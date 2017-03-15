@@ -15,7 +15,7 @@ namespace Assets.src.PathFinding.MapModelComponents
         //        private Coordinate _topLeftBoundry;
         //        private Coordinate _bottomRightBoundry;
         private Boundary _boundary;
-        private Dictionary<Coordinate,CellInfo> _cellInfoDictionary;
+        private Dictionary<String,CellInfo> _cellInfoDictionary;
 
         public MapInfo(int x, int y, int z) :
             this(new Coordinate(0, 0, 0), new Coordinate(x, y, z)) {
@@ -25,17 +25,18 @@ namespace Assets.src.PathFinding.MapModelComponents
             this(new Boundary(topLeft, bottomRight)) {
         }
 
+        [JsonConstructor]
         public MapInfo(Boundary boundary) {
             _boundary = boundary;
-            _cellInfoDictionary = new Dictionary<Coordinate, CellInfo>();
+            _cellInfoDictionary = new Dictionary<String, CellInfo>();
         }
 
         public void SetCell(Coordinate coordinate, CellInfo cellInfo) {
             if (!IsCoordinateIsWithinBounds(coordinate))
                 throw new ArgumentOutOfRangeException();
-            if (_cellInfoDictionary.ContainsKey(coordinate))
-                _cellInfoDictionary.Remove(coordinate);
-            _cellInfoDictionary.Add(coordinate,cellInfo);
+            if (_cellInfoDictionary.ContainsKey(coordinate.ToString()))
+                _cellInfoDictionary.Remove(coordinate.ToString());
+            _cellInfoDictionary.Add(coordinate.ToString(), cellInfo);
         }
 
         public CellInfo GetCell(Coordinate coordinate)
@@ -43,8 +44,8 @@ namespace Assets.src.PathFinding.MapModelComponents
 
             if (!IsCoordinateIsWithinBounds(coordinate))
                 throw new ArgumentOutOfRangeException();
-            if (_cellInfoDictionary.ContainsKey(coordinate))
-                return _cellInfoDictionary[coordinate];
+            if (_cellInfoDictionary.ContainsKey(coordinate.ToString()))
+                return _cellInfoDictionary[coordinate.ToString()];
 
             return null;
         }
@@ -79,7 +80,9 @@ namespace Assets.src.PathFinding.MapModelComponents
 
         public static MapInfo LoadMap(string testmapJson)
         {
-            throw new NotImplementedException();
+            var settings = new JsonSerializerSettings() { ContractResolver = new MyContractResolver() };
+            return JsonConvert.DeserializeObject<MapInfo>(File.ReadAllText(testmapJson),settings);
+            
         }
     }
 }

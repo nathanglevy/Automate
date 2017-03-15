@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Assets.src.PathFinding.MapModelComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UnityTest;
@@ -60,13 +61,13 @@ namespace AutomateTests.PathFinding.MapModelComponents {
 
         [TestMethod()]
         public void MapInfoTest_testLoadingMap() {
-            MapInfo mapInfo = MapInfo.LoadMap("./testMap.json");
+            MapInfo mapInfo = MapInfo.LoadMap("testMap.json");
             Assert.IsNotNull(mapInfo);
         }
 
         [TestMethod()]
-        [ExpectedException(typeof(InvalidPathException))]
-        public void MapInfoTest_testLoadingMap_invalidPathException() {
+        [ExpectedException(typeof(FileNotFoundException))]
+        public void MapInfoTest_testLoadingMap_FileNotFoundException() {
             MapInfo mapInfo = MapInfo.LoadMap("./invalidPathThisdoesNotexist.json");
         }
 
@@ -74,7 +75,18 @@ namespace AutomateTests.PathFinding.MapModelComponents {
         public void MapInfoTest_testSavingMap() {
             MapInfo mapInfo = new MapInfo(5, 5, 1);
             mapInfo.FillMapWithCells(new CellInfo(true, 1, null));
-            mapInfo.SaveMap("C:\\Users\\Public\\Documents\\Unity Projects\\New Unity ProjectTests\\Assets\\PathFinding\\PathFinder\\testMap.json");
+            mapInfo.SaveMap("testMap.json");
+        }
+
+        [TestMethod()]
+        public void MapInfoTest_testSavedMapLoadMap() {
+            MapInfo mapInfo = new MapInfo(5, 5, 1);
+            mapInfo.FillMapWithCells(new CellInfo(true, 1, null));
+            mapInfo.SaveMap("testSaveLoad.json");
+            MapInfo loaded = MapInfo.LoadMap("testSaveLoad.json");
+            Assert.AreEqual(mapInfo.GetCell(new Coordinate(0,0,0)),new CellInfo(true,1,null));
+            Assert.AreEqual(loaded.GetCell(new Coordinate(0,0,0)),new CellInfo(true,1,null));
+            Assert.AreEqual(loaded.GetCell(new Coordinate(1,2,1)),new CellInfo(true,1,null));
         }
 
         //here add tests that will check if the loaded map is indeed that same
