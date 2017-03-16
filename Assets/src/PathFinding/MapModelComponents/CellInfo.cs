@@ -3,6 +3,15 @@ using System.Collections.Generic;
 
 namespace Assets.src.PathFinding.MapModelComponents
 {
+    /// <summary>
+    /// Class which holds information on a single cell in a map.
+    /// Contains:
+    /// <list type="bullet">
+    /// <item><description>The weight of the cell for pathing algorithms</description></item>
+    /// <item><description>Whether the cell is passable / blocked off</description></item>
+    /// <item><description>What directions are accessible from the current cell</description></item>
+    /// </list>
+    /// </summary>
     [Serializable]
     public class CellInfo
     {

@@ -35,6 +35,14 @@ namespace AutomateTests.PathFinding.MapModelComponents {
         }
 
         [TestMethod()]
+        public void MapInfoTest_setCell_getCellOverload() {
+            MapInfo mapInfo = new MapInfo(10, 10, 2);
+            CellInfo cellInfo = new CellInfo(true, 1, null);
+            mapInfo.SetCell(new Coordinate(0, 0, 0), cellInfo);
+            Assert.AreEqual(mapInfo.GetCell(0, 0, 0), cellInfo);
+        }
+
+        [TestMethod()]
         public void MapInfoTest_getBoundaries() {
             MapInfo mapInfo = new MapInfo(10,10,2);
             Assert.AreEqual(mapInfo.GetBoundary(), new Boundary(new Coordinate(0, 0, 0), new Coordinate(10, 10, 2)));

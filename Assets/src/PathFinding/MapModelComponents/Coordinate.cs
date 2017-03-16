@@ -2,6 +2,23 @@
 
 namespace Assets.src.PathFinding.MapModelComponents
 {
+    /// <summary>
+    /// Class which holds information on 3D coordinates.<para />
+    /// Contains: 3 values, one for each axis.<para />
+    /// Relative operations:
+    /// <list type="bullet">
+    /// <item>
+    /// <description>Equality is not by reference, it is by value</description>
+    /// </item>
+    /// <item>
+    /// <description>Bigger-Than (>=) means that it is in bottom-right quadrant relative to it</description>
+    /// </item>
+    /// <item>
+    /// <description>Smaller than (&lt;=) means that it is in top-left quadrant relative to it</description>
+    /// </item>
+    /// </list>
+    /// </summary>
+    /// <remarks>This class is immutable!</remarks>
     [Serializable]
     public class Coordinate : Object
     {
@@ -22,6 +39,8 @@ namespace Assets.src.PathFinding.MapModelComponents
             return new Coordinate(c1.x - c2.x, c1.y - c2.y, c1.z - c2.z);
         }
 
+        //Operator is defined to check if the c1 coordinate is in the bottom right quad
+        //relative to c2.
         public static bool operator >(Coordinate c1, Coordinate c2) {
             return (c1.x > c2.x && c1.y > c2.y && c1.z > c2.z);
         }
@@ -33,6 +52,8 @@ namespace Assets.src.PathFinding.MapModelComponents
                     (c1.z > c2.z || (c1.z == c2.z)));
         }
 
+        //Operator is defined to check if the c1 coordinate is in the left top quad
+        //relative to c2.
         public static bool operator <(Coordinate c1, Coordinate c2) {
             return (c1.x < c2.x && c1.y < c2.y && c1.z < c2.z);
         }
