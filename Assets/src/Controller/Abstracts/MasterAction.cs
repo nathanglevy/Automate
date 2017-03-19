@@ -12,8 +12,8 @@ namespace Assets.src.Controller.Abstracts
             Id = Guid.NewGuid().ToString();
         }
 
-        public ActionType Type { get; private set; }
-        public string Id { get; private set; }
+        public ActionType Type { get; protected set; }
+        public string Id { get; protected set; }
 
     }
 }

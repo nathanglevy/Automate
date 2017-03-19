@@ -19,6 +19,7 @@ namespace Assets.src.Controller.Modules
             ModelObservable = modelObservable;
             ViewControllerObserver = viewControllerObserver;
             ModelControllerObserver = modelControllerObserver;
+
         }
     }
 }

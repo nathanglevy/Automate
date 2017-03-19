@@ -9,14 +9,12 @@ namespace Assets.src.Controller
 
     public class MockHandler : IHandler
     {
-        public MockObserverArgs _args;
 
         public List<MasterAction> Actions { get; private set; }
 
         public List<MasterAction> Handle<T>(T args) where T : IObserverArgs
         {
-            _args = args as MockObserverArgs;
-            var action = new MockMasterAction(ActionType.AreaSelection);
+            var action = new MockMasterAction(ActionType.AreaSelection,args.Id);
             var actions = new List<MasterAction>();
             actions.Add(action);
             Actions = actions;

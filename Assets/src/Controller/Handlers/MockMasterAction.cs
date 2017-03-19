@@ -6,8 +6,9 @@ namespace Assets.src.Controller
 {
     public class MockMasterAction : MasterAction
     {
-        public MockMasterAction(ActionType type) : base(type)
+        public MockMasterAction(ActionType type, string id) : base(type)
         {
+            Id = id;
         }
     }
 }

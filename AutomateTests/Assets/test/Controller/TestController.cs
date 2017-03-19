@@ -29,15 +29,18 @@ namespace AutomateTests.test.Controller
             // create View Observable, will be used by the controller to delegate actions to the view
             IPrimaryObserver controllerPrimaryObserverAtView = new PrimaryObserver();
             IGameView gameview = new MockGameView(controllerPrimaryObserverAtView);
-          
-            // create View Observable, will be used by the controller to delegate actions to the view
-            IPrimaryObserver controllerPrimaryObserverAtModel = new PrimaryObserver();
-            IGameModel gameModel = new MockGameModel(controllerPrimaryObserverAtModel);
+
+
             MockControllerObserver mockControllerObserver = new MockControllerObserver();
-            controllerPrimaryObserverAtModel.RegisterObserver(mockControllerObserver);
+            controllerPrimaryObserverAtView.RegisterObserver(mockControllerObserver);
             var mockHandler = new MockHandler();
             mockControllerObserver.HandlersManager.AddHandler(mockHandler);
 
+
+            // create View Observable, will be used by the controller to delegate actions to the view
+            IPrimaryObserver controllerPrimaryObserverAtModel = new PrimaryObserver();
+            IGameModel gameModel = new MockGameModel(controllerPrimaryObserverAtModel);
+   
             // Init the Controller
             IGameController gameController = new GameController(
                 gameview.GetViewObservable(), // Controller-->View
@@ -52,7 +55,7 @@ namespace AutomateTests.test.Controller
             IObserverArgs mockObserverArgs = new MockObserverArgs();
             controllerPrimaryObserverAtView.Invoke(mockObserverArgs);
 
-            Assert.AreNotEqual(1,mockHandler.Actions.Count);
+            Assert.AreEqual(1,mockHandler.Actions.Count);
             var mockHandlerAction = mockHandler.Actions[0];
             Assert.AreEqual(ActionType.AreaSelection,mockHandlerAction.Type);
             Assert.AreEqual(mockHandlerAction.Id,mockObserverArgs.Id);
