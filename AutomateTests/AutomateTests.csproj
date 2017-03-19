@@ -45,11 +45,27 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Assets\test\Controller\MasterTestMasterAction.cs" />
+    <Compile Include="Assets\test\Controller\HandlerForTest.cs" />
+    <Compile Include="Assets\test\Controller\IntegrationTestController.cs" />
+    <Compile Include="Assets\test\Mocks\MockControllerObserver.cs" />
+    <Compile Include="Assets\test\Mocks\MockDummyMasterAction.cs" />
+    <Compile Include="Assets\test\Mocks\MockObserverArgs.cs" />
+    <Compile Include="Assets\test\Mocks\MockGameModel.cs" />
+    <Compile Include="Assets\test\Mocks\MockGameView.cs" />
+    <Compile Include="Assets\test\Controller\TestObservableAndObserver.cs" />
+    <Compile Include="Assets\test\Controller\TestingForHandlersManager.cs" />
+    <Compile Include="Assets\test\Controller\TestSchedular.cs" />
+    <Compile Include="Assets\test\Controller\TestAction.cs" />
+    <Compile Include="Assets\test\Controller\UnitTest1.cs" />
+    <Compile Include="Assets\test\Controller\TestController.cs" />
     <Compile Include="Assets\test\PathFinding\MapModelComponents\BoundaryTests.cs" />
     <Compile Include="Assets\test\PathFinding\MapModelComponents\CellInfoTests.cs" />
     <Compile Include="Assets\test\PathFinding\MapModelComponents\CoordinateTests.cs" />
