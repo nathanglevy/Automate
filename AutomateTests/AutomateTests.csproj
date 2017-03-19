@@ -50,6 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Assets\test\ThreadingExample\ThreadExampleTests.cs" />
     <Compile Include="Assets\test\PathFinding\MapModelComponents\BoundaryTests.cs" />
     <Compile Include="Assets\test\PathFinding\MapModelComponents\CellInfoTests.cs" />
     <Compile Include="Assets\test\PathFinding\MapModelComponents\CoordinateTests.cs" />

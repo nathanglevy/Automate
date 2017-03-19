@@ -99,6 +99,7 @@
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\Isometric.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\MethodExtensionForMonoBehaviourTransform.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\Singleton.cs" />
+    <Compile Include="Assets\src\ThreadingExample\ThreadExample.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\AssertionComponent.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\AssertionException.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\Assertions.cs" />

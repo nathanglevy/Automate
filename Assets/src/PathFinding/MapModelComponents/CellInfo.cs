@@ -15,9 +15,13 @@ namespace Assets.src.PathFinding.MapModelComponents
     [Serializable]
     public class CellInfo
     {
+        EventArgs eventArgs = new EventArgs();
+
         private bool Passable;
         private float Weight;
+        //change this to blocked entry and blocked exit list
         private List<Coordinate> BlockedDirections;
+        //add "penalty" or "bonus" for direction
 
         public CellInfo(bool isPassable, float weight, List<Coordinate> blockedDirections) {
             if (weight < 0)
