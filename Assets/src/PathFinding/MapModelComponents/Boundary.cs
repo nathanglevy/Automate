@@ -32,6 +32,7 @@ namespace Assets.src.PathFinding.MapModelComponents
             if (obj == null || GetType() != obj.GetType())
                 return false;
 
+
             Boundary boundary = (Boundary)obj;
             return (topLeft.Equals(boundary.topLeft) && (bottomRight.Equals(boundary.bottomRight)));
         }

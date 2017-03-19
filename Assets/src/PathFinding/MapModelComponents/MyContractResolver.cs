@@ -17,4 +17,5 @@ namespace Assets.src.PathFinding.MapModelComponents {
             return props;
         }
     }
+
 }
