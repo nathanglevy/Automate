@@ -4,15 +4,15 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace AutomateTests.PathFinding.MapModelComponents
 {
     [TestClass()]
-    public class CoordinateTests {
+    public class TestCoordinate {
         [TestMethod()]
-        public void CoordinateTest() {
+        public void TestNewCoordinate_ExpectNotNull() {
             Coordinate coordinate = new Coordinate(0,0,0);
             Assert.IsNotNull(coordinate);
         }
 
         [TestMethod()]
-        public void CoordinateTest_CheckFields() {
+        public void TestCoordinateValues_ExpectCorrectValues() {
             Coordinate coordinate1 = new Coordinate(1, 2, 3);
             Assert.AreEqual(coordinate1.x,1);
             Assert.AreEqual(coordinate1.y,2);
@@ -24,7 +24,7 @@ namespace AutomateTests.PathFinding.MapModelComponents
         }
 
         [TestMethod()]
-        public void CoordinateTest_CheckOperators() {
+        public void TestCoordinateOperators_ExpectCorrectResults() {
             Coordinate coordinate1 = new Coordinate(1, 2, 3);
             Coordinate coordinate2 = new Coordinate(3, 4, 5);
             Coordinate coordinate3 = new Coordinate(0, 3, 4);
@@ -62,7 +62,7 @@ namespace AutomateTests.PathFinding.MapModelComponents
         }
 
         [TestMethod()]
-        public void CoordinateTest_CheckTranslation() {
+        public void TestTraslateCoordinate_ExpectCorrectValue() {
             Coordinate coordinate1 = new Coordinate(1, 2, 3);
             Coordinate coordinate2 = new Coordinate(3, 4, 5);
             Assert.AreEqual(new Coordinate(4, 6, 8), coordinate1.TranslateCoordinate(coordinate2));

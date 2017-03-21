@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Assets.src.PathFinding.MapModelComponents
 {
@@ -15,29 +16,42 @@ namespace Assets.src.PathFinding.MapModelComponents
     [Serializable]
     public class CellInfo
     {
-        EventArgs eventArgs = new EventArgs();
-
-        private bool Passable;
-        private float Weight;
+        private bool _passable;
+        private float _weight;
         //change this to blocked entry and blocked exit list
-        private List<Coordinate> BlockedDirections;
+        private HashSet<Coordinate> BlockedExitDirections;
+        private HashSet<Coordinate> BlockedEntranceDirections;
+        private Dictionary<string, int> DirectionalWeightRatio;
         //add "penalty" or "bonus" for direction
 
-        public CellInfo(bool isPassable, float weight, List<Coordinate> blockedDirections) {
+        public CellInfo(bool isPassable, float weight) {
             if (weight < 0)
                 throw new ArgumentException();
-            Passable = isPassable;
-            Weight = weight;
-            BlockedDirections = blockedDirections;
+            _passable = isPassable;
+            _weight = weight;
+            BlockedExitDirections = new HashSet<Coordinate>();
+            BlockedEntranceDirections = new HashSet<Coordinate>();
+        }
+
+        [JsonConstructor]
+        public CellInfo(bool isPassable, float weight, HashSet<Coordinate> blockedExitDirections, HashSet<Coordinate> blockedEntranceDirections) {
+            if (weight < 0)
+                throw new ArgumentException();
+            _passable = isPassable;
+            _weight = weight;
+            if ((blockedExitDirections == null) || (blockedEntranceDirections == null))
+                throw new ArgumentNullException();
+            BlockedExitDirections = new HashSet<Coordinate>(blockedExitDirections);
+            BlockedEntranceDirections = new HashSet<Coordinate>(blockedEntranceDirections);
         }
 
         public float GetWeight()
         {
-            return Weight;
+            return _weight;
         }
 
         public bool IsPassable() {
-            return Passable;
+            return _passable;
         }
 
         public override bool Equals(Object obj) {
@@ -46,10 +60,10 @@ namespace Assets.src.PathFinding.MapModelComponents
                 return false;
 
             CellInfo cellInfo = (CellInfo)obj;
-            return (Math.Abs(Weight - cellInfo.Weight) < 0.0001) &&
-                (Passable == cellInfo.Passable) &&
-                ((BlockedDirections == null && cellInfo.BlockedDirections == null) ||
-                (BlockedDirections != null && BlockedDirections.Equals(cellInfo.BlockedDirections)));
+            return (Math.Abs(_weight - cellInfo._weight) < 0.0001) &&
+                (_passable == cellInfo._passable) &&
+                (BlockedExitDirections.SetEquals(cellInfo.BlockedExitDirections)) &&
+                (BlockedEntranceDirections.SetEquals(cellInfo.BlockedEntranceDirections)) ;
         }
 
         public override int GetHashCode() {

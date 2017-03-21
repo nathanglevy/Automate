@@ -4,35 +4,41 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AutomateTests.PathFinding.MapModelComponents {
     [TestClass()]
-    public class BoundaryTests {
+    public class TestBoundary {
 
         [TestMethod()]
-        public void BoundaryTest_New() {
+        public void TestBoundaryConstructor_ExpectNotNull() {
             Boundary boundary = new Boundary(new Coordinate(0,0,0), new Coordinate(1,1,1));
             Assert.IsNotNull(boundary);
         }
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentException))]
-        public void BoundaryTest_NewWithBadBoundry_ExpectArgumentException() {
+        public void TestBoundaryConstructor_ExpectArgumentException() {
             Boundary boundary = new Boundary(new Coordinate(0, 0, 0), new Coordinate(-1, -1, 1));
         }
 
         [TestMethod()]
-        public void BoundaryTest_checkValues() {
+        public void TestBoundaryBorders_ExpectBoundaryValues() {
             Boundary boundary = new Boundary(new Coordinate(0, 0, 0), new Coordinate(1, 1, 1));
             Assert.AreEqual(boundary.topLeft, new Coordinate(0, 0, 0));
             Assert.AreEqual(boundary.bottomRight, new Coordinate(1, 1, 1));
         }
 
         [TestMethod()]
-        public void BoundaryTest_checkEquality() {
+        public void TestBoundaryEquality_ExpectAreEqual() {
             Boundary boundary = new Boundary(new Coordinate(0, 0, 0), new Coordinate(1, 1, 1));
             Assert.AreEqual(boundary, new Boundary(new Coordinate(0, 0, 0), new Coordinate(1, 1, 1)));
         }
 
         [TestMethod()]
-        public void BoundaryTest_checkWithinBoundary() {
+        public void TestBoundaryEquality_ExpectAreNotEqual() {
+            Boundary boundary = new Boundary(new Coordinate(0, 0, 0), new Coordinate(2, 2, 2));
+            Assert.AreNotEqual(boundary, new Boundary(new Coordinate(0, 0, 0), new Coordinate(1, 1, 1)));
+        }
+
+        [TestMethod()]
+        public void TestIsCoordinateInBoundary_ExpectCorrectValues() {
             Boundary boundary = new Boundary(new Coordinate(0, 0, 0), new Coordinate(10, 10, 2));
             Assert.AreEqual(true, boundary.IsCoordinateInBoundary(new Coordinate(0, 0, 0)));
             Assert.AreEqual(true, boundary.IsCoordinateInBoundary(new Coordinate(5, 5, 1)));

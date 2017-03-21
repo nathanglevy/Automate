@@ -66,10 +66,10 @@
     <Compile Include="Assets\test\Controller\TestAction.cs" />
     <Compile Include="Assets\test\Controller\UnitTest1.cs" />
     <Compile Include="Assets\test\Controller\TestController.cs" />
-    <Compile Include="Assets\test\PathFinding\MapModelComponents\BoundaryTests.cs" />
-    <Compile Include="Assets\test\PathFinding\MapModelComponents\CellInfoTests.cs" />
-    <Compile Include="Assets\test\PathFinding\MapModelComponents\CoordinateTests.cs" />
-    <Compile Include="Assets\test\PathFinding\MapModelComponents\MapInfoTests.cs" />
+    <Compile Include="Assets\test\PathFinding\MapModelComponents\TestBoundary.cs" />
+    <Compile Include="Assets\test\PathFinding\MapModelComponents\TestCellInfo.cs" />
+    <Compile Include="Assets\test\PathFinding\MapModelComponents\TestCoordinate.cs" />
+    <Compile Include="Assets\test\PathFinding\MapModelComponents\TestMapInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -109,7 +109,7 @@ namespace Assets.src.PathFinding.MapModelComponents
                 for (int y = _boundary.topLeft.y; y <= _boundary.bottomRight.y; y++) {
                     for (int z = _boundary.topLeft.z; z <= _boundary.bottomRight.z; z++) {
                         //SetCell(new Coordinate(x,y,z), cellInfo.Clone());
-                        CellInfo newCell = new CellInfo(cellInfo.IsPassable(), cellInfo.GetWeight(), null);
+                        CellInfo newCell = new CellInfo(cellInfo.IsPassable(), cellInfo.GetWeight());
                         SetCell(new Coordinate(x,y,z), newCell);
                     }
                 }

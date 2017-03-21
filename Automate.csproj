@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.5.0f3</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -80,6 +78,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Backup\CellType.cs" />
+    <Compile Include="Assets\Backup\GameMapHandler.cs" />
+    <Compile Include="Assets\Backup\MouseFollow.cs" />
+    <Compile Include="Assets\Backup\PathFinder.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Core\HeuristicSorting.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Core\IsoSorting.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Core\IsoTransform.cs" />
@@ -95,30 +97,6 @@
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\Isometric.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\MethodExtensionForMonoBehaviourTransform.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\Singleton.cs" />
-    <Compile Include="Assets\src\Controller\Abstracts\ObserverArgs.cs" />
-    <Compile Include="Assets\src\Controller\Handlers\ControllerSelectionHandler.cs" />
-    <Compile Include="Assets\src\Controller\Abstracts\ActionType.cs" />
-    <Compile Include="Assets\src\Controller\Handlers\MockMasterAction.cs" />
-    <Compile Include="Assets\src\Controller\Handlers\MockObserverArgs.cs" />
-    <Compile Include="Assets\src\Controller\Interfaces\IGameModel.cs" />
-    <Compile Include="Assets\src\Controller\Interfaces\IGameView.cs" />
-    <Compile Include="Assets\src\Controller\Modules\GameController.cs" />
-    <Compile Include="Assets\src\Controller\Interfaces\IGameController.cs" />
-    <Compile Include="Assets\src\Controller\Modules\ControllerScheduler.cs" />
-    <Compile Include="Assets\src\Controller\Handlers\Handler.cs" />
-    <Compile Include="Assets\src\Controller\Handlers\HandlerManager.cs" />
-    <Compile Include="Assets\src\Controller\Interfaces\IHandler.cs" />
-    <Compile Include="Assets\src\Controller\Abstracts\MasterAction.cs" />
-    <Compile Include="Assets\src\Controller\Interfaces\IHandlersManager.cs" />
-    <Compile Include="Assets\src\Controller\Interfaces\IScheduler.cs" />
-    <Compile Include="Assets\src\Controller\Interfaces\IPrimaryObserver.cs" />
-    <Compile Include="Assets\src\Controller\Interfaces\ISecondryObserver.cs" />
-    <Compile Include="Assets\src\Controller\Abstracts\IObserverArgs.cs" />
-    <Compile Include="Assets\src\Controller\Modules\PrimaryObserver.cs" />
-    <Compile Include="Assets\src\Controller\Modules\SecondryObserver.cs" />
-    <Compile Include="Assets\src\Controller\Modules\SelectionMasterAction.cs" />
-    <Compile Include="Assets\src\Controller\Modules\SelectionArgs.cs" />
-    <Compile Include="Assets\src\Controller\Modules\SelectionHandler.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\AssertionComponent.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\AssertionException.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\Assertions.cs" />
@@ -161,11 +139,36 @@
     <Compile Include="Assets\UnityTestTools\IntegrationTestsFramework\TestRunner\TestRunnerCallbackList.cs" />
     <Compile Include="Assets\UnityTestTools\IntegrationTestsFramework\TestRunner\TestRunnerConfigurator.cs" />
     <Compile Include="Assets\UnityTestTools\IntegrationTestsFramework\TestingAssets\CallTesting.cs" />
+    <Compile Include="Assets\src\Controller\Abstracts\ActionType.cs" />
+    <Compile Include="Assets\src\Controller\Abstracts\IObserverArgs.cs" />
+    <Compile Include="Assets\src\Controller\Abstracts\MasterAction.cs" />
+    <Compile Include="Assets\src\Controller\Abstracts\ObserverArgs.cs" />
+    <Compile Include="Assets\src\Controller\Handlers\ControllerSelectionHandler.cs" />
+    <Compile Include="Assets\src\Controller\Handlers\Handler.cs" />
+    <Compile Include="Assets\src\Controller\Handlers\HandlerManager.cs" />
+    <Compile Include="Assets\src\Controller\Handlers\MockMasterAction.cs" />
+    <Compile Include="Assets\src\Controller\Handlers\MockObserverArgs.cs" />
+    <Compile Include="Assets\src\Controller\Interfaces\IGameController.cs" />
+    <Compile Include="Assets\src\Controller\Interfaces\IGameModel.cs" />
+    <Compile Include="Assets\src\Controller\Interfaces\IGameView.cs" />
+    <Compile Include="Assets\src\Controller\Interfaces\IHandler.cs" />
+    <Compile Include="Assets\src\Controller\Interfaces\IHandlersManager.cs" />
+    <Compile Include="Assets\src\Controller\Interfaces\IPrimaryObserver.cs" />
+    <Compile Include="Assets\src\Controller\Interfaces\IScheduler.cs" />
+    <Compile Include="Assets\src\Controller\Interfaces\ISecondryObserver.cs" />
+    <Compile Include="Assets\src\Controller\Modules\ControllerScheduler.cs" />
+    <Compile Include="Assets\src\Controller\Modules\GameController.cs" />
+    <Compile Include="Assets\src\Controller\Modules\PrimaryObserver.cs" />
+    <Compile Include="Assets\src\Controller\Modules\SecondryObserver.cs" />
+    <Compile Include="Assets\src\Controller\Modules\SelectionArgs.cs" />
+    <Compile Include="Assets\src\Controller\Modules\SelectionHandler.cs" />
+    <Compile Include="Assets\src\Controller\Modules\SelectionMasterAction.cs" />
     <Compile Include="Assets\src\PathFinding\MapModelComponents\Boundary.cs" />
     <Compile Include="Assets\src\PathFinding\MapModelComponents\CellInfo.cs" />
     <Compile Include="Assets\src\PathFinding\MapModelComponents\Coordinate.cs" />
     <Compile Include="Assets\src\PathFinding\MapModelComponents\MapInfo.cs" />
     <Compile Include="Assets\src\PathFinding\MapModelComponents\MyContractResolver.cs" />
+    <Compile Include="Assets\src\ThreadingExample\ThreadExample.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Graphics\UltimateIsometricToolkit\License.txt" />
@@ -186,7 +189,6 @@
     <None Include="Assets\UnityTestTools\LICENSE.txt" />
     <None Include="Assets\UnityTestTools\changelog.txt" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
 </Project>
