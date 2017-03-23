@@ -1,7 +1,7 @@
-﻿using Assets.src.PathFinding.MapModelComponents;
+﻿using Assets.src.Model.MapModelComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.PathFinding.MapModelComponents
+namespace AutomateTests.Model.MapModelComponents
 {
     [TestClass()]
     public class TestCoordinate {

@@ -1,6 +1,6 @@
 using Assets.src.Controller.Abstracts;
 using Assets.src.Controller.Interfaces;
-using Assets.src.PathFinding.MapModelComponents;
+using Assets.src.Model.MapModelComponents;
 
 namespace Assets.src.Controller.Modules
 {

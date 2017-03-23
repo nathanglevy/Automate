@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assets.src.PathFinding.MapModelComponents
+namespace Assets.src.Model.MapModelComponents
 {
     /// <summary>
     /// Class which holds information on 3D coordinates.<para />
@@ -39,14 +39,23 @@ namespace Assets.src.PathFinding.MapModelComponents
             return new Coordinate(c1.x - c2.x, c1.y - c2.y, c1.z - c2.z);
         }
 
+        public static Coordinate operator -(Coordinate c2) {
+            return new Coordinate(- c2.x, - c2.y, - c2.z);
+        }
+
         //Operator is defined to check if the c1 coordinate is in the bottom right quad
         //relative to c2.
         public static bool operator >(Coordinate c1, Coordinate c2) {
+
+            if ((object)c1 == null || (object)c2 == null)
+                return false;
             return (c1.x > c2.x && c1.y > c2.y && c1.z > c2.z);
         }
 
         public static bool operator >=(Coordinate c1, Coordinate c2)
         {
+            if ((object)c1 == null || (object)c2 == null)
+                return false;
             return ((c1.x > c2.x || (c1.x == c2.x)) &&
                     (c1.y > c2.y || (c1.y == c2.y)) &&
                     (c1.z > c2.z || (c1.z == c2.z)));
@@ -55,10 +64,14 @@ namespace Assets.src.PathFinding.MapModelComponents
         //Operator is defined to check if the c1 coordinate is in the left top quad
         //relative to c2.
         public static bool operator <(Coordinate c1, Coordinate c2) {
+            if ((object)c1 == null || (object)c2 == null)
+                return false;
             return (c1.x < c2.x && c1.y < c2.y && c1.z < c2.z);
         }
 
         public static bool operator <=(Coordinate c1, Coordinate c2) {
+            if ((object)c1 == null || (object)c2 == null)
+                return false;
             return ((c1.x < c2.x || (c1.x == c2.x)) &&
                     (c1.y < c2.y || (c1.y == c2.y)) &&
                     (c1.z < c2.z || (c1.z == c2.z)));
@@ -67,7 +80,9 @@ namespace Assets.src.PathFinding.MapModelComponents
 
         public static bool operator ==(Coordinate c1, Coordinate c2)
         {
-            if ((object) c1 == null)
+            if ((object)c1 == null && (object)c2 == null)
+                return true;
+            if ((object)c1 == null || (object)c2 == null)
                 return false;
             return c1.Equals(c2);
         }

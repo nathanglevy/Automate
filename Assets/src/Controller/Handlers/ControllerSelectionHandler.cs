@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Assets.src.Controller.Abstracts;
 using Assets.src.Controller.Interfaces;
 using Assets.src.Controller.Modules;
-using Assets.src.PathFinding.MapModelComponents;
 
 namespace Assets.src.Controller.Handlers
 {
