@@ -6,7 +6,7 @@ namespace Assets.src.Controller
 {
     public interface IHandler
     {
-        bool CanHandle<T>(T args) where T : IObserverArgs;
+        bool isApplicable<T>(T args) where T : IObserverArgs;
         List<MasterAction> Handle<T>(T args) where T:IObserverArgs;
     }
 }

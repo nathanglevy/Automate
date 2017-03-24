@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Assets.src.Controller;
 using Assets.src.Controller.Interfaces;
 using Assets.src.Model.MapModelComponents;
 
-namespace AutomateTests.test.Controller
+namespace AutomateTests.Mocks
 {
     public class MockGameModel : IGameModel
     {
@@ -25,6 +24,11 @@ namespace AutomateTests.test.Controller
         }
 
         public void revertPassableState(CellInfo cellInfo)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IPrimaryObserver GetModelObservable()
         {
             throw new NotImplementedException();
         }

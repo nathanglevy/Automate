@@ -1,8 +1,7 @@
 ﻿using Assets.src.Controller.Abstracts;
 using Assets.src.Controller.Interfaces;
-using Assets.src.Controller.Modules;
 
-namespace AutomateTests.test.Controller
+namespace AutomateTests.Controller
 {
     public class MasterTestMasterAction : MasterAction
     {

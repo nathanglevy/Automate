@@ -12,20 +12,8 @@ namespace Assets.src.Controller
 
         public List<MasterAction> Actions { get; private set; }
 
-//        public List<MasterAction> Handle<T>(T args,IHandleUtils utils) where T : IObserverArgs
         public List<MasterAction> Handle<T>(T args) where T : IObserverArgs
         {
-            var selectionArgs = args as SelectionArgs;
-//            IEnumerable<CellInfo> cells = utils.Model.GetCellsInRange(selectionArgs.UpperLeft, selectionArgs.LowerRight);
-
-//            foreach (var cellInfo in cells)
-//            {
-//                if (cellInfo.IsPassable())
-//                {
-////                    utils.Model.revertPassableState(cellInfo);
-//                }
-//            }
-            
             var action = new MockMasterAction(ActionType.AreaSelection,args.Id);
             var actions = new List<MasterAction>();
             actions.Add(action);
@@ -33,14 +21,9 @@ namespace Assets.src.Controller
             return actions;
         }
 
-        public bool CanHandle<T>(T args) where T : IObserverArgs
+        public bool isApplicable<T>(T args) where T : IObserverArgs
         {
             return true;
         }
-    }
-
-    public interface IHandleUtils
-    {
-        IGameModel Model { get; }
     }
 }

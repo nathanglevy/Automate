@@ -2,10 +2,9 @@ using System.Collections.Generic;
 using Assets.src.Controller;
 using Assets.src.Controller.Abstracts;
 using Assets.src.Controller.Interfaces;
-using Automate.Assets.src.Controller;
 using IObserverArgs = Assets.src.Controller.IObserverArgs;
 
-namespace AutomateTests.test.Controller
+namespace AutomateTests.Controller
 {
     public class HandlerForTest:IHandler
     {
@@ -20,6 +19,11 @@ namespace AutomateTests.test.Controller
             masterActions.Add(new MasterAction(ActionType.AreaSelection));
             return masterActions;
 
+        }
+
+        public bool isApplicable<T>(T args) where T : IObserverArgs
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

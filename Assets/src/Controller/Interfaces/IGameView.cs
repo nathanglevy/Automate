@@ -2,6 +2,6 @@
 {
     public interface IGameView
     {
-        IPrimaryObserver GetViewPrimaryObserver();
+        IPrimaryObserver GetViewObservable();
     }
 }

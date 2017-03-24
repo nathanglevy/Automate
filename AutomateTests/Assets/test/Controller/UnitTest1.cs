@@ -3,10 +3,9 @@ using Assets.src.Controller.Handlers;
 using Assets.src.Controller.Interfaces;
 using Assets.src.Controller.Modules;
 using Assets.src.Model.MapModelComponents;
-using Automate.Assets.src.Controller;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.test.Controller
+namespace AutomateTests.Controller
 {
     [TestClass]
     public class TestControllerSelectionHandler   

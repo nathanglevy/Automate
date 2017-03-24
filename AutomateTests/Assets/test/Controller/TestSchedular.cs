@@ -5,7 +5,7 @@ using Assets.src.Controller.Interfaces;
 using Assets.src.Controller.Modules;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.test.Controller
+namespace AutomateTests.Controller
 {
     [TestClass]
     public class TestSchedular

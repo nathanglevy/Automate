@@ -1,8 +1,7 @@
-﻿using Assets.src.Controller;
-using Assets.src.Controller.Interfaces;
+﻿using Assets.src.Controller.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.test.Controller
+namespace AutomateTests.Controller
 {
     [TestClass()]
     public class TestGameTestAction

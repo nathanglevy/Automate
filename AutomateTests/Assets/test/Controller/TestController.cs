@@ -1,12 +1,13 @@
 ﻿using Assets.src.Controller;
 using Assets.src.Controller.Interfaces;
 using Assets.src.Controller.Modules;
+using AutomateTests.Mocks;
 using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using IObserverArgs = Assets.src.Controller.IObserverArgs;
 using MockObserverArgs = AutomateTests.test.Mocks.MockObserverArgs;
 
-namespace AutomateTests.test.Controller
+namespace AutomateTests.Controller
 {
     [TestClass]
     public class TestController
