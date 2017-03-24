@@ -9,7 +9,7 @@ namespace AutomateTests.test.Controller
 {
     public class HandlerForTest:IHandler
     {
-        public bool isApplicable<T>(T args) where T : IObserverArgs
+        public bool CanHandle<T>(T args) where T : IObserverArgs
         {
             return true;
         }

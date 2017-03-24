@@ -10,7 +10,7 @@ namespace Assets.src.Controller.Modules
     {
         public List<MasterAction> Handle<T>(T args) where T : IObserverArgs
         {
-            if (!isApplicable(args))
+            if (!CanHandle(args))
             {
                 return new List<MasterAction>();
             }
@@ -18,7 +18,7 @@ namespace Assets.src.Controller.Modules
             return null;
         }
 
-        public bool isApplicable<T>(T args) where T : IObserverArgs
+        public bool CanHandle<T>(T args) where T : IObserverArgs
         {
             return args is SelectionArgs;
         }

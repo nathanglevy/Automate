@@ -80,10 +80,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Backup\CellType.cs" />
-    <Compile Include="Assets\Backup\GameMapHandler.cs" />
-    <Compile Include="Assets\Backup\MouseFollow.cs" />
-    <Compile Include="Assets\Backup\PathFinder.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Core\HeuristicSorting.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Core\IsoSorting.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Core\IsoTransform.cs" />
@@ -99,6 +95,7 @@
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\Isometric.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\MethodExtensionForMonoBehaviourTransform.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\Singleton.cs" />
+    <Compile Include="Assets\src\Controller\Interfaces\IPrimaryObserver - Copy.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\AssertionComponent.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\AssertionException.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\Assertions.cs" />
@@ -155,7 +152,6 @@
     <Compile Include="Assets\src\Controller\Interfaces\IGameView.cs" />
     <Compile Include="Assets\src\Controller\Interfaces\IHandler.cs" />
     <Compile Include="Assets\src\Controller\Interfaces\IHandlersManager.cs" />
-    <Compile Include="Assets\src\Controller\Interfaces\IPrimaryObserver.cs" />
     <Compile Include="Assets\src\Controller\Interfaces\IScheduler.cs" />
     <Compile Include="Assets\src\Controller\Interfaces\ISecondryObserver.cs" />
     <Compile Include="Assets\src\Controller\Modules\ControllerScheduler.cs" />

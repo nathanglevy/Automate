@@ -16,6 +16,7 @@ namespace AutomateTests.test.Controller
         {
             IPrimaryObserver viewObservable = new PrimaryObserver();
             IPrimaryObserver modelObservable = new PrimaryObserver();
+            
             GameController gameController = new GameController(viewObservable,modelObservable,null,null);
             Assert.IsNotNull(gameController);
             Assert.IsNotNull(gameController.ViewObservable);
@@ -27,7 +28,8 @@ namespace AutomateTests.test.Controller
         {
 
             // create View Observable, will be used by the controller to delegate actions to the view
-            IPrimaryObserver controllerPrimaryObserverAtView = new PrimaryObserver();
+//            IPrimaryObserver controllerPrimaryObserverAtView = new PrimaryObserver();
+            IPrimaryObserver controllerPrimaryObserverAtView = new ThreadedPrimaryObserver();
             IGameView gameview = new MockGameView(controllerPrimaryObserverAtView);
 
 
@@ -43,8 +45,8 @@ namespace AutomateTests.test.Controller
    
             // Init the Controller
             IGameController gameController = new GameController(
-                gameview.GetViewObservable(), // Controller-->View
-                gameModel.GetModelObservable(), // Controller-->Model
+                gameview.GetViewPrimaryObserver(), // Controller-->View
+                gameModel.GetModelPrimaryObserver(), // Controller-->Model
                 controllerPrimaryObserverAtView, // View -->Controller
                 controllerPrimaryObserverAtModel // Model --> Controller
                 );

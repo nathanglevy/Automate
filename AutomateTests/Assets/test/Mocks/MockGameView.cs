@@ -14,7 +14,7 @@ namespace AutomateTests.test.Controller
             _viewControllerObserver = viewControllerObserver;
         }
 
-        public IPrimaryObserver GetViewObservable()
+        public IPrimaryObserver GetViewPrimaryObserver()
         {
             return _viewControllerObserver;
         }

@@ -34,7 +34,7 @@ namespace Assets.src.Controller
             var results = new List<MasterAction>();
             foreach (var handler in _handlers)
             {
-                if (!handler.isApplicable(args)) continue;
+                if (!handler.CanHandle(args)) continue;
                 var result = handler.Handle(args);
                 results.AddRange(result);
             }
