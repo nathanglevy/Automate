@@ -80,10 +80,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Backup\CellType.cs" />
-    <Compile Include="Assets\Backup\GameMapHandler.cs" />
-    <Compile Include="Assets\Backup\MouseFollow.cs" />
-    <Compile Include="Assets\Backup\PathFinder.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Core\HeuristicSorting.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Core\IsoSorting.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Core\IsoTransform.cs" />

@@ -1,15 +1,9 @@
-﻿using System.Collections.Generic;
-using Assets.src.PathFinding.MapModelComponents;
-
-namespace Assets.src.Controller.Interfaces
+﻿namespace Assets.src.Controller.Interfaces
 {
     public interface IGameModel
     {
-        IPrimaryObserver GetModelPrimaryObserver();
+        IPrimaryObserver GetModelObservable();
 
 
-        IEnumerable<CellInfo> GetCellsInRange(Coordinate selectionArgsUpperLeft, Coordinate selectionArgsLowerRight);
-
-        void revertPassableState(CellInfo cellInfo);
     }
 }

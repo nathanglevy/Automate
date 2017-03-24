@@ -1,11 +1,9 @@
 ﻿using Assets.src.Controller;
 using Assets.src.Controller.Abstracts;
 using Assets.src.Controller.Interfaces;
-using Automate.Assets.src.Controller;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using IObserverArgs = Assets.src.Controller.IObserverArgs;
 
-namespace AutomateTests.test.Controller {
+namespace AutomateTests.Controller {
     [TestClass()]
     public class TestObservableAndObserver {
         private static HandlersManager _handlersManager;

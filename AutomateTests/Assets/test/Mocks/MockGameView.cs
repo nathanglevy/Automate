@@ -1,9 +1,6 @@
-﻿using Assets.src.Controller;
-using Assets.src.Controller.Interfaces;
-using Automate.Assets.src.Controller;
-using IObserverArgs = Assets.src.Controller.IObserverArgs;
+﻿using Assets.src.Controller.Interfaces;
 
-namespace AutomateTests.test.Controller
+namespace AutomateTests.Mocks
 {
     public class MockGameView : IGameView
     {
@@ -17,6 +14,11 @@ namespace AutomateTests.test.Controller
         public IPrimaryObserver GetViewPrimaryObserver()
         {
             return _viewControllerObserver;
+        }
+
+        public IPrimaryObserver GetViewObservable()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
