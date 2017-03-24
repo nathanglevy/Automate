@@ -108,7 +108,6 @@ namespace Assets.src.Model.PathFinding
             return result;
         }
 
-
         MovementPath IPathFindingStrategy.FindShortestPath(MapInfo mapInfo, Coordinate source, Coordinate target)
         {
             return FindShortestPath(mapInfo, source, target);

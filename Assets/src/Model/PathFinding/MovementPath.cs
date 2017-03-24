@@ -19,6 +19,15 @@ namespace Assets.src.Model.PathFinding
             _endCoordinate = startCoordinate;
         }
 
+        public MovementPath(MovementPath clone) {
+            if (clone == null)
+                throw new ArgumentNullException();
+            _movements = new List<Movement>(clone._movements);
+            _movementMap = new Dictionary<string, Movement>(clone._movementMap);
+            _startCoordinate = clone._startCoordinate;
+            _endCoordinate = clone._endCoordinate;
+        }
+
         public void AddMovement(Movement newMovement)
         {
             _movementMap[_endCoordinate.ToString()] = newMovement;
@@ -74,5 +83,7 @@ namespace Assets.src.Model.PathFinding
         {
             return _startCoordinate.GetHashCode();
         }
+
+
     }
 }

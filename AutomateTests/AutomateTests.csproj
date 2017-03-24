@@ -52,6 +52,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Assets\test\Model\GameWorldComponents\TestGameWorld.cs" />
+    <Compile Include="Assets\test\Model\GameWorldComponents\TestMovable.cs" />
     <Compile Include="Assets\test\Model\PathFinding\TestMovementPath.cs" />
     <Compile Include="Assets\test\Model\PathFinding\TestMovement.cs" />
     <Compile Include="Assets\test\Model\PathFinding\TestPathFinderAStar.cs" />
@@ -82,6 +84,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Assets\src\Model\GameWorld\" />
     <Folder Include="Assets\src\Model\PathFinding\" />
   </ItemGroup>
   <Choose>
