@@ -4,7 +4,7 @@ using Assets.src.Controller.Abstracts;
 using Assets.src.Controller.Handlers;
 using Assets.src.Controller.Interfaces;
 using Assets.src.Controller.Modules;
-using Assets.src.PathFinding.MapModelComponents;
+using Assets.src.Model.MapModelComponents;
 using IObserverArgs = Assets.src.Controller.IObserverArgs;
 
 namespace Automate.Assets.src.Controller {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace Assets.src.PathFinding.MapModelComponents
+namespace Assets.src.Model.MapModelComponents
 {
     /// <summary>
     /// Class which holds information on a game map.<para />

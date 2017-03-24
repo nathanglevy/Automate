@@ -52,6 +52,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Assets\test\Model\GameWorldComponents\TestGameWorld.cs" />
+    <Compile Include="Assets\test\Model\GameWorldComponents\TestMovable.cs" />
+    <Compile Include="Assets\test\Model\PathFinding\TestMovementPath.cs" />
+    <Compile Include="Assets\test\Model\PathFinding\TestMovement.cs" />
+    <Compile Include="Assets\test\Model\PathFinding\TestPathFinderAStar.cs" />
     <Compile Include="Assets\test\Controller\MasterTestMasterAction.cs" />
     <Compile Include="Assets\test\Controller\HandlerForTest.cs" />
     <Compile Include="Assets\test\Controller\IntegrationTestController.cs" />
@@ -66,10 +71,10 @@
     <Compile Include="Assets\test\Controller\TestAction.cs" />
     <Compile Include="Assets\test\Controller\UnitTest1.cs" />
     <Compile Include="Assets\test\Controller\TestController.cs" />
-    <Compile Include="Assets\test\PathFinding\MapModelComponents\TestBoundary.cs" />
-    <Compile Include="Assets\test\PathFinding\MapModelComponents\TestCellInfo.cs" />
-    <Compile Include="Assets\test\PathFinding\MapModelComponents\TestCoordinate.cs" />
-    <Compile Include="Assets\test\PathFinding\MapModelComponents\TestMapInfo.cs" />
+    <Compile Include="Assets\test\Model\MapModelComponents\TestBoundary.cs" />
+    <Compile Include="Assets\test\Model\MapModelComponents\TestCellInfo.cs" />
+    <Compile Include="Assets\test\Model\MapModelComponents\TestCoordinate.cs" />
+    <Compile Include="Assets\test\Model\MapModelComponents\TestMapInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -77,6 +82,10 @@
       <Project>{BFD958C4-5209-89E8-D1A0-F25854A4DC74}</Project>
       <Name>Automate</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\src\Model\GameWorld\" />
+    <Folder Include="Assets\src\Model\PathFinding\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Assets.src.PathFinding.MapModelComponents
+namespace Assets.src.Model.MapModelComponents
 {
     /// <summary>
     /// Class which holds information on a single cell in a map.
@@ -17,14 +17,14 @@ namespace Assets.src.PathFinding.MapModelComponents
     public class CellInfo
     {
         private bool _passable;
-        private float _weight;
+        private int _weight;
         //change this to blocked entry and blocked exit list
         private HashSet<Coordinate> BlockedExitDirections;
         private HashSet<Coordinate> BlockedEntranceDirections;
         private Dictionary<string, int> DirectionalWeightRatio;
         //add "penalty" or "bonus" for direction
 
-        public CellInfo(bool isPassable, float weight) {
+        public CellInfo(bool isPassable, int weight) {
             if (weight < 0)
                 throw new ArgumentException();
             _passable = isPassable;
@@ -34,7 +34,7 @@ namespace Assets.src.PathFinding.MapModelComponents
         }
 
         [JsonConstructor]
-        public CellInfo(bool isPassable, float weight, HashSet<Coordinate> blockedExitDirections, HashSet<Coordinate> blockedEntranceDirections) {
+        public CellInfo(bool isPassable, int weight, HashSet<Coordinate> blockedExitDirections, HashSet<Coordinate> blockedEntranceDirections) {
             if (weight < 0)
                 throw new ArgumentException();
             _passable = isPassable;
@@ -45,7 +45,7 @@ namespace Assets.src.PathFinding.MapModelComponents
             BlockedEntranceDirections = new HashSet<Coordinate>(blockedEntranceDirections);
         }
 
-        public float GetWeight()
+        public int GetWeight()
         {
             return _weight;
         }
@@ -60,7 +60,7 @@ namespace Assets.src.PathFinding.MapModelComponents
                 return false;
 
             CellInfo cellInfo = (CellInfo)obj;
-            return (Math.Abs(_weight - cellInfo._weight) < 0.0001) &&
+            return (_weight == cellInfo._weight) &&
                 (_passable == cellInfo._passable) &&
                 (BlockedExitDirections.SetEquals(cellInfo.BlockedExitDirections)) &&
                 (BlockedEntranceDirections.SetEquals(cellInfo.BlockedEntranceDirections)) ;

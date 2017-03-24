@@ -1,8 +1,8 @@
-﻿    using System;
-using Assets.src.PathFinding.MapModelComponents;
+﻿using System;
+using Assets.src.Model.MapModelComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.PathFinding.MapModelComponents {
+namespace AutomateTests.Model.MapModelComponents {
     [TestClass()]
     public class TestBoundary {
 

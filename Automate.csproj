@@ -80,6 +80,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Backup\CellType.cs" />
+    <Compile Include="Assets\Backup\GameMapHandler.cs" />
+    <Compile Include="Assets\Backup\MouseFollow.cs" />
+    <Compile Include="Assets\Backup\PathFinder.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Core\HeuristicSorting.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Core\IsoSorting.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Core\IsoTransform.cs" />
@@ -95,7 +99,15 @@
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\Isometric.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\MethodExtensionForMonoBehaviourTransform.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\Singleton.cs" />
-    <Compile Include="Assets\src\Controller\Interfaces\IPrimaryObserver - Copy.cs" />
+    <Compile Include="Assets\src\Model\GameWorldComponents\Automaton.cs" />
+    <Compile Include="Assets\src\Model\GameWorldComponents\GameWorld.cs" />
+    <Compile Include="Assets\src\Model\GameWorldComponents\Movable.cs" />
+    <Compile Include="Assets\src\Model\GameWorldComponents\Structure.cs" />
+    <Compile Include="Assets\src\Model\PathFinding\Movement.cs" />
+    <Compile Include="Assets\src\Model\PathFinding\MovementPath.cs" />
+    <Compile Include="Assets\src\Model\PathFinding\NoPathFoundException.cs" />
+    <Compile Include="Assets\src\Utility\CommonUtility.cs" />
+    <Compile Include="Assets\src\Utility\DuplicateKeyComparer.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\AssertionComponent.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\AssertionException.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\Assertions.cs" />
@@ -152,6 +164,7 @@
     <Compile Include="Assets\src\Controller\Interfaces\IGameView.cs" />
     <Compile Include="Assets\src\Controller\Interfaces\IHandler.cs" />
     <Compile Include="Assets\src\Controller\Interfaces\IHandlersManager.cs" />
+    <Compile Include="Assets\src\Controller\Interfaces\IPrimaryObserver.cs" />
     <Compile Include="Assets\src\Controller\Interfaces\IScheduler.cs" />
     <Compile Include="Assets\src\Controller\Interfaces\ISecondryObserver.cs" />
     <Compile Include="Assets\src\Controller\Modules\ControllerScheduler.cs" />
@@ -161,11 +174,14 @@
     <Compile Include="Assets\src\Controller\Modules\SelectionArgs.cs" />
     <Compile Include="Assets\src\Controller\Modules\SelectionHandler.cs" />
     <Compile Include="Assets\src\Controller\Modules\SelectionMasterAction.cs" />
-    <Compile Include="Assets\src\PathFinding\MapModelComponents\Boundary.cs" />
-    <Compile Include="Assets\src\PathFinding\MapModelComponents\CellInfo.cs" />
-    <Compile Include="Assets\src\PathFinding\MapModelComponents\Coordinate.cs" />
-    <Compile Include="Assets\src\PathFinding\MapModelComponents\MapInfo.cs" />
-    <Compile Include="Assets\src\PathFinding\MapModelComponents\MyContractResolver.cs" />
+    <Compile Include="Assets\src\Model\IModelAbstractionLayer.cs" />
+    <Compile Include="Assets\src\Model\MapModelComponents\Boundary.cs" />
+    <Compile Include="Assets\src\Model\MapModelComponents\CellInfo.cs" />
+    <Compile Include="Assets\src\Model\MapModelComponents\Coordinate.cs" />
+    <Compile Include="Assets\src\Model\MapModelComponents\MapInfo.cs" />
+    <Compile Include="Assets\src\Model\MapModelComponents\MyContractResolver.cs" />
+    <Compile Include="Assets\src\Model\PathFinding\IPathFindingStrategy.cs" />
+    <Compile Include="Assets\src\Model\PathFinding\PathFinderAStar.cs" />
     <Compile Include="Assets\src\ThreadingExample\ThreadExample.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +203,7 @@
     <None Include="Assets\UnityTestTools\LICENSE.txt" />
     <None Include="Assets\UnityTestTools\changelog.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
 </Project>
