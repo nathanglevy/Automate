@@ -55,6 +55,7 @@ namespace AutomateTests.Model.GameWorldComponents {
             GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
             long movableId = gameWorld.CreateMovable(new Coordinate(0, 0, 0));
             gameWorld.IssueMoveCommand(movableId, new Coordinate(0, 0, 0));
+
         }
 
         //[TestMethod()]
