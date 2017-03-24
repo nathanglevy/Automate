@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Assets.src.PathFinding.MapModelComponents;
+using Assets.src.Model.MapModelComponents;
 
 namespace Assets.src.Controller.Interfaces
 {

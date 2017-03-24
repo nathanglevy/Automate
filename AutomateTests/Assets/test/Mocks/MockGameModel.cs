@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using Assets.src.Controller;
 using Assets.src.Controller.Interfaces;
-using Assets.src.PathFinding.MapModelComponents;
-using IObserverArgs = Assets.src.Controller.IObserverArgs;
+using Assets.src.Model.MapModelComponents;
 
 namespace AutomateTests.test.Controller
 {
