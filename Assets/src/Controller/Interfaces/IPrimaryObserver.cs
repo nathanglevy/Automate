@@ -6,6 +6,8 @@
         
         void Invoke<U>(U invokeArgs) where U : IObserverArgs;
 
+
+        // Dummy comment
         int GetObserversCount();
     }
 }
