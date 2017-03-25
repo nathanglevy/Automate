@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assets.src.Controller.Interfaces;
-using Assets.src.Model;
-using Assets.src.Model.GameWorldComponents;
-using Assets.src.Model.MapModelComponents;
-using Assets.src.Model.PathFinding;
+using src.Model;
+using src.Model.GameWorldComponents;
+using src.Model.MapModelComponents;
+using src.Model.PathFinding;
 
 namespace AutomateTests.Mocks
 {

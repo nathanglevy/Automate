@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Assets.src.Controller.Abstracts;
 using Assets.src.Controller.Interfaces;
-using Assets.src.Model.MapModelComponents;
 using AutomateTests.test.Controller;
+using src.Model.MapModelComponents;
 
 namespace Assets.src.Controller.Handlers.SelectionNotification
 {
