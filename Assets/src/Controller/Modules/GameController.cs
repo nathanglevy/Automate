@@ -35,10 +35,15 @@ namespace Assets.src.Controller.Modules
                     AutoResetEvent syncEvent = new AutoResetEvent(false);
                     var subHandler = new Thread(delegate()
                     {
-                        handler.Handle(args, new HandlerUtils(Model, viewCallBack));
+                        // Handle and Get Result
+                        var handlerResult = handler.Handle(args, new HandlerUtils(Model, viewCallBack));
+
+                        // Push to WhoEver Waiting the results
+                        viewCallBack(handlerResult);
+
+                        // resume any waiting threads
                         syncEvent.Set();
-                    });
-                    subHandler.Name = String.Format("{0}_WorkerThread", handler.Name);
+                    }) {Name = String.Format("{0}_WorkerThread", handler.GetType().ToString())};
                     threads.Add(new ThreadInfo(syncEvent, subHandler));
                     subHandler.Start();
                 }

@@ -9,20 +9,21 @@ namespace Assets.src.Controller.Handlers.SelectionNotification
 {
     public class ViewSelectionHandler  : Handler<ObserverArgs>
     {
-        public override void Handle(ObserverArgs args, IHandlerUtils utils)
+        public override IHandlerResult Handle(ObserverArgs args, IHandlerUtils utils)
         {
             ViewSelectionNotification notification = args as ViewSelectionNotification;
 
-            List<string> coordinates = utils.Model.GetPlayersInSelection(notification.UpperLeft, notification.BottomRight);
+            List<Guid> coordinates =
+                utils.Model.GetMovableListInBoundary(new Boundary(notification.UpperLeft, notification.BottomRight));
 
             List<MasterAction> actions = new List<MasterAction>();
             foreach (var guid in coordinates)
             {
-                Coordinate coordinate = utils.Model.GetPlayerCoordinate(guid);
+                Coordinate coordinate = utils.Model.GetMovableCurrentCoordinate(guid);
                 var selectPlayer = new SelectPlayer(coordinate, guid.ToString());
                 actions.Add(selectPlayer);
             }
-            utils.Enqueue(new HandlerResult(actions));
+            return new HandlerResult(actions);
         }
         
     }

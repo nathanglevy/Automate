@@ -4,6 +4,6 @@ namespace Assets.src.Controller.Abstracts
 {
     public abstract class ObserverArgs : IObserverArgs
     {
-        public string TargetId { get; private set; }
+        public string TargetId { get;  set; }
     }
 }

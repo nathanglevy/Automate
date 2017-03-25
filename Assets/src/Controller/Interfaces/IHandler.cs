@@ -17,9 +17,7 @@ namespace Assets.src.Controller
     public interface IHandler<T> : IHandler where T : IObserverArgs
     {
         bool CanHandle(T args);
-        void Handle(T args, IHandlerUtils utils);
-//        bool CanHandle<T>(T args) where T : ObserverArgs;
-//        void Handle<T>(T args, IHandlerUtils utils) where T : ObserverArgs;
+        IHandlerResult Handle(T args, IHandlerUtils utils);
     }
 
     public abstract class Handler<T> : IHandler<T> where T:IObserverArgs
@@ -31,7 +29,7 @@ namespace Assets.src.Controller
             return true;
         }
 
-        public abstract void Handle(T args, IHandlerUtils utils);
+        public abstract IHandlerResult Handle(T args, IHandlerUtils utils);
         public Type GetInputType()
         {
             throw new NotImplementedException();

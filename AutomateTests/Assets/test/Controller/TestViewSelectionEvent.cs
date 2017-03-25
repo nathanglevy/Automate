@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using Assets.src.Controller;
 using Assets.src.Controller.Abstracts;
@@ -19,7 +20,7 @@ namespace AutomateTests.test.Controller
         public void TestCreateSelectionArgs_ExpectToPass()
         {
             IObserverArgs viewSelectionNotification = new ViewSelectionNotification(
-                new Coordinate(0, 0, 0), new Coordinate(10, 10, 10));
+                new Coordinate(0, 0, 0), new Coordinate(10, 10, 10), "ObjectID");
             Assert.IsNotNull(viewSelectionNotification);
         }
 
@@ -35,7 +36,7 @@ namespace AutomateTests.test.Controller
         public void TestHandleViewSelection_ExpectActionsToBeSentToView()
         {
             ObserverArgs viewSelectionNotification = new ViewSelectionNotification(
-                new Coordinate(0, 0, 0), new Coordinate(10, 10, 0));
+                new Coordinate(0, 0, 0), new Coordinate(10, 10, 0), "ObjectID");
 
             IHandler<ObserverArgs> viewSelectionHandler = new ViewSelectionHandler();
 
@@ -47,14 +48,23 @@ namespace AutomateTests.test.Controller
             {
                 threadInfo.SyncEvent.WaitOne(20);
             }
+            foreach (var threadInfo in syncEvents)
+            {
+                Assert.AreEqual(false, threadInfo.Thread.IsAlive);
+                threadInfo.SyncEvent.WaitOne(20);
+            }
+
+
             Assert.AreEqual(1, mockGameView.Results.Count);
             IHandlerResult result = null;
             mockGameView.Results.TryPeek(out result);
             Assert.AreEqual(2, result.GetActions().Count);
             Assert.AreEqual(ActionType.SelectPlayer, result.GetActions()[0].Type);
-            Assert.AreEqual("AhmadHamdan", result.GetActions()[0].TargetId);
+            Guid action0Guid;
+            Assert.IsTrue(Guid.TryParse(result.GetActions()[0].TargetId,out action0Guid));
             Assert.AreEqual(ActionType.SelectPlayer, result.GetActions()[1].Type);
-            Assert.AreEqual("NaphLevy", result.GetActions()[1].TargetId);
+            Guid action1Guid;
+            Assert.IsTrue(Guid.TryParse(result.GetActions()[1].TargetId, out action1Guid));
 
 
         }

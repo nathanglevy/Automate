@@ -79,11 +79,16 @@ namespace AutomateTests.test.Controller
             System.Threading.Thread.CurrentThread.Name = "CurrentThread";
             IList<ThreadInfo> threads = gameController.Handle(mockNotificationArgs, viewCallBack);
 
+            foreach (var threadInfo in threads)
+            {
+                threadInfo.SyncEvent.WaitOne(100);
+            }
+
             // check that only a single thread is executed
             Assert.AreEqual(1,threads.Count);
             Assert.AreEqual("AutomateTests.test.Mocks.MockHandler_WorkerThread", threads[0].Thread.Name);
             Assert.AreNotEqual("AutomateTests.test.Mocks.MockHandler_WorkerThread", Thread.CurrentThread.Name);
-            _syncEvent.WaitOne(10);
+            
 
             Assert.AreEqual(2, _queue.Count);
             MasterAction masterAction1 = null;
@@ -93,7 +98,7 @@ namespace AutomateTests.test.Controller
             Assert.AreEqual(ActionType.AreaSelection, masterAction1.Type);
             Assert.AreEqual(ActionType.Movement, masterAction2.Type);
             Assert.AreEqual("AhmadHamdan",masterAction1.TargetId);
-            Assert.AreEqual("AhmadHamdan",masterAction2.TargetId);
+            Assert.AreEqual("NaphLevy",masterAction2.TargetId);
 
         }
 
@@ -104,8 +109,7 @@ namespace AutomateTests.test.Controller
             {
                 _queue.Enqueue(masterAction);
             }
-            // call the Main Thread to continue
-            _syncEvent.Set();
+
         }
     }
 }

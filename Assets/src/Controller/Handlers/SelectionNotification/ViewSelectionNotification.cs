@@ -10,12 +10,12 @@ namespace Assets.src.Controller.Handlers.SelectionNotification
         public Coordinate UpperLeft { get; private set; }
         public Coordinate BottomRight { get; private set; }
 
-        public ViewSelectionNotification(Coordinate UpperLeft, Coordinate bottomRight)
+        public ViewSelectionNotification(Coordinate UpperLeft, Coordinate bottomRight, string id)
         {
+            TargetId = id;
             this.UpperLeft = UpperLeft;
             this.BottomRight = bottomRight;
         }
 
-        public string TargetId { get; private set; }
     }
 }
