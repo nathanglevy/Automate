@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Assets.src.Controller.Abstracts;
 using Assets.src.Controller.Interfaces;
-using Assets.src.Model.MapModelComponents;
 using AutomateTests.test.Controller;
+using src.Model.MapModelComponents;
 
 namespace Assets.src.Controller.Handlers.SelectionNotification
 {
@@ -13,12 +13,12 @@ namespace Assets.src.Controller.Handlers.SelectionNotification
         {
             ViewSelectionNotification notification = args as ViewSelectionNotification;
 
-            List<string> coordinates = utils.Model.GetPlayersInSelection(notification.UpperLeft, notification.BottomRight);
+            List<Guid> coordinates = utils.Model.GetMovableListInBoundary(new Boundary(notification.UpperLeft, notification.BottomRight) );
 
             List<MasterAction> actions = new List<MasterAction>();
             foreach (var guid in coordinates)
             {
-                Coordinate coordinate = utils.Model.GetPlayerCoordinate(guid);
+                Coordinate coordinate = utils.Model.GetMovableCurrentCoordinate(guid);
                 var selectPlayer = new SelectPlayer(coordinate, guid.ToString());
                 actions.Add(selectPlayer);
             }

@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using Assets.src.Model.GameWorldComponents;
-using Assets.src.Model.MapModelComponents;
-using Assets.src.Model.PathFinding;
+using src.Model.MapModelComponents;
+using src.Model.PathFinding;
 
 namespace src.Model.GameWorldComponents
 {
     //TODO: Need to do comments!
     public class GameWorld
     {
-        private Dictionary<long, Movable> _movables = new Dictionary<long, Movable>();
+        private Dictionary<Guid, Movable> _movables = new Dictionary<Guid, Movable>();
+        private Dictionary<Guid, Structure> _structures = new Dictionary<Guid, Structure>();
         private MapInfo _map;
 
         public GameWorld(Coordinate mapDimensions)
@@ -27,36 +27,36 @@ namespace src.Model.GameWorldComponents
             _map.FillMapWithCells(new CellInfo(true, 1));
         }
 
-        public long CreateMovable(Coordinate coordinate)
+        public Guid CreateMovable(Coordinate coordinate)
         {
             Movable movable = new Movable(coordinate);
-            _movables.Add(movable.getId(),movable);
-            return movable.getId();
+            _movables.Add(movable.GetId(),movable);
+            return movable.GetId();
         }
 
-        public bool IssueMoveCommand(long id, Coordinate coordinate)
+        public bool IssueMoveCommand(Guid id, Coordinate coordinate)
         {
             throw new NotImplementedException();
         }
 
-        public Movement GetNextMovement(long id)
+        public Movement GetNextMovement(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Coordinate GetNextCoordinate(long id)
+        public Coordinate GetNextCoordinate(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Coordinate MoveToNext(long id)
+        public Coordinate MoveToNext(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public List<long> GetMovableIdList()
+        public List<Guid> GetMovableIdList()
         {
-            return new List<long>(_movables.Keys);
+            return new List<Guid>(_movables.Keys);
         }
     }
 }

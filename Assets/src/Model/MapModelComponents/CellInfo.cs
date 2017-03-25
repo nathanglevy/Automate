@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Assets.src.Model.MapModelComponents
+namespace src.Model.MapModelComponents
 {
     /// <summary>
     /// Class which holds information on a single cell in a map.

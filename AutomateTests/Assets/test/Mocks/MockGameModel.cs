@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assets.src.Controller.Interfaces;
-using Assets.src.Model;
-using Assets.src.Model.MapModelComponents;
-using Assets.src.Model.PathFinding;
+using src.Model;
+using src.Model.GameWorldComponents;
+using src.Model.MapModelComponents;
+using src.Model.PathFinding;
 
 namespace AutomateTests.Mocks
 {
@@ -27,6 +28,91 @@ namespace AutomateTests.Mocks
         public Coordinate GetPlayerCoordinate(string guid)
         {
             return new Coordinate(10, 10, 0);
+        }
+
+        public void FocusWorld(Guid worldId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Guid CreateGameWorld(Coordinate mapDimensions)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Guid CreateMovable(Coordinate spawnCoordinate, MovableType movableType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Guid CreateStructure(Coordinate spawnTopLeftCoordinate, StructureType structureType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Coordinate GetMovableCurrentCoordinate(Guid moveableId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Boundary GetStructureBoundary(Guid structureId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Guid> GetMovableListInBoundary(Boundary selectionArea)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Guid> GetMovableListInCoordinate(Coordinate selectionCoordinate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Guid> GetStructureListInBoundary(Boundary selectionArea)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Guid GetStructureAtCoordinate(Coordinate selectionCoordinate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void IssueMoveCommand(Guid movableId, Coordinate targetCoordinate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsMovableInMotion(Guid movableId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Movement MoveMovableToNext(Guid moveableId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Movement GetMovableNextMovement(Guid movableId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Coordinate GetMovableNextCoordinate(Guid movableId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public double GetMovableSpeed(Guid moveableId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetMovableSpeed(Guid moveableId, double speed)
+        {
+            throw new NotImplementedException();
         }
     }
 }

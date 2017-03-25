@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.src.Model.GameWorldComponents;
-using Assets.src.Model.MapModelComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using src.Model.GameWorldComponents;
+using src.Model.MapModelComponents;
 
 namespace AutomateTests.Model.GameWorldComponents {
     [TestClass()]
@@ -43,7 +42,7 @@ namespace AutomateTests.Model.GameWorldComponents {
         [TestMethod()]
         public void TestGetMovableIdList_ExpectIdToBeInList() {
             GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
-            List<long> moveableList = new List<long>();
+            List<Guid> moveableList = new List<Guid>();
             moveableList.Add(gameWorld.CreateMovable(new Coordinate(0, 0, 0)));
             moveableList.Add(gameWorld.CreateMovable(new Coordinate(0, 0, 0)));
             moveableList.Add(gameWorld.CreateMovable(new Coordinate(0, 0, 0)));
@@ -54,7 +53,7 @@ namespace AutomateTests.Model.GameWorldComponents {
         //[TestMethod()]
         public void TestIssueMoveCommand_ExpectSuccess() {
             GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
-            long movableId = gameWorld.CreateMovable(new Coordinate(0, 0, 0));
+            Guid movableId = gameWorld.CreateMovable(new Coordinate(0, 0, 0));
             gameWorld.IssueMoveCommand(movableId, new Coordinate(0, 0, 0));
 
         }

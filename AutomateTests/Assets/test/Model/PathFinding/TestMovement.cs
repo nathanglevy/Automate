@@ -1,7 +1,7 @@
 ﻿using System;
-using Assets.src.Model.MapModelComponents;
-using Assets.src.Model.PathFinding;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using src.Model.MapModelComponents;
+using src.Model.PathFinding;
 
 namespace AutomateTests.Model.PathFinding
 {

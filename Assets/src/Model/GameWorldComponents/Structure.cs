@@ -1,4 +1,4 @@
-﻿namespace Assets.src.Model.GameWorldComponents
+﻿namespace src.Model.GameWorldComponents
 {
     public class Structure
     {

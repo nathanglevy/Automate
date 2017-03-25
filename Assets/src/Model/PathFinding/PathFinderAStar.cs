@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Assets.src.Model.MapModelComponents;
 using Assets.src.Utility;
-using UnityEngine;
+using src.Model.MapModelComponents;
 
-namespace Assets.src.Model.PathFinding
+namespace src.Model.PathFinding
 {
     public class PathFinderAStar : IPathFindingStrategy
     {

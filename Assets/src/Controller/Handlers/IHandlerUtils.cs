@@ -1,5 +1,5 @@
 ﻿using Assets.src.Controller.Interfaces;
-using Assets.src.Model;
+using src.Model;
 
 namespace Assets.src.Controller.Handlers
 {

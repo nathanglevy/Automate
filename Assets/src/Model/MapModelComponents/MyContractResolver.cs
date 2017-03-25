@@ -5,7 +5,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Assets.src.Model.MapModelComponents {
+namespace src.Model.MapModelComponents {
     public class MyContractResolver : Newtonsoft.Json.Serialization.DefaultContractResolver {
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization) {
             var props = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using Assets.src.Controller.Abstracts;
 using Assets.src.Controller.Interfaces;
-using Assets.src.Model;
 using AutomateTests.test.Controller;
+using src.Model;
 
 namespace Assets.src.Controller.Modules
 {

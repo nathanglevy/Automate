@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assets.src.Model.MapModelComponents
+namespace src.Model.MapModelComponents
 {
     /// <summary>
     /// Class which describes a 3D boundary.<para />

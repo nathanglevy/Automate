@@ -1,9 +1,9 @@
 ﻿using System;
-using Assets.src.Model.MapModelComponents;
-using Assets.src.Model.PathFinding;
 using Assets.src.Utility;
+using src.Model.MapModelComponents;
+using src.Model.PathFinding;
 
-namespace Assets.src.Model.GameWorldComponents
+namespace src.Model.GameWorldComponents
 {
     //TODO: Need to do comments!
     public class Movable
@@ -11,7 +11,7 @@ namespace Assets.src.Model.GameWorldComponents
         private Coordinate _currentCoordinate;
         private bool _inMotion;
         private MovementPath _movementPath = null;
-        private long _id = CommonUtility.GetUid();
+        private Guid _id = Guid.NewGuid();
 
         public Movable(Coordinate startinCoordinate)
         {
@@ -65,6 +65,6 @@ namespace Assets.src.Model.GameWorldComponents
             SetMotionStatus();
         }
 
-        public long getId() { return _id; }
+        public Guid GetId() { return _id; }
     }
 }

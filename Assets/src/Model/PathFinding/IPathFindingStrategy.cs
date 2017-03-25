@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Assets.src.Model.MapModelComponents;
+﻿using src.Model.MapModelComponents;
 
-namespace Assets.src.Model.PathFinding
+namespace src.Model.PathFinding
 {
     public interface IPathFindingStrategy
     {
