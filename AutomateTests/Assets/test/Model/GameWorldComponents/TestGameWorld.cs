@@ -4,6 +4,7 @@ using System.Linq;
 using Assets.src.Model.GameWorldComponents;
 using Assets.src.Model.MapModelComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using src.Model.GameWorldComponents;
 
 namespace AutomateTests.Model.GameWorldComponents {
     [TestClass()]

@@ -21,7 +21,7 @@ namespace Assets.src.Model.MapModelComponents
         //change this to blocked entry and blocked exit list
         private HashSet<Coordinate> BlockedExitDirections;
         private HashSet<Coordinate> BlockedEntranceDirections;
-        private Dictionary<string, int> DirectionalWeightRatio;
+        //private Dictionary<string, int> DirectionalWeightRatio;
         //add "penalty" or "bonus" for direction
 
         public CellInfo(bool isPassable, int weight) {

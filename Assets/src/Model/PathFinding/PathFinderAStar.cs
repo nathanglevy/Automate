@@ -95,16 +95,18 @@ namespace Assets.src.Model.PathFinding
 
         private static List<Coordinate> GetPathingMovements()
         {
-            List<Coordinate> result = new List<Coordinate>();
-            
-            result.Add(new Coordinate(1, 0, 0));
-            result.Add(new Coordinate(1, 1, 0));
-            result.Add(new Coordinate(0, 1, 0));
-            result.Add(new Coordinate(-1, 0, 0));
-            result.Add(new Coordinate(-1, -1, 0));
-            result.Add(new Coordinate(0, -1, 0));
-            result.Add(new Coordinate(1, -1, 0));
-            result.Add(new Coordinate(-1, 1, 0));
+            List<Coordinate> result = new List<Coordinate>
+            {
+                new Coordinate(1, 0, 0),
+                new Coordinate(1, 1, 0),
+                new Coordinate(0, 1, 0),
+                new Coordinate(-1, 0, 0),
+                new Coordinate(-1, -1, 0),
+                new Coordinate(0, -1, 0),
+                new Coordinate(1, -1, 0),
+                new Coordinate(-1, 1, 0)
+            };
+
             return result;
         }
 
