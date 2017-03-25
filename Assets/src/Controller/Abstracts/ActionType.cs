@@ -4,5 +4,7 @@
     {
         AreaSelection,
 
+        Movement,
+        SelectPlayer
     }
 }

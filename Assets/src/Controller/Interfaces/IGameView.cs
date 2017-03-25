@@ -2,6 +2,8 @@
 {
     public interface IGameView
     {
-        IPrimaryObserver GetViewObservable();
+        ViewCallBack GetCallBack();
     }
+
+    public delegate void ViewCallBack(IHandlerResult actions);
 }

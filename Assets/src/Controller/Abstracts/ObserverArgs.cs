@@ -1,7 +1,9 @@
+using Assets.src.Controller.Interfaces;
+
 namespace Assets.src.Controller.Abstracts
 {
-    public class ObserverArgs : IObserverArgs
+    public abstract class ObserverArgs : IObserverArgs
     {
-        public string Id { get; private set; }
+        public string TargetId { get; private set; }
     }
 }
