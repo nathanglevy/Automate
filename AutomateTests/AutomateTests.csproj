@@ -36,6 +36,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="UnityEditor, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\UnityAssemblies\UnityEditor.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -52,24 +56,18 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Assets\test\Controller\TestViewSelectionEvent.cs" />
+    <Compile Include="Assets\test\Mocks\Handler.cs" />
+    <Compile Include="Assets\test\Mocks\MockMasterAction.cs" />
+    <Compile Include="Assets\test\Mocks\MockObserverArgs.cs" />
     <Compile Include="Assets\test\Model\GameWorldComponents\TestGameWorld.cs" />
     <Compile Include="Assets\test\Model\GameWorldComponents\TestMovable.cs" />
     <Compile Include="Assets\test\Model\PathFinding\TestMovementPath.cs" />
     <Compile Include="Assets\test\Model\PathFinding\TestMovement.cs" />
     <Compile Include="Assets\test\Model\PathFinding\TestPathFinderAStar.cs" />
-    <Compile Include="Assets\test\Controller\MasterTestMasterAction.cs" />
-    <Compile Include="Assets\test\Controller\HandlerForTest.cs" />
-    <Compile Include="Assets\test\Controller\IntegrationTestController.cs" />
-    <Compile Include="Assets\test\Mocks\MockControllerObserver.cs" />
-    <Compile Include="Assets\test\Mocks\MockDummyMasterAction.cs" />
-    <Compile Include="Assets\test\Mocks\MockObserverArgs.cs" />
+    <Compile Include="Assets\test\Mocks\MockNotificationARgs.cs" />
     <Compile Include="Assets\test\Mocks\MockGameModel.cs" />
     <Compile Include="Assets\test\Mocks\MockGameView.cs" />
-    <Compile Include="Assets\test\Controller\TestObservableAndObserver.cs" />
-    <Compile Include="Assets\test\Controller\TestingForHandlersManager.cs" />
-    <Compile Include="Assets\test\Controller\TestSchedular.cs" />
-    <Compile Include="Assets\test\Controller\TestAction.cs" />
-    <Compile Include="Assets\test\Controller\UnitTest1.cs" />
     <Compile Include="Assets\test\Controller\TestController.cs" />
     <Compile Include="Assets\test\Model\MapModelComponents\TestBoundary.cs" />
     <Compile Include="Assets\test\Model\MapModelComponents\TestCellInfo.cs" />

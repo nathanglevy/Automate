@@ -1,70 +1,111 @@
-﻿using Assets.src.Controller;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Threading;
+using Assets.src.Controller.Abstracts;
 using Assets.src.Controller.Interfaces;
 using Assets.src.Controller.Modules;
+using Assets.src.Model;
+using Assets.src.Model.MapModelComponents;
 using AutomateTests.Mocks;
 using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using IObserverArgs = Assets.src.Controller.IObserverArgs;
-using MockObserverArgs = AutomateTests.test.Mocks.MockObserverArgs;
 
-namespace AutomateTests.Controller
+namespace AutomateTests.test.Controller
 {
     [TestClass]
     public class TestController
     {
+
+        private ConcurrentQueue<MasterAction> _queue = new ConcurrentQueue<MasterAction>();
+        private AutoResetEvent _syncEvent = new AutoResetEvent(false);
+
         [TestMethod]
         public void TestCreateNew_ShouldPass()
         {
-            IPrimaryObserver viewObservable = new PrimaryObserver();
-            IPrimaryObserver modelObservable = new PrimaryObserver();
 
-            GameController gameController = new GameController(viewObservable, modelObservable, null, null);
+            IGameView view = new MockGameView();
+            IModelAbstractionLayer model = new MockGameModel();
+
+            GameController gameController = new GameController(view, model);
             Assert.IsNotNull(gameController);
-            Assert.IsNotNull(gameController.ViewObservable);
-            Assert.IsNotNull(gameController.ModelObservable);
+            Assert.IsNotNull(gameController.View);
+            Assert.IsNotNull(gameController.Model);
         }
 
-//
-//        [TestMethod]
-//        public void TestHandleViewObservableNotify_ExpectDelegationToModel()
-//        {
-//
-//            // create View Observable, will be used by the controller to delegate actions to the view
-//            IPrimaryObserver controllerPrimaryObserverAtView = new PrimaryObserver();
-////            IPrimaryObserver controllerPrimaryObserverAtView = new ThreadedPrimaryObserver();
-//            IGameView gameview = new MockGameView(controllerPrimaryObserverAtView);
-//
-//
-//            MockControllerObserver mockControllerObserver = new MockControllerObserver();
-//            controllerPrimaryObserverAtView.RegisterObserver(mockControllerObserver);
-//            var mockHandler = new MockHandler();
-//            mockControllerObserver.HandlersManager.AddHandler(mockHandler);
-//
-//
-//            // create View Observable, will be used by the controller to delegate actions to the view
-//            IPrimaryObserver controllerPrimaryObserverAtModel = new PrimaryObserver();
-//            IGameModel gameModel = new MockGameModel(controllerPrimaryObserverAtModel);
-//   
-//            // Init the Controller
-//            IGameController gameController = new GameController(
-//                gameview.GetViewPrimaryObserver(), // Controller-->View
-//                gameModel.GetModelPrimaryObserver(), // Controller-->Model
-//                controllerPrimaryObserverAtView, // View -->Controller
-//                controllerPrimaryObserverAtModel // Model --> Controller
-//                );
-//
-//            // Add Mock Handler
-////            gameController.
-//
-//            IObserverArgs mockObserverArgs = new MockObserverArgs();
-//            controllerPrimaryObserverAtView.Invoke(mockObserverArgs);
-//
-//            Assert.AreEqual(1,mockHandler.Actions.Count);
-//            var mockHandlerAction = mockHandler.Actions[0];
-//            Assert.AreEqual(ActionType.AreaSelection,mockHandlerAction.Type);
-//            Assert.AreEqual(mockHandlerAction.Id,mockObserverArgs.Id);
-//        }
-//
-//    }
+        [TestMethod]
+        public void TestHandlersCount_Expect0()
+        {
+            IModelAbstractionLayer gameModel = null;
+            IGameView gameview = null;
+            IGameController gameController = new GameController(gameview, gameModel);
+
+            Assert.AreEqual(0,gameController.GetHandlersCount());
+
+        }
+
+        [TestMethod]
+        public void TestRegisterHandle_ExpectHandleToBeAddedtoList()
+        {
+            IModelAbstractionLayer gameModel = null;
+            IGameView gameview = null;
+            IGameController gameController = new GameController(gameview, gameModel);
+            var mockHandler = new MockHandler();
+            gameController.RegisterHandler(mockHandler);
+
+            Assert.AreEqual(1,gameController.GetHandlersCount());
+        }
+
+        [TestMethod]
+        public void TestHandleViewArgsInControllerWithThreading_ExpectMasterActionSentToView()
+        {
+
+            // Create View Object
+            MockGameView gameview = new MockGameView();
+
+            // Create Model Object
+            IModelAbstractionLayer gameModel = new MockGameModel();
+
+            // Create Handler
+            var mockHandler = new MockHandler();
+
+            // Init the Controller
+            IGameController gameController = new GameController(gameview, gameModel);
+            gameController.RegisterHandler(mockHandler);
+            // Create the NotificationArgs
+            string playerID = "AhmadHamdan";
+            MockNotificationArgs mockNotificationArgs = new MockNotificationArgs(new Coordinate(12, 12, 3), playerID);
+            var viewCallBack = gameview.GetCallBack();
+            viewCallBack += CheckTestHandleViewArgsResult_ExpectActiontoBeAdded;
+            System.Threading.Thread.CurrentThread.Name = "CurrentThread";
+            IList<ThreadInfo> threads = gameController.Handle(mockNotificationArgs, viewCallBack);
+
+            // check that only a single thread is executed
+            Assert.AreEqual(1,threads.Count);
+            Assert.AreEqual("AutomateTests.test.Mocks.MockHandler_WorkerThread", threads[0].Thread.Name);
+            Assert.AreNotEqual("AutomateTests.test.Mocks.MockHandler_WorkerThread", Thread.CurrentThread.Name);
+            _syncEvent.WaitOne(10);
+
+            Assert.AreEqual(2, _queue.Count);
+            MasterAction masterAction1 = null;
+            MasterAction masterAction2 = null;
+            _queue.TryDequeue(out masterAction1);
+            _queue.TryDequeue(out masterAction2);
+            Assert.AreEqual(ActionType.AreaSelection, masterAction1.Type);
+            Assert.AreEqual(ActionType.Movement, masterAction2.Type);
+            Assert.AreEqual("AhmadHamdan",masterAction1.TargetId);
+            Assert.AreEqual("AhmadHamdan",masterAction2.TargetId);
+
+        }
+
+        private void CheckTestHandleViewArgsResult_ExpectActiontoBeAdded(IHandlerResult handlerResult)
+        {
+            // update concurent que
+            foreach (var masterAction in handlerResult.GetActions())
+            {
+                _queue.Enqueue(masterAction);
+            }
+            // call the Main Thread to continue
+            _syncEvent.Set();
+        }
     }
 }

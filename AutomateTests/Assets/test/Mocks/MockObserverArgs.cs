@@ -1,15 +1,8 @@
-using System;
-using Assets.src.Controller;
+﻿using Assets.src.Controller.Abstracts;
 
 namespace AutomateTests.test.Mocks
 {
-    public class MockObserverArgs :IObserverArgs
+    public class MockObserverArgs : ObserverArgs
     {
-        public MockObserverArgs()
-        {
-            Id = Guid.NewGuid().ToString();
-        }
-
-        public string Id { get; protected set; }
     }
 }

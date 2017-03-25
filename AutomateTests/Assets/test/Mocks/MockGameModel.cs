@@ -1,36 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assets.src.Controller.Interfaces;
+using Assets.src.Model;
 using Assets.src.Model.MapModelComponents;
+using Assets.src.Model.PathFinding;
 
 namespace AutomateTests.Mocks
 {
-    public class MockGameModel : IGameModel
+    public class MockGameModel : IModelAbstractionLayer
     {
-        private IPrimaryObserver _controllerPrimaryObserverAtModel;
-
-        public MockGameModel(IPrimaryObserver controllerPrimaryObserverAtModel) {
-            _controllerPrimaryObserverAtModel = controllerPrimaryObserverAtModel;
+        public MovementPath GetMovementPath()
+        {
+            return new MovementPath(new Coordinate(10,10,0));
         }
 
-        public IPrimaryObserver GetModelPrimaryObserver()
+        public List<String> GetPlayersInSelection(Coordinate notificationUpperLeft, Coordinate notificationBottomRight)
         {
-            throw new NotImplementedException();
+            List<string> ids = new List<string>();
+            ids.Add("AhmadHamdan");
+            ids.Add("NaphLevy");
+            return ids;
         }
 
-        public IEnumerable<CellInfo> GetCellsInRange(Coordinate selectionArgsUpperLeft, Coordinate selectionArgsLowerRight)
-        {
-            throw new NotImplementedException();
-        }
 
-        public void revertPassableState(CellInfo cellInfo)
-        {
-            throw new NotImplementedException();
-        }
 
-        public IPrimaryObserver GetModelObservable()
+        public Coordinate GetPlayerCoordinate(string guid)
         {
-            throw new NotImplementedException();
+            return new Coordinate(10, 10, 0);
         }
     }
 }
