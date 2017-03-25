@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assets.src.Controller.Interfaces;
-using src.Model;
-using src.Model.GameWorldComponents;
-using src.Model.MapModelComponents;
-using src.Model.PathFinding;
+using Assets.src.Model;
+using Assets.src.Model.GameWorldComponents;
+using Assets.src.Model.MapModelComponents;
+using Assets.src.Model.PathFinding;
 
 namespace AutomateTests.Mocks
 {
@@ -24,13 +24,12 @@ namespace AutomateTests.Mocks
         }
 
 
-
         public Coordinate GetPlayerCoordinate(string guid)
         {
             return new Coordinate(10, 10, 0);
         }
 
-        public void FocusWorld(Guid worldId)
+        public void FocusWorld(Guid WorldId)
         {
             throw new NotImplementedException();
         }
@@ -52,7 +51,7 @@ namespace AutomateTests.Mocks
 
         public Coordinate GetMovableCurrentCoordinate(Guid moveableId)
         {
-            throw new NotImplementedException();
+            return new Coordinate(10, 10, 0);
         }
 
         public Boundary GetStructureBoundary(Guid structureId)
@@ -62,9 +61,10 @@ namespace AutomateTests.Mocks
 
         public List<Guid> GetMovableListInBoundary(Boundary selectionArea)
         {
-            throw new NotImplementedException();
-        }
+            
+            return new List<Guid>() {Guid.NewGuid(),Guid.NewGuid()};
 
+        }
         public List<Guid> GetMovableListInCoordinate(Coordinate selectionCoordinate)
         {
             throw new NotImplementedException();

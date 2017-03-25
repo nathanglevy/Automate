@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Assets.src.Controller;
 using Assets.src.Controller.Abstracts;
@@ -14,30 +15,30 @@ namespace AutomateTests.test.Mocks
 
         public bool CanHandle<T>(T args) where T : ObserverArgs
         {
-            if (args is MockObserverArgs)
+            if (args is MockNotificationArgs)
                 return true;
             return false;
         }
 
-        public string Name
+
+        public override IHandlerResult Handle(ObserverArgs args, IHandlerUtils utils)
         {
-            get { return this.GetType().ToString(); }
-        }
+            if (!CanHandle(args))
+            {
+                throw new ArgumentException("args must be MockObserverArgs, current handler cannot Handle it");
+            }
 
-        public override void Handle(ObserverArgs args, IHandlerUtils utils)
-        {
-            if (!CanHandle(args)) return;
+            MockNotificationArgs mockArgs = args as MockNotificationArgs;
 
-            MockObserverArgs mockArgs = args as MockObserverArgs;
-
-            var action = new MockMasterAction(ActionType.AreaSelection, mockArgs.TargetId);
-            var action2 = new MockMasterAction(ActionType.Movement, mockArgs.TargetId);
+            var action = new MockMasterAction(ActionType.AreaSelection, "AhmadHamdan");
+            var action2 = new MockMasterAction(ActionType.Movement, "NaphLevy");
             var actions = new List<MasterAction>();
             actions.Add(action);
             actions.Add(action2);
             Actions = actions;
 
-            utils.Enqueue(new HandlerResult(actions));
+
+            return new HandlerResult(actions);
 
         }
     }

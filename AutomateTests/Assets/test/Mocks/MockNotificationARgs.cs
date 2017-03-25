@@ -11,11 +11,9 @@ namespace AutomateTests.test.Mocks
         public MockNotificationArgs(Coordinate dropCoordinate, string targetId)
         {
             DropCoordinate = dropCoordinate;
-            TargetId = targetId;
         }
 
         public Coordinate DropCoordinate { get; }
 
-        public string TargetId { get; protected set; }
     }
 }
