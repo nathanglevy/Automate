@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Assets.src.Model.GameWorldComponents;
 using Assets.src.Model.MapModelComponents;
 using Assets.src.Model.PathFinding;
@@ -7,29 +8,31 @@ namespace Assets.src.Model
 {
     public interface IModelAbstractionLayer
     {
-        long CreateMovable(long WorldId, Coordinate spawnCoordinate, MovableType movableType);
-        long CreateStructure(long WorldId, Coordinate spawnTopLeftCoordinate, StructureType structureType);
+        void FocusWorld(Guid WorldId);
+        Guid CreateGameWorld(Coordinate mapDimensions);
+        Guid CreateMovable(Coordinate spawnCoordinate, MovableType movableType);
+        Guid CreateStructure(Coordinate spawnTopLeftCoordinate, StructureType structureType);
         //this is for movables
-        Coordinate GetMovableCurrentCoordinate(long WorldId, long moveableId);
+        Coordinate GetMovableCurrentCoordinate(Guid moveableId);
         //this is for structures
-        Boundary GetStructureBoundary(long WorldId, long structureId);
+        Boundary GetStructureBoundary(Guid structureId);
 
         //Get ids of structures and movables
-        List<long> GetMovableListInBoundary(long WorldId, Boundary selectionArea);
-        List<long> GetMovableListInCoordinate(long WorldId, Coordinate selectionCoordinate);
-        List<long> GetStructureListInBoundary(long WorldId, Boundary selectionArea);
-        long GetStructureAtCoordinate(long WorldId, Coordinate selectionCoordinate);
+        List<Guid> GetMovableListInBoundary(Boundary selectionArea);
+        List<Guid> GetMovableListInCoordinate(Coordinate selectionCoordinate);
+        List<Guid> GetStructureListInBoundary(Boundary selectionArea);
+        Guid GetStructureAtCoordinate(Coordinate selectionCoordinate);
         
         //motion issue movement related
-        void IssueMoveCommand(long WorldId, long movableId, Coordinate targetCoordinate);
-        bool IsMovableInMotion(long WorldId, long movableId);
-        bool MoveMovableToNext(long WorldId, long moveableId);
+        void IssueMoveCommand(Guid movableId, Coordinate targetCoordinate);
+        bool IsMovableInMotion(Guid movableId);
+        Movement MoveMovableToNext(Guid moveableId);
         //motion information related
-        Movement GetMovableNextMovement(long WorldId, long movableId);
-        Coordinate GetMovableNextCoordinate(long WorldId, long movableId);
+        Movement GetMovableNextMovement(Guid movableId);
+        Coordinate GetMovableNextCoordinate(Guid movableId);
 
         //movable speed related
-        double GetMovableSpeed(long WorldId, long moveableId);
-        void SetMovableSpeed(long WorldId, long moveableId, double speed);
+        double GetMovableSpeed(Guid moveableId);
+        void SetMovableSpeed(Guid moveableId, double speed);
     }
 }
