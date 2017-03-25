@@ -8,7 +8,7 @@ namespace Assets.src.Model
 {
     public interface IModelAbstractionLayer
     {
-        void FocusWorld(Guid WorldId);
+        void FocusWorld(Guid worldId);
         Guid CreateGameWorld(Coordinate mapDimensions);
         Guid CreateMovable(Coordinate spawnCoordinate, MovableType movableType);
         Guid CreateStructure(Coordinate spawnTopLeftCoordinate, StructureType structureType);

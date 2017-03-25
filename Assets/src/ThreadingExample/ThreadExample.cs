@@ -12,7 +12,6 @@ namespace Assets.src.ThreadingExample {
         {
             // example scenario:
             // we need more information before continuing calculation:
-            bool isCompleted = false;
             int theResult = 0;
 
             // we make a wait handle 'signal' event, and set it to initial signal state false
@@ -26,7 +25,6 @@ namespace Assets.src.ThreadingExample {
 
                 // calculation is ready:
                 theResult = 100;
-                isCompleted = true;
 
                 // we set the handle to signal that we are done
                 // ONE of the threads waiting on this signal will wake up

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Assets.src.Model.GameWorldComponents;
 using Assets.src.Model.MapModelComponents;
 using Assets.src.Model.PathFinding;
 
-namespace Assets.src.Model.GameWorldComponents
+namespace src.Model.GameWorldComponents
 {
     //TODO: Need to do comments!
     public class GameWorld
