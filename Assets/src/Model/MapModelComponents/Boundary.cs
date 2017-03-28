@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace src.Model.MapModelComponents
 {
@@ -48,6 +49,46 @@ namespace src.Model.MapModelComponents
         /// <returns>true if coordinate is within boundary, false otherwise</returns>
         public bool IsCoordinateInBoundary(Coordinate coordinate) {
             return (coordinate >= topLeft) && (coordinate <= bottomRight);
+        }
+
+        private HashSet<Coordinate> GetBoundaryCoordinatePoints()
+        {
+            HashSet<Coordinate> result = new HashSet<Coordinate>();
+            result.Add(new Coordinate(topLeft.x,        topLeft.y,      topLeft.z));
+            result.Add(new Coordinate(topLeft.x,        topLeft.y,      bottomRight.z));
+            result.Add(new Coordinate(topLeft.x,        bottomRight.y,  bottomRight.z));
+            result.Add(new Coordinate(bottomRight.x,    bottomRight.y,  bottomRight.z));
+            result.Add(new Coordinate(bottomRight.x,    bottomRight.y,  topLeft.z));
+            result.Add(new Coordinate(bottomRight.x,    topLeft.y,      topLeft.z));
+            result.Add(new Coordinate(topLeft.x,        bottomRight.y,  topLeft.z));
+            result.Add(new Coordinate(bottomRight.x,    topLeft.y,      bottomRight.z));
+            return result;
+        }
+
+        public bool IsBoundaryDisjointToBoundary(Boundary boundary)
+        {
+            bool currentInclusive = false;
+            foreach (Coordinate boundaryCoordinatePoint in GetBoundaryCoordinatePoints())
+            {
+                if (boundary.IsCoordinateInBoundary(boundaryCoordinatePoint))
+                    currentInclusive = true;
+            }
+            bool otherInclusive = false;
+            foreach (Coordinate boundaryCoordinatePoint in boundary.GetBoundaryCoordinatePoints()) {
+                if (IsCoordinateInBoundary(boundaryCoordinatePoint))
+                    otherInclusive = true;
+            }
+            return !(currentInclusive || otherInclusive);
+        }
+
+        public HashSet<Coordinate> GetListOfCoordinatesInBoundary()
+        {
+            HashSet<Coordinate> result = new HashSet<Coordinate>();
+            for(int x = topLeft.x; x <= bottomRight.x; x++)
+                for(int y = topLeft.y; y <= bottomRight.y; y++)
+                    for (int z = topLeft.z; z <= bottomRight.z; z++)
+                        result.Add(new Coordinate(x, y, z));
+            return result;
         }
 
 

@@ -86,7 +86,7 @@ namespace src.Model.MapModelComponents
             return null;
         }
 
-        public object GetBoundary() {
+        public Boundary GetBoundary() {
             return _boundary;
         }
 

@@ -9,25 +9,25 @@ namespace AutomateTests.Model.GameWorldComponents {
     public class TestMovable {
         [TestMethod()]
         public void TestMovableNew_ExpectNotNull() {
-            Movable movable = new Movable(new Coordinate(0,0,0));
+            Movable movable = new Movable(new Coordinate(0,0,0), MovableType.NormalHuman);
             Assert.IsNotNull(movable);
         }
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentNullException))]
         public void TestMovableNew_WithNull_ExpectArgumentNullException() {
-            Movable movable = new Movable(null);
+            Movable movable = new Movable(null, MovableType.NormalHuman);
         }
 
         [TestMethod()]
         public void TestIsInMotion_ExpectNotInMotion() {
-            Movable movable = new Movable(new Coordinate(0, 0, 0));
+            Movable movable = new Movable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
             Assert.IsFalse(movable.IsInMotion());
         }
 
         [TestMethod()]
         public void TestIsInMotion_ExpectInMotionToggle() {
-            Movable movable = new Movable(new Coordinate(0, 0, 0));
+            Movable movable = new Movable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
             MovementPath movementPath = new MovementPath(new Coordinate(0,0,0));
             Assert.IsFalse(movable.IsInMotion());
             movementPath.AddMovement(new Movement(1,1,0,1));
@@ -41,7 +41,7 @@ namespace AutomateTests.Model.GameWorldComponents {
 
         [TestMethod()]
         public void TestSetPath_EnsureMovementIsCloned() {
-            Movable movable = new Movable(new Coordinate(0, 0, 0));
+            Movable movable = new Movable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
             MovementPath movementPath = new MovementPath(new Coordinate(0, 0, 0));
             movementPath.AddMovement(new Movement(1, 1, 0, 1));
             movable.SetPath(movementPath);
@@ -54,7 +54,7 @@ namespace AutomateTests.Model.GameWorldComponents {
 
         [TestMethod()]
         public void TestGetNextMovement() {
-            Movable movable = new Movable(new Coordinate(0, 0, 0));
+            Movable movable = new Movable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
             MovementPath movementPath = new MovementPath(new Coordinate(0, 0, 0));
             movementPath.AddMovement(new Movement(1, 1, 0, 1));
             movementPath.AddMovement(new Movement(0, 1, 0, 1));
@@ -73,7 +73,7 @@ namespace AutomateTests.Model.GameWorldComponents {
 
         [TestMethod()]
         public void TestGetNextCoordinate() {
-            Movable movable = new Movable(new Coordinate(0, 0, 0));
+            Movable movable = new Movable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
             MovementPath movementPath = new MovementPath(new Coordinate(0, 0, 0));
             movementPath.AddMovement(new Movement(1, 1, 0, 1));
             movementPath.AddMovement(new Movement(0, 1, 0, 1));
@@ -91,8 +91,27 @@ namespace AutomateTests.Model.GameWorldComponents {
 
         [TestMethod()]
         public void TestMoveToNext_NoPathSet_ExpectSuccess() {
-            Movable movable = new Movable(new Coordinate(0, 0, 0));
+            Movable movable = new Movable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
             movable.MoveToNext();
+        }
+
+        [TestMethod()]
+        public void TestGetEffectiveCoordinate() {
+            Movable movable = new Movable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
+            MovementPath movementPath = new MovementPath(new Coordinate(0, 0, 0));
+            movementPath.AddMovement(new Movement(1, 1, 0, 1));
+            movementPath.AddMovement(new Movement(0, 1, 0, 1));
+            movementPath.AddMovement(new Movement(1, 0, 0, 1));
+            movable.SetPath(movementPath);
+            Assert.AreEqual(movable.GetEffectiveCoordinate(), new Coordinate(0, 0, 0));
+            Assert.AreEqual(movable.GetCurrentCoordinate(), new Coordinate(0, 0, 0));
+            movable.StartTransitionToNext();
+            Assert.AreEqual(movable.GetEffectiveCoordinate(), new Coordinate(1, 1, 0));
+            Assert.AreEqual(movable.GetCurrentCoordinate(), new Coordinate(0, 0, 0));
+            movable.MoveToNext();
+            Assert.AreEqual(movable.GetEffectiveCoordinate(), new Coordinate(1, 1, 0));
+            Assert.AreEqual(movable.GetCurrentCoordinate(), new Coordinate(1, 1, 0));
+
         }
     }
 }

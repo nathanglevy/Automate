@@ -104,10 +104,14 @@
     <Compile Include="Assets\src\Controller\Modules\ThreadInfo.cs" />
     <Compile Include="Assets\src\Model\GameWorldComponents\Automaton.cs" />
     <Compile Include="Assets\src\Model\GameWorldComponents\GameWorld.cs" />
+    <Compile Include="Assets\src\Model\GameWorldComponents\Item.cs" />
     <Compile Include="Assets\src\Model\GameWorldComponents\Movable.cs" />
+    <Compile Include="Assets\src\Model\GameWorldComponents\MovableItem.cs" />
     <Compile Include="Assets\src\Model\GameWorldComponents\MovableType.cs" />
     <Compile Include="Assets\src\Model\GameWorldComponents\Structure.cs" />
+    <Compile Include="Assets\src\Model\GameWorldComponents\StructureItem.cs" />
     <Compile Include="Assets\src\Model\GameWorldComponents\StructureType.cs" />
+    <Compile Include="Assets\src\Model\ModelAbstractionLayer.cs" />
     <Compile Include="Assets\src\Model\PathFinding\Movement.cs" />
     <Compile Include="Assets\src\Model\PathFinding\MovementPath.cs" />
     <Compile Include="Assets\src\Model\PathFinding\NoPathFoundException.cs" />
