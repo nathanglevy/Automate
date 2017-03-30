@@ -66,8 +66,8 @@ namespace AutomateTests.test.Controller
             Guid action1Guid;
             Assert.IsTrue(Guid.TryParse(result.GetActions()[1].TargetId, out action1Guid));
 
-
         }
+
     }
 }
 

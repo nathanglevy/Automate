@@ -57,6 +57,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Assets\test\Controller\TestViewSelectionEvent.cs" />
+    <Compile Include="Assets\test\Controller\TestRightClickNotification.cs" />
     <Compile Include="Assets\test\Mocks\Handler.cs" />
     <Compile Include="Assets\test\Mocks\MockMasterAction.cs" />
     <Compile Include="Assets\test\Mocks\MockObserverArgs.cs" />

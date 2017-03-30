@@ -95,8 +95,10 @@
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\Isometric.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\MethodExtensionForMonoBehaviourTransform.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\Singleton.cs" />
+    <Compile Include="Assets\src\Controller\Handlers\RightClickNotification\RightClickNotification.cs" />
     <Compile Include="Assets\src\Controller\Handlers\HandlerUtils.cs" />
     <Compile Include="Assets\src\Controller\Handlers\IHandlerUtils.cs" />
+    <Compile Include="Assets\src\Controller\Handlers\RightClickNotification\RightClickNotificationHandler.cs" />
     <Compile Include="Assets\src\Controller\Handlers\SelectionNotification\ViewSelectionHandler.cs" />
     <Compile Include="Assets\src\Controller\Handlers\SelectionNotification\ViewSelectionNotification.cs" />
     <Compile Include="Assets\src\Controller\Interfaces\HandlerResult.cs" />

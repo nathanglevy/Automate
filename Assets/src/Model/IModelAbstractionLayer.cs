@@ -34,5 +34,6 @@ namespace Assets.src.Model
         //movable speed related
         double GetMovableSpeed(Guid moveableId);
         void SetMovableSpeed(Guid moveableId, double speed);
+        List<string> GetSelectedMovables();
     }
 }

@@ -114,5 +114,10 @@ namespace AutomateTests.Mocks
         {
             throw new NotImplementedException();
         }
+
+        public List<string> GetSelectedMovables()
+        {
+            return new List<string>() {"10","17"};
+        }
     }
 }
