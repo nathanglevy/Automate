@@ -2,7 +2,7 @@ using System;
 using Assets.src.Controller;
 using Assets.src.Controller.Abstracts;
 using Assets.src.Controller.Interfaces;
-using Assets.src.Model.MapModelComponents;
+using src.Model.MapModelComponents;
 
 namespace AutomateTests.test.Mocks
 {

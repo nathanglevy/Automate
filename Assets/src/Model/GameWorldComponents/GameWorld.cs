@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using Assets.src.Model.GameWorldComponents;
-using Assets.src.Model.MapModelComponents;
-using Assets.src.Model.PathFinding;
+using JetBrains.Annotations;
+using src.Model.MapModelComponents;
+using src.Model.PathFinding;
 
 namespace src.Model.GameWorldComponents
 {
     //TODO: Need to do comments!
     public class GameWorld
     {
-        private Dictionary<long, Movable> _movables = new Dictionary<long, Movable>();
+        private Dictionary<Guid, Movable> _movables = new Dictionary<Guid, Movable>();
+        private Dictionary<Guid, Structure> _structures = new Dictionary<Guid, Structure>();
+        private Dictionary<Coordinate, Guid> _coordinateToStructureMap = new Dictionary<Coordinate, Guid>();
+        private HashSet<Guid> _selectedItems = new HashSet<Guid>();
+        private HashSet<Item> _itemsToBePlaced = new HashSet<Item>();
         private MapInfo _map;
+        public Guid Guid { get; private set; }
 
         public GameWorld(Coordinate mapDimensions)
         {
@@ -25,38 +30,187 @@ namespace src.Model.GameWorldComponents
 
             _map = new MapInfo(topLeft, bottomRight);
             _map.FillMapWithCells(new CellInfo(true, 1));
+            Guid = Guid.NewGuid();
         }
 
-        public long CreateMovable(Coordinate coordinate)
+        public Movable GetMovable(Guid movableGuid)
         {
-            Movable movable = new Movable(coordinate);
-            _movables.Add(movable.getId(),movable);
-            return movable.getId();
+            return _movables[movableGuid];
         }
 
-        public bool IssueMoveCommand(long id, Coordinate coordinate)
+        public Structure GetStructure(Guid structureGuid)
         {
-            throw new NotImplementedException();
+            return _structures[structureGuid];
         }
 
-        public Movement GetNextMovement(long id)
-        {
-            throw new NotImplementedException();
+        public MovableItem GetMovableItem(Guid movableGuid) {
+            return new MovableItem(this, movableGuid);
         }
 
-        public Coordinate GetNextCoordinate(long id)
+        public StructureItem GetStructureItem(Guid structureGuid)
         {
-            throw new NotImplementedException();
+            return new StructureItem(this, structureGuid);
         }
 
-        public Coordinate MoveToNext(long id)
+        public bool IsStructureAtCoordinate(Coordinate coordinate)
         {
-            throw new NotImplementedException();
+            return _coordinateToStructureMap.ContainsKey(coordinate);
+        }
+        public StructureItem GetStructureItemAtCoordinate(Coordinate coordinate)
+        {
+            if (!IsStructureAtCoordinate(coordinate))
+                throw new ArgumentException("There is no structure at given coordinate");
+            Guid structureGuid = _coordinateToStructureMap[coordinate];
+            return new StructureItem(this, structureGuid);
         }
 
-        public List<long> GetMovableIdList()
+        public MovableItem CreateMovable(Coordinate coordinate, MovableType movableType)
         {
-            return new List<long>(_movables.Keys);
+            Movable movable = new Movable(coordinate,movableType);
+            MovableItem movableItem = new MovableItem(this, movable.GetId());
+            _itemsToBePlaced.Add(movableItem);
+            _movables.Add(movable.GetId(),movable);
+            return movableItem;
         }
+
+        public bool CanStructureBePlaced(Coordinate coordinate, Coordinate dimensions)
+        {
+            Boundary boundaryToCheck = new Boundary(coordinate, coordinate + dimensions);
+//            foreach (Structure structureValue in _structures.Values)
+//            {
+//                if (!structureValue.GetStructureBoundary().IsBoundaryDisjointToBoundary(boundaryToCheck))
+//                    return false;
+//            }
+//            return true;
+
+            foreach (Coordinate coordinateInBoundary in boundaryToCheck.GetListOfCoordinatesInBoundary())
+            {
+                if (_coordinateToStructureMap.ContainsKey(coordinateInBoundary))
+                    return false;
+            }
+            return true;
+        }
+
+        //needs to check if it can even place the structure
+        public StructureItem CreateStructure(Coordinate coordinate, Coordinate dimensions, StructureType structureType) {
+            //throw new NotImplementedException();
+            //check that we can make the structure with these dimensions:
+            if (!CanStructureBePlaced(coordinate, dimensions))
+                throw new ArgumentException("cannot create structure in this location -- occupied!");
+            Structure structure = new Structure(coordinate,dimensions,structureType);
+            StructureItem structureItem = new StructureItem(this, structure.Guid);
+            _structures.Add(structure.Guid, structure);
+            foreach (Coordinate coordinteInBoundary in structure.GetStructureBoundary().GetListOfCoordinatesInBoundary())
+            {
+                _coordinateToStructureMap.Add(coordinteInBoundary,structure.Guid);
+            }
+            return structureItem;
+        }
+
+        //TODO: need to test false issue move command
+        public bool IssueMoveCommand(Guid id, [NotNull] Coordinate targetCoordinate)
+        {
+            if (!_movables.ContainsKey(id))
+                throw new ArgumentException("Given movable Guid is not defined as a movable in this world");
+            Movable currentMovable = _movables[id];
+            Coordinate startCoordinate = currentMovable.GetEffectiveCoordinate();
+            try
+            {
+                MovementPath movementPath = PathFinderAStar.FindShortestPath(_map, startCoordinate, targetCoordinate);
+                currentMovable.SetPath(movementPath);
+                return true;
+            }
+            catch (NoPathFoundException)
+            {
+                return false;
+            }
+        }
+
+        public List<Guid> GetMovableIdList()
+        {
+            return new List<Guid>(_movables.Keys);
+        }
+
+        public List<MovableItem> GetMovableItemList()
+        {
+            List<MovableItem> movableItemList = new List<MovableItem>();
+            foreach (Guid movable in _movables.Keys)
+            {
+                movableItemList.Add(new MovableItem(this,movable));
+            }
+            return movableItemList;
+        }
+
+        public List<Guid> GetSelectedIdList() {
+            return new List<Guid>(_selectedItems);
+        }
+
+        public List<MovableItem> GetSelectedMovableItemList() {
+            List<MovableItem> movableItemList = new List<MovableItem>();
+            foreach (Guid movable in _selectedItems) {
+                movableItemList.Add(new MovableItem(this, movable));
+            }
+            return movableItemList;
+        }
+
+        public void SelectItemsById(List<Guid> itemListToSelect) {
+            _selectedItems.Clear();
+            _selectedItems.UnionWith(itemListToSelect);
+        }
+
+        public void SelectMovableItems(List<MovableItem> itemListToSelect) {
+            _selectedItems.Clear();
+            AddToSelectedMovableItems(itemListToSelect);
+        }
+
+        public void AddToSelectedItemsById(List<Guid> itemListToSelect) {
+            _selectedItems.UnionWith(itemListToSelect);
+        }
+
+        public void AddToSelectedMovableItems(List<MovableItem> itemListToSelect) {
+            foreach (MovableItem movableItem in itemListToSelect) {
+                _selectedItems.Add(movableItem.Guid);
+            }
+        }
+
+        public void ClearSelectedItems() {
+            _selectedItems.Clear();
+        }
+
+        public List<MovableItem> GetMovableListInBoundary(Boundary boundary)
+        {
+            List<MovableItem> movableList = new List<MovableItem>();
+            foreach (Guid movableId in _movables.Keys)
+            {
+                Coordinate currentMovableCoordinate = _movables[movableId].GetCurrentCoordinate();
+                if (boundary.IsCoordinateInBoundary(currentMovableCoordinate))
+                    movableList.Add(new MovableItem(this, movableId));
+            }
+            return movableList;
+        }
+
+
+
+        public Boundary GetWorldBoundary()
+        {
+            return _map.GetBoundary();
+        }
+
+        public bool IsThereAnItemToBePlaced()
+        {
+            return (_itemsToBePlaced.Count > 0);
+        }
+
+        public List<Item> GetItemsToBePlaced()
+        {
+            return new List<Item>(_itemsToBePlaced);
+        }
+
+        public void ClearItemsToBePlaced()
+        {
+            _itemsToBePlaced.Clear();
+        }
+
+
     }
 }

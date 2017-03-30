@@ -1,6 +1,6 @@
 ﻿using Assets.src.Controller.Handlers;
 using Assets.src.Controller.Interfaces;
-using Assets.src.Model;
+using src.Model;
 
 namespace AutomateTests.test.Controller
 {

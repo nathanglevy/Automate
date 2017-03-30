@@ -1,39 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using Assets.src.Model.GameWorldComponents;
-using Assets.src.Model.MapModelComponents;
-using Assets.src.Model.PathFinding;
+using src.Model.GameWorldComponents;
+using src.Model.MapModelComponents;
+using src.Model.PathFinding;
 
-namespace Assets.src.Model
+namespace src.Model
 {
     public interface IModelAbstractionLayer
     {
         void FocusWorld(Guid worldId);
         Guid CreateGameWorld(Coordinate mapDimensions);
-        Guid CreateMovable(Coordinate spawnCoordinate, MovableType movableType);
-        Guid CreateStructure(Coordinate spawnTopLeftCoordinate, StructureType structureType);
-        //this is for movables
-        Coordinate GetMovableCurrentCoordinate(Guid moveableId);
-        //this is for structures
-        Boundary GetStructureBoundary(Guid structureId);
+        MovableItem CreateMovable(Coordinate spawnCoordinate, MovableType movableType);
+        StructureItem CreateStructure(Coordinate spawnTopLeftCoordinate, Coordinate dimensions, StructureType structureType);
+
+        MovableItem GetMovableItem(Guid movableGuid);
+        //StructureItem GetStructureItem(Guid structureGuid);
+        //TileItem GetTileItem(Guid itemGuid);
+
+        //this is for the world
+        Boundary GetWorldBoundary();
 
         //Get ids of structures and movables
-        List<Guid> GetMovableListInBoundary(Boundary selectionArea);
-        List<Guid> GetMovableListInCoordinate(Coordinate selectionCoordinate);
-        List<Guid> GetStructureListInBoundary(Boundary selectionArea);
-        Guid GetStructureAtCoordinate(Coordinate selectionCoordinate);
-        
-        //motion issue movement related
-        void IssueMoveCommand(Guid movableId, Coordinate targetCoordinate);
-        bool IsMovableInMotion(Guid movableId);
-        Movement MoveMovableToNext(Guid moveableId);
-        //motion information related
-        Movement GetMovableNextMovement(Guid movableId);
-        Coordinate GetMovableNextCoordinate(Guid movableId);
+        List<MovableItem> GetMovableListInBoundary(Boundary selectionArea);
+        List<MovableItem> GetMovableListInCoordinate(Coordinate selectionCoordinate);
+        List<StructureItem> GetStructureListInBoundary(Boundary selectionArea);
+        StructureItem GetStructureAtCoordinate(Coordinate selectionCoordinate);
+        bool IsStructureAtCoordinate(Coordinate coordinate);
 
-        //movable speed related
-        double GetMovableSpeed(Guid moveableId);
-        void SetMovableSpeed(Guid moveableId, double speed);
-        List<string> GetSelectedMovables();
+        //selection related
+        List<Guid> GetSelectedIdList();
+        List<MovableItem> GetSelectedMovableItemList();
+        void SelectItemsById(List<Guid> itemListToSelect);
+        void AddToSelectedItemsById(List<Guid> itemListToSelect);
+        void ClearSelectedItems();
+
+        //items to be placed related
+        bool IsThereAnItemToBePlaced();
+        List<Item> GetItemsToBePlaced();
+        void ClearItemsToBePlaced();
+        Guid GetCurrentFocusGuid();
+        void AddToSelectedMovableItems(List<MovableItem> itemListToSelect);
+        void SelectMovableItems(List<MovableItem> itemListToSelect);
+        StructureItem GetStructureItem(Guid structureGuid);
     }
 }

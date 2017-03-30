@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace Assets.src.Model.MapModelComponents
+namespace src.Model.MapModelComponents
 {
     /// <summary>
     /// Class which holds information on a game map.<para />
@@ -86,7 +86,7 @@ namespace Assets.src.Model.MapModelComponents
             return null;
         }
 
-        public object GetBoundary() {
+        public Boundary GetBoundary() {
             return _boundary;
         }
 

@@ -6,9 +6,9 @@ using Assets.src.Controller.Abstracts;
 using Assets.src.Controller.Handlers.SelectionNotification;
 using Assets.src.Controller.Interfaces;
 using Assets.src.Controller.Modules;
-using Assets.src.Model.MapModelComponents;
 using AutomateTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using src.Model.MapModelComponents;
 
 namespace AutomateTests.test.Controller
 {

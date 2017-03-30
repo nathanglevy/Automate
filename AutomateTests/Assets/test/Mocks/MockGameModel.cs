@@ -1,35 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assets.src.Controller.Interfaces;
-using Assets.src.Model;
-using Assets.src.Model.GameWorldComponents;
-using Assets.src.Model.MapModelComponents;
-using Assets.src.Model.PathFinding;
+using src.Model;
+using src.Model.GameWorldComponents;
+using src.Model.MapModelComponents;
+using src.Model.PathFinding;
 
 namespace AutomateTests.Mocks
 {
     public class MockGameModel : IModelAbstractionLayer
     {
-        public MovementPath GetMovementPath()
-        {
-            return new MovementPath(new Coordinate(10,10,0));
-        }
-
-        public List<String> GetPlayersInSelection(Coordinate notificationUpperLeft, Coordinate notificationBottomRight)
-        {
-            List<string> ids = new List<string>();
-            ids.Add("AhmadHamdan");
-            ids.Add("NaphLevy");
-            return ids;
-        }
-
-
-        public Coordinate GetPlayerCoordinate(string guid)
-        {
-            return new Coordinate(10, 10, 0);
-        }
-
-        public void FocusWorld(Guid WorldId)
+        public void FocusWorld(Guid worldId)
         {
             throw new NotImplementedException();
         }
@@ -39,78 +20,112 @@ namespace AutomateTests.Mocks
             throw new NotImplementedException();
         }
 
-        public Guid CreateMovable(Coordinate spawnCoordinate, MovableType movableType)
+        public MovableItem CreateMovable(Coordinate spawnCoordinate, MovableType movableType)
         {
             throw new NotImplementedException();
         }
 
-        public Guid CreateStructure(Coordinate spawnTopLeftCoordinate, StructureType structureType)
+        public StructureItem CreateStructure(Coordinate spawnTopLeftCoordinate, StructureType structureType)
         {
             throw new NotImplementedException();
         }
 
-        public Coordinate GetMovableCurrentCoordinate(Guid moveableId)
-        {
-            return new Coordinate(10, 10, 0);
-        }
-
-        public Boundary GetStructureBoundary(Guid structureId)
+        public MovableItem GetMovableItem(Guid movableGuid)
         {
             throw new NotImplementedException();
         }
 
-        public List<Guid> GetMovableListInBoundary(Boundary selectionArea)
-        {
-            
-            return new List<Guid>() {Guid.NewGuid(),Guid.NewGuid()};
-
-        }
-        public List<Guid> GetMovableListInCoordinate(Coordinate selectionCoordinate)
+        public Boundary GetWorldBoundary()
         {
             throw new NotImplementedException();
         }
 
-        public List<Guid> GetStructureListInBoundary(Boundary selectionArea)
+        public List<MovableItem> GetMovableListInBoundary(Boundary selectionArea)
         {
             throw new NotImplementedException();
         }
 
-        public Guid GetStructureAtCoordinate(Coordinate selectionCoordinate)
+        public List<MovableItem> GetMovableListInCoordinate(Coordinate selectionCoordinate)
         {
             throw new NotImplementedException();
         }
 
-        public void IssueMoveCommand(Guid movableId, Coordinate targetCoordinate)
+        public List<StructureItem> GetStructureListInBoundary(Boundary selectionArea)
         {
             throw new NotImplementedException();
         }
 
-        public bool IsMovableInMotion(Guid movableId)
+        public StructureItem GetStructureAtCoordinate(Coordinate selectionCoordinate)
         {
             throw new NotImplementedException();
         }
 
-        public Movement MoveMovableToNext(Guid moveableId)
+        public List<Guid> GetSelectedIdList()
         {
             throw new NotImplementedException();
         }
 
-        public Movement GetMovableNextMovement(Guid movableId)
+        public void SelectItemsById(List<Guid> itemListToSelect)
         {
             throw new NotImplementedException();
         }
 
-        public Coordinate GetMovableNextCoordinate(Guid movableId)
+        public void AddToSelectedItemsById(List<Guid> itemListToSelect)
         {
             throw new NotImplementedException();
         }
 
-        public double GetMovableSpeed(Guid moveableId)
+        public void ClearSelectedItems()
         {
             throw new NotImplementedException();
         }
 
-        public void SetMovableSpeed(Guid moveableId, double speed)
+        public bool IsThereAnItemToBePlaced()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Item> GetItemsToBePlaced()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ClearItemsToBePlaced()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Guid GetCurrentFocusGuid()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddToSelectedMovableItems(List<MovableItem> itemListToSelect)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SelectMovableItems(List<MovableItem> itemListToSelect)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<MovableItem> GetSelectedMovableItemList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public StructureItem CreateStructure(Coordinate spawnTopLeftCoordinate, Coordinate dimensions, StructureType structureType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsStructureAtCoordinate(Coordinate coordinate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public StructureItem GetStructureItem(Guid structureGuid)
         {
             throw new NotImplementedException();
         }

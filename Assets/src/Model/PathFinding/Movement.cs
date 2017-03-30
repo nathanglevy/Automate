@@ -1,7 +1,7 @@
 ﻿using System;
-using Assets.src.Model.MapModelComponents;
+using src.Model.MapModelComponents;
 
-namespace Assets.src.Model.PathFinding
+namespace src.Model.PathFinding
 {
     /// <summary>
     /// Movement class describes a movement in a direction and encapsulates

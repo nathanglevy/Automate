@@ -4,11 +4,11 @@ using System.Threading;
 using Assets.src.Controller.Abstracts;
 using Assets.src.Controller.Interfaces;
 using Assets.src.Controller.Modules;
-using Assets.src.Model;
-using Assets.src.Model.MapModelComponents;
 using AutomateTests.Mocks;
 using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using src.Model;
+using src.Model.MapModelComponents;
 
 namespace AutomateTests.test.Controller
 {

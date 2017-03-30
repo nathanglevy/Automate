@@ -2,7 +2,7 @@
 using System.Threading;
 using Assets.src.Controller.Abstracts;
 using Assets.src.Controller.Modules;
-using Assets.src.Model;
+using src.Model;
 
 namespace Assets.src.Controller.Interfaces
 {
