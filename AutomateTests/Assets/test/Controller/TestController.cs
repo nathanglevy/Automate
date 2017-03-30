@@ -22,7 +22,6 @@ namespace AutomateTests.test.Controller
         [TestMethod]
         public void TestCreateNew_ShouldPass()
         {
-
             IGameView view = new MockGameView();
             IModelAbstractionLayer model = new MockGameModel();
 

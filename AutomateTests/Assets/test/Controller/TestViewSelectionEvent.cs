@@ -15,12 +15,11 @@ namespace AutomateTests.test.Controller
     [TestClass]
     public class TestViewSelectionEvent
     {
-        private AutoResetEvent _sync1 = new AutoResetEvent(false);
         [TestMethod]
         public void TestCreateSelectionArgs_ExpectToPass()
         {
             IObserverArgs viewSelectionNotification = new ViewSelectionNotification(
-                new Coordinate(0, 0, 0), new Coordinate(10, 10, 10), "ObjectID");
+                new Coordinate(0, 30, 0), new Coordinate(10, 0, 0), "ObjectID");
             Assert.IsNotNull(viewSelectionNotification);
         }
 
@@ -36,7 +35,7 @@ namespace AutomateTests.test.Controller
         public void TestHandleViewSelection_ExpectActionsToBeSentToView()
         {
             ObserverArgs viewSelectionNotification = new ViewSelectionNotification(
-                new Coordinate(0, 0, 0), new Coordinate(10, 10, 0), "ObjectID");
+                new Coordinate(10, 30, 0), new Coordinate(20, 10, 0), "ObjectID");
 
             IHandler<ObserverArgs> viewSelectionHandler = new ViewSelectionHandler();
 

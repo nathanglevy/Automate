@@ -6,9 +6,9 @@ using Assets.src.Controller.Handlers.RightClickNotification;
 using Assets.src.Controller.Handlers.SelectionNotification;
 using Assets.src.Controller.Interfaces;
 using Assets.src.Controller.Modules;
-using Assets.src.Model.MapModelComponents;
 using AutomateTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using src.Model.MapModelComponents;
 
 namespace AutomateTests.test.Controller
 {
@@ -34,7 +34,7 @@ namespace AutomateTests.test.Controller
         {
             {
                 ObserverArgs viewSelectionNotification = new RightClickNotification(
-                    new Coordinate(0, 0, 0));
+                    new Coordinate(20, 10, 0));
 
                 IHandler<ObserverArgs> viewSelectionHandler = new RightClickNotificationHandler();
 

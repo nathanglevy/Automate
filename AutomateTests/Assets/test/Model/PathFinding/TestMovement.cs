@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using src.Model.MapModelComponents;
 using src.Model.PathFinding;
 
-namespace AutomateTests.Model.PathFinding
+namespace AutomateTests.test.Model.PathFinding
 {
     [TestClass()]
     public class TestMovement

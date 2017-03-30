@@ -1,5 +1,5 @@
 ﻿using Assets.src.Controller.Abstracts;
-using Assets.src.Model.MapModelComponents;
+using src.Model.MapModelComponents;
 
 namespace Assets.src.Controller.Handlers.RightClickNotification
 {

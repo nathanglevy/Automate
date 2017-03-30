@@ -5,7 +5,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using src.Model;
 using src.Model.GameWorldComponents;
 using src.Model.MapModelComponents;
-using src.Model.PathFinding;
 
 namespace AutomateTests.Model.ModelAbstractionLayerTests
 {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using src.Model.MapModelComponents;
 
-namespace AutomateTests.Model.MapModelComponents
+namespace AutomateTests.test.Model.MapModelComponents
 {
     [TestClass()]
     public class TestCoordinate {

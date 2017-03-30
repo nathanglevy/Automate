@@ -18,11 +18,10 @@ namespace Assets.src.Controller.Handlers.SelectionNotification
                 utils.Model.GetMovableListInBoundary(new Boundary(notification.UpperLeft, notification.BottomRight));
 
             List<MasterAction> actions = new List<MasterAction>();
-            foreach (var guid in coordinates)
+            foreach (var movableItem in coordinates) 
             {
-//                Coordinate coordinate = utils.Model.GetMovableCurrentCoordinate(guid);
-//                var selectPlayer = new SelectPlayer(coordinate, guid.ToString());
-//                actions.Add(selectPlayer);
+                var selectPlayer = new SelectPlayer(movableItem.CurrentCoordiate, movableItem.ToString());
+                actions.Add(selectPlayer);
             }
             return new HandlerResult(actions);
         }

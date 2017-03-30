@@ -22,7 +22,7 @@ namespace src.Model.MapModelComponents
         /// <param name="bottomRight"></param>
         public Boundary(Coordinate topLeft, Coordinate bottomRight) {
             if (!(bottomRight >= topLeft))
-                throw new ArgumentException();
+                throw new ArgumentException("Bottom Right Is Not Greater Or Equal To TopLeft");
             this.topLeft = topLeft;
             this.bottomRight = bottomRight;
             //TODO: Make the boundary constructor smarter so it can overcome the exception

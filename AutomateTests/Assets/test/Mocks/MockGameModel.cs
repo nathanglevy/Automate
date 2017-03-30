@@ -10,6 +10,10 @@ namespace AutomateTests.Mocks
 {
     public class MockGameModel : IModelAbstractionLayer
     {
+        private GameWorld _testingGameWorld = new GameWorld(new Coordinate(10,10,10));
+        private Guid _player1 = Guid.NewGuid();
+        private Guid _player2 = Guid.NewGuid();
+
         public void FocusWorld(Guid worldId)
         {
             throw new NotImplementedException();
@@ -42,7 +46,11 @@ namespace AutomateTests.Mocks
 
         public List<MovableItem> GetMovableListInBoundary(Boundary selectionArea)
         {
-            throw new NotImplementedException();
+            return new List<MovableItem>()
+            {
+                new MovableItem(_testingGameWorld,_player1),
+                new MovableItem(_testingGameWorld,_player2),
+            };
         }
 
         public List<MovableItem> GetMovableListInCoordinate(Coordinate selectionCoordinate)
@@ -112,7 +120,11 @@ namespace AutomateTests.Mocks
 
         public List<MovableItem> GetSelectedMovableItemList()
         {
-            throw new NotImplementedException();
+            return new List<MovableItem>()
+            {
+                new MovableItem(_testingGameWorld, _player1),
+                new MovableItem(_testingGameWorld, _player2),
+            };
         }
 
         public StructureItem CreateStructure(Coordinate spawnTopLeftCoordinate, Coordinate dimensions, StructureType structureType)
