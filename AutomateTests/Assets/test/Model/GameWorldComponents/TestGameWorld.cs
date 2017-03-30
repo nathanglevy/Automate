@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Automate.Model.src.GameWorldComponents;
+using Automate.Model.src.MapModelComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using src.Model.GameWorldComponents;
-using src.Model.MapModelComponents;
 
 namespace AutomateTests.test.Model.GameWorldComponents {
     [TestClass()]

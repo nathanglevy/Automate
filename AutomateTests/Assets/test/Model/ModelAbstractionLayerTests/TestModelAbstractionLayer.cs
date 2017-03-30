@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Automate.Model.src.GameWorldComponents;
+using Automate.Model.src.MapModelComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using src.Model;
-using src.Model.GameWorldComponents;
-using src.Model.MapModelComponents;
 
-namespace AutomateTests.Model.ModelAbstractionLayerTests
+namespace AutomateTests.test.Model.ModelAbstractionLayerTests
 {
     [TestClass()]
     public class TestModelAbstractionLayer {
         GameWorldItem _gameWorldItem;
-        Guid _baseWorldId;
+//        Guid _baseWorldId;
 
         [TestInitialize]
         public void TestInitialize()

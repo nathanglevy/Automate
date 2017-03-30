@@ -1,8 +1,6 @@
 using System;
-using Assets.src.Controller;
-using Assets.src.Controller.Abstracts;
-using Assets.src.Controller.Interfaces;
-using src.Model.MapModelComponents;
+using Automate.Controller.src.Abstracts;
+using Automate.Model.src.MapModelComponents;
 
 namespace AutomateTests.test.Mocks
 {

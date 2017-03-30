@@ -1,14 +1,13 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
-using Assets.src.Controller.Abstracts;
-using Assets.src.Controller.Interfaces;
-using Assets.src.Controller.Modules;
-using AutomateTests.Mocks;
+using Automate.Controller.src.Abstracts;
+using Automate.Controller.src.Interfaces;
+using Automate.Controller.src.Modules;
+using Automate.Model.src;
+using Automate.Model.src.MapModelComponents;
 using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using src.Model;
-using src.Model.MapModelComponents;
 
 namespace AutomateTests.test.Controller
 {

@@ -1,5 +1,4 @@
-﻿using Assets.src.Controller.Abstracts;
-using Assets.src.Controller.Interfaces;
+﻿using Automate.Controller.src.Abstracts;
 
 namespace AutomateTests.test.Mocks
 {

@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using Assets.src.Controller;
-using Assets.src.Controller.Abstracts;
-using Assets.src.Controller.Handlers.SelectionNotification;
-using Assets.src.Controller.Interfaces;
-using Assets.src.Controller.Modules;
-using AutomateTests.Mocks;
+using Automate.Controller.src.Abstracts;
+using Automate.Controller.src.Handlers.SelectionNotification;
+using Automate.Controller.src.Interfaces;
+using Automate.Controller.src.Modules;
+using Automate.Model.src.MapModelComponents;
+using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using src.Model.MapModelComponents;
 
 namespace AutomateTests.test.Controller
 {
@@ -35,7 +34,7 @@ namespace AutomateTests.test.Controller
         public void TestHandleViewSelection_ExpectActionsToBeSentToView()
         {
             ObserverArgs viewSelectionNotification = new ViewSelectionNotification(
-                new Coordinate(10, 30, 0), new Coordinate(20, 10, 0), "ObjectID");
+                new Coordinate(1, 1, 0), new Coordinate(20, 10, 0), "ObjectID");
 
             IHandler<ObserverArgs> viewSelectionHandler = new ViewSelectionHandler();
 

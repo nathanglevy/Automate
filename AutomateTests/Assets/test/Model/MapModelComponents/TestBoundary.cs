@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Automate.Model.src.MapModelComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using src.Model.MapModelComponents;
 
-namespace AutomateTests.Model.MapModelComponents {
+namespace AutomateTests.test.Model.MapModelComponents {
     [TestClass()]
     public class TestBoundary
     {

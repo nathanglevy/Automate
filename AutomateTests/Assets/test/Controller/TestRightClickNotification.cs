@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Assets.src.Controller;
-using Assets.src.Controller.Abstracts;
-using Assets.src.Controller.Handlers.RightClickNotification;
-using Assets.src.Controller.Handlers.SelectionNotification;
-using Assets.src.Controller.Interfaces;
-using Assets.src.Controller.Modules;
-using AutomateTests.Mocks;
+using Automate.Controller.src.Abstracts;
+using Automate.Controller.src.Handlers.RightClockNotification;
+using Automate.Controller.src.Interfaces;
+using Automate.Controller.src.Modules;
+using Automate.Model.src.MapModelComponents;
+using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using src.Model.MapModelComponents;
 
 namespace AutomateTests.test.Controller
 {

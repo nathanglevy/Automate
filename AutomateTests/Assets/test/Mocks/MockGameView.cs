@@ -1,11 +1,11 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
-using Assets.src.Controller.Abstracts;
-using Assets.src.Controller.Interfaces;
-using Assets.src.Controller.Modules;
+using Automate.Controller.src.Abstracts;
+using Automate.Controller.src.Interfaces;
+using Automate.Controller.src.Modules;
 
-namespace AutomateTests.Mocks
+namespace AutomateTests.test.Mocks
 {
     public class MockGameView : IGameView
     {

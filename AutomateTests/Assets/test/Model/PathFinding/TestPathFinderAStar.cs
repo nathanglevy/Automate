@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using Automate.Model.src.MapModelComponents;
+using Automate.Model.src.PathFinding;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using src.Model.MapModelComponents;
-using src.Model.PathFinding;
 
-namespace AutomateTests.Model.PathFinding {
+namespace AutomateTests.test.Model.PathFinding {
     [TestClass()]
     public class PathFinderAStarTests {
 

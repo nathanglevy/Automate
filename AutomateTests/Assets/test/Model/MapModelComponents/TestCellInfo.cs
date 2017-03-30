@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using src.Model.MapModelComponents;
+using Automate.Model.src.MapModelComponents;
 
-namespace AutomateTests.Model.MapModelComponents {
+namespace AutomateTests.test.Model.MapModelComponents {
     [TestClass()]
     public class TestCellInfo {
         [TestMethod()]

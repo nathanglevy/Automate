@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Assets.src.Controller.Interfaces;
-using src.Model;
-using src.Model.GameWorldComponents;
-using src.Model.MapModelComponents;
-using src.Model.PathFinding;
+using Automate.Model.src;
+using Automate.Model.src.GameWorldComponents;
+using Automate.Model.src.MapModelComponents;
 
-namespace AutomateTests.Mocks
+namespace AutomateTests.test.Mocks
 {
     public class MockGameModel : IModelAbstractionLayer
     {
-        private GameWorld _testingGameWorld = new GameWorld(new Coordinate(10,10,10));
+        private GameWorldItem _testingGameWorld = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 20));
         private Guid _player1 = Guid.NewGuid();
         private Guid _player2 = Guid.NewGuid();
 
@@ -48,8 +46,8 @@ namespace AutomateTests.Mocks
         {
             return new List<MovableItem>()
             {
-                new MovableItem(_testingGameWorld,_player1),
-                new MovableItem(_testingGameWorld,_player2),
+               _testingGameWorld.CreateMovable(new Coordinate(1,1,1),MovableType.NormalHuman),
+               _testingGameWorld.CreateMovable(new Coordinate(7,7,7),MovableType.NormalHuman),
             };
         }
 
@@ -122,8 +120,8 @@ namespace AutomateTests.Mocks
         {
             return new List<MovableItem>()
             {
-                new MovableItem(_testingGameWorld, _player1),
-                new MovableItem(_testingGameWorld, _player2),
+               _testingGameWorld.CreateMovable(new Coordinate(1,1,1),MovableType.NormalHuman),
+               _testingGameWorld.CreateMovable(new Coordinate(7,7,7),MovableType.NormalHuman),
             };
         }
 

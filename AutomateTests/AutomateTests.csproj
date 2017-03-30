@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AutomateTests</RootNamespace>
     <AssemblyName>AutomateTests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -16,6 +16,7 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -78,14 +79,22 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Automate.csproj">
-      <Project>{BFD958C4-5209-89E8-D1A0-F25854A4DC74}</Project>
-      <Name>Automate</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Assets\src\Model\GameWorld\" />
     <Folder Include="Assets\src\Model\PathFinding\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Automate.Controller\Automate.Controller.csproj">
+      <Project>{46b6edc5-1879-4e95-8271-1a7b526f50f1}</Project>
+      <Name>Automate.Controller</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Automate.csproj">
+      <Project>{9d6e405c-85ec-3e21-edd7-62a43ac5a861}</Project>
+      <Name>Automate</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Automate.Model\Automate.Model.csproj">
+      <Project>{237a8506-7efd-4d28-b543-29e119cad8de}</Project>
+      <Name>Automate.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
