@@ -1,16 +1,17 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
-using Automate.Controller.src.Abstracts;
-using Automate.Controller.src.Interfaces;
-using Automate.Controller.src.Modules;
+using Automate.Controller.Abstracts;
+using Automate.Controller.Delegates;
+using Automate.Controller.Interfaces;
+using Automate.Controller.Modules;
 
 namespace AutomateTests.test.Mocks
 {
     public class MockGameView : IGameView
     {
         private readonly List<MasterAction> _list;
-        private event ViewCallBack callmeBack;
+        private event HandlerResultListner callmeBack;
         public ConcurrentQueue<IHandlerResult> Results { get; }
 
         public MockGameView()
@@ -26,10 +27,6 @@ namespace AutomateTests.test.Mocks
         }
 
 
-        public ViewCallBack GetCallBack()
-        {
-            return callmeBack;
-        }
 
         public List<MasterAction> GetHandledActions()
         {

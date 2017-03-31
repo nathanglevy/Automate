@@ -9,8 +9,7 @@ namespace AutomateTests.test.Mocks
     public class MockGameModel : IModelAbstractionLayer
     {
         private GameWorldItem _testingGameWorld = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 20));
-        private Guid _player1 = Guid.NewGuid();
-        private Guid _player2 = Guid.NewGuid();
+        private List<MovableItem> _selected = new List<MovableItem>();
 
         public void FocusWorld(Guid worldId)
         {
@@ -108,7 +107,7 @@ namespace AutomateTests.test.Mocks
 
         public void AddToSelectedMovableItems(List<MovableItem> itemListToSelect)
         {
-            throw new NotImplementedException();
+            _selected.AddRange(itemListToSelect);
         }
 
         public void SelectMovableItems(List<MovableItem> itemListToSelect)

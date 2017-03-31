@@ -1,9 +1,9 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
-using Automate.Controller.src.Abstracts;
-using Automate.Controller.src.Interfaces;
-using Automate.Controller.src.Modules;
+using Automate.Controller.Abstracts;
+using Automate.Controller.Interfaces;
+using Automate.Controller.Modules;
 using Automate.Model.src;
 using Automate.Model.src.MapModelComponents;
 using AutomateTests.test.Mocks;
@@ -72,10 +72,8 @@ namespace AutomateTests.test.Controller
             // Create the NotificationArgs
             string playerID = "AhmadHamdan";
             MockNotificationArgs mockNotificationArgs = new MockNotificationArgs(new Coordinate(12, 12, 3), playerID);
-            var viewCallBack = gameview.GetCallBack();
-            viewCallBack += CheckTestHandleViewArgsResult_ExpectActiontoBeAdded;
             System.Threading.Thread.CurrentThread.Name = "CurrentThread";
-            IList<ThreadInfo> threads = gameController.Handle(mockNotificationArgs, viewCallBack);
+            IList<ThreadInfo> threads = gameController.Handle(mockNotificationArgs);
 
             foreach (var threadInfo in threads)
             {
@@ -88,11 +86,9 @@ namespace AutomateTests.test.Controller
             Assert.AreNotEqual("AutomateTests.test.Mocks.MockHandler_WorkerThread", Thread.CurrentThread.Name);
             
 
-            Assert.AreEqual(2, _queue.Count);
-            MasterAction masterAction1 = null;
-            MasterAction masterAction2 = null;
-            _queue.TryDequeue(out masterAction1);
-            _queue.TryDequeue(out masterAction2);
+            Assert.AreEqual(2, gameController.OutputSched.ActionsCount);
+            MasterAction masterAction1 = gameController.OutputSched.Pull();
+            MasterAction masterAction2 = gameController.OutputSched.Pull();
             Assert.AreEqual(ActionType.AreaSelection, masterAction1.Type);
             Assert.AreEqual(ActionType.Movement, masterAction2.Type);
             Assert.AreEqual("AhmadHamdan",masterAction1.TargetId);

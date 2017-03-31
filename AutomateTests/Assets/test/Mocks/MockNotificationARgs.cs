@@ -1,5 +1,5 @@
 using System;
-using Automate.Controller.src.Abstracts;
+using Automate.Controller.Abstracts;
 using Automate.Model.src.MapModelComponents;
 
 namespace AutomateTests.test.Mocks

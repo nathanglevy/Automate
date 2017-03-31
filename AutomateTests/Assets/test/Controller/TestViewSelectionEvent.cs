@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using Automate.Controller.src.Abstracts;
-using Automate.Controller.src.Handlers.SelectionNotification;
-using Automate.Controller.src.Interfaces;
-using Automate.Controller.src.Modules;
+using Automate.Controller.Abstracts;
+using Automate.Controller.Handlers.SelectionNotification;
+using Automate.Controller.Interfaces;
+using Automate.Controller.Modules;
 using Automate.Model.src.MapModelComponents;
 using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -41,10 +41,10 @@ namespace AutomateTests.test.Controller
             var mockGameView = new MockGameView();
             var controller = new GameController(mockGameView, new MockGameModel());
             controller.RegisterHandler(viewSelectionHandler);
-            IList<ThreadInfo> syncEvents = controller.Handle(viewSelectionNotification, mockGameView.GetCallBack());
+            IList<ThreadInfo> syncEvents = controller.Handle(viewSelectionNotification);
             foreach (var threadInfo in syncEvents)
             {
-                threadInfo.SyncEvent.WaitOne(20);
+                threadInfo.SyncEvent.WaitOne(200);
             }
             foreach (var threadInfo in syncEvents)
             {
@@ -53,17 +53,12 @@ namespace AutomateTests.test.Controller
             }
 
 
-            Assert.AreEqual(1, mockGameView.Results.Count);
+            Assert.AreEqual(2, controller.OutputSched.ActionsCount);
             IHandlerResult result = null;
-            mockGameView.Results.TryPeek(out result);
-            Assert.AreEqual(2, result.GetActions().Count);
-            Assert.AreEqual(ActionType.SelectPlayer, result.GetActions()[0].Type);
-            Guid action0Guid;
-            Assert.IsTrue(Guid.TryParse(result.GetActions()[0].TargetId,out action0Guid));
-            Assert.AreEqual(ActionType.SelectPlayer, result.GetActions()[1].Type);
-            Guid action1Guid;
-            Assert.IsTrue(Guid.TryParse(result.GetActions()[1].TargetId, out action1Guid));
-
+            MasterAction action0 = controller.OutputSched.Pull();
+            MasterAction action1 = controller.OutputSched.Pull();
+            Assert.AreEqual(ActionType.SelectPlayer, action0.Type);
+            Assert.AreEqual(ActionType.SelectPlayer, action1.Type);
         }
 
     }

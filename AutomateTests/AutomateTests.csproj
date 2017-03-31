@@ -57,6 +57,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Assets\test\Controller\TestScheduler.cs" />
     <Compile Include="Assets\test\Model\ModelAbstractionLayerTests\TestModelAbstractionLayer.cs" />
     <Compile Include="Assets\test\Controller\TestViewSelectionEvent.cs" />
     <Compile Include="Assets\test\Controller\TestRightClickNotification.cs" />

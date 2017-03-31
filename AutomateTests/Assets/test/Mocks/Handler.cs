@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Automate.Controller.src.Abstracts;
-using Automate.Controller.src.Handlers;
-using Automate.Controller.src.Interfaces;
+using Automate.Controller.Abstracts;
+using Automate.Controller.Handlers;
+using Automate.Controller.Interfaces;
 
 namespace AutomateTests.test.Mocks
 {

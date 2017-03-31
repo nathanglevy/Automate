@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Automate.Controller.src.Abstracts;
-using Automate.Controller.src.Handlers.RightClockNotification;
-using Automate.Controller.src.Interfaces;
-using Automate.Controller.src.Modules;
+using Automate.Controller.Abstracts;
+using Automate.Controller.Handlers.RightClockNotification;
+using Automate.Controller.Interfaces;
+using Automate.Controller.Modules;
 using Automate.Model.src.MapModelComponents;
 using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -34,12 +34,12 @@ namespace AutomateTests.test.Controller
                 ObserverArgs viewSelectionNotification = new RightClickNotification(
                     new Coordinate(20, 10, 0));
 
-                IHandler<ObserverArgs> viewSelectionHandler = new RightClickNotificationHandler();
+                IHandler<ObserverArgs> rightClickNotificationHandler = new RightClickNotificationHandler();
 
                 var mockGameView = new MockGameView();
                 var controller = new GameController(mockGameView, new MockGameModel());
-                controller.RegisterHandler(viewSelectionHandler);
-                IList<ThreadInfo> syncEvents = controller.Handle(viewSelectionNotification, mockGameView.GetCallBack());
+                controller.RegisterHandler(rightClickNotificationHandler);
+                IList<ThreadInfo> syncEvents = controller.Handle(viewSelectionNotification);
                 foreach (var threadInfo in syncEvents)
                 {
                     threadInfo.SyncEvent.WaitOne(20);
@@ -51,12 +51,9 @@ namespace AutomateTests.test.Controller
                 }
 
 
-                Assert.AreEqual(1, mockGameView.Results.Count);
-                IHandlerResult result = null;
-                mockGameView.Results.TryPeek(out result);
-                Assert.AreEqual(2, result.GetActions().Count);
-                Assert.AreEqual(ActionType.Movement, result.GetActions()[0].Type);
-                Assert.AreEqual(ActionType.Movement, result.GetActions()[1].Type);
+                Assert.AreEqual(2, controller.OutputSched.ActionsCount);
+                Assert.AreEqual(ActionType.Movement, controller.OutputSched.Pull().Type);
+                Assert.AreEqual(ActionType.Movement, controller.OutputSched.Pull().Type);
 
             }
         }
