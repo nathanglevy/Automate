@@ -82,8 +82,8 @@ namespace AutomateTests.test.Controller
 
             // check that only a single thread is executed
             Assert.AreEqual(1,threads.Count);
-            Assert.AreEqual("AutomateTests.test.Mocks.MockHandler_WorkerThread", threads[0].Thread.Name);
-            Assert.AreNotEqual("AutomateTests.test.Mocks.MockHandler_WorkerThread", Thread.CurrentThread.Name);
+            Assert.AreEqual("AutomateTests.test.Mocks.MockHandler_HandleWorkerThread", threads[0].Thread.Name);
+            Assert.AreNotEqual("AutomateTests.test.Mocks.MockHandler_HandleWorkerThread", Thread.CurrentThread.Name);
             
 
             Assert.AreEqual(2, gameController.OutputSched.ActionsCount);

@@ -40,5 +40,26 @@ namespace AutomateTests.test.Mocks
             return new HandlerResult(actions);
 
         }
+
+        public override IAcknowledgeResult Acknowledge(MasterAction action, IHandlerUtils utils)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool CanAcknowledge(MasterAction action)
+        {
+            return action is MockMasterAction;
+        }
+
+        public override bool CanHandle(ObserverArgs args)
+        {
+            return args is MockNotificationArgs;
+
+        }
+
+        protected override Type GetInputType()
+        {
+            return typeof(MockObserverArgs);
+        }
     }
 }

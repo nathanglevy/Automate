@@ -11,13 +11,11 @@ namespace AutomateTests.test.Mocks
     public class MockGameView : IGameView
     {
         private readonly List<MasterAction> _list;
-        private event HandlerResultListner callmeBack;
         public ConcurrentQueue<IHandlerResult> Results { get; }
 
         public MockGameView()
         {
             _list =new List<MasterAction>();
-            callmeBack += HandleResults;
             Results = new ConcurrentQueue<IHandlerResult>();
         }
 
