@@ -109,7 +109,7 @@ namespace AutomateTests.test.Controller
             IList<ThreadInfo> syncEvents = controller.Handle(viewSelectionNotification);
             foreach (var threadInfo in syncEvents)
             {
-                threadInfo.SyncEvent.WaitOne();
+                threadInfo.SyncEvent.WaitOne(2000);
             }
 //            foreach (var threadInfo in syncEvents)
 //            {
