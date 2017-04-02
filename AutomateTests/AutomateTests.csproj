@@ -57,7 +57,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Assets\test\Controller\AcknowledgeNotificationHandler.cs" />
     <Compile Include="Assets\test\Controller\TestScheduler.cs" />
     <Compile Include="Assets\test\Controller\TestAcknowledgeNotification.cs" />
     <Compile Include="Assets\test\Model\ModelAbstractionLayerTests\TestModelAbstractionLayer.cs" />
