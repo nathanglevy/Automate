@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using Assets.UnityTestTools.IntegrationTestsFramework.TestRunner;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;

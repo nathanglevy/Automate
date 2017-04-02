@@ -1,15 +1,17 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ThrowCustomException : MonoBehaviour
+namespace Assets.UnityTestTools.Examples.IntegrationTestsFrameworkExamples
 {
-    public void Start()
+    public class ThrowCustomException : MonoBehaviour
     {
-        throw new CustomException();
-    }
+        public void Start()
+        {
+            throw new CustomException();
+        }
 
-    private class CustomException : Exception
-    {
+        private class CustomException : Exception
+        {
+        }
     }
 }

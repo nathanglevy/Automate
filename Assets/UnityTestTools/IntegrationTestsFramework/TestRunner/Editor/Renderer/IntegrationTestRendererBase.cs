@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.UnityTestTools.IntegrationTestsFramework.TestRunner;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;

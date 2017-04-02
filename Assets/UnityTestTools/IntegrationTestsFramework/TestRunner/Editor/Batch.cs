@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Assets.UnityTestTools.IntegrationTestsFramework.TestRunner;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;

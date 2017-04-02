@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Assets.UltimateIsometricToolkit.Scripts.Utils;
+using Assets.Graphics.UltimateIsometricToolkit.Scripts.Utils;
 
-namespace Assets.UltimateIsometricToolkit.Scripts.Core {
+namespace Assets.Graphics.UltimateIsometricToolkit.Scripts.Core {
 	/// <summary>
 	/// Calculates a continuous depth value for each IsoTransform based on its position. Then sorts by depth
 	/// </summary>

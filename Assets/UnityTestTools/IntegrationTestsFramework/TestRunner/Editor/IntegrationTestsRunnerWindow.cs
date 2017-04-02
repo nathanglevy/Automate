@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Assets.UnityTestTools.Common;
+using Assets.UnityTestTools.IntegrationTestsFramework.TestRunner;
 using UnityEditor;
 using UnityEngine;
-using UnityTest.IntegrationTestRunner;
 using UnityEngine.SceneManagement;
 
 namespace UnityTest

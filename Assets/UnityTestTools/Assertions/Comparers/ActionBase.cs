@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-namespace UnityTest
+namespace Assets.UnityTestTools.Assertions.Comparers
 {
     public abstract class ActionBase : ScriptableObject
     {

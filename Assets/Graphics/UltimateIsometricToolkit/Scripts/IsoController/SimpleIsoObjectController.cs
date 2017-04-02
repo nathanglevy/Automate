@@ -1,7 +1,8 @@
-﻿using UnityEngine;
-using Assets.UltimateIsometricToolkit.Scripts.Core;
+﻿using Assets.Graphics.UltimateIsometricToolkit.Scripts.Core;
+using Assets.Graphics.UltimateIsometricToolkit.Scripts.Utils;
+using UnityEngine;
 
-namespace UltimateIsometricToolkit.controller { 
+namespace Assets.Graphics.UltimateIsometricToolkit.Scripts.IsoController { 
 /// <summary>
 /// Simple continuous movement with WSAD/Arrow Keys movement.
 /// Note: This is an exemplary implementation. You may vary inputs, speeds, etc.

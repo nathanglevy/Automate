@@ -1,17 +1,16 @@
 #if !UNITY_METRO && (UNITY_PRO_LICENSE || !(UNITY_ANDROID || UNITY_IPHONE))
 #define UTT_SOCKETS_SUPPORTED
 #endif
+
 using System;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityTest.IntegrationTestRunner;
-
-#if UTT_SOCKETS_SUPPORTED
 using System.Net.Sockets;
-using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine;
+#if UTT_SOCKETS_SUPPORTED
+
 #endif
 
-namespace UnityTest
+namespace Assets.UnityTestTools.IntegrationTestsFramework.TestRunner
 {
     public class NetworkResultSender : ITestRunnerCallback
     {

@@ -1,13 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automate", "Automate.csproj", "{9D6E405C-85EC-3E21-EDD7-62A43AC5A861}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automate.Editor", "Automate.Editor.csproj", "{2CA1C0CA-090C-B34A-CC35-C835FC1C9F87}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomateTests", "AutomateTests\AutomateTests.csproj", "{4F64C6DB-3C1D-40DD-80DF-9C6366B40FC7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{237A8506-7EFD-4D28-B543-29E119CAD8DE} = {237A8506-7EFD-4D28-B543-29E119CAD8DE}
+		{46B6EDC5-1879-4E95-8271-1A7B526F50F1} = {46B6EDC5-1879-4E95-8271-1A7B526F50F1}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automate.Model", "Automate.Model\Automate.Model.csproj", "{237A8506-7EFD-4D28-B543-29E119CAD8DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automate.Controller", "Automate.Controller\Automate.Controller.csproj", "{46B6EDC5-1879-4E95-8271-1A7B526F50F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "IntegrationTests\IntegrationTests.csproj", "{5D806982-7E89-4AC0-A96D-F6EEFF0AD585}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +41,14 @@ Global
 		{237A8506-7EFD-4D28-B543-29E119CAD8DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{237A8506-7EFD-4D28-B543-29E119CAD8DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{237A8506-7EFD-4D28-B543-29E119CAD8DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46B6EDC5-1879-4E95-8271-1A7B526F50F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46B6EDC5-1879-4E95-8271-1A7B526F50F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46B6EDC5-1879-4E95-8271-1A7B526F50F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46B6EDC5-1879-4E95-8271-1A7B526F50F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D806982-7E89-4AC0-A96D-F6EEFF0AD585}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D806982-7E89-4AC0-A96D-F6EEFF0AD585}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D806982-7E89-4AC0-A96D-F6EEFF0AD585}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D806982-7E89-4AC0-A96D-F6EEFF0AD585}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

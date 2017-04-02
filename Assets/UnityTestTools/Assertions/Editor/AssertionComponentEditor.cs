@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Assets.UnityTestTools.Assertions;
+using Assets.UnityTestTools.Assertions.Comparers;
 using UnityEditor;
 using UnityEngine;
 using UnityEditor.SceneManagement;

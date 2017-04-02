@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace UnityTest
+namespace Assets.UnityTestTools.Assertions.Comparers
 {
     public class StringComparer : ComparerBaseGeneric<string>
     {

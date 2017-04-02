@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Linq;
-using Assets.UltimateIsometricToolkit.Scripts.Core;
+using Assets.Graphics.UltimateIsometricToolkit.Scripts.Core;
 using UnityEngine.Assertions.Comparers;
 
 namespace UltimateIsometricToolkit {

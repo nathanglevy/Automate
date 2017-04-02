@@ -1,4 +1,4 @@
-﻿using Assets.UltimateIsometricToolkit.Scripts.Core;
+﻿using Assets.Graphics.UltimateIsometricToolkit.Scripts.Core;
 using UnityEditor;
 
 namespace UltimateIsometricToolkit {

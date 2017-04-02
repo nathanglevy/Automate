@@ -5,20 +5,20 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
-using UnityEngine;
-using UnityTest.IntegrationTestRunner;
-#if UTT_SOCKETS_SUPPORTED
 using System.Net;
-using System.Net.Sockets;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
+using System.Threading;
+using UnityEditorInternal;
+using UnityEngine;
+#if UTT_SOCKETS_SUPPORTED
 #endif
 
 #if UNITY_EDITOR
-using UnityEditorInternal;
+
 #endif
 
-namespace UnityTest
+namespace Assets.UnityTestTools.IntegrationTestsFramework.TestRunner
 {
     public class TestRunnerConfigurator
     {

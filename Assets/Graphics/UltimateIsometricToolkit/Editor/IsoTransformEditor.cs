@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Assets.UltimateIsometricToolkit.Scripts.Core;
-using Assets.UltimateIsometricToolkit.Scripts.Utils;
+using Assets.Graphics.UltimateIsometricToolkit.Scripts.Core;
+using Assets.Graphics.UltimateIsometricToolkit.Scripts.Utils;
 using UltimateIsometricToolkit;
 using UnityEditor;
 using UnityEngine;

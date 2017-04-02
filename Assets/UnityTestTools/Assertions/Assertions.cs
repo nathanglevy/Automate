@@ -1,9 +1,7 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace UnityTest
+namespace Assets.UnityTestTools.Assertions
 {
     public static class Assertions
     {
