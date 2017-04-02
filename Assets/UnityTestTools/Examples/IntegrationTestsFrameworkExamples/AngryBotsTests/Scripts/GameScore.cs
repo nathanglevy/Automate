@@ -1,123 +1,125 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameScore : MonoBehaviour
+namespace Assets.UnityTestTools.Examples.IntegrationTestsFrameworkExamples.AngryBotsTests.Scripts
 {
-    static GameScore s_Instance;
-
-
-    static GameScore Instance
+    public class GameScore : MonoBehaviour
     {
-        get
+        static GameScore s_Instance;
+
+
+        static GameScore Instance
         {
-            if (s_Instance == null)
+            get
             {
-                s_Instance = (GameScore)FindObjectOfType(typeof(GameScore));
+                if (s_Instance == null)
+                {
+                    s_Instance = (GameScore)FindObjectOfType(typeof(GameScore));
+                }
+
+                return s_Instance;
             }
-
-            return s_Instance;
         }
-    }
 
 
-    public void OnApplicationQuit()
-    {
-        s_Instance = null;
-    }
-
-
-    public string playerLayerName = "Player", enemyLayerName = "Enemies";
-
-
-    int m_Deaths;
-    readonly Dictionary<string, int> m_Kills = new Dictionary<string, int>();
-    float m_StartTime;
-
-
-    public static int Deaths
-    {
-        get
+        public void OnApplicationQuit()
         {
-            if (Instance == null)
+            s_Instance = null;
+        }
+
+
+        public string playerLayerName = "Player", enemyLayerName = "Enemies";
+
+
+        int m_Deaths;
+        readonly Dictionary<string, int> m_Kills = new Dictionary<string, int>();
+        float m_StartTime;
+
+
+        public static int Deaths
+        {
+            get
+            {
+                if (Instance == null)
+                {
+                    return 0;
+                }
+
+                return Instance.m_Deaths;
+            }
+        }
+
+
+#if !UNITY_FLASH
+        public static ICollection<string> KillTypes
+        {
+            get
+            {
+                if (Instance == null)
+                {
+                    return new string[0];
+                }
+
+                return Instance.m_Kills.Keys;
+            }
+        }
+#endif  // if !UNITY_FLASH
+
+
+        public static int GetKills(string type)
+        {
+            if (Instance == null || !Instance.m_Kills.ContainsKey(type))
             {
                 return 0;
             }
 
-            return Instance.m_Deaths;
+            return Instance.m_Kills[type];
         }
-    }
 
 
-    #if !UNITY_FLASH
-    public static ICollection<string> KillTypes
-    {
-        get
+        public static float GameTime
+        {
+            get
+            {
+                if (Instance == null)
+                {
+                    return 0.0f;
+                }
+
+                return Time.time - Instance.m_StartTime;
+            }
+        }
+
+
+        public static void RegisterDeath(GameObject deadObject)
         {
             if (Instance == null)
             {
-                return new string[0];
+                Debug.Log("Game score not loaded");
+                return;
             }
 
-            return Instance.m_Kills.Keys;
-        }
-    }
-    #endif  // if !UNITY_FLASH
+            int
+                playerLayer = LayerMask.NameToLayer(Instance.playerLayerName),
+                enemyLayer = LayerMask.NameToLayer(Instance.enemyLayerName);
 
-
-    public static int GetKills(string type)
-    {
-        if (Instance == null || !Instance.m_Kills.ContainsKey(type))
-        {
-            return 0;
-        }
-
-        return Instance.m_Kills[type];
-    }
-
-
-    public static float GameTime
-    {
-        get
-        {
-            if (Instance == null)
+            if (deadObject.layer == playerLayer)
             {
-                return 0.0f;
+                Instance.m_Deaths++;
             }
-
-            return Time.time - Instance.m_StartTime;
-        }
-    }
-
-
-    public static void RegisterDeath(GameObject deadObject)
-    {
-        if (Instance == null)
-        {
-            Debug.Log("Game score not loaded");
-            return;
+            else if (deadObject.layer == enemyLayer)
+            {
+                Instance.m_Kills[deadObject.name] = Instance.m_Kills.ContainsKey(deadObject.name) ? Instance.m_Kills[deadObject.name] + 1 : 1;
+            }
         }
 
-        int
-            playerLayer = LayerMask.NameToLayer(Instance.playerLayerName),
-            enemyLayer = LayerMask.NameToLayer(Instance.enemyLayerName);
 
-        if (deadObject.layer == playerLayer)
+        public void Awake()
         {
-            Instance.m_Deaths++;
-        }
-        else if (deadObject.layer == enemyLayer)
-        {
-            Instance.m_Kills[deadObject.name] = Instance.m_Kills.ContainsKey(deadObject.name) ? Instance.m_Kills[deadObject.name] + 1 : 1;
-        }
-    }
-
-
-    public void Awake()
-    {
-        if (m_StartTime == 0.0f)
-        {
-            m_StartTime = Time.time;
+            if (m_StartTime == 0.0f)
+            {
+                m_StartTime = Time.time;
+            }
         }
     }
 }

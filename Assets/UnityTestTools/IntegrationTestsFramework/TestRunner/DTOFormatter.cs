@@ -2,9 +2,9 @@
 using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
-using UnityEngine;
+using Assets.UnityTestTools.Common;
 
-namespace UnityTest
+namespace Assets.UnityTestTools.IntegrationTestsFramework.TestRunner
 {
 
     public class DTOFormatter {

@@ -3,7 +3,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Assets.UltimateIsometricToolkit.Scripts.External;
+using Assets.Graphics.UltimateIsometricToolkit.Scripts.External;
 
 
 public static class ExposeProperties {

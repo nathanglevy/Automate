@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Assets.UltimateIsometricToolkit.Scripts.Core;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Assets.UltimateIsometricToolkit.Scripts.Utils {
+namespace Assets.Graphics.UltimateIsometricToolkit.Scripts.Utils {
 	public static class GizmosExtension {
 
 		public static void DrawIsoWireCube(Vector3 center, Vector3 size) {

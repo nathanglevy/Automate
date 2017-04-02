@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.UltimateIsometricToolkit.Scripts.Utils {
+namespace Assets.Graphics.UltimateIsometricToolkit.Scripts.Utils {
 	/// <summary>
 	/// Isometric helper class with utility functions
 	/// </summary>

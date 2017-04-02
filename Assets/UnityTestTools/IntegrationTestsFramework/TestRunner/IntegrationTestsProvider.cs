@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace UnityTest.IntegrationTestRunner
+namespace Assets.UnityTestTools.IntegrationTestsFramework.TestRunner
 {
     class IntegrationTestsProvider
     {

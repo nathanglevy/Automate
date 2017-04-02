@@ -85,7 +85,7 @@
     <Folder Include="Assets\src\Model\PathFinding\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Automate.Controller\Automate.Controller.csproj">
+    <ProjectReference Include="..\Automate.Controller\Automate.Controller.csproj">
       <Project>{46b6edc5-1879-4e95-8271-1a7b526f50f1}</Project>
       <Name>Automate.Controller</Name>
     </ProjectReference>

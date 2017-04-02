@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.UltimateIsometricToolkit.Scripts.Core {
+namespace Assets.Graphics.UltimateIsometricToolkit.Scripts.Core {
 
 	/// <summary>
 	/// Sorting strategy defines how objects are sorted

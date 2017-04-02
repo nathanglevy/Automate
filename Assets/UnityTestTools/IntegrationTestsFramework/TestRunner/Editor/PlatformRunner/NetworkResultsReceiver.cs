@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using Assets.UnityTestTools.Common;
+using Assets.UnityTestTools.IntegrationTestsFramework.TestRunner;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;

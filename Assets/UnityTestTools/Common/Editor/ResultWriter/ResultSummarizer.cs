@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using Assets.UnityTestTools.Common;
 using UnityEngine;
 
 namespace UnityTest

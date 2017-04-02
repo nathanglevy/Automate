@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using Assets.UltimateIsometricToolkit.Scripts.External;
-using Assets.UltimateIsometricToolkit.Scripts.Utils;
+using Assets.Graphics.UltimateIsometricToolkit.Scripts.External;
+using Assets.Graphics.UltimateIsometricToolkit.Scripts.Utils;
 using UnityEditor;
 using UnityEngine;
 
-namespace Assets.UltimateIsometricToolkit.Scripts.Core {
+namespace Assets.Graphics.UltimateIsometricToolkit.Scripts.Core {
 
 
 	/// <summary>

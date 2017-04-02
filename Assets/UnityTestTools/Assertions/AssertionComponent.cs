@@ -1,13 +1,13 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Assets.UnityTestTools.Assertions.Comparers;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
-namespace UnityTest
+namespace Assets.UnityTestTools.Assertions
 {
     [Serializable]
     public class AssertionComponent : MonoBehaviour, IAssertionComponentConfigurator

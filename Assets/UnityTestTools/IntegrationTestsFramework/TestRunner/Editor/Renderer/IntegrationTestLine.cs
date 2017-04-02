@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Assets.UnityTestTools.IntegrationTestsFramework.TestRunner;
 using UnityEditor;
 using UnityEngine;
 

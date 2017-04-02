@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-namespace UnityTest
+namespace Assets.UnityTestTools.Assertions
 {
     public class MemberResolver
     {

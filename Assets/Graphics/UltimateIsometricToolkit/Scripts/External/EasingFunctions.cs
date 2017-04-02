@@ -5,7 +5,7 @@
 // Copyright © 2001 Robert Penner
 // All rights reserved
 
-namespace Assets.UltimateIsometricToolkit.Scripts.External {
+namespace Assets.Graphics.UltimateIsometricToolkit.Scripts.External {
 	/// <summary>
 	/// Easing functions to create a movement from point a to point b described by various functions.
 	/// </summary>

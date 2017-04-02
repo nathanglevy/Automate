@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-namespace UnityTest.IntegrationTestRunner
+namespace Assets.UnityTestTools.IntegrationTestsFramework.TestRunner
 {
     public class TestRunnerCallbackList : ITestRunnerCallback
     {
