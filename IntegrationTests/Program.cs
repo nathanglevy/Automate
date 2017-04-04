@@ -48,9 +48,9 @@ namespace IntegrationTests
                 // acknoledge
                 gameController.Handle(new AcknowledgeNotification(masterAction));
             }
+            Console.WriteLine("Press the Enter key to exit the program at any time... ");
+            Console.ReadLine();
 
-            Console.Out.WriteLine("Process Finished.");
-            Thread.Sleep(10000);
         }
     }
 }

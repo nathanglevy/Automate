@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Delegates;
 using Automate.Controller.Interfaces;
@@ -96,6 +97,27 @@ namespace AutomateTests.Assets.test.Controller
         }
 
         //TODO: i think we should add another event to notify that jobs added
+        [TestMethod]
+        public void TestAcknowledgeToTimerAndQueueWhenPullOccurs_ExpectAckSentToHandle()
+        {
+            IScheduler scheduler = new Scheduler();
+            List<MasterAction> actions = new List<MasterAction>();
+            actions.Add(new MockMasterAction(ActionType.Movement, "MyId2"));
+            IHandlerResult handlerResult = new HandlerResult(actions);
+
+            HandlerResultListner pusher = scheduler.GetPushInvoker();
+            Assert.IsNotNull(pusher);
+            pusher(handlerResult);
+            Assert.AreEqual(1, scheduler.ActionsCount);
+            MasterAction action = scheduler.Pull();
+            Assert.AreEqual(ActionType.Movement,action.Type);
+            // by doing pull, we expect an action is added to Wait/Timer and send to Handler
+            Thread.Sleep(300);
+            Assert.AreEqual(1, scheduler.ActionsCount);
+            MasterAction action2 = scheduler.Pull();
+            Assert.AreEqual(ActionType.Movement, action2.Type);
+
+        }
 
      
     }

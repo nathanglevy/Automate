@@ -33,7 +33,7 @@ namespace Automate.Controller.Handlers.SelectionNotification
 
         public override bool CanAcknowledge(MasterAction action)
         {
-            return action is SelectMovableAction;
+            return false;
         }
 
         public override bool CanHandle(ObserverArgs args)

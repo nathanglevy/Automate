@@ -38,7 +38,7 @@ namespace Automate.Controller.Handlers.AcknowledgeNotification
 
         public override bool CanAcknowledge(MasterAction action)
         {
-            throw new NotImplementedException();
+            return false;
         }
     }
 }
