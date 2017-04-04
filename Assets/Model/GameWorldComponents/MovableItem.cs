@@ -8,7 +8,7 @@ namespace Model.GameWorldComponents
     {
         private readonly GameWorld _gameWorld;
 
-        public MovableItem(GameWorld gameWorld, Guid movableGuid) {
+        internal MovableItem(GameWorld gameWorld, Guid movableGuid) {
             Guid = movableGuid;
             Type = ItemType.Movable;
             _gameWorld = gameWorld;
