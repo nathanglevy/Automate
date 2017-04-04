@@ -1,5 +1,5 @@
-﻿using Automate.Model.src.MapModelComponents;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Model.MapModelComponents;
 
 namespace AutomateTests.test.Model.MapModelComponents
 {

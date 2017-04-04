@@ -5,9 +5,9 @@ using Automate.Controller.Handlers;
 using Automate.Controller.Handlers.AcknowledgeNotification;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
-using Automate.Model.src.MapModelComponents;
 using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Model.MapModelComponents;
 
 namespace AutomateTests.test.Controller
 {

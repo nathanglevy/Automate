@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Automate.Model.src.GameWorldComponents;
-using Automate.Model.src.MapModelComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Model.GameWorldComponents;
+using Model.MapModelComponents;
 
 namespace AutomateTests.test.Model.ModelAbstractionLayerTests
 {
@@ -44,7 +44,7 @@ namespace AutomateTests.test.Model.ModelAbstractionLayerTests
         [TestMethod()]
         public void TestGetStructureBoundary_ExpectValidValue() {
             StructureItem structure = _gameWorldItem.CreateStructure(new Coordinate(0, 0, 0), new Coordinate(1, 2, 1), StructureType.Basic);
-            Assert.AreEqual(structure.StructureBoundary, new Boundary(new Coordinate(0,0,0), new Coordinate(1,2,1) ));
+            Assert.AreEqual(structure.StructureBoundary, new Boundary(new Coordinate(0,0,0), new Coordinate(0,1,0) ));
         }
 
         [TestMethod()]
@@ -75,7 +75,7 @@ namespace AutomateTests.test.Model.ModelAbstractionLayerTests
         {
             StructureItem structure = _gameWorldItem.CreateStructure(new Coordinate(0, 0, 0),
                 new Coordinate(2, 2, 1), StructureType.Basic);
-            Assert.IsTrue(_gameWorldItem.IsStructureAtCoordinate(new Coordinate(1, 1, 1)));
+            Assert.IsTrue(_gameWorldItem.IsStructureAtCoordinate(new Coordinate(1, 1, 0)));
         }
 
         [TestMethod()]
@@ -89,7 +89,7 @@ namespace AutomateTests.test.Model.ModelAbstractionLayerTests
         public void TestGetStructureAtCoordinate_ExpectCorrectValue() {
             StructureItem structure = _gameWorldItem.CreateStructure(new Coordinate(0, 0, 0),
                 new Coordinate(2, 2, 1), StructureType.Basic);
-            Assert.AreEqual(_gameWorldItem.GetStructureAtCoordinate(new Coordinate(2, 2, 1)),structure);
+            Assert.AreEqual(_gameWorldItem.GetStructureAtCoordinate(new Coordinate(1, 1, 0)),structure);
         }
 
         [TestMethod()]

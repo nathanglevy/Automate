@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.Threading;
 using Automate.Controller.Abstracts;
-using Automate.Controller.Delegates;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 
-namespace AutomateTests.test.Mocks
+namespace AutomateTests.Mocks
 {
     public class MockGameView : IGameView
     {
         private readonly List<MasterAction> _list;
-        public ConcurrentQueue<IHandlerResult> Results { get; }
+        public ConcurrentQueue<IHandlerResult> Results { get; private set; }
 
         public MockGameView()
         {
@@ -34,7 +33,7 @@ namespace AutomateTests.test.Mocks
 
     public class TestingThreadWrapper : IHandlerResult
     {
-        public ThreadInfo PerformingThread { get; }
+        public ThreadInfo PerformingThread { get; private set; }
         private readonly IHandlerResult _handlerResult;
 
         public TestingThreadWrapper(ThreadInfo currentThread, IHandlerResult handlerResult)

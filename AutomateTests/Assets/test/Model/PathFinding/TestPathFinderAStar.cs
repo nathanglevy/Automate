@@ -1,7 +1,7 @@
 ﻿using System;
-using Automate.Model.src.MapModelComponents;
-using Automate.Model.src.PathFinding;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Model.MapModelComponents;
+using Model.PathFinding;
 
 namespace AutomateTests.test.Model.PathFinding {
     [TestClass()]

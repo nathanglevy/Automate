@@ -10,9 +10,10 @@ using Automate.Controller.Handlers.AcknowledgeNotification;
 using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Handlers.SelectionNotification;
 using Automate.Controller.Modules;
-using Automate.Model.src;
-using Automate.Model.src.MapModelComponents;
+using Automate.Model;
 using AutomateTests.test.Mocks;
+using Model;
+using Model.MapModelComponents;
 
 namespace IntegrationTests
 {
