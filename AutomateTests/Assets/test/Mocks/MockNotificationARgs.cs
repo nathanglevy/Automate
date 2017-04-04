@@ -1,8 +1,7 @@
-using System;
 using Automate.Controller.Abstracts;
-using Automate.Model.src.MapModelComponents;
+using Model.MapModelComponents;
 
-namespace AutomateTests.test.Mocks
+namespace AutomateTests.Mocks
 {
     public class MockNotificationArgs :ObserverArgs
     {
@@ -11,7 +10,7 @@ namespace AutomateTests.test.Mocks
             DropCoordinate = dropCoordinate;
         }
 
-        public Coordinate DropCoordinate { get; }
+        public Coordinate DropCoordinate { get; private set; }
 
     }
 }

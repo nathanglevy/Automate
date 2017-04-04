@@ -1,8 +1,8 @@
 ﻿using System;
-using Automate.Model.src.GameWorldComponents;
-using Automate.Model.src.MapModelComponents;
-using Automate.Model.src.PathFinding;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Model.GameWorldComponents;
+using Model.MapModelComponents;
+using Model.PathFinding;
 
 namespace AutomateTests.test.Model.GameWorldComponents {
     [TestClass()]

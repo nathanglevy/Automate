@@ -1,5 +1,5 @@
 using Automate.Controller.Abstracts;
-using Automate.Model.src.MapModelComponents;
+using Model.MapModelComponents;
 
 namespace Automate.Controller.Actions
 {

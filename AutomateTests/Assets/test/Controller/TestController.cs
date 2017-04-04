@@ -4,10 +4,12 @@ using System.Threading;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
-using Automate.Model.src;
-using Automate.Model.src.MapModelComponents;
+using Automate.Model;
+using AutomateTests.Mocks;
 using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Model;
+using Model.MapModelComponents;
 
 namespace AutomateTests.test.Controller
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Actions;
 using Automate.Controller.Interfaces;
-using Automate.Model.src.GameWorldComponents;
+using Model.GameWorldComponents;
 
 namespace Automate.Controller.Handlers.RightClockNotification
 {

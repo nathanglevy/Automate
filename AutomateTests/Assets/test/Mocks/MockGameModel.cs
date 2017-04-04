@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Automate.Model.src;
-using Automate.Model.src.GameWorldComponents;
-using Automate.Model.src.MapModelComponents;
+using Automate.Model;
+using Model;
+using Model.GameWorldComponents;
+using Model.MapModelComponents;
 
 namespace AutomateTests.test.Mocks
 {

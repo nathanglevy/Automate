@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Automate.Model.src.GameWorldComponents;
-using Automate.Model.src.MapModelComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Model.GameWorldComponents;
+using Model.MapModelComponents;
 
 namespace AutomateTests.test.Model.GameWorldComponents {
     [TestClass()]
@@ -110,6 +110,7 @@ namespace AutomateTests.test.Model.GameWorldComponents {
         [TestMethod()]
         public void TestIsThereAnItemToBePlaced_ExpectFalseThenTrue() {
             GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
+            gameWorld.ClearItemsToBePlaced();
             Assert.IsFalse(gameWorld.IsThereAnItemToBePlaced());
             Guid movableId = gameWorld.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman).Guid;
             Assert.IsTrue(gameWorld.IsThereAnItemToBePlaced());
@@ -118,6 +119,7 @@ namespace AutomateTests.test.Model.GameWorldComponents {
         [TestMethod()]
         public void TestGetItemsToBePlaced_ExpectItemsToBePlaced() {
             GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
+            gameWorld.ClearItemsToBePlaced();
             Guid movableId = gameWorld.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman).Guid;
             Assert.AreEqual(gameWorld.GetItemsToBePlaced().Count, 1);
             Assert.AreEqual(gameWorld.GetItemsToBePlaced()[0].Guid, movableId);
@@ -126,11 +128,18 @@ namespace AutomateTests.test.Model.GameWorldComponents {
         [TestMethod()]
         public void TestClearItemsToBePlaced_ExpectItemsToBeCleared() {
             GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
+            gameWorld.ClearItemsToBePlaced();
             Assert.IsFalse(gameWorld.IsThereAnItemToBePlaced());
             Guid movableId = gameWorld.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman).Guid;
             Assert.IsTrue(gameWorld.IsThereAnItemToBePlaced());
             gameWorld.ClearItemsToBePlaced();
             Assert.IsFalse(gameWorld.IsThereAnItemToBePlaced());
+        }
+
+        [TestMethod()]
+        public void TestExpectCellsTobePlaced() {
+            GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
+            Assert.AreEqual(gameWorld.GetItemsToBePlaced().Count, 27);
         }
 
     }
