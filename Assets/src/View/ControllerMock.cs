@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
-using Boo.Lang.Runtime;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -74,7 +73,7 @@ public class ControllerMock : MonoBehaviour
                         AddStructureToMap(itemToPlace as StructureItem);
                         break;
                     default:
-                        throw new RuntimeException("Unexpected item type!");
+                        throw new Exception("Unexpected item type!");
                 }
             }
             print("done placing");
@@ -106,12 +105,13 @@ public class ControllerMock : MonoBehaviour
             {
                 Vector3 movableStartVector = GetWorldVectorFromMapCoodinates(movableItem.CurrentCoordiate);
                 Vector3 movableTargetVector = GetWorldVectorFromMapCoodinates(movableItem.NextCoordinate);
+                
                 movableGameObject.GetComponent<MovableBehaviour>().startPosition = movableStartVector;
                 movableGameObject.GetComponent<MovableBehaviour>().targetPosition = movableTargetVector;
-                movableGameObject.GetComponent<MovableBehaviour>().animationSpeed = (float)movableItem.Speed;
+                movableGameObject.GetComponent<MovableBehaviour>().animationSpeed = (float) movableItem.NextMovement.GetMoveCost() / (float)movableItem.Speed;
                 movableGameObject.GetComponent<MovableBehaviour>().isMoving = true;
                 movableGameObject.GetComponent<MovableBehaviour>().journeyFract = 0;
-                String animationName = movableGameObject.GetComponent<MovableBehaviour>().DecideAnimation();
+                string animationName = movableGameObject.GetComponent<MovableBehaviour>().DecideAnimation();
                 movableGameObject.GetComponent<Animator>().Play(animationName);
                 movableItem.MoveToNext();
             }

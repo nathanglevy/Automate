@@ -4,7 +4,7 @@ using Automate.Model.MapModelComponents;
 using Automate.Model.PathFinding;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.test.Model.GameWorldComponents {
+namespace Automate.Model.localTests {
     [TestClass()]
     public class TestMovable {
         [TestMethod()]

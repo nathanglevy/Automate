@@ -29,25 +29,15 @@ namespace Automate.Model.GameWorldComponents
             return Guid.GetHashCode();
         }
 
-        public Coordinate CurrentCoordiate
-        {
-            get { return _gameWorld.GetMovable(Guid).GetCurrentCoordinate(); }
-        }
+        public Coordinate CurrentCoordiate => _gameWorld.GetMovable(Guid).GetCurrentCoordinate();
 
-        public Movement NextMovement
-        {
-            get { return _gameWorld.GetMovable(Guid).GetNextMovement(); }
-        }
+        public Movement NextMovement => _gameWorld.GetMovable(Guid).GetNextMovement();
 
-        public Coordinate NextCoordinate
-        {
-            get { return _gameWorld.GetMovable(Guid).GetNextCoordinate(); }
-        }
+        public Coordinate NextCoordinate => _gameWorld.GetMovable(Guid).GetNextCoordinate();
 
-        public MovableType MovableType
-        {
-            get { return _gameWorld.GetMovable(Guid).MovableType; }
-        }
+        public MovableType MovableType => _gameWorld.GetMovable(Guid).MovableType;
+
+        public double NextMovementDuration => NextMovement.GetMoveCost() / Speed;
 
         public double Speed
         {

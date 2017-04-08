@@ -46,7 +46,7 @@ namespace Automate.Controller.Handlers.RightClockNotification
             var moveAction = action as MoveAction;
 
             // get the movableItem from model
-            var movableItem = utils.Model.GetMovableItem(Guid.Parse(moveAction.TargetId));
+            var movableItem = utils.Model.GetMovableItem(new Guid(moveAction.TargetId));
 
             // get next step
             var movableItemNextCoordinate = movableItem.NextCoordinate;

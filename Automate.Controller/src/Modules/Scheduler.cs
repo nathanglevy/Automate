@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Delegates;
 using Automate.Controller.Interfaces;
@@ -9,7 +8,7 @@ namespace Automate.Controller.Modules
     public class Scheduler : IScheduler
     {
         // collection
-        private ConcurrentQueue<MasterAction> _queue = new ConcurrentQueue<MasterAction>();
+        private Queue<MasterAction> _queue = new Queue<MasterAction>();
 
         // events
         private event HandlerResultListner _enqueueListener;
@@ -42,7 +41,7 @@ namespace Automate.Controller.Modules
 
         public bool HasActions
         {
-            get { return !_queue.IsEmpty; }
+            get { return (_queue.Count > 0); }
         }
 
         public MasterAction Pull()
@@ -50,9 +49,9 @@ namespace Automate.Controller.Modules
             MasterAction action = null;
             bool actionPulled = false;
 
-            while (!actionPulled && !_queue.IsEmpty)
+            while (!actionPulled && (_queue.Count > 0))
             {
-                actionPulled = _queue.TryDequeue(out action);
+                action = _queue.Dequeue();
             }
 
             return action;

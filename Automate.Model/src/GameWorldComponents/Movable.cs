@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Automate.Model.MapModelComponents;
 using Automate.Model.PathFinding;
 
-namespace Automate.Model.GameWorldComponents
-{
+[assembly: InternalsVisibleTo("AutomateTests")]
+namespace Automate.Model.GameWorldComponents {
     //TODO: Need to do comments!
     public class Movable
     {
@@ -15,18 +16,7 @@ namespace Automate.Model.GameWorldComponents
         public MovableType MovableType { get; private set; }
         private double _speed;
 
-        public double Speed
-        {
-            get { return _speed; }
-            set
-            {
-                if (value <= 0)
-                    throw new ArgumentException("cannot set speed below 0");
-                _speed = value;
-            }
-        }
-
-        public Movable(Coordinate startinCoordinate, MovableType movableType)
+        internal Movable(Coordinate startinCoordinate, MovableType movableType)
         {
             if (startinCoordinate == null)
                 throw new ArgumentNullException();
@@ -34,6 +24,15 @@ namespace Automate.Model.GameWorldComponents
             _currentCoordinate = startinCoordinate;
             MovableType = movableType;
             Speed = 1;
+        }
+
+        public double Speed {
+            get { return _speed; }
+            set {
+                if (value <= 0)
+                    throw new ArgumentException("cannot set speed below 0");
+                _speed = value;
+            }
         }
 
         public bool IsInMotion()
