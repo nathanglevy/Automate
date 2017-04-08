@@ -3,7 +3,6 @@ using Automate.Controller.Abstracts;
 using Automate.Controller.Delegates;
 using Automate.Controller.Modules;
 using Automate.Model;
-using Model;
 
 namespace Automate.Controller.Interfaces
 {

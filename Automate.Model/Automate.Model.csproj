@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\Assets\Plugins\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -62,14 +62,38 @@
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
       <HintPath>..\Library\UnityAssemblies\UnityEngine.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\GameWorldComponents\Automaton.cs" />
+    <Compile Include="src\GameWorldComponents\CellItem.cs" />
+    <Compile Include="src\GameWorldComponents\GameUniverse.cs" />
+    <Compile Include="src\GameWorldComponents\GameWorld.cs" />
+    <Compile Include="src\GameWorldComponents\GameWorldItem.cs" />
+    <Compile Include="src\GameWorldComponents\Item.cs" />
+    <Compile Include="src\GameWorldComponents\Movable.cs" />
+    <Compile Include="src\GameWorldComponents\MovableItem.cs" />
+    <Compile Include="src\GameWorldComponents\MovableType.cs" />
+    <Compile Include="src\GameWorldComponents\Structure.cs" />
+    <Compile Include="src\GameWorldComponents\StructureItem.cs" />
+    <Compile Include="src\GameWorldComponents\StructureType.cs" />
+    <Compile Include="src\IModelAbstractionLayer.cs" />
+    <Compile Include="src\MapModelComponents\Boundary.cs" />
+    <Compile Include="src\MapModelComponents\CellInfo.cs" />
+    <Compile Include="src\MapModelComponents\Coordinate.cs" />
+    <Compile Include="src\MapModelComponents\MapInfo.cs" />
+    <Compile Include="src\MapModelComponents\MyContractResolver.cs" />
+    <Compile Include="src\PathFinding\IPathFindingStrategy.cs" />
+    <Compile Include="src\PathFinding\Movement.cs" />
+    <Compile Include="src\PathFinding\MovementPath.cs" />
+    <Compile Include="src\PathFinding\NoPathFoundException.cs" />
+    <Compile Include="src\PathFinding\PathFinderAStar.cs" />
+    <Compile Include="src\Utility\CommonUtility.cs" />
+    <Compile Include="src\Utility\DuplicateKeyComparer.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

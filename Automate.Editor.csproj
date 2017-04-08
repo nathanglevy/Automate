@@ -118,6 +118,12 @@
     <Reference Include="NSubstitute">
       <HintPath>Assets\UnityTestTools\UnitTesting\Editor\NSubstitute\NSubstitute.dll</HintPath>
     </Reference>
+    <Reference Include="Automate.Model">
+      <HintPath>Assets\Plugins\Automate.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Assets\Plugins\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-UnityScript">
       <HintPath>Library\ScriptAssemblies\Assembly-UnityScript.dll</HintPath>
     </Reference>

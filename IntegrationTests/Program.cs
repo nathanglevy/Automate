@@ -11,9 +11,8 @@ using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Handlers.SelectionNotification;
 using Automate.Controller.Modules;
 using Automate.Model;
+using Automate.Model.MapModelComponents;
 using AutomateTests.test.Mocks;
-using Model;
-using Model.MapModelComponents;
 
 namespace IntegrationTests
 {

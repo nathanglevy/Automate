@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Automate.Model.GameWorldComponents;
+using Automate.Model.MapModelComponents;
 using Boo.Lang.Runtime;
-using Model.GameWorldComponents;
-using Model.MapModelComponents;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

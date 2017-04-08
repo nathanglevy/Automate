@@ -9,7 +9,6 @@ using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Handlers.SelectionNotification;
 using Automate.Controller.Interfaces;
 using Automate.Model;
-using Model;
 
 namespace Automate.Controller.Modules
 {

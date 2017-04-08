@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.5.0f3</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -78,6 +76,12 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>Assets\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Automate.Model">
+      <HintPath>Assets\Plugins\Automate.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Assets\Plugins\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Core\HeuristicSorting.cs" />
@@ -95,29 +99,6 @@
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\Isometric.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\MethodExtensionForMonoBehaviourTransform.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\Singleton.cs" />
-    <Compile Include="Assets\Model\GameWorldComponents\Automaton.cs" />
-    <Compile Include="Assets\Model\GameWorldComponents\CellItem.cs" />
-    <Compile Include="Assets\Model\GameWorldComponents\GameUniverse.cs" />
-    <Compile Include="Assets\Model\GameWorldComponents\GameWorld.cs" />
-    <Compile Include="Assets\Model\GameWorldComponents\GameWorldItem.cs" />
-    <Compile Include="Assets\Model\GameWorldComponents\Item.cs" />
-    <Compile Include="Assets\Model\GameWorldComponents\Movable.cs" />
-    <Compile Include="Assets\Model\GameWorldComponents\MovableItem.cs" />
-    <Compile Include="Assets\Model\GameWorldComponents\MovableType.cs" />
-    <Compile Include="Assets\Model\GameWorldComponents\Structure.cs" />
-    <Compile Include="Assets\Model\GameWorldComponents\StructureItem.cs" />
-    <Compile Include="Assets\Model\GameWorldComponents\StructureType.cs" />
-    <Compile Include="Assets\Model\IModelAbstractionLayer.cs" />
-    <Compile Include="Assets\Model\MapModelComponents\Boundary.cs" />
-    <Compile Include="Assets\Model\MapModelComponents\CellInfo.cs" />
-    <Compile Include="Assets\Model\MapModelComponents\Coordinate.cs" />
-    <Compile Include="Assets\Model\MapModelComponents\MapInfo.cs" />
-    <Compile Include="Assets\Model\MapModelComponents\MyContractResolver.cs" />
-    <Compile Include="Assets\Model\PathFinding\IPathFindingStrategy.cs" />
-    <Compile Include="Assets\Model\PathFinding\Movement.cs" />
-    <Compile Include="Assets\Model\PathFinding\MovementPath.cs" />
-    <Compile Include="Assets\Model\PathFinding\NoPathFoundException.cs" />
-    <Compile Include="Assets\Model\PathFinding\PathFinderAStar.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\AssertionComponent.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\AssertionException.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\Assertions.cs" />
@@ -160,13 +141,13 @@
     <Compile Include="Assets\UnityTestTools\IntegrationTestsFramework\TestRunner\TestRunnerCallbackList.cs" />
     <Compile Include="Assets\UnityTestTools\IntegrationTestsFramework\TestRunner\TestRunnerConfigurator.cs" />
     <Compile Include="Assets\UnityTestTools\IntegrationTestsFramework\TestingAssets\CallTesting.cs" />
+    <Compile Include="Assets\Utility\CommonUtility.cs" />
+    <Compile Include="Assets\Utility\DuplicateKeyComparer.cs" />
     <Compile Include="Assets\src\ThreadingExample\ThreadExample.cs" />
     <Compile Include="Assets\src\View\ControllerMock.cs" />
     <Compile Include="Assets\src\View\DummyBehaviour.cs" />
     <Compile Include="Assets\src\View\MovableBehaviour.cs" />
     <Compile Include="Assets\src\View\ViewBehaviour.cs" />
-    <Compile Include="Assets\Utility\CommonUtility.cs" />
-    <Compile Include="Assets\Utility\DuplicateKeyComparer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Graphics\UltimateIsometricToolkit\License.txt" />
@@ -188,7 +169,6 @@
     <None Include="Assets\UnityTestTools\LICENSE.txt" />
     <None Include="Assets\UnityTestTools\changelog.txt" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
 </Project>

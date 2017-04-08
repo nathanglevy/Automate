@@ -2,8 +2,8 @@
 using Automate.Controller.Abstracts;
 using Automate.Controller.Actions;
 using Automate.Controller.Interfaces;
-using Model.GameWorldComponents;
-using Model.MapModelComponents;
+using Automate.Model.GameWorldComponents;
+using Automate.Model.MapModelComponents;
 
 namespace Automate.Controller.Handlers.SelectionNotification
 {

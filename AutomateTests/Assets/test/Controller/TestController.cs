@@ -5,11 +5,10 @@ using Automate.Controller.Abstracts;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 using Automate.Model;
+using Automate.Model.MapModelComponents;
 using AutomateTests.Mocks;
 using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Model;
-using Model.MapModelComponents;
 
 namespace AutomateTests.test.Controller
 {

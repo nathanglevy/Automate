@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Automate.Model.MapModelComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Model.MapModelComponents;
 
 namespace AutomateTests.test.Model.MapModelComponents {
     [TestClass()]
