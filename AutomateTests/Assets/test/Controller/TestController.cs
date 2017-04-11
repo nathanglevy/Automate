@@ -34,8 +34,8 @@ namespace AutomateTests.test.Controller
         [TestMethod]
         public void TestHandlersCount_Expect0()
         {
-            IModelAbstractionLayer gameModel = null;
-            IGameView gameview = null;
+            IModelAbstractionLayer gameModel = new MockGameModel();
+            IGameView gameview = new MockGameView();
             IGameController gameController = new GameController(gameview, gameModel);
 
             Assert.IsTrue(gameController.GetHandlersCount() > 0);
@@ -45,8 +45,8 @@ namespace AutomateTests.test.Controller
         [TestMethod]
         public void TestRegisterHandle_ExpectHandleToBeAddedtoList()
         {
-            IModelAbstractionLayer gameModel = null;
-            IGameView gameview = null;
+            IModelAbstractionLayer gameModel = new MockGameModel();
+            IGameView gameview = new MockGameView();
             IGameController gameController = new GameController(gameview, gameModel);
             var mockHandler = new MockHandler();
 
@@ -128,7 +128,7 @@ namespace AutomateTests.test.Controller
             // Create the NotificationArgs
             string playerID = "AhmadHamdan";
             MockNotificationArgs mockNotificationArgs = new MockNotificationArgs(new Coordinate(12, 12, 3), playerID);
-            System.Threading.Thread.CurrentThread.Name = "CurrentThread";
+//            System.Threading.Thread.CurrentThread.Name = "CurrentThread";
             IList<ThreadInfo> threads = gameController.Handle(mockNotificationArgs);
 
             foreach (var threadInfo in threads)
@@ -153,7 +153,13 @@ namespace AutomateTests.test.Controller
             // mimic update from the view
             gameview.PerformUpdate();
 
-            Thread.Sleep(200);
+            int retry = 0;
+            while (gameController.OutputSched.ItemsCount != 2 && retry < 3)
+            {
+                Thread.Sleep(2000);
+                retry++;
+            }
+            
             // NOW I WILL PULL AGAIN FROM SCHED - it SHOULD HAS SOME ACTIONS WHICH Resultd from the 
             // Ack
             Assert.AreEqual(2, gameController.OutputSched.ItemsCount);

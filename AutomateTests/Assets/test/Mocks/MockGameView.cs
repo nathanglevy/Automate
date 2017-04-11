@@ -34,8 +34,7 @@ namespace AutomateTests.Mocks
 
         public void PerformUpdate()
         {
-            if (onUpdate != null)
-                onUpdate(new ViewUpdateArgs());
+            onUpdate?.Invoke(new ViewUpdateArgs());
         }
     }
 

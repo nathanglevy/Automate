@@ -9,7 +9,6 @@ using AutomateTests.test.Controller;
 using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 
 namespace AutomateTests.Assets.test.Controller
 {

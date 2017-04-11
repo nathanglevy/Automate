@@ -97,7 +97,6 @@ namespace AutomateTests.test.Controller
         public void TestAcknowledgeMoveAction_ExpectNewMoveActionWithXAxisGreaterByOne()
         {
 
-
             ObserverArgs viewSelectionNotification = new RightClickNotification(
                 new Coordinate(10, 10, 1));
 
@@ -106,20 +105,14 @@ namespace AutomateTests.test.Controller
             var mockGameView = new MockGameView();
             var mockGameModel = new MockGameModel();
             var controller = new GameController(mockGameView,mockGameModel);
- //           controller.RegisterHandler(rightClickNotificationHandler);
 
             IList<ThreadInfo> syncEvents = controller.Handle(viewSelectionNotification);
             foreach (var threadInfo in syncEvents)
             {
                 threadInfo.SyncEvent.WaitOne(200);
             }
-//            foreach (var threadInfo in syncEvents)
-//            {
-//                Assert.AreEqual(false, threadInfo.Thread.IsAlive);
-//            }
 
             Assert.AreEqual(2, controller.OutputSched.ItemsCount);
-
             MasterAction action1 = controller.OutputSched.Pull();
             MasterAction action2 = controller.OutputSched.Pull();
             Assert.AreEqual(ActionType.Movement, action1.Type);

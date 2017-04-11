@@ -102,7 +102,7 @@
       <Name>Automate.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\AutomateTests\AutomateTests.csproj">
-      <Project>{4F64C6DB-3C1D-40DD-80DF-9C6366B40FC7}</Project>
+      <Project>{4f64c6db-3c1d-40dd-80df-9c6366b40fc7}</Project>
       <Name>AutomateTests</Name>
     </ProjectReference>
   </ItemGroup>

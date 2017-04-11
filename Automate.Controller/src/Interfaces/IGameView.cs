@@ -1,4 +1,7 @@
-﻿namespace Automate.Controller.Interfaces
+﻿using System.Collections.Generic;
+using Automate.Controller.Modules;
+
+namespace Automate.Controller.Interfaces
 {
     public interface IGameView
     {

@@ -13,10 +13,9 @@ using Automate.Controller.Handlers.SelectionNotification;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 using Automate.Model;
+using Automate.Model.MapModelComponents;
 using AutomateTests.Mocks;
 using AutomateTests.test.Mocks;
-using Model;
-using Model.MapModelComponents;
 using Timer = System.Timers.Timer;
 
 namespace IntegrationTests

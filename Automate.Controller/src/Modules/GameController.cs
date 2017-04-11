@@ -21,6 +21,8 @@ namespace Automate.Controller.Modules
 
         public GameController(IGameView view, IModelAbstractionLayer model)
         {
+            if (view == null || model == null)
+                throw new ArgumentException("");
             Model = model;
             View = view;
             _handlers = new List<IHandler<ObserverArgs>>();
@@ -38,6 +40,7 @@ namespace Automate.Controller.Modules
             
             // Link the View Update to the TimerSched
             view.onUpdate += ForwardUpdateToTimerSched;
+
 
             // register handlers
             _handlers.Add(new ViewSelectionHandler());
