@@ -3,12 +3,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4F64C6DB-3C1D-40DD-80DF-9C6366B40FC7}</ProjectGuid>
+    <ProjectGuid>{1B27388E-1446-48CE-8D6C-6349BADFC0D2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AutomateTests</RootNamespace>
-    <AssemblyName>AutomateTests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>Automate.ModelTests</RootNamespace>
+    <AssemblyName>Automate.ModelTests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -16,7 +16,6 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,30 +34,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="UnityEditor, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\UnityAssemblies\UnityEditor.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -68,48 +45,21 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
-          <Private>False</Private>
-        </Reference>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Assets\test\Controller\TestScheduler.cs" />
-    <Compile Include="Assets\test\Controller\TestAcknowledgeNotification.cs" />
-    <Compile Include="Assets\test\Model\GameWorldComponents\TestMovable.cs" />
-    <Compile Include="Assets\test\Model\GameWorldInterface\TestGameWorldItem.cs" />
-    <Compile Include="Assets\test\Model\GameWorldInterface\TestMovableItem.cs" />
-    <Compile Include="Assets\test\Model\GameWorldInterface\TestGameUniverse.cs" />
-    <Compile Include="Assets\test\Controller\TestViewSelectionEvent.cs" />
-    <Compile Include="Assets\test\Controller\TestRightClickNotification.cs" />
-    <Compile Include="Assets\test\Mocks\Handler.cs" />
-    <Compile Include="Assets\test\Mocks\MockMasterAction.cs" />
-    <Compile Include="Assets\test\Mocks\MockObserverArgs.cs" />
-    <Compile Include="Assets\test\Model\GameWorldComponents\TestGameWorld.cs" />
-    <Compile Include="Assets\test\Model\PathFinding\TestMovementPath.cs" />
-    <Compile Include="Assets\test\Model\PathFinding\TestMovement.cs" />
-    <Compile Include="Assets\test\Model\PathFinding\TestPathFinderAStar.cs" />
-    <Compile Include="Assets\test\Mocks\MockNotificationARgs.cs" />
-    <Compile Include="Assets\test\Mocks\MockGameModel.cs" />
-    <Compile Include="Assets\test\Mocks\MockGameView.cs" />
-    <Compile Include="Assets\test\Controller\TestController.cs" />
-    <Compile Include="Assets\test\Model\MapModelComponents\TestBoundary.cs" />
-    <Compile Include="Assets\test\Model\MapModelComponents\TestCellInfo.cs" />
-    <Compile Include="Assets\test\Model\MapModelComponents\TestCoordinate.cs" />
-    <Compile Include="Assets\test\Model\MapModelComponents\TestMapInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\Automate.Controller\Automate.Controller.csproj">
-      <Project>{46b6edc5-1879-4e95-8271-1a7b526f50f1}</Project>
-      <Name>Automate.Controller</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Automate.Model\Automate.Model.csproj">
-      <Project>{237a8506-7efd-4d28-b543-29e119cad8de}</Project>
+      <Project>{237A8506-7EFD-4D28-B543-29E119CAD8DE}</Project>
       <Name>Automate.Model</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

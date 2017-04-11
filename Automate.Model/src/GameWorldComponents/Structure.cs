@@ -11,7 +11,7 @@ namespace Automate.Model.GameWorldComponents
         private Boundary boundary;
         public Guid Guid { get; private set; }
 
-        public Structure(Coordinate coordinate, Coordinate dimensions, StructureType structureType) {
+        internal Structure(Coordinate coordinate, Coordinate dimensions, StructureType structureType) {
             this.coordinate = coordinate;
             this.dimensions = dimensions;
             this.structureType = structureType;

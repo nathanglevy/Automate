@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Automate.Model.GameWorldComponents
+namespace Automate.Model.GameWorldInterface
 {
     public abstract class Item
     {

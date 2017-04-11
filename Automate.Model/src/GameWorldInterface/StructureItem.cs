@@ -1,7 +1,8 @@
 ﻿using System;
+using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 
-namespace Automate.Model.GameWorldComponents
+namespace Automate.Model.GameWorldInterface
 {
     public class StructureItem : Item
     {
@@ -12,7 +13,7 @@ namespace Automate.Model.GameWorldComponents
             get { return _gameWorld.GetStructure(Guid).GetStructureBoundary(); }
         }
 
-        public StructureItem(GameWorld gameWorld, Guid structureGuid) {
+        internal StructureItem(GameWorld gameWorld, Guid structureGuid) {
             Guid = structureGuid;
             Type = ItemType.Structure;
             _gameWorld = gameWorld;

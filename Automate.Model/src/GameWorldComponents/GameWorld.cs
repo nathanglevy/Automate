@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.PathFinding;
 using JetBrains.Annotations;
 
+[assembly: InternalsVisibleTo("AutomateTests")]
 namespace Automate.Model.GameWorldComponents
 {
     //TODO: Need to do comments!
@@ -17,7 +20,7 @@ namespace Automate.Model.GameWorldComponents
         private MapInfo _map;
         public Guid Guid { get; private set; }
 
-        public GameWorld(Coordinate mapDimensions)
+        internal GameWorld(Coordinate mapDimensions)
         {
             if (mapDimensions == null)
                 throw new ArgumentNullException();
@@ -25,7 +28,7 @@ namespace Automate.Model.GameWorldComponents
             Coordinate bottomRight = mapDimensions - new Coordinate(1, 1, 1);
             Coordinate topLeft = new Coordinate(0, 0, 0);
 
-            if (!(bottomRight > topLeft))
+            if (!(bottomRight >= topLeft))
                 throw new ArgumentException("dimensions must all be positive");
 
             _map = new MapInfo(topLeft, bottomRight);

@@ -2,25 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using Automate.Model.GameWorldComponents;
+using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.test.Model.ModelAbstractionLayerTests
-{
+namespace AutomateTests.Model.GameWorldInterface {
     [TestClass()]
-    public class TestModelAbstractionLayer {
-        GameWorldItem _gameWorldItem;
-//        Guid _baseWorldId;
+    public class TestGameWorldItem
+    {
+        private GameWorldItem _gameWorldItem;
 
         [TestInitialize]
-        public void TestInitialize()
-        {
+        public void TestInitialize() {
             _gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(10, 10, 2));
         }
 
         [TestMethod()]
-        public void TestGetGameWorldItemById_ExpectSuccess()
-        {
+        public void TestGetGameWorldItemById_ExpectSuccess() {
             GameUniverse.GetGameWorldItemById(_gameWorldItem.Guid);
         }
 
@@ -30,21 +28,19 @@ namespace AutomateTests.test.Model.ModelAbstractionLayerTests
         }
 
         [TestMethod()]
-        public void TestCreateMovable_ExpectSuccess()
-        {
+        public void TestCreateMovable_ExpectSuccess() {
             _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
         }
 
         [TestMethod()]
-        public void TestCreateStructure_ExepectSuccess()
-        {
+        public void TestCreateStructure_ExepectSuccess() {
             StructureItem structure = _gameWorldItem.CreateStructure(new Coordinate(0, 0, 0), new Coordinate(1, 2, 1), StructureType.Basic);
         }
 
         [TestMethod()]
         public void TestGetStructureBoundary_ExpectValidValue() {
             StructureItem structure = _gameWorldItem.CreateStructure(new Coordinate(0, 0, 0), new Coordinate(1, 2, 1), StructureType.Basic);
-            Assert.AreEqual(structure.StructureBoundary, new Boundary(new Coordinate(0,0,0), new Coordinate(0,1,0) ));
+            Assert.AreEqual(structure.StructureBoundary, new Boundary(new Coordinate(0, 0, 0), new Coordinate(0, 1, 0)));
         }
 
         [TestMethod()]
@@ -67,12 +63,11 @@ namespace AutomateTests.test.Model.ModelAbstractionLayerTests
         public void TestGetStructureItem_ExpectValidResult() {
             StructureItem structure = _gameWorldItem.CreateStructure(new Coordinate(0, 0, 0),
                 new Coordinate(2, 2, 1), StructureType.Basic);
-            Assert.AreEqual(_gameWorldItem.GetStructureItem(structure.Guid),structure);
+            Assert.AreEqual(_gameWorldItem.GetStructureItem(structure.Guid), structure);
         }
 
         [TestMethod()]
-        public void TestIsStructureAtCoordinate_ExpectTrue()
-        {
+        public void TestIsStructureAtCoordinate_ExpectTrue() {
             StructureItem structure = _gameWorldItem.CreateStructure(new Coordinate(0, 0, 0),
                 new Coordinate(2, 2, 1), StructureType.Basic);
             Assert.IsTrue(_gameWorldItem.IsStructureAtCoordinate(new Coordinate(1, 1, 0)));
@@ -89,7 +84,7 @@ namespace AutomateTests.test.Model.ModelAbstractionLayerTests
         public void TestGetStructureAtCoordinate_ExpectCorrectValue() {
             StructureItem structure = _gameWorldItem.CreateStructure(new Coordinate(0, 0, 0),
                 new Coordinate(2, 2, 1), StructureType.Basic);
-            Assert.AreEqual(_gameWorldItem.GetStructureAtCoordinate(new Coordinate(1, 1, 0)),structure);
+            Assert.AreEqual(_gameWorldItem.GetStructureAtCoordinate(new Coordinate(1, 1, 0)), structure);
         }
 
         [TestMethod()]
@@ -127,8 +122,8 @@ namespace AutomateTests.test.Model.ModelAbstractionLayerTests
         [TestMethod()]
         public void TestGetSelectedIdListAndSelectItemsById() {
             MovableItem movable = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
-            _gameWorldItem.SelectItemsById(new List<Guid>() {movable.Guid});
-            Assert.IsTrue(_gameWorldItem.GetSelectedIdList().SequenceEqual(new List<Guid>() {movable.Guid}));
+            _gameWorldItem.SelectItemsById(new List<Guid>() { movable.Guid });
+            Assert.IsTrue(_gameWorldItem.GetSelectedIdList().SequenceEqual(new List<Guid>() { movable.Guid }));
         }
 
         [TestMethod()]
@@ -182,7 +177,7 @@ namespace AutomateTests.test.Model.ModelAbstractionLayerTests
 
         [TestMethod()]
         public void TestGetWorldBoundary() {
-            Assert.AreEqual(_gameWorldItem.GetWorldBoundary(),new Boundary(new Coordinate(0,0,0), new Coordinate(9, 9, 1) ));
+            Assert.AreEqual(_gameWorldItem.GetWorldBoundary(), new Boundary(new Coordinate(0, 0, 0), new Coordinate(9, 9, 1)));
         }
 
         [TestMethod()]
@@ -197,7 +192,7 @@ namespace AutomateTests.test.Model.ModelAbstractionLayerTests
             _gameWorldItem.ClearItemsToBePlaced();
             MovableItem movable = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
             MovableItem movable2 = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
-            Assert.IsTrue(_gameWorldItem.GetItemsToBePlaced().SequenceEqual(new List<Item>() {movable, movable2}));
+            Assert.IsTrue(_gameWorldItem.GetItemsToBePlaced().SequenceEqual(new List<Item>() { movable, movable2 }));
         }
 
         [TestMethod()]

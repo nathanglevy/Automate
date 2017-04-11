@@ -1,10 +1,11 @@
 ﻿using System;
 using Automate.Model.GameWorldComponents;
+using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.PathFinding;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.Model.GameWorldComponents {
+namespace AutomateTests.Model.GameWorldInterface {
     [TestClass()]
     public class TestMovableItem
     {
