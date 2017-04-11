@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AutomateTests</RootNamespace>
     <AssemblyName>AutomateTests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -26,7 +26,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,7 +34,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -45,7 +43,6 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -55,17 +52,12 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="UnityEditor, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\UnityAssemblies\UnityEditor.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Choose>
@@ -85,7 +77,7 @@
   <ItemGroup>
     <Compile Include="Assets\test\Controller\TestScheduler.cs" />
     <Compile Include="Assets\test\Controller\TestAcknowledgeNotification.cs" />
-    <Compile Include="Assets\test\Controller\TestTimeSchuduler.cs" />
+    <Compile Include="Assets\test\Model\GameWorldComponents\TestMovable.cs" />
     <Compile Include="Assets\test\Model\GameWorldComponents\TestMovableItem.cs" />
     <Compile Include="Assets\test\Model\ModelAbstractionLayerTests\TestModelAbstractionLayer.cs" />
     <Compile Include="Assets\test\Controller\TestViewSelectionEvent.cs" />
@@ -94,7 +86,6 @@
     <Compile Include="Assets\test\Mocks\MockMasterAction.cs" />
     <Compile Include="Assets\test\Mocks\MockObserverArgs.cs" />
     <Compile Include="Assets\test\Model\GameWorldComponents\TestGameWorld.cs" />
-    <Compile Include="Assets\test\Model\GameWorldComponents\TestMovable.cs" />
     <Compile Include="Assets\test\Model\PathFinding\TestMovementPath.cs" />
     <Compile Include="Assets\test\Model\PathFinding\TestMovement.cs" />
     <Compile Include="Assets\test\Model\PathFinding\TestPathFinderAStar.cs" />
@@ -108,18 +99,11 @@
     <Compile Include="Assets\test\Model\MapModelComponents\TestMapInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\src\Model\GameWorld\" />
-    <Folder Include="Assets\src\Model\PathFinding\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Automate.Controller\Automate.Controller.csproj">
       <Project>{46b6edc5-1879-4e95-8271-1a7b526f50f1}</Project>
       <Name>Automate.Controller</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Automate.csproj">
-      <Project>{9d6e405c-85ec-3e21-edd7-62a43ac5a861}</Project>
-      <Name>Automate</Name>
     </ProjectReference>
     <ProjectReference Include="..\Automate.Model\Automate.Model.csproj">
       <Project>{237a8506-7efd-4d28-b543-29e119cad8de}</Project>

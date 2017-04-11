@@ -11,13 +11,14 @@
     <AssemblyName>Automate.Controller</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\Assets\Plugins\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -95,13 +96,10 @@
     <Compile Include="src\Modules\ThreadInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Automate.csproj">
-      <Project>{9D6E405C-85EC-3E21-EDD7-62A43AC5A861}</Project>
-      <Name>Automate</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Automate.Model\Automate.Model.csproj">
       <Project>{237a8506-7efd-4d28-b543-29e119cad8de}</Project>
       <Name>Automate.Model</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
