@@ -31,6 +31,7 @@ namespace IntegrationTests
         {
             GameWorldItem gameWorld = GameUniverse.CreateGameWorld(new Coordinate(11,11,2));
             gameWorld.CreateMovable(new Coordinate(2, 3, 0), MovableType.NormalHuman);
+            gameWorld.CreateMovable(new Coordinate(5, 2, 0), MovableType.NormalHuman);
 
             IGameView view = new MockGameView();
             _gameController = new GameController(view, gameWorld.Guid);
@@ -98,7 +99,7 @@ namespace IntegrationTests
             Console.WriteLine("Move Target Now to 7,18.2");
             _gameController.Handle(selection);
 
-            var rightClickNotification2 = new RightClickNotification(new Coordinate(13, 8, 2));
+            var rightClickNotification2 = new RightClickNotification(new Coordinate(3, 8, 0));
             _gameController.Handle(rightClickNotification2);
 
             Console.WriteLine("Press the Enter key to exit the program at any time... ");

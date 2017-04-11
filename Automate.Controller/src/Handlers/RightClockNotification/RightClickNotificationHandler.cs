@@ -34,8 +34,9 @@ namespace Automate.Controller.Handlers.RightClockNotification
             foreach (var movable in selectedMovables)
             {
                 movable.IssueMoveCommand(rightNotification.Coordinate);
+                movable.StartTransitionToNext();
                 masterActions.Add(new MoveAction(movable.NextCoordinate, movable.Guid.ToString()) {Duration = new TimeSpan(0,0,0,0,(int) (movable.NextMovementDuration*1000))});
-                movable.MoveToNext();
+                //movable.MoveToNext();
             }
                 
             return new HandlerResult(masterActions);
@@ -52,13 +53,13 @@ namespace Automate.Controller.Handlers.RightClockNotification
             // get the movableItem from model
             var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
             var movableItem = gameWorldItem.GetMovableItem(new Guid(moveAction.TargetId));
+            movableItem.MoveToNext();
 
             if (movableItem.IsInMotion())
             {
-                
-                movableItem.MoveToNext();
+                var moveToNext = new MoveAction(movableItem.NextCoordinate, movableItem.Guid.ToString());
+                movableItem.StartTransitionToNext();
 
-                var moveToNext = new MoveAction(movableItem.CurrentCoordiate, movableItem.Guid.ToString());
                 var masterActions = new List<MasterAction>();
                 masterActions.Add(moveToNext);
                 var acknowledgeResult = new AcknowledgeResult(masterActions);
