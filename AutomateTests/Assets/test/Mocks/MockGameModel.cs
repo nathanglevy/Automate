@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Automate.Model;
 using Automate.Model.GameWorldComponents;
+using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 
 namespace AutomateTests.test.Mocks

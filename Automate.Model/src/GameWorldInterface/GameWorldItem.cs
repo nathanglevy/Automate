@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 
-namespace Automate.Model.GameWorldComponents
+namespace Automate.Model.GameWorldInterface
 {
     /// <summary>
     /// Interface class allowing access to the GameWorld Model.

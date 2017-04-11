@@ -1,7 +1,8 @@
 ﻿using System;
+using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 
-namespace Automate.Model.GameWorldComponents
+namespace Automate.Model.GameWorldInterface
 {
     public class CellItem : Item
     {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Automate.Model.GameWorldComponents;
+using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -12,6 +13,12 @@ namespace AutomateTests.test.Model.GameWorldComponents {
         [TestMethod()]
         public void TestGameWorldNew_AssertNotNull() {
             GameWorld gameWorld = new GameWorld(new Coordinate(3,3,3));
+            Assert.IsNotNull(gameWorld);
+        }
+
+        [TestMethod()]
+        public void TestGameWorldNew_SmallWorld_ExpectSuccess() {
+            GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 0));
             Assert.IsNotNull(gameWorld);
         }
 

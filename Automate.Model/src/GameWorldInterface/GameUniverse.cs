@@ -1,0 +1,52 @@
+﻿using System;
+using System.Collections.Generic;
+using Automate.Model.GameWorldComponents;
+using Automate.Model.MapModelComponents;
+
+namespace Automate.Model.GameWorldInterface {
+
+    /// <summary>
+    /// Game Universe Interface, this is the main object used to interract with the model.
+    /// All new game worlds should be created using this interface.
+    /// The Game Universe holds all existing worlds currently loaded by the game and should be accessed through it.
+    /// </summary>
+    public static class GameUniverse {
+        private static Dictionary<Guid, GameWorld> _gameWorldDictionary = new Dictionary<Guid, GameWorld>();
+
+        /// <summary>
+        /// Create a new Game World and get the GameWorld interface item.
+        /// </summary>
+        /// <param name="mapDimensions">The map dimensions of the world to generate. For example, giving (2,2,1) will generate a 2x2 map with one layer.</param>
+        /// <returns>Returns a GameWorld interface item to a new Game World</returns>
+        public static GameWorldItem CreateGameWorld(Coordinate mapDimensions) {
+            GameWorld newGameWorld = new GameWorld(mapDimensions);
+            _gameWorldDictionary.Add(newGameWorld.Guid, newGameWorld);
+            GameWorldItem gameWorldItem = new GameWorldItem(newGameWorld);
+            return gameWorldItem;
+        }
+
+        /// <summary>
+        /// Get all of Game Worlds existing in game via a list of GameWorld interface items
+        /// </summary>
+        /// <returns>List of all GameWorld interface items</returns>
+        public static List<GameWorldItem> GetGameWorldItemsInUniverse()
+        {
+            List<GameWorldItem> result = new List<GameWorldItem>();
+            foreach (GameWorld gameWorld in _gameWorldDictionary.Values)
+            {
+                result.Add(new GameWorldItem(gameWorld));
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Get a specific GameWorld interface item by a given Guid
+        /// </summary>
+        /// <param name="gameWorldGuid">Guid of GameWorld to fetch the interface for</param>
+        /// <returns>A GameWorld interface item matching the given Guid</returns>
+        public static GameWorldItem GetGameWorldItemById(Guid gameWorldGuid)
+        {
+            return new GameWorldItem(_gameWorldDictionary[gameWorldGuid]);
+        }
+    }
+}
