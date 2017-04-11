@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using Automate.Controller.Abstracts;
@@ -32,9 +33,10 @@ namespace AutomateTests.Mocks
 
         public event ViewUpdate onUpdate;
 
+
         public void PerformUpdate()
         {
-            onUpdate?.Invoke(new ViewUpdateArgs());
+            if (onUpdate != null) onUpdate?.Invoke(new ViewUpdateArgs());
         }
     }
 

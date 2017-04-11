@@ -50,7 +50,7 @@ namespace Automate.Controller.Modules
 
         private void ForwardUpdateToTimerSched(ViewUpdateArgs args)
         {
-//            Console.Out.WriteLine("ForwardUpdate Fired");
+            Console.Out.WriteLine("ForwardUpdate Fired");
             _timerSched.Update(new TimerSchudulerUpdateArgs() {Time = DateTime.Now});
         }
 

@@ -13,6 +13,7 @@ namespace Automate.Controller.Interfaces
 
     public class ViewUpdateArgs
     {
+        public List<ThreadInfo> ThreadsInfo { get; set; }
     }
 
 }
