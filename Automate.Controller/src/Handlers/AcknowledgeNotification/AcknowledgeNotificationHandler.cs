@@ -12,7 +12,7 @@ namespace Automate.Controller.Handlers.AcknowledgeNotification
             return args is AcknowledgeNotification;
         }
 
-        public override IHandlerResult Handle(ObserverArgs args, IHandlerUtils utils)
+        public override IHandlerResult<MasterAction> Handle(ObserverArgs args, IHandlerUtils utils)
         {
             var acknowledgeNotification = args as AcknowledgeNotification;
             if (acknowledgeNotification == null)
@@ -23,7 +23,7 @@ namespace Automate.Controller.Handlers.AcknowledgeNotification
             // Get the Executed ACtion
             var executedAction = acknowledgeNotification.ExecutedAction;
 
-            // invoke Acknowledge Master Method to acknowledge the sepecefic action and continue the flow
+            // invoke TimedOut Master Method to acknowledge the sepecefic action and continue the flow
             utils.AcknowledgeHandler(executedAction);
 
             // return an empty result 
@@ -31,14 +31,14 @@ namespace Automate.Controller.Handlers.AcknowledgeNotification
             return new HandlerResult(new List<MasterAction>());
         }
 
-        public override IAcknowledgeResult Acknowledge(MasterAction action, IHandlerUtils utils)
+        public override IAcknowledgeResult<MasterAction> Acknowledge(MasterAction action, IHandlerUtils utils)
         {
             throw new NotImplementedException();
         }
 
         public override bool CanAcknowledge(MasterAction action)
         {
-            throw new NotImplementedException();
+            return false;
         }
     }
 }

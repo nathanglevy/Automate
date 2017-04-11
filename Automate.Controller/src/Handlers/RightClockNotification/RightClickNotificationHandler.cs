@@ -14,7 +14,7 @@ namespace Automate.Controller.Handlers.RightClockNotification
         {
             return action is MoveAction;
         }
-        public override IHandlerResult Handle(ObserverArgs args, IHandlerUtils utils)
+        public override IHandlerResult<MasterAction> Handle(ObserverArgs args, IHandlerUtils utils)
         {
             if (!CanHandle(args))
             {
@@ -22,6 +22,7 @@ namespace Automate.Controller.Handlers.RightClockNotification
             }
 
             // Get the RightClock Object
+            
             RightClickNotification rightNotification = args as RightClickNotification;
 
             // Get All Selcted Objects
@@ -38,31 +39,49 @@ namespace Automate.Controller.Handlers.RightClockNotification
             return new HandlerResult(masterActions);
         }
 
-        public override IAcknowledgeResult Acknowledge(MasterAction action, IHandlerUtils utils)
+        public override IAcknowledgeResult<MasterAction> Acknowledge(MasterAction action, IHandlerUtils utils)
         {
          if (!CanAcknowledge(action))
-                throw new ArgumentException("Current Handler Can Acknowledge only MoveAction");
+                throw new ArgumentException("Current Handler Can TimedOut only MoveAction");
 
          // get the move Action
             var moveAction = action as MoveAction;
 
             // get the movableItem from model
+            
             var movableItem = utils.Model.GetMovableItem(new Guid(moveAction.TargetId));
 
             // get next step
+            //            var toNext = movableItem.MoveToNext();
+
+            //            var movableItemNextCoordinate = toNext.GetMoveDirection();
+            
             var movableItemNextCoordinate = movableItem.NextCoordinate;
+
+            movableItem.MoveToNext();
+            //            movableItem.IssueMoveCommand(movableItemNextCoordinate);
+            //            var issueMoveCommand = movableItem.IssueMoveCommand(movableItemNextCoordinate);
+            //            if (!issueMoveCommand)
+            //                throw new Exception("cannot move to next coordinate" + movableItemNextCoordinate);
+            //            
 
             if (movableItemNextCoordinate != moveAction.To)
             {
+
                 var moveToNext = new MoveAction(movableItemNextCoordinate, movableItem.Guid.ToString());
                 var masterActions = new List<MasterAction>();
-                masterActions.Add(moveToNext);
+                   masterActions.Add(moveToNext);
                 var acknowledgeResult = new AcknowledgeResult(masterActions);
+
+                // instruct model to move to next
+                //ovableItem.MoveToNext();
+
                 return acknowledgeResult;
             }
             else
             {
-                // Current Coordinate and Next Coordinate -- no Move should Be Done, Stopping the Flow By Returnning Empty result
+
+                Console.Out.WriteLine(String.Format("Player {0} reached the Target - Good Job :-)",movableItem.Guid.ToString()));
                 return new AcknowledgeResult(new List<MasterAction>());
             }
             

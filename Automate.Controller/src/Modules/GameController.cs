@@ -15,22 +15,50 @@ namespace Automate.Controller.Modules
     public class GameController : IGameController
     {
         private readonly List<IHandler<ObserverArgs>> _handlers;
-        private event AcknowledgeActivation _acknowledgeActivation;
-        private event HandleActivation _handlerActivation;
+        private event AcknowledgeActivation AcknowledgeActivation;
+        private event HandleActivation HandlerActivation;
+        private readonly ITimerScheduler<Abstracts.MasterAction> _timerSched;
 
         public GameController(IGameView view, IModelAbstractionLayer model)
         {
+            if (view == null || model == null)
+                throw new ArgumentException("");
             Model = model;
             View = view;
             _handlers = new List<IHandler<ObserverArgs>>();
-            OutputSched = new Scheduler();
-            _handlerActivation += Handle;
-            _acknowledgeActivation += Acknowledge;
+
+            // create the TimedOut Q and Link it
+            _timerSched = new TimersSchedular<MasterAction>(new TimedOut<MasterAction>(Acknowledge));
+
+            // create the controller-->View Schued
+            OutputSched = new Scheduler<MasterAction>();
+            HandlerActivation += Handle;
+            AcknowledgeActivation += Acknowledge;
+
+            // Link the 2 Sched
+            OutputSched.OnPull += ForwardItemToTimerSched;
+            
+            // Link the View Update to the TimerSched
+            view.onUpdate += ForwardUpdateToTimerSched;
+
 
             // register handlers
             _handlers.Add(new ViewSelectionHandler());
             _handlers.Add(new RightClickNotificationHandler());
             _handlers.Add(new AcknowledgeNotificationHandler());
+        }
+
+        private void ForwardUpdateToTimerSched(ViewUpdateArgs args)
+        {
+            Console.Out.WriteLine("ForwardUpdate Fired");
+            _timerSched.Update(new TimerSchudulerUpdateArgs() {Time = DateTime.Now});
+        }
+
+        private void ForwardItemToTimerSched(MasterAction item)
+        {
+//            Console.Out.WriteLine("ForwardItem Fired");
+            //            _timerSched.Enqueue(DateTime.Now.Add(item.Duration),item);
+            _timerSched.Enqueue(DateTime.Now.Add(new TimeSpan(0,0,0,0,100)),item);
         }
 
 
@@ -44,13 +72,16 @@ namespace Automate.Controller.Modules
             {
                 if (handler.CanHandle(args))
                 {
+
+                    Console.Out.WriteLine(String.Format("Handler {0} Fired with Args: {1}",handler.GetType(),args.GetType()));
+
                     //# create new thread to perform the action
                     AutoResetEvent syncEvent = new AutoResetEvent(false);
                     var subHandler = new Thread(delegate()
                     {
                         // Handle and Get Result
                         var handlerResult = handler.Handle(args,
-                            new HandlerUtils(Model, _handlerActivation, _acknowledgeActivation));
+                            new HandlerUtils(Model, HandlerActivation, AcknowledgeActivation));
 
                         // Push to Sched
                         OutputSched.GetPushInvoker().Invoke(handlerResult);
@@ -77,10 +108,10 @@ namespace Automate.Controller.Modules
                     var subHandler = new Thread(delegate ()
                     {
                         // Handle and Get Result
-                        var handlerResult = handler.Acknowledge(action, new HandlerUtils(Model, _handlerActivation, _acknowledgeActivation));
+                        IAcknowledgeResult<MasterAction> acknowledgeResult = handler.Acknowledge(action, new HandlerUtils(Model, HandlerActivation, AcknowledgeActivation));
 
                         // Push to Sched
-                        OutputSched.GetPushInvoker().Invoke(handlerResult);
+                        OutputSched.GetPushInvoker().Invoke(acknowledgeResult);
 
                         // resume any waiting threads
                         syncEvent.Set();
@@ -103,6 +134,6 @@ namespace Automate.Controller.Modules
             _handlers.Add(handler);
         }
 
-        public IScheduler OutputSched { get; private set; }
+        public IScheduler<MasterAction> OutputSched { get; private set; }
     }
 }

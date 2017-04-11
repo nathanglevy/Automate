@@ -14,16 +14,16 @@ namespace Automate.Controller.Interfaces
     public interface IHandler<T> : IHandler where T : IObserverArgs
     {
         bool CanHandle(T args);
-        IHandlerResult Handle(T args, IHandlerUtils utils);
-        IAcknowledgeResult Acknowledge(MasterAction action,IHandlerUtils utils);
+        IHandlerResult<MasterAction> Handle(T args, IHandlerUtils utils);
+        IAcknowledgeResult<MasterAction> Acknowledge(MasterAction action,IHandlerUtils utils);
     }
 
     public abstract class Handler<T> : IHandler<T> where T:IObserverArgs
     {
         public string Name { get; private set; }
 
-        public abstract IHandlerResult Handle(T args, IHandlerUtils utils);
-        public abstract IAcknowledgeResult Acknowledge(MasterAction action, IHandlerUtils utils);
+        public abstract IHandlerResult<MasterAction> Handle(T args, IHandlerUtils utils);
+        public abstract IAcknowledgeResult<MasterAction> Acknowledge(MasterAction action, IHandlerUtils utils);
         public abstract bool CanAcknowledge(MasterAction action);
         public abstract bool CanHandle(T args);
 

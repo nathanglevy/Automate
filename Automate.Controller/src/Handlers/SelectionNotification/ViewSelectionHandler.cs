@@ -10,7 +10,7 @@ namespace Automate.Controller.Handlers.SelectionNotification
 {
     public class ViewSelectionHandler  : Handler<ObserverArgs>
     {
-        public override IHandlerResult Handle(ObserverArgs args, IHandlerUtils utils)
+        public override IHandlerResult<MasterAction> Handle(ObserverArgs args, IHandlerUtils utils)
         {
             ViewSelectionNotification notification = args as ViewSelectionNotification;
 
@@ -27,9 +27,9 @@ namespace Automate.Controller.Handlers.SelectionNotification
             return new HandlerResult(actions);
         }
 
-        public override IAcknowledgeResult Acknowledge(MasterAction action, IHandlerUtils utils)
+        public override IAcknowledgeResult<MasterAction> Acknowledge(MasterAction action, IHandlerUtils utils)
         {
-            throw new System.NotImplementedException();
+            return new AcknowledgeResult(new List<MasterAction>());
         }
 
         public override bool CanAcknowledge(MasterAction action)

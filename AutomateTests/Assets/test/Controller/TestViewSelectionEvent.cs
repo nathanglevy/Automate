@@ -43,11 +43,11 @@ namespace AutomateTests.test.Controller
 
             var mockGameView = new MockGameView();
             var controller = new GameController(mockGameView, new MockGameModel());
-            controller.RegisterHandler(viewSelectionHandler);
+            //controller.RegisterHandler(viewSelectionHandler);
             IList<ThreadInfo> syncEvents = controller.Handle(viewSelectionNotification);
             foreach (var threadInfo in syncEvents)
             {
-                threadInfo.SyncEvent.WaitOne(200);
+                threadInfo.SyncEvent.WaitOne();
             }
             foreach (var threadInfo in syncEvents)
             {
@@ -56,7 +56,7 @@ namespace AutomateTests.test.Controller
             }
 
 
-            Assert.AreEqual(2, controller.OutputSched.ActionsCount);
+            Assert.AreEqual(2, controller.OutputSched.ItemsCount);
             MasterAction action0 = controller.OutputSched.Pull();
             MasterAction action1 = controller.OutputSched.Pull();
             Assert.AreEqual(ActionType.SelectPlayer, action0.Type);

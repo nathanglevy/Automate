@@ -80,12 +80,16 @@
     <Compile Include="src\Handlers\SelectionNotification\ViewSelectionNotification.cs" />
     <Compile Include="src\Interfaces\HandlerResult.cs" />
     <Compile Include="src\Interfaces\IAcknowledgeResult.cs" />
+    <Compile Include="src\Interfaces\IAcknowledgeResult1.cs" />
     <Compile Include="src\Interfaces\IGameController.cs" />
     <Compile Include="src\Interfaces\IGameView.cs" />
     <Compile Include="src\Interfaces\IHandler.cs" />
     <Compile Include="src\Interfaces\IHandlerResult.cs" />
     <Compile Include="src\Interfaces\IObserverArgs.cs" />
     <Compile Include="src\Interfaces\IScheduler.cs" />
+    <Compile Include="src\Interfaces\ITimerScheduler.cs" />
+    <Compile Include="src\Modules\TimerSchudulerUpdateArgs.cs" />
+    <Compile Include="src\Modules\TimersSchedular.cs" />
     <Compile Include="src\Modules\GameController.cs" />
     <Compile Include="src\Modules\HandleActivation.cs" />
     <Compile Include="src\Modules\Scheduler.cs" />
