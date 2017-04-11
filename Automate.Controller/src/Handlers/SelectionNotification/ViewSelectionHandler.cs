@@ -13,9 +13,12 @@ namespace Automate.Controller.Handlers.SelectionNotification
         {
             ViewSelectionNotification notification = args as ViewSelectionNotification;
 
+            var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
             List<MovableItem> selectedMovables =
-                utils.Model.GetMovableListInBoundary(new Boundary(notification.UpperLeft, notification.BottomRight));
-            utils.Model.AddToSelectedMovableItems(selectedMovables);
+                gameWorldItem.GetMovableListInBoundary(new Boundary(notification.UpperLeft, notification.BottomRight));
+            gameWorldItem.SelectMovableItems(selectedMovables);
+
+            var selectedMovableItemList = gameWorldItem.GetSelectedMovableItemList();
 
             List<MasterAction> actions = new List<MasterAction>();
             foreach (var movableItem in selectedMovables) 

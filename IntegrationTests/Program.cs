@@ -13,6 +13,7 @@ using Automate.Controller.Handlers.SelectionNotification;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 using Automate.Model;
+using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 using AutomateTests.Mocks;
 using AutomateTests.test.Mocks;
@@ -27,16 +28,20 @@ namespace IntegrationTests
         public static volatile  bool _canPull;
         private   static void Main(string[] args)
         {
-            IModelAbstractionLayer model = new MockGameModel();
+            GameWorldItem gameWorld = GameUniverse.CreateGameWorld(new Coordinate(11,11,2));
+            gameWorld.CreateMovable(new Coordinate(2, 3, 0), MovableType.NormalHuman);
+
             IGameView view = new MockGameView();
-            _gameController = new GameController(view, model);
+            _gameController = new GameController(view, gameWorld.Guid);
 
             // Select all Game World
-            var selection = new ViewSelectionNotification(new Coordinate(0, 0, 0), new Coordinate(20, 20, 20), "ID");
+            var selection = new ViewSelectionNotification(gameWorld.GetWorldBoundary().topLeft, gameWorld.GetWorldBoundary().bottomRight, "ID");
             _gameController.Handle(selection);
 
+            Thread.Sleep(100);
+
             // Right Click on Some Point to start moving the players
-            Coordinate target = new Coordinate(13, 7, 1);
+            Coordinate target = new Coordinate(7, 3, 0);
             Console.Out.WriteLine("Moving Players To Target:" + target.ToString());
             var rightClickNotification = new RightClickNotification(target);
             _gameController.Handle(rightClickNotification);

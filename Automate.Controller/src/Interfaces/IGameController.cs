@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Delegates;
 using Automate.Controller.Modules;
@@ -8,7 +9,7 @@ namespace Automate.Controller.Interfaces
 {
     public interface IGameController
     {
-        IModelAbstractionLayer Model { get; }
+        Guid Model { get; }
         IGameView View { get; }
         IScheduler<MasterAction> OutputSched { get;}
         IList<ThreadInfo> Handle(ObserverArgs args);

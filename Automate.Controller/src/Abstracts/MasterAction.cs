@@ -6,18 +6,14 @@ namespace Automate.Controller.Abstracts
     public class MasterAction : IObserverArgs
     {
         private string _targetId;
-        private readonly TimeSpan _duration;
 
-        public TimeSpan Duration
-        {
-            get { return _duration; }
-        }
+        public TimeSpan Duration { get; set; }
 
         public MasterAction(ActionType type, string targetId)
         {
             Type = type;
             _targetId = targetId;
-            _duration = new TimeSpan();
+            Duration = new TimeSpan();
         }
 
         public MasterAction(ActionType type)

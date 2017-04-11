@@ -42,7 +42,8 @@ namespace AutomateTests.test.Controller
             IHandler<ObserverArgs> viewSelectionHandler = new ViewSelectionHandler();
 
             var mockGameView = new MockGameView();
-            var controller = new GameController(mockGameView, new MockGameModel());
+            var gameModel = GetMockGameModel();
+            var controller = new GameController(mockGameView, gameModel);
             //controller.RegisterHandler(viewSelectionHandler);
             IList<ThreadInfo> syncEvents = controller.Handle(viewSelectionNotification);
             foreach (var threadInfo in syncEvents)
@@ -61,6 +62,11 @@ namespace AutomateTests.test.Controller
             MasterAction action1 = controller.OutputSched.Pull();
             Assert.AreEqual(ActionType.SelectPlayer, action0.Type);
             Assert.AreEqual(ActionType.SelectPlayer, action1.Type);
+        }
+
+        private Guid GetMockGameModel()
+        {
+            throw new NotImplementedException();
         }
 
         [TestMethod]

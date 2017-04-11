@@ -42,7 +42,8 @@ namespace AutomateTests.test.Controller
             IHandler<ObserverArgs> rightClickNotificationHandler = new RightClickNotificationHandler();
 
             var mockGameView = new MockGameView();
-            var controller = new GameController(mockGameView, new MockGameModel());
+            Guid gameModel = GetMockGameWorld();
+            var controller = new GameController(mockGameView, gameModel);
            // controller.RegisterHandler(rightClickNotificationHandler);
             IList<ThreadInfo> threadInfos = controller.Handle(viewSelectionNotification);
             foreach (var threadInfo in threadInfos)
@@ -57,6 +58,11 @@ namespace AutomateTests.test.Controller
             Assert.AreEqual(ActionType.Movement, controller.OutputSched.Pull().Type);
 
 
+        }
+
+        private Guid GetMockGameWorld()
+        {
+            throw new NotImplementedException();
         }
 
         [TestMethod]
@@ -103,7 +109,7 @@ namespace AutomateTests.test.Controller
             IHandler<ObserverArgs> rightClickNotificationHandler = new RightClickNotificationHandler();
 
             var mockGameView = new MockGameView();
-            var mockGameModel = new MockGameModel();
+            var mockGameModel = GetMockGameWorld();
             var controller = new GameController(mockGameView,mockGameModel);
 
             IList<ThreadInfo> syncEvents = controller.Handle(viewSelectionNotification);
@@ -118,9 +124,6 @@ namespace AutomateTests.test.Controller
             Assert.AreEqual(ActionType.Movement, action1.Type);
             Assert.AreEqual(ActionType.Movement, action2.Type);
 
-
-
-            var player1Guid = mockGameModel.GetGuidByAlias("Player1");
 
             var acknowledgeResult = rightClickNotificationHandler.Acknowledge(action1,new HandlerUtils(mockGameModel, null, null));
             Assert.AreEqual(1,acknowledgeResult.GetItems().Count);

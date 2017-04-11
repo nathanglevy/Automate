@@ -64,7 +64,6 @@ namespace Automate.Controller.Modules
                 if (HasItems)
                 {
                     
-                    //actionPulled = _queue.Dequeue()(out item);
                     var masterAction = _queue.Dequeue();
 
                     Console.Out.WriteLine("Dequeued an item from Q, ID:" + masterAction.ToString());

@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using Automate.Controller.Abstracts;
@@ -26,7 +27,7 @@ namespace AutomateTests.test.Controller
         public void TestCreateNew_ShouldPass()
         {
             IGameView view = new MockGameView();
-            IModelAbstractionLayer model = new MockGameModel();
+            Guid model = GetMockGameWorld();
 
             GameController gameController = new GameController(view, model);
             Assert.IsNotNull(gameController);
@@ -34,10 +35,15 @@ namespace AutomateTests.test.Controller
             Assert.IsNotNull(gameController.Model);
         }
 
+        private Guid GetMockGameWorld()
+        {
+            throw new NotImplementedException();
+        }
+
         [TestMethod]
         public void TestHandlersCount_Expect0()
         {
-            IModelAbstractionLayer gameModel = new MockGameModel();
+            Guid gameModel = GetMockGameWorld();
             IGameView gameview = new MockGameView();
             IGameController gameController = new GameController(gameview, gameModel);
 
@@ -48,7 +54,7 @@ namespace AutomateTests.test.Controller
         [TestMethod]
         public void TestRegisterHandle_ExpectHandleToBeAddedtoList()
         {
-            IModelAbstractionLayer gameModel = new MockGameModel();
+            Guid gameModel = GetMockGameWorld();
             IGameView gameview = new MockGameView();
             IGameController gameController = new GameController(gameview, gameModel);
             var mockHandler = new MockHandler();
@@ -66,8 +72,8 @@ namespace AutomateTests.test.Controller
             // Create View Object
             MockGameView gameview = new MockGameView();
 
-            // Create Model Object
-            IModelAbstractionLayer gameModel = new MockGameModel();
+            // Create GameWorldId Object
+            Guid gameModel = GetMockGameWorld();
 
             // Create Handler
             var mockHandler = new MockHandler();
@@ -110,8 +116,8 @@ namespace AutomateTests.test.Controller
             // Create View Object
             MockGameView gameview = new MockGameView();
 
-            // Create Model Object
-            IModelAbstractionLayer gameModel = new MockGameModel();
+            // Create GameWorldId Object
+            Guid gameModel = GetMockGameWorld();
 
             // Create Handler
             var mockHandler = new MockHandler();

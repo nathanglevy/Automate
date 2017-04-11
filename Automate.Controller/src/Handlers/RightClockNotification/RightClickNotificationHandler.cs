@@ -25,14 +25,16 @@ namespace Automate.Controller.Handlers.RightClockNotification
             RightClickNotification rightNotification = args as RightClickNotification;
 
             // Get All Selcted Objects
-            List<MovableItem> selectedMovables = utils.Model.GetSelectedMovableItemList();
+            var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
+            List<MovableItem> selectedMovables = gameWorldItem.GetSelectedMovableItemList();
 
             // iterate over selectable movables and create move actions
             var masterActions = new List<MasterAction>();
             foreach (var movable in selectedMovables)
             {
                 movable.IssueMoveCommand(rightNotification.Coordinate);
-                masterActions.Add(new MoveAction(movable.NextMovement.GetMoveDirection(), movable.Guid.ToString()));
+                masterActions.Add(new MoveAction(movable.NextCoordinate, movable.Guid.ToString()) {Duration = new TimeSpan(0,0,0,0,(int) (movable.NextMovementDuration*1000))});
+                movable.MoveToNext();
             }
                 
             return new HandlerResult(masterActions);
@@ -47,43 +49,29 @@ namespace Automate.Controller.Handlers.RightClockNotification
             var moveAction = action as MoveAction;
 
             // get the movableItem from model
-            
-            var movableItem = utils.Model.GetMovableItem(new Guid(moveAction.TargetId));
+            var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
+            var movableItem = gameWorldItem.GetMovableItem(new Guid(moveAction.TargetId));
 
-            // get next step
-            //            var toNext = movableItem.MoveToNext();
-
-            //            var movableItemNextCoordinate = toNext.GetMoveDirection();
-            
-            var movableItemNextCoordinate = movableItem.NextCoordinate;
-
-            movableItem.MoveToNext();
-            //            movableItem.IssueMoveCommand(movableItemNextCoordinate);
-            //            var issueMoveCommand = movableItem.IssueMoveCommand(movableItemNextCoordinate);
-            //            if (!issueMoveCommand)
-            //                throw new Exception("cannot move to next coordinate" + movableItemNextCoordinate);
-            //            
-
-            if (movableItemNextCoordinate != moveAction.To)
+            if (movableItem.IsInMotion())
             {
+                
+                movableItem.MoveToNext();
 
-                var moveToNext = new MoveAction(movableItemNextCoordinate, movableItem.Guid.ToString());
+                var moveToNext = new MoveAction(movableItem.CurrentCoordiate, movableItem.Guid.ToString());
                 var masterActions = new List<MasterAction>();
-                   masterActions.Add(moveToNext);
+                masterActions.Add(moveToNext);
                 var acknowledgeResult = new AcknowledgeResult(masterActions);
-
-                // instruct model to move to next
-                //ovableItem.MoveToNext();
 
                 return acknowledgeResult;
             }
             else
             {
 
-                Console.Out.WriteLine(String.Format("Player {0} reached the Target - Good Job :-)",movableItem.Guid.ToString()));
+                Console.Out.WriteLine(String.Format("Player {0} reached the Target - Good Job :-)",
+                    movableItem.Guid.ToString()));
                 return new AcknowledgeResult(new List<MasterAction>());
             }
-            
+
         }
 
         public override bool CanAcknowledge(MasterAction action)

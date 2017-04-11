@@ -1,4 +1,5 @@
-﻿using Automate.Controller.Delegates;
+﻿using System;
+using Automate.Controller.Delegates;
 using Automate.Controller.Modules;
 using Automate.Model;
 
@@ -6,7 +7,7 @@ namespace Automate.Controller.Handlers
 {
     public interface IHandlerUtils    
     {
-        IModelAbstractionLayer Model { get;  }
+        Guid GameWorldId { get;  }
         HandleActivation InvokeHandler { get;  }
         AcknowledgeActivation AcknowledgeHandler { get; }
     }

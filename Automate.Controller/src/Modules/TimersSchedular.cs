@@ -102,9 +102,9 @@ namespace Automate.Controller.Modules
             var delta = timeoutTicks - _lastUpdate.Ticks;
 
             // check if the slot is in the past
-            if (delta < 0)
+            if (delta <= 0)
             {
-                //todo: consult Naph if it's the needed behaviur (can we have a race and the Update is faster?
+                // Fire the event immediatly
                 OnTimeOut(item);
                 return;
             }

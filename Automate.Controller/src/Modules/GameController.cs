@@ -19,11 +19,11 @@ namespace Automate.Controller.Modules
         private event HandleActivation HandlerActivation;
         private readonly ITimerScheduler<Abstracts.MasterAction> _timerSched;
 
-        public GameController(IGameView view, IModelAbstractionLayer model)
+        public GameController(IGameView view, Guid modelId)
         {
-            if (view == null || model == null)
-                throw new ArgumentException("");
-            Model = model;
+//            if (view == null || model == null)
+//                throw new ArgumentException("");
+            Model = modelId;
             View = view;
             _handlers = new List<IHandler<ObserverArgs>>();
 
@@ -50,7 +50,7 @@ namespace Automate.Controller.Modules
 
         private void ForwardUpdateToTimerSched(ViewUpdateArgs args)
         {
-            Console.Out.WriteLine("ForwardUpdate Fired");
+//            Console.Out.WriteLine("ForwardUpdate Fired");
             _timerSched.Update(new TimerSchudulerUpdateArgs() {Time = DateTime.Now});
         }
 
@@ -58,11 +58,11 @@ namespace Automate.Controller.Modules
         {
 //            Console.Out.WriteLine("ForwardItem Fired");
             //            _timerSched.Enqueue(DateTime.Now.Add(item.Duration),item);
-            _timerSched.Enqueue(DateTime.Now.Add(new TimeSpan(0,0,0,0,100)),item);
+            _timerSched.Enqueue(DateTime.Now.Add(item.Duration),item);
         }
 
 
-        public IModelAbstractionLayer Model { get; private set; }
+        public Guid Model { get; private set; }
         public IGameView View { get; private set; }
 
         public IList<ThreadInfo> Handle(ObserverArgs args)
