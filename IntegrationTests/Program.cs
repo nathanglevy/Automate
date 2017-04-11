@@ -14,6 +14,7 @@ using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 using Automate.Model;
 using Automate.Model.GameWorldComponents;
+using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using AutomateTests.Mocks;
 using AutomateTests.test.Mocks;
