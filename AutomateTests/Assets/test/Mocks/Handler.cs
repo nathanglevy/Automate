@@ -21,7 +21,7 @@ namespace AutomateTests.test.Mocks
         }
 
 
-        public override IHandlerResult Handle(ObserverArgs args, IHandlerUtils utils)
+        public override IHandlerResult<MasterAction> Handle(ObserverArgs args, IHandlerUtils utils)
         {
             if (!CanHandle(args))
             {
@@ -42,9 +42,12 @@ namespace AutomateTests.test.Mocks
 
         }
 
-        public override IAcknowledgeResult Acknowledge(MasterAction action, IHandlerUtils utils)
+
+        public override IAcknowledgeResult<MasterAction> Acknowledge(MasterAction action, IHandlerUtils utils)
         {
-            throw new NotImplementedException();
+            List<MasterAction> actions =new List<MasterAction>();
+            actions.Add(new MasterAction(action.Type,action.TargetId + "_ACK"));
+            return new AcknowledgeResult(actions);
         }
 
         public override bool CanAcknowledge(MasterAction action)

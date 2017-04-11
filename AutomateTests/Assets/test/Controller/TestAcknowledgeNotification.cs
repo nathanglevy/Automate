@@ -44,9 +44,9 @@ namespace AutomateTests.test.Controller
 //            var handler = new AcknowledgeNotificationHandler();
 //            AcknowledgeNotification acknowledgeNotificationArgs = new AcknowledgeNotification(new MoveAction(new Coordinate(5,5,5),new Coordinate(3,3,3),"MyID"  ));
 //            var handlerResult = handler.Handle(acknowledgeNotificationArgs, utils);
-//            Assert.AreEqual(1,handlerResult.GetActions().Count);
-//            Assert.AreEqual(ActionType.Movement,handlerResult.GetActions()[0].Type);
-//            Assert.IsTrue(handlerResult.GetActions()[0] is MoveAction);
+//            Assert.AreEqual(1,handlerResult.GetItems().Count);
+//            Assert.AreEqual(ActionType.Movement,handlerResult.GetItems()[0].Type);
+//            Assert.IsTrue(handlerResult.GetItems()[0] is MoveAction);
 //
 //        }
 

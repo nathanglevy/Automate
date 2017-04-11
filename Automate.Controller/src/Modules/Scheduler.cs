@@ -1,30 +1,40 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Delegates;
 using Automate.Controller.Interfaces;
 
 namespace Automate.Controller.Modules
 {
-    public class Scheduler : IScheduler
+    public class Scheduler<MasterAction> : IScheduler<MasterAction>
     {
         // collection
-        private ConcurrentQueue<MasterAction> _queue = new ConcurrentQueue<MasterAction>();
+        //private ConcurrentQueue<MasterAction> _queue = new ConcurrentQueue<MasterAction>();
+        private Queue<MasterAction> _queue = new Queue<MasterAction>();
+
+        private Object _lock = new Object();
+
 
         // events
-        private event HandlerResultListner _enqueueListener;
+        private event HandlerResultListner<MasterAction> _enqueueListener;
 
         public Scheduler()
         {
             _enqueueListener += PushResultsToQueue;
         }
 
-        private void PushResultsToQueue(IHandlerResult handlerResult)
+        private void PushResultsToQueue(IHandlerResult<MasterAction> handlerResult)
         {
-            Enqueue(handlerResult.GetActions());
+//            var thread = new Thread(delegate()
+//                {
+                    Enqueue(handlerResult.GetItems());
+//                }
+//            );
+//            thread.Start();
         }
 
-        public int ActionsCount
+        public int ItemsCount
         {
             get
             {
@@ -32,36 +42,59 @@ namespace Automate.Controller.Modules
             }
         }
 
-        public void Enqueue(IList<MasterAction> actions)
+        public void Enqueue(IList<MasterAction> items)
         {
-            foreach (var action in actions)
+            foreach (var action in items)
             {
-                _queue.Enqueue(action);
+                Enqueue(action);
             }
+
         }
 
-        public bool HasActions
+        public bool HasItems
         {
-            get { return !_queue.IsEmpty; }
+            //get { return !_queue.IsEmpty; }
+            get { return _queue.Count != 0; }
         }
 
         public MasterAction Pull()
         {
-            MasterAction action = null;
-            bool actionPulled = false;
-
-            while (!actionPulled && !_queue.IsEmpty)
+            lock (_lock)
             {
-                actionPulled = _queue.TryDequeue(out action);
+                if (HasItems)
+                {
+                    
+                    //actionPulled = _queue.Dequeue()(out item);
+                    var masterAction = _queue.Dequeue();
+
+                    Console.Out.WriteLine("Dequeued an item from Q, ID:" + masterAction.ToString());
+
+                    // Fire OnPull To All Listners
+                    if (OnPull != null) 
+                        OnPull(masterAction);
+
+                    // return to requestor
+                    return masterAction;
+                }
             }
 
-            return action;
+            throw new Exception("Queue is empty, cannot pull");
 
         }
 
-        public HandlerResultListner GetPushInvoker()
+        public HandlerResultListner<MasterAction> GetPushInvoker()
         {
             return _enqueueListener;
         }
+
+        public void Enqueue(MasterAction item)
+        {
+            lock (_lock)
+            {
+                _queue.Enqueue(item);
+            }
+        }
+
+        public event NotifyOnPull<MasterAction> OnPull;
     }
 }

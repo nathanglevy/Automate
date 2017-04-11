@@ -2,5 +2,5 @@
 
 namespace Automate.Controller.Delegates
 {
-    public delegate void HandlerResultListner(IHandlerResult handlerResult);
+    public delegate void HandlerResultListner<T>(IHandlerResult<T> handlerResult);
 }

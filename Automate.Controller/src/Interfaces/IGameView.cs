@@ -2,8 +2,14 @@
 {
     public interface IGameView
     {
-//        ViewCallBack GetCallBack();
+        event ViewUpdate onUpdate;
+        void PerformUpdate();
     }
 
-//    public delegate void ViewCallBack(IHandlerResult actions);
+    public delegate void ViewUpdate(ViewUpdateArgs args);
+
+    public class ViewUpdateArgs
+    {
+    }
+
 }

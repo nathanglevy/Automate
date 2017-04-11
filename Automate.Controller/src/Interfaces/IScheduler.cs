@@ -4,16 +4,22 @@ using Automate.Controller.Delegates;
 
 namespace Automate.Controller.Interfaces
 {
-    public interface IScheduler
+    public interface IScheduler<T>
     {
-        int ActionsCount { get;  }
-        bool HasActions { get;  }
-        void Enqueue(IList<MasterAction> actions);
+        int ItemsCount { get;  }
 
-        MasterAction Pull();
+        bool HasItems { get;  }
+        event NotifyOnPull<T> OnPull;
 
-        HandlerResultListner GetPushInvoker();
+//        event SchedItemPull OnPull
+
+        void Enqueue(IList<T> items);
+        void Enqueue(T item);
+
+        T Pull();
+
+        HandlerResultListner<T> GetPushInvoker();
     }
 
-    // Delegate to all objects want to 
+    public delegate void NotifyOnPull<T>(T item);
 }

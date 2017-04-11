@@ -17,6 +17,7 @@ namespace AutomateTests.test.Controller
     [TestClass]
     public class TestRightClickNotification
     {
+        private  const int TIMEOUT = 200;
         [TestMethod]
         public void TestCreateNew_ShouldPass()
         {
@@ -36,21 +37,22 @@ namespace AutomateTests.test.Controller
         {
 
             ObserverArgs viewSelectionNotification = new RightClickNotification(
-                new Coordinate(20, 10, 0));
+                new Coordinate(18, 10, 0));
 
             IHandler<ObserverArgs> rightClickNotificationHandler = new RightClickNotificationHandler();
 
             var mockGameView = new MockGameView();
             var controller = new GameController(mockGameView, new MockGameModel());
-            controller.RegisterHandler(rightClickNotificationHandler);
+           // controller.RegisterHandler(rightClickNotificationHandler);
             IList<ThreadInfo> threadInfos = controller.Handle(viewSelectionNotification);
             foreach (var threadInfo in threadInfos)
             {
-                threadInfo.SyncEvent.WaitOne();
+                //threadInfo.SyncEvent.WaitOne();
+                threadInfo.SyncEvent.WaitOne(TIMEOUT);
             }
 
 
-            Assert.AreEqual(2, controller.OutputSched.ActionsCount);
+            Assert.AreEqual(2, controller.OutputSched.ItemsCount);
             Assert.AreEqual(ActionType.Movement, controller.OutputSched.Pull().Type);
             Assert.AreEqual(ActionType.Movement, controller.OutputSched.Pull().Type);
 
@@ -104,19 +106,19 @@ namespace AutomateTests.test.Controller
             var mockGameView = new MockGameView();
             var mockGameModel = new MockGameModel();
             var controller = new GameController(mockGameView,mockGameModel);
-            controller.RegisterHandler(rightClickNotificationHandler);
+ //           controller.RegisterHandler(rightClickNotificationHandler);
 
             IList<ThreadInfo> syncEvents = controller.Handle(viewSelectionNotification);
             foreach (var threadInfo in syncEvents)
             {
-                threadInfo.SyncEvent.WaitOne(2000);
+                threadInfo.SyncEvent.WaitOne(200);
             }
 //            foreach (var threadInfo in syncEvents)
 //            {
 //                Assert.AreEqual(false, threadInfo.Thread.IsAlive);
 //            }
 
-            Assert.AreEqual(2, controller.OutputSched.ActionsCount);
+            Assert.AreEqual(2, controller.OutputSched.ItemsCount);
 
             MasterAction action1 = controller.OutputSched.Pull();
             MasterAction action2 = controller.OutputSched.Pull();
@@ -128,8 +130,8 @@ namespace AutomateTests.test.Controller
             var player1Guid = mockGameModel.GetGuidByAlias("Player1");
 
             var acknowledgeResult = rightClickNotificationHandler.Acknowledge(action1,new HandlerUtils(mockGameModel, null, null));
-            Assert.AreEqual(1,acknowledgeResult.GetActions().Count);
-            var nextMoveAction = acknowledgeResult.GetActions()[0];
+            Assert.AreEqual(1,acknowledgeResult.GetItems().Count);
+            var nextMoveAction = acknowledgeResult.GetItems()[0];
             Assert.IsNotNull(nextMoveAction);
             var realNextMoveAction = nextMoveAction as MoveAction;
             Assert.IsNotNull(realNextMoveAction);

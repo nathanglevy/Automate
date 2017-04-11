@@ -65,7 +65,7 @@ namespace AutomateTests.test.Mocks
             return new List<MovableItem>()
             {
                 player1,
-                player2
+//                player2
             };
         }
 
@@ -144,7 +144,7 @@ namespace AutomateTests.test.Mocks
             return new List<MovableItem>()
             {
                 player1,
-                player2
+//                player2
             };
         }
 

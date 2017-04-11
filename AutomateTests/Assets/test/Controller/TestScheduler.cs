@@ -8,58 +8,63 @@ using Automate.Controller.Modules;
 using AutomateTests.test.Controller;
 using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using UnityEngine;
+using UnityEngine.Assertions.Must;
 
 namespace AutomateTests.Assets.test.Controller
 {
     [TestClass]
     public class TestScheduler
     {
+        private AutoResetEvent _onPullSync = new AutoResetEvent(false);
+        private bool _listnerActivated = false;
+
         [TestMethod]
         public void TestCreateNew_ShouldPass()
         {
-            IScheduler scheduler = new Scheduler();
+            IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
             Assert.IsNotNull(scheduler);
         }
 
         [TestMethod]
         public void TestCount_expect0()
         {
-            IScheduler scheduler = new Scheduler();
-            Assert.AreEqual(0, scheduler.ActionsCount);
+            IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
+            Assert.AreEqual(0, scheduler.ItemsCount);
 
         }
 
         [TestMethod]
         public void TestEnqueJobsFromSingleThread_ExpectJobsinQ()
         {
-            IScheduler scheduler = new Scheduler();
+            IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
             List<MasterAction> actions = new List<MasterAction>();
             actions.Add(new MockMasterAction(ActionType.AreaSelection, "MyId"));
             scheduler.Enqueue(actions);
-            Assert.AreEqual(1, scheduler.ActionsCount);
+            Assert.AreEqual(1, scheduler.ItemsCount);
         }
 
         [TestMethod]
         public void TestHasActions_Expectfalse()
         {
-            IScheduler scheduler = new Scheduler();
-            Assert.IsFalse(scheduler.HasActions);
+            IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
+            Assert.IsFalse(scheduler.HasItems);
         }
 
         [TestMethod]
         public void TestHasActions_expectTrue()
         {
-            IScheduler scheduler = new Scheduler();
+            IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
             List<MasterAction> actions = new List<MasterAction>();
             actions.Add(new MockMasterAction(ActionType.AreaSelection, "MyId"));
             scheduler.Enqueue(actions);
-            Assert.IsTrue(scheduler.HasActions);
+            Assert.IsTrue(scheduler.HasItems);
         }
 
         [TestMethod]
         public void TestPull_expectToGetTheSameActionAdded()
         {
-            IScheduler scheduler = new Scheduler();
+            IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
             List<MasterAction> actions = new List<MasterAction>();
             actions.Add(new MockMasterAction(ActionType.AreaSelection, "MyId1"));
             actions.Add(new MockMasterAction(ActionType.Movement, "MyId2"));
@@ -70,9 +75,10 @@ namespace AutomateTests.Assets.test.Controller
         }
 
         [TestMethod]
+        [ExpectedException(typeof(Exception))]
         public void TestPullOnEmptryQ_expectNull()
         {
-            IScheduler scheduler = new Scheduler();
+            IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
             MasterAction action = scheduler.Pull();
             Assert.IsNull(action);
         }
@@ -80,45 +86,104 @@ namespace AutomateTests.Assets.test.Controller
         [TestMethod]
         public void TestPushActionsEvent_ExpectActionsToBeAdded()
         {
-            IScheduler scheduler = new Scheduler();
+            IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
             List<MasterAction> actions = new List<MasterAction>();
             actions.Add(new MockMasterAction(ActionType.AreaSelection, "MyId1"));
             actions.Add(new MockMasterAction(ActionType.Movement, "MyId2"));
-            IHandlerResult handlerResult = new HandlerResult(actions);
+            IHandlerResult<MasterAction> handlerResult = new HandlerResult(actions);
 
-            HandlerResultListner pusher = scheduler.GetPushInvoker();
+            HandlerResultListner<MasterAction> pusher = scheduler.GetPushInvoker();
             Assert.IsNotNull(pusher);
             pusher(handlerResult);
-            Assert.AreEqual(2, scheduler.ActionsCount);
+            Thread.Sleep(100);
+            Assert.AreEqual(2, scheduler.ItemsCount);
             MasterAction action = scheduler.Pull();
-            Assert.AreEqual(1, scheduler.ActionsCount);
+            Assert.AreEqual(1, scheduler.ItemsCount);
             Assert.IsNotNull(action);
             Assert.AreEqual(ActionType.AreaSelection, action.Type);
         }
 
-        //TODO: i think we should add another event to notify that jobs added
-        [TestMethod]
-        public void TestAcknowledgeToTimerAndQueueWhenPullOccurs_ExpectAckSentToHandle()
-        {
-            IScheduler scheduler = new Scheduler();
-            List<MasterAction> actions = new List<MasterAction>();
-            actions.Add(new MockMasterAction(ActionType.Movement, "MyId2"));
-            IHandlerResult handlerResult = new HandlerResult(actions);
 
-            HandlerResultListner pusher = scheduler.GetPushInvoker();
+        [TestMethod]
+        public void TestOurImplToThreadSafeLocksForPullAndPush_ExpectCorrectBehaviour()
+        {
+
+            IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
+            List<MasterAction> actions = new List<MasterAction>();
+            for (int i = 0; i < 50; i++)
+            {
+                actions.Add(new MockMasterAction(ActionType.Movement, "MyId" + i));
+            }
+            IHandlerResult<MasterAction> handlerResult = new HandlerResult(actions);
+
+            HandlerResultListner<MasterAction> pusher = scheduler.GetPushInvoker();
             Assert.IsNotNull(pusher);
             pusher(handlerResult);
-            Assert.AreEqual(1, scheduler.ActionsCount);
+            
+            Thread.Sleep(20);
+            //Assert.AreEqual(50, scheduler.ItemsCount);
+            for (int i = 0; i < 50; i++)
+            {
+                MasterAction action = scheduler.Pull();
+                Assert.AreEqual(ActionType.Movement, action.Type);
+                Assert.AreEqual("MyId" + i,action.TargetId);
+            }
+
+
+        }
+
+
+        //TODO: i think we should add another event to notify that jobs added
+       // [TestMethod]
+        public void TestAcknowledgeToTimerAndQueueWhenPullOccurs_ExpectAckSentToHandle()
+        {
+            IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
+            List<MasterAction> actions = new List<MasterAction>();
+            actions.Add(new MockMasterAction(ActionType.Movement, "MyId2"));
+            IHandlerResult<MasterAction> handlerResult = new HandlerResult(actions);
+
+            HandlerResultListner<MasterAction> pusher = scheduler.GetPushInvoker();
+            Assert.IsNotNull(pusher);
+            pusher(handlerResult);
+            Thread.Sleep(100);
+            Assert.AreEqual(1, scheduler.ItemsCount);
             MasterAction action = scheduler.Pull();
             Assert.AreEqual(ActionType.Movement,action.Type);
             // by doing pull, we expect an action is added to Wait/Timer and send to Handler
             Thread.Sleep(300);
-            Assert.AreEqual(1, scheduler.ActionsCount);
+            Assert.AreEqual(1, scheduler.ItemsCount);
             MasterAction action2 = scheduler.Pull();
             Assert.AreEqual(ActionType.Movement, action2.Type);
 
         }
 
-     
+        [TestMethod]
+        public void TestOnPullEvent_ExpectSniffMethodToBeActivated()
+        {
+            IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
+            scheduler.OnPull += PullListner;
+            List<MasterAction> actions = new List<MasterAction>();
+            actions.Add(new MockMasterAction(ActionType.Movement, "MyId2"));
+            IHandlerResult<MasterAction> handlerResult = new HandlerResult(actions);
+
+            HandlerResultListner<MasterAction> pusher = scheduler.GetPushInvoker();
+            Assert.IsNotNull(pusher);
+            pusher(handlerResult);
+            Thread.Sleep(100);
+            Assert.AreEqual(1, scheduler.ItemsCount);
+            MasterAction action = scheduler.Pull();
+            Assert.AreEqual(ActionType.Movement, action.Type);
+            _onPullSync.WaitOne(200);
+            Assert.IsTrue(_listnerActivated);
+        }
+
+        private void PullListner(MasterAction item)
+        {
+            Assert.AreEqual("MyId2", item.TargetId);
+            _listnerActivated = true;
+            _onPullSync.Set();
+            
+
+        }
     }
 }

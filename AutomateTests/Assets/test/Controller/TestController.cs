@@ -39,7 +39,7 @@ namespace AutomateTests.test.Controller
             IGameView gameview = null;
             IGameController gameController = new GameController(gameview, gameModel);
 
-            Assert.AreEqual(0,gameController.GetHandlersCount());
+            Assert.IsTrue(gameController.GetHandlersCount() > 0);
 
         }
 
@@ -50,9 +50,11 @@ namespace AutomateTests.test.Controller
             IGameView gameview = null;
             IGameController gameController = new GameController(gameview, gameModel);
             var mockHandler = new MockHandler();
+
+            var handlersCount = gameController.GetHandlersCount();
             gameController.RegisterHandler(mockHandler);
 
-            Assert.AreEqual(1,gameController.GetHandlersCount());
+            Assert.AreEqual(handlersCount + 1,gameController.GetHandlersCount());
         }
 
         [TestMethod]
@@ -79,7 +81,7 @@ namespace AutomateTests.test.Controller
 
             foreach (var threadInfo in threads)
             {
-                threadInfo.SyncEvent.WaitOne(100);
+                threadInfo.SyncEvent.WaitOne(300);
             }
 
             // check that only a single thread is executed
@@ -88,7 +90,7 @@ namespace AutomateTests.test.Controller
             Assert.AreNotEqual("AutomateTests.test.Mocks.MockHandler_HandleWorkerThread", Thread.CurrentThread.Name);
             
 
-            Assert.AreEqual(2, gameController.OutputSched.ActionsCount);
+            Assert.AreEqual(2, gameController.OutputSched.ItemsCount);
             MasterAction masterAction1 = gameController.OutputSched.Pull();
             MasterAction masterAction2 = gameController.OutputSched.Pull();
             Assert.AreEqual(ActionType.AreaSelection, masterAction1.Type);
@@ -98,14 +100,73 @@ namespace AutomateTests.test.Controller
 
         }
 
-        private void CheckTestHandleViewArgsResult_ExpectActiontoBeAdded(IHandlerResult handlerResult)
+        private void CheckTestHandleViewArgsResult_ExpectActiontoBeAdded(IHandlerResult<MasterAction> handlerResult)
         {
             // update concurent que
-            foreach (var masterAction in handlerResult.GetActions())
+            foreach (var masterAction in handlerResult.GetItems())
             {
                 _queue.Enqueue(masterAction);
             }
 
         }
+
+        [TestMethod]
+        public void TestAllTheLoop_ACTION_TO_HANDLE_TO_SCHED_TO_TIMERSCHED_TO_ACK_EXPECtITworks()
+        {
+
+            // Create View Object
+            MockGameView gameview = new MockGameView();
+
+            // Create Model Object
+            IModelAbstractionLayer gameModel = new MockGameModel();
+
+            // Create Handler
+            var mockHandler = new MockHandler();
+
+            // Init the Controller
+            IGameController gameController = new GameController(gameview, gameModel);
+            gameController.RegisterHandler(mockHandler);
+            // Create the NotificationArgs
+            string playerID = "AhmadHamdan";
+            MockNotificationArgs mockNotificationArgs = new MockNotificationArgs(new Coordinate(12, 12, 3), playerID);
+            System.Threading.Thread.CurrentThread.Name = "CurrentThread";
+            IList<ThreadInfo> threads = gameController.Handle(mockNotificationArgs);
+
+            foreach (var threadInfo in threads)
+            {
+                threadInfo.SyncEvent.WaitOne(300);
+            }
+
+            // check that only a single thread is executed
+            Assert.AreEqual(1, threads.Count);
+            Assert.AreEqual("AutomateTests.test.Mocks.MockHandler_HandleWorkerThread", threads[0].Thread.Name);
+            Assert.AreNotEqual("AutomateTests.test.Mocks.MockHandler_HandleWorkerThread", Thread.CurrentThread.Name);
+
+
+            Assert.AreEqual(2, gameController.OutputSched.ItemsCount);
+            MasterAction masterAction1 = gameController.OutputSched.Pull();
+            MasterAction masterAction2 = gameController.OutputSched.Pull();
+            Assert.AreEqual(ActionType.AreaSelection, masterAction1.Type);
+            Assert.AreEqual(ActionType.Movement, masterAction2.Type);
+            Assert.AreEqual("AhmadHamdan", masterAction1.TargetId);
+            Assert.AreEqual("NaphLevy", masterAction2.TargetId);
+
+            // mimic update from the view
+            gameview.PerformUpdate();
+
+            Thread.Sleep(200);
+            // NOW I WILL PULL AGAIN FROM SCHED - it SHOULD HAS SOME ACTIONS WHICH Resultd from the 
+            // Ack
+            Assert.AreEqual(2, gameController.OutputSched.ItemsCount);
+            MasterAction masterAction3 = gameController.OutputSched.Pull();
+            MasterAction masterAction4 = gameController.OutputSched.Pull();
+            Assert.AreEqual(ActionType.AreaSelection, masterAction3.Type);
+            Assert.AreEqual(ActionType.Movement, masterAction4.Type);
+            Assert.AreEqual("AhmadHamdan_ACK", masterAction3.TargetId);
+            Assert.AreEqual("NaphLevy_ACK", masterAction4.TargetId);
+
+
+        }
+
     }
 }

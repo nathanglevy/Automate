@@ -11,7 +11,7 @@ namespace Automate.Controller.Interfaces
     {
         IModelAbstractionLayer Model { get; }
         IGameView View { get; }
-        IScheduler OutputSched { get;}
+        IScheduler<MasterAction> OutputSched { get;}
         IList<ThreadInfo> Handle(ObserverArgs args);
         int GetHandlersCount();
         void RegisterHandler(IHandler<ObserverArgs> handler);

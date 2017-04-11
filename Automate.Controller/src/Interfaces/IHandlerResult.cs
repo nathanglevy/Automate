@@ -3,10 +3,9 @@ using Automate.Controller.Abstracts;
 
 namespace Automate.Controller.Interfaces
 {
-    public interface IHandlerResult
+    public interface IHandlerResult<T>
     {
-        IList<MasterAction> GetActions();
-
+        IList<T> GetItems();
 
     }
 }
