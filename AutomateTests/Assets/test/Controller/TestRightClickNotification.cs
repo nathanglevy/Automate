@@ -7,6 +7,8 @@ using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Handlers.SelectionNotification;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
+using Automate.Model.GameWorldComponents;
+using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using AutomateTests.Mocks;
 using AutomateTests.test.Mocks;
@@ -62,7 +64,11 @@ namespace AutomateTests.test.Controller
 
         private Guid GetMockGameWorld()
         {
-            throw new NotImplementedException();
+            var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
+            var movableItem = gameWorldItem.CreateMovable(new Coordinate(3, 3, 0), MovableType.NormalHuman);
+            var movableItem2 = gameWorldItem.CreateMovable(new Coordinate(7, 3, 0), MovableType.NormalHuman);
+            gameWorldItem.SelectMovableItems(new List<MovableItem>() { movableItem , movableItem2});
+            return gameWorldItem.Guid;
         }
 
         [TestMethod]
@@ -104,7 +110,7 @@ namespace AutomateTests.test.Controller
         {
 
             ObserverArgs viewSelectionNotification = new RightClickNotification(
-                new Coordinate(10, 10, 1));
+                new Coordinate(10, 10, 0));
 
             IHandler<ObserverArgs> rightClickNotificationHandler = new RightClickNotificationHandler();
 
@@ -131,7 +137,7 @@ namespace AutomateTests.test.Controller
             Assert.IsNotNull(nextMoveAction);
             var realNextMoveAction = nextMoveAction as MoveAction;
             Assert.IsNotNull(realNextMoveAction);
-            Assert.AreEqual(new Coordinate(2,2,1),realNextMoveAction.To);
+            Assert.AreEqual(new Coordinate(5,5,0),realNextMoveAction.To);
 
         }
 

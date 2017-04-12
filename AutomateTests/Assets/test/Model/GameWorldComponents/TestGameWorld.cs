@@ -18,7 +18,7 @@ namespace AutomateTests.test.Model.GameWorldComponents {
 
         [TestMethod()]
         public void TestGameWorldNew_SmallWorld_ExpectSuccess() {
-            GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 0));
+            GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 1));
             Assert.IsNotNull(gameWorld);
         }
 

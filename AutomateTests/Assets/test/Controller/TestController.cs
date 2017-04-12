@@ -6,6 +6,7 @@ using Automate.Controller.Abstracts;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 using Automate.Model;
+using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using AutomateTests.Mocks;
 using AutomateTests.test.Mocks;
@@ -37,7 +38,7 @@ namespace AutomateTests.test.Controller
 
         private Guid GetMockGameWorld()
         {
-            throw new NotImplementedException();
+            return GameUniverse.CreateGameWorld(new Coordinate(10, 10, 1)).Guid;
         }
 
         [TestMethod]

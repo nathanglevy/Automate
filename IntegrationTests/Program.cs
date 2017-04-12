@@ -4,7 +4,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
-//using System.Timers;
 using System.Threading.Tasks;
 using Automate.Controller.Actions;
 using Automate.Controller.Handlers.AcknowledgeNotification;
