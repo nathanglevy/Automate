@@ -15,6 +15,7 @@ namespace Automate.Model.GameWorldInterface
     public class MovableItem : Item
     {
         private readonly GameWorld _gameWorld;
+        public override Coordinate Coordinate => CurrentCoordiate;
 
         internal MovableItem(GameWorld gameWorld, Guid movableGuid) {
             Guid = movableGuid;

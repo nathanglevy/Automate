@@ -7,22 +7,16 @@ namespace Automate.Model.GameWorldInterface
     public class CellItem : Item
     {
         private GameWorld _gameWorld;
-        private Coordinate _cellInfoCoordinate;
 
         public CellItem(GameWorld gameWorld, Coordinate cellInfoCoordinate)
         {
             _gameWorld = gameWorld;
             Type = ItemType.Cell;
-            _cellInfoCoordinate = cellInfoCoordinate;
+            Coordinate = cellInfoCoordinate;
             Guid = Guid.NewGuid();
         }
 
-        public new Guid Guid
-        {
-            //get { return _gameWorld.GetCellInfo(_cellInfoCoordinate).Guid; }
-            get; private set; }
-
-        public Coordinate Coordinate { get { return _cellInfoCoordinate; } }
+        public override Coordinate Coordinate { get; }
 
 
         public override bool Equals(Object obj) {

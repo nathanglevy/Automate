@@ -41,7 +41,7 @@ namespace AutomateTests.Model.GameWorldInterface {
                 GameUniverse.CreateGameWorld(new Coordinate(10, 10, 2)),
                 GameUniverse.CreateGameWorld(new Coordinate(10, 10, 2))
             };
-            Assert.IsTrue(gameWorldIdList.SetEquals(GameUniverse.GetGameWorldItemsInUniverse()));
+            Assert.IsTrue(gameWorldIdList.IsProperSubsetOf(GameUniverse.GetGameWorldItemsInUniverse()));
         }
 
         [TestMethod()]

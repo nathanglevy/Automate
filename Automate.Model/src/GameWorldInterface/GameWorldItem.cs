@@ -14,6 +14,7 @@ namespace Automate.Model.GameWorldInterface
     public class GameWorldItem : Item
     {
         private readonly GameWorld _focusedGameWorld;
+        public override Coordinate Coordinate => _focusedGameWorld.GetWorldBoundary().topLeft;
 
         internal GameWorldItem(GameWorld gameWorld) {
             _focusedGameWorld = gameWorld;

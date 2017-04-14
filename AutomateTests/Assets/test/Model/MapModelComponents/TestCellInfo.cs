@@ -2,7 +2,7 @@
 using Automate.Model.MapModelComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.test.Model.MapModelComponents {
+namespace AutomateTests.Model.MapModelComponents {
     [TestClass()]
     public class TestCellInfo {
         [TestMethod()]

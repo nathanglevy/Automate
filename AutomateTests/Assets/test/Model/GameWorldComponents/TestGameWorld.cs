@@ -6,7 +6,7 @@ using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.test.Model.GameWorldComponents {
+namespace AutomateTests.Model.GameWorldComponents {
     [TestClass()]
     public class TestGameWorld {
 
@@ -18,7 +18,7 @@ namespace AutomateTests.test.Model.GameWorldComponents {
 
         [TestMethod()]
         public void TestGameWorldNew_SmallWorld_ExpectSuccess() {
-            GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 0));
+            GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 1));
             Assert.IsNotNull(gameWorld);
         }
 

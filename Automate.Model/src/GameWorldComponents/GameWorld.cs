@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Automate.Model.Components;
+using Automate.Model.Components;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.PathFinding;
 using JetBrains.Annotations;
+using Automate.Model.Tasks;
 
 [assembly: InternalsVisibleTo("AutomateTests")]
 namespace Automate.Model.GameWorldComponents
@@ -12,11 +15,12 @@ namespace Automate.Model.GameWorldComponents
     //TODO: Need to do comments!
     public class GameWorld
     {
-        private Dictionary<Guid, Movable> _movables = new Dictionary<Guid, Movable>();
-        private Dictionary<Guid, Structure> _structures = new Dictionary<Guid, Structure>();
-        private Dictionary<Coordinate, Guid> _coordinateToStructureMap = new Dictionary<Coordinate, Guid>();
-        private HashSet<Guid> _selectedItems = new HashSet<Guid>();
-        private HashSet<Item> _itemsToBePlaced = new HashSet<Item>();
+        private readonly Dictionary<Guid, Movable> _movables = new Dictionary<Guid, Movable>();
+        private readonly Dictionary<Coordinate, ComponentStack> _componentStacks = new Dictionary<Coordinate, ComponentStack>();
+        private readonly Dictionary<Guid, Structure> _structures = new Dictionary<Guid, Structure>();
+        private readonly Dictionary<Coordinate, Guid> _coordinateToStructureMap = new Dictionary<Coordinate, Guid>();
+        private readonly HashSet<Guid> _selectedItems = new HashSet<Guid>();
+        private readonly HashSet<Item> _itemsToBePlaced = new HashSet<Item>();
         private MapInfo _map;
         public Guid Guid { get; private set; }
 
@@ -234,6 +238,27 @@ namespace Automate.Model.GameWorldComponents
                     result.Add(new MovableItem(this,movable.GetId()));
             }
             return result;
+        }
+
+        public ComponentStack AddComponent(Component component, Coordinate location, int amount)
+        {
+            if (_componentStacks.ContainsKey(location) && _componentStacks[location].GetType() != component.GetType())
+                throw new ArgumentException("Coordinate: " + location + " already has an item stack");
+            ComponentStack componentStack = new ComponentStack(component, amount);
+            _componentStacks[location] = componentStack;
+            return componentStack;
+        }
+
+        public bool IsComponentStackAtCoordinate(Coordinate location)
+        {
+            return _componentStacks.ContainsKey(location);
+        }
+
+        public ComponentStack GetComponentsAtCoordinate(Coordinate location)
+        {
+            if (!_componentStacks.ContainsKey(location))
+                throw new ArgumentException("Coordinate: " + location + " does not have an item stack");
+            return _componentStacks[location];
         }
     }
 }

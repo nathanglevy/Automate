@@ -8,6 +8,8 @@ namespace Automate.Model.GameWorldInterface
     {
         private readonly GameWorld _gameWorld;
 
+        public override Coordinate Coordinate => StructureBoundary.topLeft;
+
         public Boundary StructureBoundary
         {
             get { return _gameWorld.GetStructure(Guid).GetStructureBoundary(); }

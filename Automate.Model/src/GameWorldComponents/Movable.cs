@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Automate.Model.MapModelComponents;
 using Automate.Model.PathFinding;
+using Automate.Model.Tasks;
 
 [assembly: InternalsVisibleTo("AutomateTests")]
 namespace Automate.Model.GameWorldComponents {
@@ -15,6 +17,7 @@ namespace Automate.Model.GameWorldComponents {
         private Guid _id = Guid.NewGuid();
         public MovableType MovableType { get; private set; }
         private double _speed;
+        private List<Task> _taskList = new List<Task>();
 
         internal Movable(Coordinate startinCoordinate, MovableType movableType)
         {

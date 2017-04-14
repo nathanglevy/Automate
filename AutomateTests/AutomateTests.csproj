@@ -99,6 +99,7 @@
     <Compile Include="Assets\test\Model\MapModelComponents\TestCoordinate.cs" />
     <Compile Include="Assets\test\Model\MapModelComponents\TestMapInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\Components\TestComponentStack.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

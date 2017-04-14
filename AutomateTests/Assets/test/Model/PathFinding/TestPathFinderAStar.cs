@@ -3,7 +3,7 @@ using Automate.Model.MapModelComponents;
 using Automate.Model.PathFinding;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.test.Model.PathFinding {
+namespace AutomateTests.Model.PathFinding {
     [TestClass()]
     public class PathFinderAStarTests {
 
