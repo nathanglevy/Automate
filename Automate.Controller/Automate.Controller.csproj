@@ -76,6 +76,10 @@
     <Compile Include="src\Handlers\HandlerUtils.cs" />
     <Compile Include="src\Handlers\IHandlerUtils.cs" />
     <Compile Include="src\Actions\MoveAction.cs" />
+    <Compile Include="src\Handlers\PlaceAnObject\PlaceAMovableRequest.cs" />
+    <Compile Include="src\Handlers\PlaceAnObject\PlaceAnObjectRequest.cs" />
+    <Compile Include="src\Handlers\PlaceAnObject\PlaceAnObjectRequestHandler.cs" />
+    <Compile Include="src\Handlers\PlaceAnObject\PlaceAStrcutureRequest.cs" />
     <Compile Include="src\Handlers\RightClockNotification\RightClickNotification.cs" />
     <Compile Include="src\Handlers\RightClockNotification\RightClickNotificationHandler.cs" />
     <Compile Include="src\Actions\SelectMovableAction.cs" />

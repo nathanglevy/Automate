@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Actions;
+using Automate.Controller.Handlers.PlaceAnObject;
 using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Handlers.SelectionNotification;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
+using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using UnityEngine;
@@ -17,7 +19,7 @@ namespace src.View
     {
 
         // Use this for initialization
-        public static GameViewBase _gameViewBase;
+        private static GameViewBase _gameViewBase;
         public Dictionary<Guid, GameObject> _movableDictionary = new Dictionary<Guid, GameObject>();
         // Game Objects
         public GameObject CellObjectReference;
@@ -84,8 +86,8 @@ namespace src.View
 
             movableGameObject.GetComponent<MovableBehaviour>().startPosition = movableStartVector;
             movableGameObject.GetComponent<MovableBehaviour>().targetPosition = movableTargetVector;
-            //movableGameObject.GetComponent<MovableBehaviour>().animationSpeed = (float)moveAction.movableItem.NextMovement.GetMoveCost() / (float)movableItem.Speed;
-            movableGameObject.GetComponent<MovableBehaviour>().animationSpeed = (float) 10;
+            movableGameObject.GetComponent<MovableBehaviour>().animationSpeed = (float) moveAction.Duration.TotalMilliseconds;
+//            movableGameObject.GetComponent<MovableBehaviour>().animationSpeed = (float) 10;
             movableGameObject.GetComponent<MovableBehaviour>().isMoving = true;
             movableGameObject.GetComponent<MovableBehaviour>().journeyFract = 0;
             string animationName = movableGameObject.GetComponent<MovableBehaviour>().DecideAnimation();
@@ -133,13 +135,15 @@ namespace src.View
         {
             Vector3 worldPosition = GetMouseEffectiveWorldLocation();
             Coordinate mapCoordinate = GetMapCoordinateFromWorldVector(worldPosition);
-            if (Input.GetKeyDown(KeyCode.Alpha0))
+            if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-//            _gameWorldItem.CreateMovable(mapCoordinate, MovableType.NormalHuman);
+                var placeAMovableRequest = new PlaceAMovableRequest(mapCoordinate, MovableType.NormalHuman);
+                _gameViewBase.Controller.Handle(placeAMovableRequest);
             }
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-//            _gameWorldItem.CreateStructure(mapCoordinate, new Coordinate(1, 1, 1), StructureType.Basic);
+                var placeAMovableRequest = new PlaceAStrcutureRequest(mapCoordinate,new Coordinate(1,1,1), StructureType.Basic);
+                _gameViewBase.Controller.Handle(placeAMovableRequest);
             }
             if (Input.GetMouseButtonDown(0))
             {
@@ -153,8 +157,7 @@ namespace src.View
             }
             if (Input.GetMouseButtonDown(2))
             {
-                var rightSelectNotification = new RightClickNotification(mapCoordinate);
-                _gameViewBase.Controller.Handle(rightSelectNotification);
+            
                 //            _gameWorldItem.ClearSelectedItems();
             }
         }

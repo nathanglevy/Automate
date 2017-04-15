@@ -5,6 +5,7 @@ using Automate.Controller.Abstracts;
 using Automate.Controller.Delegates;
 using Automate.Controller.Handlers;
 using Automate.Controller.Handlers.AcknowledgeNotification;
+using Automate.Controller.Handlers.PlaceAnObject;
 using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Handlers.SelectionNotification;
 using Automate.Controller.Interfaces;
@@ -56,7 +57,8 @@ namespace Automate.Controller.Modules
             // register handlers
             _handlers.Add(new ViewSelectionHandler());
             _handlers.Add(new RightClickNotificationHandler());
-            _handlers.Add(new AcknowledgeNotificationHandler());
+//            _handlers.Add(new AcknowledgeNotificationHandler());
+            _handlers.Add(new PlaceAnObjectRequestHandler());
 
         }
 

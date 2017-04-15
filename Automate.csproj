@@ -154,7 +154,6 @@
     <Compile Include="Assets\src\View\DummyBehaviour.cs" />
     <Compile Include="Assets\src\View\MovableBehaviour.cs" />
     <Compile Include="Assets\src\View\UnityViewProxy.cs" />
-    <Compile Include="Assets\src\View\UpdateEventsPkg.cs" />
     <Compile Include="Assets\src\View\ViewBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -16,7 +16,6 @@ namespace Automate.Controller.Modules
         private AutoResetEvent _copyActionsAutoResetEvent = new AutoResetEvent(false);
         private Object _pushOnlyLock = new Object();
         private Object _pullOnlylock = new Object();
-        private bool _copyThreadCanRun = true;
         private Thread _copyThread;
         // events
         private event HandlerResultListner<MasterAction> _enqueueListener;

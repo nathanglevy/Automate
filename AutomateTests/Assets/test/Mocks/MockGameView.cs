@@ -31,7 +31,6 @@ namespace AutomateTests.test.Mocks
             return _list;
         }
 
-        public event ViewUpdate onUpdate;
 
 
 
@@ -85,7 +84,8 @@ namespace AutomateTests.test.Mocks
         public event ViewHandleAction OnActionReady;
         public void PerformOnActionReady(ViewHandleActionArgs viewHandleArgs)
         {
-            throw new NotImplementedException();
+            if (OnActionReady != null) OnActionReady.Invoke(viewHandleArgs);
+
         }
 
         IEnumerable<MasterAction> IGameView.PullFromController()
