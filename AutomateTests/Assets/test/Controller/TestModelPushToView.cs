@@ -24,7 +24,8 @@ namespace AutomateTests.Assets.test.Controller
             var mockGameView = new MockGameView();
             var gameController = new GameController((IGameView) mockGameView);
             gameController.FocusGameWorld(gameWorldItem.Guid);
-            mockGameView.PerformUpdate();
+            mockGameView.PerformOnUpdateStart();
+            mockGameView.PerformOnUpdate();
 
             Assert.AreEqual(101,gameController.OutputSched.ItemsCount);
             Assert.AreEqual(ActionType.PlaceGameObject,gameController.OutputSched.Pull().Type);

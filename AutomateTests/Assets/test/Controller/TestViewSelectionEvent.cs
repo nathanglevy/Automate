@@ -20,7 +20,7 @@ namespace AutomateTests.test.Controller
     public class TestViewSelectionEvent
     {
         private int THREADS_TIME_OUT = 1000;
-
+        private List<MasterAction> _handledActions = new List<MasterAction>();
         [TestMethod]
         public void TestCreateSelectionArgs_ExpectToPass()
         {
@@ -43,12 +43,16 @@ namespace AutomateTests.test.Controller
             ObserverArgs viewSelectionNotification = new ViewSelectionNotification(
                 new Coordinate(1, 1, 0), new Coordinate(20, 10, 0), "ObjectID");
 
-            IHandler<ObserverArgs> viewSelectionHandler = new ViewSelectionHandler();
 
             var mockGameView = new MockGameView();
             var gameModel = GetMockGameModel();
             var controller = new GameController((IGameView) mockGameView);
-            //controller.RegisterHandler(viewSelectionHandler);
+            controller.FocusGameWorld(gameModel);
+
+           // mockGameView.PerformOnStart();
+
+            mockGameView.PerformCompleteUpdate();
+
             IList<ThreadInfo> syncEvents = controller.Handle(viewSelectionNotification);
             foreach (var threadInfo in syncEvents)
             {
@@ -56,16 +60,28 @@ namespace AutomateTests.test.Controller
             }
             foreach (var threadInfo in syncEvents)
             {
-                Assert.AreEqual(false, threadInfo.Thread.IsAlive);
-                threadInfo.SyncEvent.WaitOne(20);
+                  Assert.AreEqual(false, threadInfo.Thread.IsAlive);
+                threadInfo.SyncEvent.WaitOne(THREADS_TIME_OUT);
             }
 
+            mockGameView.PerformCompleteUpdate();
 
-            Assert.AreEqual(2, controller.OutputSched.ItemsCount);
+            Assert.AreEqual(402, controller.OutputSched.ItemsCount);
+          
+            for (int i = 0; i < 400; i++)
+            {
+                MasterAction action = controller.OutputSched.Pull();
+                Assert.AreEqual(ActionType.PlaceGameObject, action.Type);
+            }
             MasterAction action0 = controller.OutputSched.Pull();
             MasterAction action1 = controller.OutputSched.Pull();
             Assert.AreEqual(ActionType.SelectPlayer, action0.Type);
             Assert.AreEqual(ActionType.SelectPlayer, action1.Type);
+        }
+
+        private void saveActions(ViewHandleActionArgs args)
+        {
+            _handledActions.Add(args.Action);
         }
 
         private Guid GetMockGameModel()

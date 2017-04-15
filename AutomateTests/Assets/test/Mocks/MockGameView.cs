@@ -34,37 +34,35 @@ namespace AutomateTests.test.Mocks
         public event ViewUpdate onUpdate;
 
 
-        public void PerformUpdate()
-        {
-            if (onUpdate != null) onUpdate?.Invoke(new ViewUpdateArgs());
-        }
 
         public event ViewUpdate OnUpdateStart;
         public event ViewUpdate OnUpdate;
         public event ViewUpdate OnUpdateFinish;
         public void PerformCompleteUpdate()
         {
-            throw new NotImplementedException();
+            PerformOnUpdateStart();
+            PerformOnUpdate();
+            PerformOnUpdateFinish();
         }
 
         public void PerformOnUpdate()
         {
-            throw new NotImplementedException();
+            if (OnUpdate != null) OnUpdate.Invoke(new ViewUpdateArgs());
         }
 
         public void PerformOnUpdateStart()
         {
-            throw new NotImplementedException();
+            if (OnUpdateStart != null) OnUpdateStart.Invoke(new ViewUpdateArgs());
         }
 
         public void PerformOnUpdateFinish()
         {
-            throw new NotImplementedException();
+            if (OnUpdateFinish != null) OnUpdateFinish.Invoke(new ViewUpdateArgs());
         }
 
         public void PerformOnStart()
         {
-            throw new NotImplementedException();
+            if (OnStart != null) OnStart.Invoke(new ViewUpdateArgs());
         }
 
         public event ViewUpdate OnStart;

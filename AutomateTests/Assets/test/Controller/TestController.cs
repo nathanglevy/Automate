@@ -137,7 +137,7 @@ namespace AutomateTests.test.Controller
             // Create the NotificationArgs
 
             // Perform First Update To Mimic The World Creation
-            gameview.PerformUpdate();
+            gameview.PerformCompleteUpdate();
 
             Assert.AreEqual(102, gameController.OutputSched.ItemsCount);
             for (int i = 0; i < 102; i++)
@@ -172,7 +172,8 @@ namespace AutomateTests.test.Controller
 
             gameController.OutputSched.OnEnqueue += ActionsAddedtoSched;
             // mimic update from the view
-            gameview.PerformUpdate();
+            gameview.PerformOnUpdateStart();
+            gameview.PerformOnUpdate();
 
             // wait till action being added to sched
             _ackSync.WaitOne(1000);

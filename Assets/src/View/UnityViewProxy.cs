@@ -17,7 +17,7 @@ namespace src.View
     {
 
         // Use this for initialization
-        public GameViewBase _gameViewBase;
+        public static GameViewBase _gameViewBase;
         public Dictionary<Guid, GameObject> _movableDictionary = new Dictionary<Guid, GameObject>();
         // Game Objects
         public GameObject CellObjectReference;
