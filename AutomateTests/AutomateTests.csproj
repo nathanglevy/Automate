@@ -77,6 +77,8 @@
   <ItemGroup>
     <Compile Include="Assets\test\Controller\TestScheduler.cs" />
     <Compile Include="Assets\test\Controller\TestAcknowledgeNotification.cs" />
+    <Compile Include="Assets\test\Controller\TestModelPushToView.cs" />
+    <Compile Include="Assets\test\Controller\TestGameViewBase.cs" />
     <Compile Include="Assets\test\Model\GameWorldComponents\TestMovable.cs" />
     <Compile Include="Assets\test\Model\GameWorldInterface\TestGameWorldItem.cs" />
     <Compile Include="Assets\test\Model\GameWorldInterface\TestMovableItem.cs" />

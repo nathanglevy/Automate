@@ -30,8 +30,8 @@ namespace AutomateTests.test.Mocks
 
             MockNotificationArgs mockArgs = args as MockNotificationArgs;
 
-            var action = new MockMasterAction(ActionType.AreaSelection, "AhmadHamdan");
-            var action2 = new MockMasterAction(ActionType.Movement, "NaphLevy");
+            var action = new MockMasterAction(ActionType.AreaSelection, "AhmadHamdan") {NeedAcknowledge = false};
+            var action2 = new MockMasterAction(ActionType.Movement, "NaphLevy") {NeedAcknowledge = true};
             var actions = new List<MasterAction>();
             actions.Add(action);
             actions.Add(action2);

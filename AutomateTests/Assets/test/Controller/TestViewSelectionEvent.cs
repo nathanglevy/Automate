@@ -19,6 +19,8 @@ namespace AutomateTests.test.Controller
     [TestClass]
     public class TestViewSelectionEvent
     {
+        private int THREADS_TIME_OUT = 1000;
+
         [TestMethod]
         public void TestCreateSelectionArgs_ExpectToPass()
         {
@@ -45,12 +47,12 @@ namespace AutomateTests.test.Controller
 
             var mockGameView = new MockGameView();
             var gameModel = GetMockGameModel();
-            var controller = new GameController(mockGameView, gameModel);
+            var controller = new GameController((IGameView) mockGameView);
             //controller.RegisterHandler(viewSelectionHandler);
             IList<ThreadInfo> syncEvents = controller.Handle(viewSelectionNotification);
             foreach (var threadInfo in syncEvents)
             {
-                threadInfo.SyncEvent.WaitOne();
+                threadInfo.SyncEvent.WaitOne(THREADS_TIME_OUT);
             }
             foreach (var threadInfo in syncEvents)
             {
@@ -106,7 +108,7 @@ namespace AutomateTests.test.Controller
         [TestMethod]
         public void TestCannotAcknowledgeIncorrectAction_ExpectFalse()
         {
-            MasterAction selectMovableAction = new MoveAction(new Coordinate(0, 0, 0), "MyPlayer");
+            MasterAction selectMovableAction = new MoveAction(new Coordinate(0, 0, 0), new Coordinate(1, 1, 0), "MyPlayer");
             IHandler<ObserverArgs> rightClickNotificationHandler = new ViewSelectionHandler();
             Assert.IsFalse(rightClickNotificationHandler.CanAcknowledge(selectMovableAction));
         }

@@ -9,11 +9,14 @@ namespace Automate.Controller.Abstracts
 
         public TimeSpan Duration { get; set; }
 
+        public bool NeedAcknowledge { get; set; }
+
         public MasterAction(ActionType type, string targetId)
         {
             Type = type;
             _targetId = targetId;
             Duration = new TimeSpan();
+            NeedAcknowledge = false;
         }
 
         public MasterAction(ActionType type)

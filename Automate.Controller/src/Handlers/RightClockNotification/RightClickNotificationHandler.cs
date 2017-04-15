@@ -35,7 +35,11 @@ namespace Automate.Controller.Handlers.RightClockNotification
             {
                 movable.IssueMoveCommand(rightNotification.Coordinate);
                 movable.StartTransitionToNext();
-                masterActions.Add(new MoveAction(movable.NextCoordinate, movable.Guid.ToString()) {Duration = new TimeSpan(0,0,0,0,(int) (movable.NextMovementDuration*1000))});
+                masterActions.Add(new MoveAction(movable.NextCoordinate, movable.CurrentCoordiate, movable.Guid.ToString())
+                {
+                    Duration = new TimeSpan(0,0,0,0,(int) (movable.NextMovementDuration*1000)),
+                    NeedAcknowledge = true
+                });
                 //movable.MoveToNext();
             }
                 
@@ -57,7 +61,7 @@ namespace Automate.Controller.Handlers.RightClockNotification
 
             if (movableItem.IsInMotion())
             {
-                var moveToNext = new MoveAction(movableItem.NextCoordinate, movableItem.Guid.ToString());
+                var moveToNext = new MoveAction(movableItem.NextCoordinate, movableItem.CurrentCoordiate,movableItem.Guid.ToString()) {NeedAcknowledge = true};
                 movableItem.StartTransitionToNext();
 
                 var masterActions = new List<MasterAction>();

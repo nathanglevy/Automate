@@ -45,8 +45,9 @@ namespace AutomateTests.test.Controller
 
             var mockGameView = new MockGameView();
             Guid gameModel = GetMockGameWorld();
-            var controller = new GameController(mockGameView, gameModel);
-           // controller.RegisterHandler(rightClickNotificationHandler);
+            var controller = new GameController((IGameView) mockGameView);
+            controller.FocusGameWorld(gameModel);
+            // controller.RegisterHandler(rightClickNotificationHandler);
             IList<ThreadInfo> threadInfos = controller.Handle(viewSelectionNotification);
             foreach (var threadInfo in threadInfos)
             {
@@ -91,7 +92,7 @@ namespace AutomateTests.test.Controller
         [TestMethod]
         public void TestCanAcknowledgeWithCorrectAction_ExpectTrue()
         {
-            MasterAction moveAction = new MoveAction(new Coordinate(1, 0, 0), "MyPlayer");
+            MasterAction moveAction = new MoveAction(new Coordinate(1, 0, 0), new Coordinate(1, 1, 0), "MyPlayer");
             IHandler<ObserverArgs> rightClickNotificationHandler = new RightClickNotificationHandler();
             Assert.IsTrue(rightClickNotificationHandler.CanAcknowledge(moveAction));
 
@@ -116,7 +117,8 @@ namespace AutomateTests.test.Controller
 
             var mockGameView = new MockGameView();
             var mockGameModel = GetMockGameWorld();
-            var controller = new GameController(mockGameView,mockGameModel);
+            var controller = new GameController((IGameView) mockGameView);
+            controller.FocusGameWorld(mockGameModel);
 
             IList<ThreadInfo> syncEvents = controller.Handle(viewSelectionNotification);
             foreach (var threadInfo in syncEvents)

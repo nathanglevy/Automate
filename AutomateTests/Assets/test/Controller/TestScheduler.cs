@@ -16,7 +16,9 @@ namespace AutomateTests.Assets.test.Controller
     public class TestScheduler
     {
         private AutoResetEvent _onPullSync = new AutoResetEvent(false);
+        private AutoResetEvent _onEnqSync = new AutoResetEvent(false);
         private bool _listnerActivated = false;
+        private bool _OnEnqueueFired = false;
 
         [TestMethod]
         public void TestCreateNew_ShouldPass()
@@ -176,13 +178,35 @@ namespace AutomateTests.Assets.test.Controller
             Assert.IsTrue(_listnerActivated);
         }
 
+        [TestMethod]
+        public void TestOnAddEvent_ExpectItTOHappen()
+        {
+            IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
+            scheduler.OnEnqueue += ConfirmEnqueue;
+
+            scheduler.Enqueue(new MasterAction(ActionType.AreaSelection));
+
+            // mimic OnPullFinish Event -- scheduler will copy items at staging area to the final Q
+            scheduler.OnPullStart(new ViewUpdateArgs());
+            scheduler.OnPullFinish(new ViewUpdateArgs());
+
+            _onEnqSync.WaitOne(100);
+            Assert.IsTrue(_OnEnqueueFired);
+        }
+
+        private void ConfirmEnqueue(MasterAction item)
+        {
+            _OnEnqueueFired = true;
+            _onEnqSync.Set();
+        }
+
         private void PullListner(MasterAction item)
         {
             Assert.AreEqual("MyId2", item.TargetId);
             _listnerActivated = true;
             _onPullSync.Set();
-            
-
         }
+
+        
     }
 }

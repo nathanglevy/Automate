@@ -5,6 +5,7 @@
         AreaSelection,
 
         Movement,
-        SelectPlayer
+        SelectPlayer,
+        PlaceGameObject
     }
 }

@@ -24,7 +24,7 @@ namespace AutomateTests.test.Controller
         [TestMethod]
         public void TestGetExecutedActionOnView_ExpectNotNull()
         {
-            MoveAction executedAction = new MoveAction(new Coordinate(1,0,0),"MyId");
+            MoveAction executedAction = new MoveAction(new Coordinate(1,0,0), new Coordinate(1, 1, 0),"MyId");
             AcknowledgeNotification args = new AcknowledgeNotification(executedAction);
             Assert.IsNotNull(args.ExecutedAction);
         }

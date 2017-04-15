@@ -6,7 +6,7 @@ using Automate.Controller.Abstracts;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 
-namespace AutomateTests.Mocks
+namespace AutomateTests.test.Mocks
 {
     public class MockGameView : IGameView
     {
@@ -37,6 +37,62 @@ namespace AutomateTests.Mocks
         public void PerformUpdate()
         {
             if (onUpdate != null) onUpdate?.Invoke(new ViewUpdateArgs());
+        }
+
+        public event ViewUpdate OnUpdateStart;
+        public event ViewUpdate OnUpdate;
+        public event ViewUpdate OnUpdateFinish;
+        public void PerformCompleteUpdate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PerformOnUpdate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PerformOnUpdateStart()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PerformOnUpdateFinish()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PerformOnStart()
+        {
+            throw new NotImplementedException();
+        }
+
+        public event ViewUpdate OnStart;
+        public IList<MasterAction> PullFromController()
+        {
+            var items = new List<MasterAction>();
+            while (Controller.OutputSched.HasItems)
+            {
+                items.Add(Controller.OutputSched.Pull());
+            }
+            return items;
+        }
+
+        public IGameController Controller { get; set; }
+        public void HandleAction(MasterAction action)
+        {
+            throw new NotImplementedException();
+        }
+
+        public event ViewHandleAction OnActionReady;
+        public void PerformOnActionReady(ViewHandleActionArgs viewHandleArgs)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerable<MasterAction> IGameView.PullFromController()
+        {
+            throw new NotImplementedException();
         }
     }
 

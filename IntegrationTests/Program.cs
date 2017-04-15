@@ -33,7 +33,7 @@ namespace IntegrationTests
             gameWorld.CreateMovable(new Coordinate(5, 2, 0), MovableType.NormalHuman);
 
             IGameView view = new MockGameView();
-            _gameController = new GameController(view, gameWorld.Guid);
+            _gameController = new GameController(view);
 
             // Select all Game World
             var selection = new ViewSelectionNotification(gameWorld.GetWorldBoundary().topLeft, gameWorld.GetWorldBoundary().bottomRight, "ID");
@@ -111,7 +111,7 @@ namespace IntegrationTests
 
         private static void MimicViewupdate(object state)
         {
-            _gameController.View.PerformUpdate();
+            _gameController.View.PerformOnUpdate();
         }
 
     }
