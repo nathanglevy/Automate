@@ -90,7 +90,7 @@ public class ControllerMock : MonoBehaviour
     }
 
     void AddMovableToMap(MovableItem movableItem) {
-        GameObject newGameObject = Object.Instantiate(MovableObjectReference, GetWorldVectorFromMapCoodinates(movableItem.CurrentCoordiate) + Vector3.back * 2, Quaternion.identity);
+        GameObject newGameObject = Object.Instantiate(MovableObjectReference,   GetWorldVectorFromMapCoodinates(movableItem.CurrentCoordiate) + Vector3.back * 2, Quaternion.identity);
         _movableDictionary.Add(movableItem.Guid, newGameObject);
     }
 

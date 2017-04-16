@@ -31,19 +31,19 @@ public class MovableBehaviour : MonoBehaviour
                 startPosition = targetPosition;
             }
         }
-	    if (Input.GetKeyDown(KeyCode.E))
-	    {
-	        journeyFract = 0;
-	        isMoving = true;
-	    }
-        if (Input.GetMouseButton(2)) {
-            journeyFract = 0;
-            isMoving = true;
-            Vector3 currentMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            targetPosition = getCellPositionFromVector(currentMousePosition,new Vector3(0.32F,0.32F,0));
-            String animationName = DecideAnimation();
-            GetComponent<Animator>().Play(animationName);
-        }
+//	    if (Input.GetKeyDown(KeyCode.E))
+//	    {
+//	        journeyFract = 0;
+//	        isMoving = true;
+//	    }
+//        if (Input.GetMouseButton(2)) {
+//            journeyFract = 0;
+//            isMoving = true;
+//            Vector3 currentMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+//            targetPosition = getCellPositionFromVector(currentMousePosition,new Vector3(0.32F,0.32F,0));
+//            String animationName = DecideAnimation();
+//            GetComponent<Animator>().Play(animationName);
+//        }
     }
 
     public String DecideAnimation()

@@ -10,6 +10,7 @@ using Automate.Controller.Modules;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
+using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -19,7 +20,7 @@ namespace src.View
     {
 
         // Use this for initialization
-        private static GameViewBase _gameViewBase;
+        private GameViewBase _gameViewBase;
         public Dictionary<Guid, GameObject> _movableDictionary = new Dictionary<Guid, GameObject>();
         // Game Objects
         public GameObject CellObjectReference;
@@ -50,7 +51,7 @@ namespace src.View
             }
             catch (Exception e)
             {
-//            EditorUtility.DisplayDialog("Caught An Exception", e.Message + "\n" + e.StackTrace, "OK, Got it");
+//              EditorUtility.DisplayDialog("Caught An Exception", e.Message + "\n" + e.StackTrace, "OK, Got it");
                 Debug.LogError(e.ToString());
             
             }
@@ -80,14 +81,14 @@ namespace src.View
 
         private void MoveObject(MoveAction moveAction)
         {
+            Debug.Log(String.Format("MOVE OBJECT FROM: {0} to {1}",moveAction.CurrentCoordiate,moveAction.To));
             Vector3 movableStartVector = GetWorldVectorFromMapCoodinates(moveAction.CurrentCoordiate);
             Vector3 movableTargetVector = GetWorldVectorFromMapCoodinates(moveAction.To);
             GameObject movableGameObject = _movableDictionary[new Guid(moveAction.TargetId)];
 
             movableGameObject.GetComponent<MovableBehaviour>().startPosition = movableStartVector;
             movableGameObject.GetComponent<MovableBehaviour>().targetPosition = movableTargetVector;
-            movableGameObject.GetComponent<MovableBehaviour>().animationSpeed = (float) moveAction.Duration.TotalMilliseconds;
-//            movableGameObject.GetComponent<MovableBehaviour>().animationSpeed = (float) 10;
+            movableGameObject.GetComponent<MovableBehaviour>().animationSpeed = (float) moveAction.Duration.TotalSeconds;
             movableGameObject.GetComponent<MovableBehaviour>().isMoving = true;
             movableGameObject.GetComponent<MovableBehaviour>().journeyFract = 0;
             string animationName = movableGameObject.GetComponent<MovableBehaviour>().DecideAnimation();
@@ -98,25 +99,27 @@ namespace src.View
         {
             if (action == null)
                 throw new ArgumentException("got a null instead of PlaceAGameObjectAction");
-            GameObject gameObject = null;
 
             switch (action.ItemType)
             {
                 case ItemType.Movable:
-                    gameObject = MovableObjectReference;
-                    _movableDictionary.Add(action.Id, MovableObjectReference);
+                    GameObject newGameObject = Object.Instantiate(MovableObjectReference,
+                GetWorldVectorFromMapCoodinates(action.Coordinate)  + Vector3.back * 2, Quaternion.identity);
+                    _movableDictionary.Add(action.Id,newGameObject);
                     break;
                 case ItemType.Structure:
-                    gameObject = StructureObjectReference;
+                    Object.Instantiate(StructureObjectReference,
+                GetWorldVectorFromMapCoodinates(action.Coordinate) + Vector3.back , Quaternion.identity);
                     break;
                 case ItemType.Cell:
-                    gameObject = CellObjectReference;
+                     Object.Instantiate(CellObjectReference,
+                GetWorldVectorFromMapCoodinates(action.Coordinate) , Quaternion.identity);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            GameObject newGameObject = Object.Instantiate(gameObject,
-                GetWorldVectorFromMapCoodinates(action.Coordinate), Quaternion.identity);
+            
+
 
 
         }
@@ -137,6 +140,8 @@ namespace src.View
             Coordinate mapCoordinate = GetMapCoordinateFromWorldVector(worldPosition);
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
+                Debug.Log(worldPosition);
+                Debug.Log(mapCoordinate.ToString());
                 var placeAMovableRequest = new PlaceAMovableRequest(mapCoordinate, MovableType.NormalHuman);
                 _gameViewBase.Controller.Handle(placeAMovableRequest);
             }
@@ -147,7 +152,7 @@ namespace src.View
             }
             if (Input.GetMouseButtonDown(0))
             {
-                var viewSelectionNotification = new ViewSelectionNotification(new Coordinate(0,0,0), new Coordinate(10,10,0), "");
+                var viewSelectionNotification = new ViewSelectionNotification(mapCoordinate, mapCoordinate, "");
                 _gameViewBase.Controller.Handle(viewSelectionNotification);
             }
             if (Input.GetMouseButtonDown(1))

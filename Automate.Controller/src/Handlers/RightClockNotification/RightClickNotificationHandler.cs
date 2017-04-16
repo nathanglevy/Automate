@@ -5,6 +5,7 @@ using Automate.Controller.Actions;
 using Automate.Controller.Interfaces;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
+using UnityEngine;
 
 namespace Automate.Controller.Handlers.RightClockNotification
 {
@@ -21,63 +22,98 @@ namespace Automate.Controller.Handlers.RightClockNotification
                 throw new ArgumentException("Args Must Be from the Type RightClickNotfication, please make sure your use the CanHandle Method");
             }
 
-            // Get the RightClock Object
-            
-            RightClickNotification rightNotification = args as RightClickNotification;
-
-            // Get All Selcted Objects
-            var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
-            List<MovableItem> selectedMovables = gameWorldItem.GetSelectedMovableItemList();
-
-            // iterate over selectable movables and create move actions
-            var masterActions = new List<MasterAction>();
-            foreach (var movable in selectedMovables)
+            try
             {
-                movable.IssueMoveCommand(rightNotification.Coordinate);
-                movable.StartTransitionToNext();
-                masterActions.Add(new MoveAction(movable.NextCoordinate, movable.CurrentCoordiate, movable.Guid.ToString())
+                // Get the RightClock Object
+
+                RightClickNotification rightNotification = args as RightClickNotification;
+
+                // Get All Selcted Objects
+                var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
+                List<MovableItem> selectedMovables = gameWorldItem.GetSelectedMovableItemList();
+
+                // iterate over selectable movables and create move actions
+                var masterActions = new List<MasterAction>();
+                foreach (var movable in selectedMovables)
                 {
-                    Duration = new TimeSpan(0,0,0,0,(int) (movable.NextMovementDuration*1000)),
-                    NeedAcknowledge = true
-                });
-                //movable.MoveToNext();
+                    Debug.Log(String.Format("Build New Path From to {0}", rightNotification.Coordinate));
+
+                    var isInMotion = movable.IsInMotion();
+                    movable.IssueMoveCommand(rightNotification.Coordinate);
+
+                    if (!isInMotion)
+                    {
+                        movable.StartTransitionToNext();
+                        masterActions.Add(new MoveAction(movable.NextCoordinate, movable.CurrentCoordiate,
+                            movable.Guid.ToString())
+                        {
+                            Duration = new TimeSpan(0, 0, 0, 0, (int) (movable.NextMovementDuration * 1000)),
+                            NeedAcknowledge = true
+                        });
+                        Debug.Log(String.Format("New Path: Go From {0} to {1}", movable.CurrentCoordiate,
+                            movable.NextCoordinate));
+                    }
+                }
+
+                return new HandlerResult(masterActions);
+
             }
-                
-            return new HandlerResult(masterActions);
+            catch (Exception e)
+            {
+                Console.Out.Write("Cannot Move Object- "  + e.Message);
+                throw e;
+            }
         }
 
         public override IAcknowledgeResult<MasterAction> Acknowledge(MasterAction action, IHandlerUtils utils)
         {
-         if (!CanAcknowledge(action))
+            if (!CanAcknowledge(action))
                 throw new ArgumentException("Current Handler Can TimedOut only MoveAction");
-
-         // get the move Action
-            var moveAction = action as MoveAction;
-
-            // get the movableItem from model
-            var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
-            var movableItem = gameWorldItem.GetMovableItem(new Guid(moveAction.TargetId));
-            movableItem.MoveToNext();
-
-            if (movableItem.IsInMotion())
+            try
             {
-                var moveToNext = new MoveAction(movableItem.NextCoordinate, movableItem.CurrentCoordiate,movableItem.Guid.ToString()) {NeedAcknowledge = true};
-                movableItem.StartTransitionToNext();
+                // get the move Action
+                var moveAction = action as MoveAction;
 
-                var masterActions = new List<MasterAction>();
-                masterActions.Add(moveToNext);
-                var acknowledgeResult = new AcknowledgeResult(masterActions);
+                // get the movableItem from model
+                var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
+                var movableItem = gameWorldItem.GetMovableItem(new Guid(moveAction.TargetId));
+                var isInMotion = movableItem.IsInMotion();
+                movableItem.MoveToNext();
 
-                return acknowledgeResult;
+                if (isInMotion)
+                {
+
+                    var moveToNext = new MoveAction(movableItem.NextCoordinate, movableItem.CurrentCoordiate,
+                        movableItem.Guid.ToString())
+                    {
+                        NeedAcknowledge = true,
+                        Duration = new TimeSpan(0, 0, 0, 0, (int) (movableItem.NextMovementDuration * 1000)),
+
+                    };
+                    Debug.Log(String.Format("Ack From {0} to {1}", movableItem.CurrentCoordiate,
+                        movableItem.NextCoordinate));
+                    movableItem.StartTransitionToNext();
+
+
+                    var masterActions = new List<MasterAction>();
+                    masterActions.Add(moveToNext);
+                    var acknowledgeResult = new AcknowledgeResult(masterActions);
+
+                    return acknowledgeResult;
+                }
+                else
+                {
+
+                    Console.Out.WriteLine(String.Format("Player {0} reached the Target - Good Job :-)",
+                        movableItem.Guid.ToString()));
+                    return new AcknowledgeResult(new List<MasterAction>());
+                }
             }
-            else
+            catch (Exception e)
             {
-
-                Console.Out.WriteLine(String.Format("Player {0} reached the Target - Good Job :-)",
-                    movableItem.Guid.ToString()));
-                return new AcknowledgeResult(new List<MasterAction>());
+                Console.Out.Write("Cannot ACK to Move Object- " + e.Message);
+                throw e;
             }
-
         }
 
         public override bool CanAcknowledge(MasterAction action)
