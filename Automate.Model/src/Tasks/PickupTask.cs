@@ -25,5 +25,23 @@ namespace Automate.Model.Tasks
             TargetAmount -= amount;
             return pickupTask;
         }
+
+        public void MergeWithPickupTask(PickupTask pickupTaskToMerge)
+        {
+            if (!pickupTaskToMerge.TargetCoordinate.Equals(TargetCoordinate))
+                throw new ArgumentException("Cannot merge pickup tasks not in same coordinate!");
+            TargetAmount += pickupTaskToMerge.TargetAmount;
+        }
+
+        public static PickupTask MergePickupTasks(PickupTask task1, PickupTask task2) {
+            if (!task1.TargetCoordinate.Equals(task2.TargetCoordinate))
+                throw new ArgumentException("Cannot merge pickup tasks not in same coordinate!");
+            return new PickupTask(task1.TargetCoordinate, task1.TargetAmount + task2.TargetAmount);
+        }
+
+        public override bool IsPositionChangeRequired(Coordinate currentPosition)
+        {
+            return (!TargetCoordinate.Equals(currentPosition));
+        }
     }
 }

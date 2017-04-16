@@ -13,6 +13,8 @@ namespace Automate.Model.GameWorldComponents {
         private Coordinate _currentCoordinate;
         private bool _inMotion;
         private bool _isTransitioning;
+        private bool _isPendingNewPath;
+        private MovementPath _pendingNewPath;
         private MovementPath _movementPath;
         private Guid _id = Guid.NewGuid();
         public MovableType MovableType { get; private set; }
@@ -85,6 +87,10 @@ namespace Automate.Model.GameWorldComponents {
             Movement nextMovement = GetNextMovement();
             _currentCoordinate = _currentCoordinate + nextMovement.GetMoveDirection();
             SetMotionStatus();
+            if (_isPendingNewPath)
+            {
+                SetPendingPathAsActivePath();
+            }
 
             return nextMovement;
         }
@@ -96,10 +102,20 @@ namespace Automate.Model.GameWorldComponents {
 
         public void SetPath(MovementPath movementPath)
         {
-            _isTransitioning = false;
             if (movementPath == null)
                 throw new ArgumentNullException();
-            _movementPath = new MovementPath(movementPath);
+            _pendingNewPath = new MovementPath(movementPath);
+            _isPendingNewPath = true;
+            if (!_isTransitioning)
+            {
+                SetPendingPathAsActivePath();
+            }
+        }
+
+        private void SetPendingPathAsActivePath()
+        {
+            _movementPath = _pendingNewPath;
+            _isPendingNewPath = false;
             SetMotionStatus();
         }
 

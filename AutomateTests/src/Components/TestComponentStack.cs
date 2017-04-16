@@ -183,6 +183,7 @@ namespace Automate.Model.Components.Tests {
         }
 
         [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
         public void TestDeliverAmount_IdNotDefined_ExpectArgumentException() {
             ComponentStack componentStack = new ComponentStack(new IronOreComponent(), 0);
             Guid targetGuid = Guid.NewGuid();
@@ -191,6 +192,7 @@ namespace Automate.Model.Components.Tests {
         }
 
         [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
         public void TestDeliverAmount_NegativeAmount_ExpectArgumentException() {
             ComponentStack componentStack = new ComponentStack(new IronOreComponent(), 0);
             Guid targetGuid = Guid.NewGuid();
@@ -198,6 +200,7 @@ namespace Automate.Model.Components.Tests {
         }
 
         [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
         public void TestDeliverAmount_DeliverWithNoIncomingAssigned_ExpectArgumentException() {
             ComponentStack componentStack = new ComponentStack(new IronOreComponent(), 0);
             Guid targetGuid = Guid.NewGuid();

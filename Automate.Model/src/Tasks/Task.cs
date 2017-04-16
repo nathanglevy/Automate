@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using Automate.Model.MapModelComponents;
 
 namespace Automate.Model.Tasks
 {
@@ -23,5 +24,7 @@ namespace Automate.Model.Tasks
                 _assignedToGuid = value;
             }
         }
+
+        public abstract bool IsPositionChangeRequired(Coordinate currentPosition);
     }
 }

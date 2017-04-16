@@ -111,7 +111,28 @@ namespace AutomateTests.Model.GameWorldComponents {
             movable.MoveToNext();
             Assert.AreEqual(movable.GetEffectiveCoordinate(), new Coordinate(1, 1, 0));
             Assert.AreEqual(movable.GetCurrentCoordinate(), new Coordinate(1, 1, 0));
+        }
 
+        [TestMethod()]
+        public void TestSetPathWhileTransitioning_ExpectToKeepPathWhileTransitioning() {
+            Movable movable = new Movable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
+            MovementPath movementPath = new MovementPath(new Coordinate(0, 0, 0));
+            movementPath.AddMovement(new Movement(1, 1, 0, 1));
+            movementPath.AddMovement(new Movement(1, 0, 0, 1));
+            MovementPath movementPath2 = new MovementPath(new Coordinate(1, 1, 0));
+            movementPath2.AddMovement(new Movement(0, 1, 0, 1));
+            
+            movable.SetPath(movementPath);
+            movable.StartTransitionToNext();
+            movable.SetPath(movementPath2);
+            Assert.AreEqual(movable.GetNextCoordinate(), new Coordinate(1, 1, 0));
+            movable.StartTransitionToNext();
+            movable.MoveToNext();
+            Assert.AreEqual(movable.GetNextCoordinate(), new Coordinate(1, 2, 0));
+            movable.StartTransitionToNext();
+            movable.MoveToNext();
+            //check when there are no more moves
+            Assert.AreEqual(movable.GetNextCoordinate(), new Coordinate(1, 2, 0));
         }
     }
 }
