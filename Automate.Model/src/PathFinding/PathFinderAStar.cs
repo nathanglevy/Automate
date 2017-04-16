@@ -30,6 +30,10 @@ namespace Automate.Model.PathFinding
             if (source == target)
                 return resultPath;
 
+            // target of path is inaccessible -- throw an exception
+            if (!mapInfo.GetCell(target).IsPassable())
+                throw new NoPathFoundException();
+
             Dictionary<Coordinate,Movement> movementList = new Dictionary<Coordinate, Movement>();
             SortedList<double, Coordinate> toVisitList = new SortedList<double, Coordinate>(new DuplicateKeyComparer<double>());
             HashSet<Coordinate> visitedSet = new HashSet<Coordinate>();
@@ -79,13 +83,13 @@ namespace Automate.Model.PathFinding
                 throw new NoPathFoundException();
 
             //debug
-            Console.Out.WriteLine("Now working backwards, starting at: " + resultPath.GetStartCoordinate().ToString());
+            //Console.Out.WriteLine("Now working backwards, starting at: " + resultPath.GetStartCoordinate().ToString());
             //build the return path
             while (resultPath.GetEndCoordinate() != target)
             {
-                Console.Out.WriteLine("Moving by: " + movementList[resultPath.GetEndCoordinate()].GetMoveDirection().ToString());
+                //Console.Out.WriteLine("Moving by: " + movementList[resultPath.GetEndCoordinate()].GetMoveDirection().ToString());
                 resultPath.AddMovement(movementList[resultPath.GetEndCoordinate()]);
-                Console.Out.WriteLine("End is now: " + resultPath.GetEndCoordinate().ToString());
+                //Console.Out.WriteLine("End is now: " + resultPath.GetEndCoordinate().ToString());
 
             }
 

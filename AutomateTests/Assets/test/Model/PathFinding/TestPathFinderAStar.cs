@@ -73,6 +73,24 @@ namespace AutomateTests.Model.PathFinding {
         }
 
         [TestMethod()]
+        [ExpectedException(typeof(NoPathFoundException))]
+        public void TestFindShortestPath_TargetIsNotAccessible_ExpectNoPathFoundException() {
+            MapInfo mapInfo = new MapInfo(10, 10, 2);
+            mapInfo.FillMapWithCells(new CellInfo(true, 1));
+            mapInfo.SetCell(new Coordinate(0,0,0), new CellInfo(false, 1) );
+            MovementPath result = PathFinderAStar.FindShortestPath(mapInfo, new Coordinate(3, 3, 0), new Coordinate(0, 0, 0));
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(NoPathFoundException))]
+        public void TestFindShortestPath_SourceIsNotAccessible_ExpectNoPathFoundException() {
+            MapInfo mapInfo = new MapInfo(10, 10, 2);
+            mapInfo.FillMapWithCells(new CellInfo(true, 1));
+            mapInfo.SetCell(new Coordinate(0, 0, 0), new CellInfo(false, 1));
+            MovementPath result = PathFinderAStar.FindShortestPath(mapInfo, new Coordinate(0, 0, 0), new Coordinate(3, 3, 0));
+        }
+
+        [TestMethod()]
         public void TestFindShortestPath_WithBlockedOffCells_ExpectCorrectPath() {
             MapInfo mapInfo = new MapInfo(4, 4, 1);
             mapInfo.FillMapWithCells(new CellInfo(false, 1));

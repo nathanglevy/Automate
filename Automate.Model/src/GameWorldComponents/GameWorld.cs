@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Automate.Model.Components;
 using Automate.Model.GameWorldInterface;
@@ -123,6 +124,7 @@ namespace Automate.Model.GameWorldComponents
                 if (!structureType.Equals(StructureType.NonBlocking))
                     _map.GetCell(coordinteInBoundary).SetPassability(false);
             }
+            RecalculateMovablePaths();
             return structureItem;
         }
 
@@ -141,7 +143,20 @@ namespace Automate.Model.GameWorldComponents
             }
             catch (NoPathFoundException)
             {
-                return false;
+                try
+                {
+                    if (currentMovable.IsInMotion())
+                    {
+                        MovementPath movementPath = PathFinderAStar.FindShortestPath(_map,
+                            currentMovable.GetEffectiveCoordinate(), currentMovable.GetEffectiveCoordinate());
+                        currentMovable.SetPath(movementPath);
+                    }
+                    return false;
+                }
+                catch (NoPathFoundException)
+                {
+                    return false;
+                }
             }
         }
 
@@ -258,6 +273,15 @@ namespace Automate.Model.GameWorldComponents
             if (!_componentStacks.ContainsKey(location))
                 throw new ArgumentException("Coordinate: " + location + " does not have an item stack");
             return _componentStacks[location];
+        }
+
+        public void RecalculateMovablePaths()
+        {
+            IEnumerable<Movable> movablesInMotion = _movables.Where(pair => pair.Value.IsInMotion()).Select(pair => pair.Value);
+            foreach (Movable movable in movablesInMotion)
+            {
+                IssueMoveCommand(movable.GetId(), movable.GetFinalDestination());
+            }
         }
     }
 }

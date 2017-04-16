@@ -149,5 +149,12 @@ namespace AutomateTests.Model.GameWorldComponents {
             Assert.AreEqual(gameWorld.GetItemsToBePlaced().Count, 27);
         }
 
+        [TestMethod()]
+        public void TestRecalculateMovablePaths_ExpectSucess() {
+            GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
+            gameWorld.RecalculateMovablePaths();
+        }
+
+        //TODO: Need a testcase to check that recalculation is indeed happening properly
     }
 }
