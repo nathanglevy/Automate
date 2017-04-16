@@ -20,24 +20,26 @@ namespace src.View
     {
 
         // Use this for initialization
-        private GameViewBase _gameViewBase;
+        public GameViewBase GameViewBase;
+        public bool IsGameBaseNull = false;
         public Dictionary<Guid, GameObject> _movableDictionary = new Dictionary<Guid, GameObject>();
         // Game Objects
         public GameObject CellObjectReference;
         public GameObject MovableObjectReference;
         public GameObject StructureObjectReference;
 
+
         public void Start()
         {
 
-            _gameViewBase = new GameViewBase();
+            GameViewBase = new GameViewBase();
+            GameViewBase.OnActionReady += HandleAction;
+            var gameController = new GameController(GameViewBase);
 
-            _gameViewBase.OnActionReady += HandleAction;
-
-            var gameController = new GameController(_gameViewBase);
+            IsGameBaseNull = GameViewBase == null;
 
             // notify that Start being Done Now
-            _gameViewBase.PerformOnStart();
+            GameViewBase.PerformOnStart();
 
         }
 
@@ -45,9 +47,19 @@ namespace src.View
         {
             try
             {
+                IsGameBaseNull = GameViewBase == null;
+
                 CheckForKeypressesAndAddItems();
 
-                _gameViewBase.PerformCompleteUpdate();
+                if (IsGameBaseNull)
+                {
+                    Debug.LogError("GAME BASE IS NULL");
+                }
+                else
+                {
+                    GameViewBase.PerformCompleteUpdate();
+                }
+                
             }
             catch (Exception e)
             {
@@ -138,27 +150,35 @@ namespace src.View
         {
             Vector3 worldPosition = GetMouseEffectiveWorldLocation();
             Coordinate mapCoordinate = GetMapCoordinateFromWorldVector(worldPosition);
+            
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                var placeAMovableRequest = new PlaceAStrcutureRequest(mapCoordinate,new Coordinate(1,1,1), StructureType.Basic);
+                GameViewBase.Controller.Handle(placeAMovableRequest);
+            }
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
                 Debug.Log(worldPosition);
                 Debug.Log(mapCoordinate.ToString());
                 var placeAMovableRequest = new PlaceAMovableRequest(mapCoordinate, MovableType.NormalHuman);
-                _gameViewBase.Controller.Handle(placeAMovableRequest);
+                GameViewBase.Controller.Handle(placeAMovableRequest);
             }
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                var placeAMovableRequest = new PlaceAStrcutureRequest(mapCoordinate,new Coordinate(1,1,1), StructureType.Basic);
-                _gameViewBase.Controller.Handle(placeAMovableRequest);
+                Debug.Log(mapCoordinate.ToString());
+                var gameWorldItemById = GameUniverse.GetGameWorldItemById(GameViewBase.Controller.Model);
+                gameWorldItemById.ClearSelectedItems();
             }
+
             if (Input.GetMouseButtonDown(0))
             {
                 var viewSelectionNotification = new ViewSelectionNotification(mapCoordinate, mapCoordinate, "");
-                _gameViewBase.Controller.Handle(viewSelectionNotification);
+                GameViewBase.Controller.Handle(viewSelectionNotification);
             }
             if (Input.GetMouseButtonDown(1))
             {
                 var rightSelectNotification = new RightClickNotification(mapCoordinate);
-                _gameViewBase.Controller.Handle(rightSelectNotification);
+                GameViewBase.Controller.Handle(rightSelectNotification);
             }
             if (Input.GetMouseButtonDown(2))
             {
