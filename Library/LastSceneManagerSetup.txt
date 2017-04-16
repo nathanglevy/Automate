@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/PROJECT.unity
+- path: C:/Users/Donman/AppData/Local/Temp/Temp1_Automate-master.zip/Automate-master/Assets/PROJECT.unity
   isLoaded: 1
   isActive: 1

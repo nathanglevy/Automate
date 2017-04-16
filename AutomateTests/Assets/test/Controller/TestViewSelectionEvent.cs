@@ -7,6 +7,8 @@ using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Handlers.SelectionNotification;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
+using Automate.Model.GameWorldComponents;
+using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using AutomateTests.Mocks;
 using AutomateTests.test.Mocks;
@@ -17,6 +19,8 @@ namespace AutomateTests.test.Controller
     [TestClass]
     public class TestViewSelectionEvent
     {
+        private int THREADS_TIME_OUT = 1000;
+        private List<MasterAction> _handledActions = new List<MasterAction>();
         [TestMethod]
         public void TestCreateSelectionArgs_ExpectToPass()
         {
@@ -39,29 +43,57 @@ namespace AutomateTests.test.Controller
             ObserverArgs viewSelectionNotification = new ViewSelectionNotification(
                 new Coordinate(1, 1, 0), new Coordinate(20, 10, 0), "ObjectID");
 
-            IHandler<ObserverArgs> viewSelectionHandler = new ViewSelectionHandler();
 
             var mockGameView = new MockGameView();
-            var controller = new GameController(mockGameView, new MockGameModel());
-            //controller.RegisterHandler(viewSelectionHandler);
+            var gameModel = GetMockGameModel();
+            var controller = new GameController((IGameView) mockGameView);
+            controller.FocusGameWorld(gameModel);
+
+           // mockGameView.PerformOnStart();
+
+            mockGameView.PerformCompleteUpdate();
+
             IList<ThreadInfo> syncEvents = controller.Handle(viewSelectionNotification);
             foreach (var threadInfo in syncEvents)
             {
-                threadInfo.SyncEvent.WaitOne();
+                threadInfo.SyncEvent.WaitOne(THREADS_TIME_OUT);
             }
             foreach (var threadInfo in syncEvents)
             {
-                Assert.AreEqual(false, threadInfo.Thread.IsAlive);
-                threadInfo.SyncEvent.WaitOne(20);
+                  Assert.AreEqual(false, threadInfo.Thread.IsAlive);
+                threadInfo.SyncEvent.WaitOne(THREADS_TIME_OUT);
             }
 
+            mockGameView.PerformCompleteUpdate();
 
-            Assert.AreEqual(2, controller.OutputSched.ItemsCount);
+            Assert.AreEqual(402, controller.OutputSched.ItemsCount);
+          
+            for (int i = 0; i < 400; i++)
+            {
+                MasterAction action = controller.OutputSched.Pull();
+                Assert.AreEqual(ActionType.PlaceGameObject, action.Type);
+            }
             MasterAction action0 = controller.OutputSched.Pull();
             MasterAction action1 = controller.OutputSched.Pull();
             Assert.AreEqual(ActionType.SelectPlayer, action0.Type);
             Assert.AreEqual(ActionType.SelectPlayer, action1.Type);
         }
+
+        private void saveActions(ViewHandleActionArgs args)
+        {
+            _handledActions.Add(args.Action);
+        }
+
+        private Guid GetMockGameModel()
+        {
+            var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
+            var movableItem = gameWorldItem.CreateMovable(new Coordinate(3, 3, 0), MovableType.NormalHuman);
+            var movableItem2 = gameWorldItem.CreateMovable(new Coordinate(7, 3, 0), MovableType.NormalHuman);
+            gameWorldItem.SelectMovableItems(new List<MovableItem>() { movableItem, movableItem2 });
+            return gameWorldItem.Guid;
+        }
+
+
 
         [TestMethod]
         public void TestCanHandleWithCorrectArgs_ExpectTrue()
@@ -92,7 +124,7 @@ namespace AutomateTests.test.Controller
         [TestMethod]
         public void TestCannotAcknowledgeIncorrectAction_ExpectFalse()
         {
-            MasterAction selectMovableAction = new MoveAction(new Coordinate(0, 0, 0), "MyPlayer");
+            MasterAction selectMovableAction = new MoveAction(new Coordinate(0, 0, 0), new Coordinate(1, 1, 0), "MyPlayer");
             IHandler<ObserverArgs> rightClickNotificationHandler = new ViewSelectionHandler();
             Assert.IsFalse(rightClickNotificationHandler.CanAcknowledge(selectMovableAction));
         }

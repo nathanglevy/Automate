@@ -6,7 +6,7 @@ using Automate.Controller.Abstracts;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 
-namespace AutomateTests.Mocks
+namespace AutomateTests.test.Mocks
 {
     public class MockGameView : IGameView
     {
@@ -31,12 +31,66 @@ namespace AutomateTests.Mocks
             return _list;
         }
 
-        public event ViewUpdate onUpdate;
 
 
-        public void PerformUpdate()
+
+        public event ViewUpdate OnUpdateStart;
+        public event ViewUpdate OnUpdate;
+        public event ViewUpdate OnUpdateFinish;
+        public void PerformCompleteUpdate()
         {
-            if (onUpdate != null) onUpdate?.Invoke(new ViewUpdateArgs());
+            PerformOnUpdateStart();
+            PerformOnUpdate();
+            PerformOnUpdateFinish();
+        }
+
+        public void PerformOnUpdate()
+        {
+            if (OnUpdate != null) OnUpdate.Invoke(new ViewUpdateArgs());
+        }
+
+        public void PerformOnUpdateStart()
+        {
+            if (OnUpdateStart != null) OnUpdateStart.Invoke(new ViewUpdateArgs());
+        }
+
+        public void PerformOnUpdateFinish()
+        {
+            if (OnUpdateFinish != null) OnUpdateFinish.Invoke(new ViewUpdateArgs());
+        }
+
+        public void PerformOnStart()
+        {
+            if (OnStart != null) OnStart.Invoke(new ViewUpdateArgs());
+        }
+
+        public event ViewUpdate OnStart;
+        public IList<MasterAction> PullFromController()
+        {
+            var items = new List<MasterAction>();
+            while (Controller.OutputSched.HasItems)
+            {
+                items.Add(Controller.OutputSched.Pull());
+            }
+            return items;
+        }
+
+        public IGameController Controller { get; set; }
+        public void HandleAction(MasterAction action)
+        {
+            throw new NotImplementedException();
+        }
+
+        public event ViewHandleAction OnActionReady;
+        public void PerformOnActionReady(ViewHandleActionArgs viewHandleArgs)
+        {
+            if (OnActionReady != null) OnActionReady.Invoke(viewHandleArgs);
+
+        }
+
+        IEnumerable<MasterAction> IGameView.PullFromController()
+        {
+            throw new NotImplementedException();
         }
     }
 

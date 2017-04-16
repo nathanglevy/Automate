@@ -60,6 +60,9 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\Library\UnityAssemblies\UnityEngine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
@@ -73,6 +76,10 @@
     <Compile Include="src\Handlers\HandlerUtils.cs" />
     <Compile Include="src\Handlers\IHandlerUtils.cs" />
     <Compile Include="src\Actions\MoveAction.cs" />
+    <Compile Include="src\Handlers\PlaceAnObject\PlaceAMovableRequest.cs" />
+    <Compile Include="src\Handlers\PlaceAnObject\PlaceAnObjectRequest.cs" />
+    <Compile Include="src\Handlers\PlaceAnObject\PlaceAnObjectRequestHandler.cs" />
+    <Compile Include="src\Handlers\PlaceAnObject\PlaceAStrcutureRequest.cs" />
     <Compile Include="src\Handlers\RightClockNotification\RightClickNotification.cs" />
     <Compile Include="src\Handlers\RightClockNotification\RightClickNotificationHandler.cs" />
     <Compile Include="src\Actions\SelectMovableAction.cs" />
@@ -88,12 +95,15 @@
     <Compile Include="src\Interfaces\IObserverArgs.cs" />
     <Compile Include="src\Interfaces\IScheduler.cs" />
     <Compile Include="src\Interfaces\ITimerScheduler.cs" />
+    <Compile Include="src\Modules\GameViewBase.cs" />
+    <Compile Include="src\Modules\PlaceAGameObjectAction.cs" />
     <Compile Include="src\Modules\TimerSchudulerUpdateArgs.cs" />
     <Compile Include="src\Modules\TimersSchedular.cs" />
     <Compile Include="src\Modules\GameController.cs" />
     <Compile Include="src\Modules\HandleActivation.cs" />
     <Compile Include="src\Modules\Scheduler.cs" />
     <Compile Include="src\Modules\ThreadInfo.cs" />
+    <Compile Include="src\Modules\WorkerName.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Automate.Model\Automate.Model.csproj">

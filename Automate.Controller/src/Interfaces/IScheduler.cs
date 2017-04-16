@@ -10,6 +10,7 @@ namespace Automate.Controller.Interfaces
 
         bool HasItems { get;  }
         event NotifyOnPull<T> OnPull;
+        event NotifyOnPull<T> OnEnqueue;
 
 //        event SchedItemPull OnPull
 
@@ -19,6 +20,8 @@ namespace Automate.Controller.Interfaces
         T Pull();
 
         HandlerResultListner<T> GetPushInvoker();
+        void OnPullFinish(ViewUpdateArgs args);
+        void OnPullStart(ViewUpdateArgs args);
     }
 
     public delegate void NotifyOnPull<T>(T item);

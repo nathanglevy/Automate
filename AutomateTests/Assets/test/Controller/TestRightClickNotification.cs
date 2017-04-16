@@ -7,6 +7,8 @@ using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Handlers.SelectionNotification;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
+using Automate.Model.GameWorldComponents;
+using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using AutomateTests.Mocks;
 using AutomateTests.test.Mocks;
@@ -42,8 +44,10 @@ namespace AutomateTests.test.Controller
             IHandler<ObserverArgs> rightClickNotificationHandler = new RightClickNotificationHandler();
 
             var mockGameView = new MockGameView();
-            var controller = new GameController(mockGameView, new MockGameModel());
-           // controller.RegisterHandler(rightClickNotificationHandler);
+            Guid gameModel = GetMockGameWorld();
+            var controller = new GameController((IGameView) mockGameView);
+            controller.FocusGameWorld(gameModel);
+            // controller.RegisterHandler(rightClickNotificationHandler);
             IList<ThreadInfo> threadInfos = controller.Handle(viewSelectionNotification);
             foreach (var threadInfo in threadInfos)
             {
@@ -57,6 +61,15 @@ namespace AutomateTests.test.Controller
             Assert.AreEqual(ActionType.Movement, controller.OutputSched.Pull().Type);
 
 
+        }
+
+        private Guid GetMockGameWorld()
+        {
+            var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
+            var movableItem = gameWorldItem.CreateMovable(new Coordinate(3, 3, 0), MovableType.NormalHuman);
+            var movableItem2 = gameWorldItem.CreateMovable(new Coordinate(7, 3, 0), MovableType.NormalHuman);
+            gameWorldItem.SelectMovableItems(new List<MovableItem>() { movableItem , movableItem2});
+            return gameWorldItem.Guid;
         }
 
         [TestMethod]
@@ -79,7 +92,7 @@ namespace AutomateTests.test.Controller
         [TestMethod]
         public void TestCanAcknowledgeWithCorrectAction_ExpectTrue()
         {
-            MasterAction moveAction = new MoveAction(new Coordinate(1, 0, 0), "MyPlayer");
+            MasterAction moveAction = new MoveAction(new Coordinate(1, 0, 0), new Coordinate(1, 1, 0), "MyPlayer");
             IHandler<ObserverArgs> rightClickNotificationHandler = new RightClickNotificationHandler();
             Assert.IsTrue(rightClickNotificationHandler.CanAcknowledge(moveAction));
 
@@ -98,13 +111,14 @@ namespace AutomateTests.test.Controller
         {
 
             ObserverArgs viewSelectionNotification = new RightClickNotification(
-                new Coordinate(10, 10, 1));
+                new Coordinate(10, 10, 0));
 
             IHandler<ObserverArgs> rightClickNotificationHandler = new RightClickNotificationHandler();
 
             var mockGameView = new MockGameView();
-            var mockGameModel = new MockGameModel();
-            var controller = new GameController(mockGameView,mockGameModel);
+            var mockGameModel = GetMockGameWorld();
+            var controller = new GameController((IGameView) mockGameView);
+            controller.FocusGameWorld(mockGameModel);
 
             IList<ThreadInfo> syncEvents = controller.Handle(viewSelectionNotification);
             foreach (var threadInfo in syncEvents)
@@ -119,16 +133,13 @@ namespace AutomateTests.test.Controller
             Assert.AreEqual(ActionType.Movement, action2.Type);
 
 
-
-            var player1Guid = mockGameModel.GetGuidByAlias("Player1");
-
             var acknowledgeResult = rightClickNotificationHandler.Acknowledge(action1,new HandlerUtils(mockGameModel, null, null));
             Assert.AreEqual(1,acknowledgeResult.GetItems().Count);
             var nextMoveAction = acknowledgeResult.GetItems()[0];
             Assert.IsNotNull(nextMoveAction);
             var realNextMoveAction = nextMoveAction as MoveAction;
             Assert.IsNotNull(realNextMoveAction);
-            Assert.AreEqual(new Coordinate(2,2,1),realNextMoveAction.To);
+            Assert.AreEqual(new Coordinate(5,5,0),realNextMoveAction.To);
 
         }
 
