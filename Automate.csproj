@@ -88,6 +88,9 @@
     <Reference Include="nunit.framework">
       <HintPath>Assets\Plugins\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>Assets\Plugins\log4net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Core\HeuristicSorting.cs" />
@@ -160,6 +163,7 @@
     <None Include="Assets\Graphics\UltimateIsometricToolkit\License.txt" />
     <None Include="Assets\Graphics\openpixels-master\openpixels-master\README.txt" />
     <None Include="Assets\Plugins\UnityEngine.xml" />
+    <None Include="Assets\Plugins\log4net.xml" />
     <None Include="Assets\Plugins\nunit.framework.xml" />
     <None Include="Assets\UnityTestTools\Examples\IntegrationTestsFrameworkExamples\AngryBotsTests\Shaders\BackgroundAndCharacters\AngryInclude.cginc" />
     <None Include="Assets\UnityTestTools\Examples\IntegrationTestsFrameworkExamples\AngryBotsTests\Shaders\BackgroundAndCharacters\CharacterSelfIlluminationReflective.shader" />

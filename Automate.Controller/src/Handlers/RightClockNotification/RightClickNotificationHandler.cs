@@ -47,7 +47,7 @@ namespace Automate.Controller.Handlers.RightClockNotification
                         masterActions.Add(new MoveAction(movable.NextCoordinate, movable.CurrentCoordiate,
                             movable.Guid.ToString())
                         {
-                            Duration = new TimeSpan(0, 0, 0, 0, (int) (movable.NextMovementDuration * 1000)),
+                            Duration = new TimeSpan(0, 0, 0, 0, (int) (movable.NextMovementDuration * 1000/5)),
                             NeedAcknowledge = true
                         });
                         Debug.Log(String.Format("New Path: Go From {0} to {1}", movable.CurrentCoordiate,
@@ -77,17 +77,18 @@ namespace Automate.Controller.Handlers.RightClockNotification
                 // get the movableItem from model
                 var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
                 var movableItem = gameWorldItem.GetMovableItem(new Guid(moveAction.TargetId));
-                var isInMotion = movableItem.IsInMotion();
+                var wasInMotion = movableItem.IsInMotion();
                 movableItem.MoveToNext();
 
-                if (isInMotion)
+//                if (isInMotion)
+                if (movableItem.IsInMotion())
                 {
 
                     var moveToNext = new MoveAction(movableItem.NextCoordinate, movableItem.CurrentCoordiate,
                         movableItem.Guid.ToString())
                     {
                         NeedAcknowledge = true,
-                        Duration = new TimeSpan(0, 0, 0, 0, (int) (movableItem.NextMovementDuration * 1000)),
+                        Duration = new TimeSpan(0, 0, 0, 0, (int) (movableItem.NextMovementDuration * 1000/5)),
 
                     };
                     Debug.Log(String.Format("Ack From {0} to {1}", movableItem.CurrentCoordiate,
@@ -101,10 +102,25 @@ namespace Automate.Controller.Handlers.RightClockNotification
 
                     return acknowledgeResult;
                 }
-                else
+                else if (wasInMotion)
                 {
+                    var moveToNext = new MoveAction(movableItem.CurrentCoordiate, movableItem.CurrentCoordiate,
+                          movableItem.Guid.ToString())
+                    {
+                        NeedAcknowledge = false,
+                        Duration = new TimeSpan(0, 0, 0, 0, 0),
+                    };
+                    Debug.Log(String.Format("Ack From {0} to {1}", movableItem.CurrentCoordiate,
+                        movableItem.CurrentCoordiate));
+                    var masterActions = new List<MasterAction>();
+                    masterActions.Add(moveToNext);
+                    var acknowledgeResult = new AcknowledgeResult(masterActions);
 
-                    Console.Out.WriteLine(String.Format("Player {0} reached the Target - Good Job :-)",
+                    return acknowledgeResult;
+                }
+                else { 
+
+                Console.Out.WriteLine(String.Format("Player {0} reached the Target - Good Job :-)",
                         movableItem.Guid.ToString()));
                     return new AcknowledgeResult(new List<MasterAction>());
                 }

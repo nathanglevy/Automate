@@ -13,6 +13,8 @@ using Automate.Model;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
+using log4net;
+using log4net.Config;
 
 namespace Automate.Controller.Modules
 {
@@ -22,12 +24,15 @@ namespace Automate.Controller.Modules
         private event AcknowledgeActivation AcknowledgeActivation;
         private event HandleActivation HandlerActivation;
         private readonly ITimerScheduler<Abstracts.MasterAction> _timerSched;
+        private   ILog _logger;
 
         public GameController(IGameView view)
         {
             Model = Guid.Empty;
             View = view;
-
+            _logger = LogManager.GetLogger(typeof(GameController));
+            BasicConfigurator.Configure();
+            _logger.Info("LOGGER CHECK");
             // register current Controller
             view.Controller = this;
 
