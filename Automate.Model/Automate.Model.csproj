@@ -92,12 +92,15 @@
     <Compile Include="src\PathFinding\MovementPath.cs" />
     <Compile Include="src\PathFinding\NoPathFoundException.cs" />
     <Compile Include="src\PathFinding\PathFinderAStar.cs" />
-    <Compile Include="src\Tasks\DeliverTask.cs" />
     <Compile Include="src\Tasks\NoTaskException.cs" />
     <Compile Include="src\Tasks\PickupTask.cs" />
     <Compile Include="src\Tasks\Task.cs" />
+    <Compile Include="src\Tasks\TaskAction.cs" />
+    <Compile Include="src\Tasks\TaskActionException.cs" />
+    <Compile Include="src\Tasks\TaskActionType.cs" />
     <Compile Include="src\Tasks\TaskAssignmentException.cs" />
     <Compile Include="src\Tasks\TaskDelegator.cs" />
+    <Compile Include="src\Tasks\TransportTaskAction.cs" />
     <Compile Include="src\Utility\CommonUtility.cs" />
     <Compile Include="src\Utility\DuplicateKeyComparer.cs" />
   </ItemGroup>

@@ -3,9 +3,10 @@ using Automate.Model.MapModelComponents;
 
 namespace Automate.Model.Tasks
 {
+    //REMOVE
     public class PickupTask : Task
     {
-        public PickupTask(Coordinate targetCoordinate, int targetAmount)
+        private PickupTask(Coordinate targetCoordinate, int targetAmount)
         {
             TargetCoordinate = targetCoordinate;
             TargetAmount = targetAmount;
@@ -39,7 +40,7 @@ namespace Automate.Model.Tasks
             return new PickupTask(task1.TargetCoordinate, task1.TargetAmount + task2.TargetAmount);
         }
 
-        public override bool IsPositionChangeRequired(Coordinate currentPosition)
+        public bool IsPositionChangeRequired(Coordinate currentPosition)
         {
             return (!TargetCoordinate.Equals(currentPosition));
         }

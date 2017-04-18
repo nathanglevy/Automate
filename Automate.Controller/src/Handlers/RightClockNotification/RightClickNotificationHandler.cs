@@ -31,27 +31,33 @@ namespace Automate.Controller.Handlers.RightClockNotification
                 // Get All Selcted Objects
                 var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
                 List<MovableItem> selectedMovables = gameWorldItem.GetSelectedMovableItemList();
-
+                
                 // iterate over selectable movables and create move actions
                 var masterActions = new List<MasterAction>();
                 foreach (var movable in selectedMovables)
                 {
-                    Debug.Log(String.Format("Build New Path From to {0}", rightNotification.Coordinate));
-
-                    var isInMotion = movable.IsInMotion();
-                    movable.IssueMoveCommand(rightNotification.Coordinate);
-
-                    if (!isInMotion)
+                    lock (movable.GetAccessLock())
                     {
-                        movable.StartTransitionToNext();
-                        masterActions.Add(new MoveAction(movable.NextCoordinate, movable.CurrentCoordiate,
-                            movable.Guid.ToString())
+                        Debug.Log(String.Format("Build New Path From to {0}", rightNotification.Coordinate));
+                        //var isInMotion = movable.IsInMotion();
+                        if (!movable.IsInMotion())
                         {
-                            Duration = new TimeSpan(0, 0, 0, 0, (int) (movable.NextMovementDuration * 1000)),
-                            NeedAcknowledge = true
-                        });
-                        Debug.Log(String.Format("New Path: Go From {0} to {1}", movable.CurrentCoordiate,
-                            movable.NextCoordinate));
+                            movable.IssueMoveCommand(rightNotification.Coordinate);
+
+                            movable.StartTransitionToNext();
+                            masterActions.Add(new MoveAction(movable.NextCoordinate, movable.CurrentCoordiate,
+                                movable.Guid.ToString())
+                            {
+                                Duration = new TimeSpan(0, 0, 0, 0, (int) (movable.NextMovementDuration == 0 ? 10 : movable.NextMovementDuration * 1000)),
+                                NeedAcknowledge = true
+                            });
+                            Debug.Log(String.Format("New Path: Go From {0} to {1}", movable.CurrentCoordiate,
+                                movable.NextCoordinate));
+                        }
+                        else
+                        {
+                            movable.IssueMoveCommand(rightNotification.Coordinate);
+                        }
                     }
                 }
 
@@ -77,36 +83,37 @@ namespace Automate.Controller.Handlers.RightClockNotification
                 // get the movableItem from model
                 var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
                 var movableItem = gameWorldItem.GetMovableItem(new Guid(moveAction.TargetId));
-                var isInMotion = movableItem.IsInMotion();
-                movableItem.MoveToNext();
-
-                if (isInMotion)
+                lock (movableItem.GetAccessLock())
                 {
-
-                    var moveToNext = new MoveAction(movableItem.NextCoordinate, movableItem.CurrentCoordiate,
-                        movableItem.Guid.ToString())
+                    var isInMotion = movableItem.IsInMotion();
+                    movableItem.MoveToNext();
+                    isInMotion = isInMotion || movableItem.IsInMotion();
+                    if (isInMotion)
                     {
-                        NeedAcknowledge = true,
-                        Duration = new TimeSpan(0, 0, 0, 0, (int) (movableItem.NextMovementDuration * 1000)),
 
-                    };
-                    Debug.Log(String.Format("Ack From {0} to {1}", movableItem.CurrentCoordiate,
-                        movableItem.NextCoordinate));
-                    movableItem.StartTransitionToNext();
+                        var moveToNext = new MoveAction(movableItem.NextCoordinate, movableItem.CurrentCoordiate,
+                            movableItem.Guid.ToString())
+                        {
+                            NeedAcknowledge = true,
+                            Duration = new TimeSpan(0, 0, 0, 0, movableItem.NextMovementDuration == 0 ? 10 : (int) (movableItem.NextMovementDuration * 1000)),
+                        };
+                        Debug.Log(String.Format("Ack From {0} to {1}", movableItem.CurrentCoordiate,
+                            movableItem.NextCoordinate));
+                        movableItem.StartTransitionToNext();
 
 
-                    var masterActions = new List<MasterAction>();
-                    masterActions.Add(moveToNext);
-                    var acknowledgeResult = new AcknowledgeResult(masterActions);
+                        var masterActions = new List<MasterAction>();
+                        masterActions.Add(moveToNext);
+                        var acknowledgeResult = new AcknowledgeResult(masterActions);
 
-                    return acknowledgeResult;
-                }
-                else
-                {
-
-                    Console.Out.WriteLine(String.Format("Player {0} reached the Target - Good Job :-)",
-                        movableItem.Guid.ToString()));
-                    return new AcknowledgeResult(new List<MasterAction>());
+                        return acknowledgeResult;
+                    }
+                    else
+                    {
+                        Debug.Log(String.Format("Player {0} reached the Target - Good Job :-)",
+                            movableItem.Guid.ToString()));
+                        return new AcknowledgeResult(new List<MasterAction>());
+                    }
                 }
             }
             catch (Exception e)

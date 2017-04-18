@@ -6,13 +6,15 @@ namespace Automate.Model.Tasks
 {
     public class TaskDelegator
     {
-        private List<Task> _pendingDelegationTasks = new List<Task>();
-        private Dictionary<Guid,Task> _delegatedTasks = new Dictionary<Guid, Task>();
+        private readonly List<Task> _pendingDelegationTasks = new List<Task>();
+        private readonly Dictionary<Guid,Task> _delegatedTasks = new Dictionary<Guid, Task>();
 
         public void AssignTask(Guid assignTaskTo, Task taskToAssign)
         {
             if (taskToAssign.IsAssigned)
                 throw new TaskAssignmentException("Task is already assigned, cannot assign again!");
+            if (!_pendingDelegationTasks.Contains(taskToAssign))
+                throw new TaskAssignmentException("Task is not in pending delegation task pool! Add task first and make sure it is not delegated");
             _pendingDelegationTasks.Remove(taskToAssign);
             taskToAssign.AssignedToGuid = assignTaskTo;
             _delegatedTasks[taskToAssign.Guid] = taskToAssign;
@@ -36,19 +38,45 @@ namespace Automate.Model.Tasks
             return _pendingDelegationTasks[0];
         }
 
-        public T GetNextPendingTask<T>() where T : Task
-        {
-            return _pendingDelegationTasks.First(s => s.GetType() == typeof(T)) as T;
-        }
-
         public Task GetNextDelegatedTaskForGuid(Guid delegatedGuid)
         {
+            if (!HasDelegatedTasks(delegatedGuid))
+                throw new NoTaskException("There are no delegated tasks for this GUID - cannot return next");
             return GetDelegatedTasksForGuid(delegatedGuid).First();
         }
 
-        public T GetNextDelegatedTaskForGuid<T>(Guid delegatedGuid) where T : Task {
-            return GetDelegatedTasksForGuid(delegatedGuid).First(s => s.GetType() == typeof(T)) as T;
+        private void AddPendingTask(Task newTask)
+        {
+            _pendingDelegationTasks.Add(newTask);
         }
+
+        public Task CreateNewTask()
+        {
+            Task newTask = new Task();
+            AddPendingTask(newTask);
+            return newTask;
+        }
+
+        public bool HasDelegatedTasks(Guid assignee)
+        {
+            return GetDelegatedTasksForGuid(assignee).Any();
+        }
+
+        public void RemoveCompletedTasks(Guid assignee)
+        {
+            IEnumerable<Guid> tasksToRemove = GetDelegatedTasksForGuid(assignee).Where(task => task.IsTaskComplete()).Select(task => task.Guid);
+            foreach (Guid taskToRemove in tasksToRemove)
+            {
+                _delegatedTasks.Remove(taskToRemove);
+            }
+        }
+    }
+}
+
+
+//        public T GetNextDelegatedTaskForGuid<T>(Guid delegatedGuid) where T : Task {
+//            return GetDelegatedTasksForGuid(delegatedGuid).First(s => s.GetType() == typeof(T)) as T;
+//        }
 
 //        public List<Guid> GetListWithNoAssignedTask(List<Guid> movableIdList)
 //        {
@@ -59,9 +87,8 @@ namespace Automate.Model.Tasks
 //            }
 //            return result;
 //        }
-        public void AddPendingTask(Task newTask)
-        {
-            _pendingDelegationTasks.Add(newTask);
-        }
-    }
-}
+
+//        public T GetNextPendingTask<T>() where T : Task
+//        {
+//            return _pendingDelegationTasks.First(s => s.GetType() == typeof(T)) as T;
+//        }
