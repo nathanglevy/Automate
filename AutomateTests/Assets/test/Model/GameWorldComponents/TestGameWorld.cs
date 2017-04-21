@@ -4,6 +4,7 @@ using System.Linq;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
+using Automate.Model.PathFinding;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AutomateTests.Model.GameWorldComponents {
@@ -155,6 +156,16 @@ namespace AutomateTests.Model.GameWorldComponents {
             gameWorld.RecalculateMovablePaths();
         }
 
+        [TestMethod()]
+        public void IMPLEMENT_PATH_AND_RECALC_TESTS() {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod()]
+        public void IMPLEMENT_COMPONENT_STACK_TESTS() {
+            throw new NotImplementedException();
+        }
+        //TODO: Tests for structures!!!!
         //TODO: Need a testcase to check that recalculation is indeed happening properly
     }
 }

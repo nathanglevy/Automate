@@ -23,6 +23,7 @@ namespace Automate.Model.GameWorldComponents
         private readonly HashSet<Item> _itemsToBePlaced = new HashSet<Item>();
         private MapInfo _map;
         public Guid Guid { get; private set; }
+        public TaskDelegator TaskDelegator { get; } = new TaskDelegator();
 
         internal GameWorld(Coordinate mapDimensions)
         {
@@ -103,6 +104,8 @@ namespace Automate.Model.GameWorldComponents
             foreach (Coordinate coordinateInBoundary in boundaryToCheck.GetListOfCoordinatesInBoundary())
             {
                 if (_coordinateToStructureMap.ContainsKey(coordinateInBoundary))
+                    return false;
+                if (_movables.Any(pair => pair.Value.GetEffectiveCoordinate().Equals(coordinateInBoundary)))
                     return false;
             }
             return true;
@@ -254,7 +257,7 @@ namespace Automate.Model.GameWorldComponents
             return result;
         }
 
-        public ComponentStack AddComponent(Component component, Coordinate location, int amount)
+        public ComponentStack AddComponentStack(Component component, Coordinate location, int amount)
         {
             if (_componentStacks.ContainsKey(location) && _componentStacks[location].GetType() != component.GetType())
                 throw new ArgumentException("Coordinate: " + location + " already has an item stack");
@@ -283,5 +286,7 @@ namespace Automate.Model.GameWorldComponents
                 IssueMoveCommand(movable.GetId(), movable.GetFinalDestination());
             }
         }
+
+        //public Task CreateTask
     }
 }

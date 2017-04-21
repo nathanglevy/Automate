@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
+using Automate.Model.Tasks;
 
 namespace Automate.Model.GameWorldInterface
 {
@@ -15,7 +17,7 @@ namespace Automate.Model.GameWorldInterface
     {
         private readonly GameWorld _focusedGameWorld;
         public override Coordinate Coordinate => _focusedGameWorld.GetWorldBoundary().topLeft;
-
+        public TaskDelegator TaskDelegator => _focusedGameWorld.TaskDelegator;
         internal GameWorldItem(GameWorld gameWorld) {
             _focusedGameWorld = gameWorld;
             Guid = gameWorld.Guid;
@@ -221,5 +223,17 @@ namespace Automate.Model.GameWorldInterface
             return _focusedGameWorld.GetMovableItemsInMotion();
         }
 
+
+        public ComponentStack AddComponentStack(Component component, Coordinate location, int amount) {
+            return _focusedGameWorld.AddComponentStack(component, location, amount);
+        }
+
+        public bool IsComponentStackAtCoordinate(Coordinate location) {
+            return _focusedGameWorld.IsComponentStackAtCoordinate(location);
+        }
+
+        public ComponentStack GetComponentsAtCoordinate(Coordinate location) {
+            return _focusedGameWorld.GetComponentsAtCoordinate(location);
+        }
     }
 }

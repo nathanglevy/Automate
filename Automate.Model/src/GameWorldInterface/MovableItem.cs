@@ -151,5 +151,10 @@ namespace Automate.Model.GameWorldInterface
             _gameWorld.GetMovable(Guid).StartTransitionToNext();
         }
 
+        public Object GetAccessLock()
+        {
+            return _gameWorld.GetMovable(Guid).GetMovableAccessLock();
+        }
+
     }
 }

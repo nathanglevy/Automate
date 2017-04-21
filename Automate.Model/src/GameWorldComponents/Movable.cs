@@ -11,7 +11,7 @@ namespace Automate.Model.GameWorldComponents {
     public class Movable
     {
         private Coordinate _currentCoordinate;
-        private bool _inMotion;
+        //private bool _inMotion;
         private bool _isTransitioning;
         private bool _isPendingNewPath;
         private MovementPath _pendingNewPath;
@@ -19,13 +19,14 @@ namespace Automate.Model.GameWorldComponents {
         private Guid _id = Guid.NewGuid();
         public MovableType MovableType { get; private set; }
         private double _speed;
+        private readonly Object AccessLock = new Object();
         private List<Task> _taskList = new List<Task>();
+
 
         internal Movable(Coordinate startinCoordinate, MovableType movableType)
         {
             if (startinCoordinate == null)
                 throw new ArgumentNullException();
-            _inMotion = false;
             _currentCoordinate = startinCoordinate;
             MovableType = movableType;
             Speed = 1;
@@ -42,74 +43,83 @@ namespace Automate.Model.GameWorldComponents {
 
         public bool IsInMotion()
         {
-            return _inMotion;
+            lock (AccessLock)
+                return !((_movementPath == null) || (_currentCoordinate == _movementPath.GetEndCoordinate()));
         }
 
         public bool IsTransitioning() {
-            return _isTransitioning;
+            lock (AccessLock)
+                return _isTransitioning;
         }
 
         //intermediate state where the object is between current and next cell
         public void StartTransitionToNext() {
-            if (_inMotion)
-                _isTransitioning = true;
+            lock (AccessLock)
+                if (IsInMotion())
+                    _isTransitioning = true;
         }
 
         public Movement GetNextMovement()
         {
-            if (!_inMotion)
-                return new Movement(0,0,0,0);
-            return _movementPath.GetNextMovement(_currentCoordinate);
+            lock (AccessLock)
+                return IsInMotion() ? _movementPath.GetNextMovement(_currentCoordinate) : new Movement(0, 0, 0, 0);
         }
 
         public Coordinate GetNextCoordinate()
         {
-            if (!_inMotion)
-                return _currentCoordinate;
-            return _movementPath.GetNextCoordinate(_currentCoordinate);
+            lock (AccessLock)
+                return !IsInMotion() ? _currentCoordinate : _movementPath.GetNextCoordinate(_currentCoordinate);
         }
 
         public Coordinate GetCurrentCoordinate()
         {
-            return _currentCoordinate;
+            lock (AccessLock)
+                return _currentCoordinate;
         }
 
         public Coordinate GetEffectiveCoordinate()
         {
-            return _isTransitioning ? GetNextCoordinate() : GetCurrentCoordinate();
+            lock (AccessLock)
+                return _isTransitioning ? GetNextCoordinate() : GetCurrentCoordinate();
         }
 
         public Movement MoveToNext()
         {
-            _isTransitioning = false;
-            if (!_inMotion)
-                return new Movement(0,0,0,0);
-
-            Movement nextMovement = GetNextMovement();
-            _currentCoordinate = _currentCoordinate + nextMovement.GetMoveDirection();
-            SetMotionStatus();
-            if (_isPendingNewPath)
+            lock (AccessLock)
             {
-                SetPendingPathAsActivePath();
+                _isTransitioning = false;
+                if (!IsInMotion())
+                    return new Movement(0, 0, 0, 0);
+
+                Movement nextMovement = GetNextMovement();
+                _currentCoordinate = _currentCoordinate + nextMovement.GetMoveDirection();
+                //SetMotionStatus();
+                if (_isPendingNewPath)
+                {
+                    SetPendingPathAsActivePath();
+                }
+
+                return nextMovement;
             }
-
-            return nextMovement;
         }
 
-        private void SetMotionStatus()
-        {
-            _inMotion = !((_movementPath == null) || (_currentCoordinate == _movementPath.GetEndCoordinate()));
-        }
+//        private void SetMotionStatus()
+//        {
+//            _inMotion = !((_movementPath == null) || (_currentCoordinate == _movementPath.GetEndCoordinate()));
+//        }
 
         public void SetPath(MovementPath movementPath)
         {
-            if (movementPath == null)
-                throw new ArgumentNullException();
-            _pendingNewPath = new MovementPath(movementPath);
-            _isPendingNewPath = true;
-            if (!_isTransitioning)
+            lock (AccessLock)
             {
-                SetPendingPathAsActivePath();
+                if (movementPath == null)
+                    throw new ArgumentNullException();
+                _pendingNewPath = new MovementPath(movementPath);
+                _isPendingNewPath = true;
+                if (!_isTransitioning)
+                {
+                    SetPendingPathAsActivePath();
+                }
             }
         }
 
@@ -117,18 +127,27 @@ namespace Automate.Model.GameWorldComponents {
         {
             _movementPath = _pendingNewPath;
             _isPendingNewPath = false;
-            SetMotionStatus();
+            //SetMotionStatus();
         }
 
         public Coordinate GetFinalDestination()
         {
-            return (_inMotion) ? _movementPath.GetEndCoordinate() : _currentCoordinate;
-            
-        
+            lock (AccessLock)
+                return (IsInMotion()) ? _movementPath.GetEndCoordinate() : _currentCoordinate;
         }
 
         public Guid GetId() { return _id; }
 
-
+        public Object GetMovableAccessLock()
+        {
+            return AccessLock;
+        }
     }
+}
+
+struct MovementPackage
+{
+    public Coordinate currentCoordinate;
+    public Coordinate NextCoordinate;
+    public Movement NextMovement;
 }
