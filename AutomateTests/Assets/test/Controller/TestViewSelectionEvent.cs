@@ -66,9 +66,9 @@ namespace AutomateTests.test.Controller
 
             mockGameView.PerformCompleteUpdate();
 
-            Assert.AreEqual(402, controller.OutputSched.ItemsCount);
+            Assert.AreEqual(404, controller.OutputSched.ItemsCount);
           
-            for (int i = 0; i < 400; i++)
+            for (int i = 0; i < 402; i++)
             {
                 MasterAction action = controller.OutputSched.Pull();
                 Assert.AreEqual(ActionType.PlaceGameObject, action.Type);
@@ -86,7 +86,7 @@ namespace AutomateTests.test.Controller
 
         private Guid GetMockGameModel()
         {
-            var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(8, 8, 1));
+            var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
             var movableItem = gameWorldItem.CreateMovable(new Coordinate(3, 3, 0), MovableType.NormalHuman);
             var movableItem2 = gameWorldItem.CreateMovable(new Coordinate(7, 3, 0), MovableType.NormalHuman);
             gameWorldItem.SelectMovableItems(new List<MovableItem>() { movableItem, movableItem2 });

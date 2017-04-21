@@ -66,7 +66,7 @@ namespace Automate.Controller.Modules
                 var action = Controller.OutputSched.Pull();
                 actions.Add(action);
             }
-            Debug.Log("NUMBER OF ACTIONS:" + actions.Count);
+            //Debug.Log("NUMBER OF ACTIONS:" + actions.Count);
             return actions;
             
         }

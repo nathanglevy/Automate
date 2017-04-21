@@ -12,7 +12,7 @@ namespace Automate.Controller.Handlers.RightClockNotification
 {
     public class RightClickNotificationHandler : Handler<ObserverArgs>, IHandler<ObserverArgs>
     {
-        Logger _logger = new Logger(new AutomateLogHandler());
+        //Logger _logger = new Logger(new AutomateLogHandler());
         bool IHandler.CanAcknowledge(MasterAction action)
         {
             return action is MoveAction;
@@ -29,7 +29,7 @@ namespace Automate.Controller.Handlers.RightClockNotification
                 // Get the RightClock Object
                 
                 RightClickNotification rightNotification = args as RightClickNotification;
-                _logger.Log(LogType.Log, "HANDLE_RIGHT_CLICK", "Right Click Fired, Target: " + rightNotification.Coordinate);
+                //_logger.Log(LogType.Log, "HANDLE_RIGHT_CLICK", "Right Click Fired, Target: " + rightNotification.Coordinate);
 
                 // Get All Selcted Objects
                 var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
@@ -39,7 +39,7 @@ namespace Automate.Controller.Handlers.RightClockNotification
                 var masterActions = new List<MasterAction>();
                 foreach (var movable in selectedMovables)
                 {
-                    Debug.Log(String.Format("Build New Path From to {0}", rightNotification.Coordinate));
+                    //Debug.Log(String.Format("Build New Path From to {0}", rightNotification.Coordinate));
 
                     var isInMotion = movable.IsInMotion();
                     movable.IssueMoveCommand(rightNotification.Coordinate);
@@ -53,8 +53,8 @@ namespace Automate.Controller.Handlers.RightClockNotification
                             Duration = new TimeSpan(0, 0, 0, 0, (int) (movable.NextMovementDuration * 1000/5)),
                             NeedAcknowledge = true
                         });
-                        Debug.Log(String.Format("New Path: Go From {0} to {1}", movable.CurrentCoordiate,
-                            movable.NextCoordinate));
+                        //Debug.Log(String.Format("New Path: Go From {0} to {1}", movable.CurrentCoordiate,
+                        //    movable.NextCoordinate));
                     }
                 }
 
@@ -94,8 +94,8 @@ namespace Automate.Controller.Handlers.RightClockNotification
                         Duration = new TimeSpan(0, 0, 0, 0, (int) (movableItem.NextMovementDuration * 1000/5)),
 
                     };
-                    Debug.Log(String.Format("Ack From {0} to {1}", movableItem.CurrentCoordiate,
-                        movableItem.NextCoordinate));
+                    //Debug.Log(String.Format("Ack From {0} to {1}", movableItem.CurrentCoordiate,
+                    //    movableItem.NextCoordinate));
                     movableItem.StartTransitionToNext();
 
 
@@ -113,8 +113,8 @@ namespace Automate.Controller.Handlers.RightClockNotification
                         NeedAcknowledge = false,
                         Duration = new TimeSpan(0, 0, 0, 0, 0),
                     };
-                    Debug.Log(String.Format("Ack From {0} to {1}", movableItem.CurrentCoordiate,
-                        movableItem.CurrentCoordiate));
+                    //Debug.Log(String.Format("Ack From {0} to {1}", movableItem.CurrentCoordiate,
+                    //    movableItem.CurrentCoordiate));
                     var masterActions = new List<MasterAction>();
                     masterActions.Add(moveToNext);
                     var acknowledgeResult = new AcknowledgeResult(masterActions);

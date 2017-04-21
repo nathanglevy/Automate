@@ -71,13 +71,8 @@ namespace Automate.Controller.Modules
             {
                 if (HasItems)
                 {
-                    //_logger.Log(LogType.Log, LogTag.Scheduler.ToString(),
-                    //    "Dequeue an action and send using OnPull Event");
 
                     MasterAction deqMasterAction = _targetPullQ.Dequeue();
-
-                    //_logger.Log(LogType.Log, LogTag.Scheduler.ToString(),
-                    //    "Action being Dequeued, " + deqMasterAction.ToString());
 
                     if (OnPull != null)
                         OnPull(deqMasterAction);
