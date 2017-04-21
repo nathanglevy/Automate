@@ -18,8 +18,6 @@ namespace Automate.Controller.Handlers.PlaceAnObject
 
             try
             {
-
-
                 var placeObjectArgs = args as PlaceAnObjectRequest;
 
                 var gameWorld = GameUniverse.GetGameWorldItemById(utils.GameWorldId);

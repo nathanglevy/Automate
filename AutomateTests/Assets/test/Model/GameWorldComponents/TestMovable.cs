@@ -114,6 +114,32 @@ namespace AutomateTests.Model.GameWorldComponents {
         }
 
         [TestMethod()]
+        public void TestStartTransitionToNext_NoPathSet_ExpectNotSet()
+        {
+            Movable movable = new Movable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
+            movable.StartTransitionToNext();
+            Assert.IsFalse(movable.IsTransitioning());
+
+        }
+
+        [TestMethod()]
+        public void TestGetFinalDestination_ExpectCorrectValue() {
+            Movable movable = new Movable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
+            MovementPath movementPath = new MovementPath(new Coordinate(0, 0, 0));
+            movementPath.AddMovement(new Movement(1, 1, 0, 1));
+            movementPath.AddMovement(new Movement(1, 0, 0, 1));
+            movable.SetPath(movementPath);
+            Assert.AreEqual(new Coordinate(2, 1, 0),movable.GetFinalDestination());
+        }
+
+        [TestMethod()]
+        public void TestGetFinalDestination_NoPathSet_ExpectCurrentPosition() {
+            Movable movable = new Movable(new Coordinate(1, 1, 0), MovableType.NormalHuman);
+            movable.StartTransitionToNext();
+            Assert.AreEqual(new Coordinate(1, 1, 0), movable.GetFinalDestination());
+        }
+
+        [TestMethod()]
         public void TestSetPathWhileTransitioning_ExpectToKeepPathWhileTransitioning() {
             Movable movable = new Movable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
             MovementPath movementPath = new MovementPath(new Coordinate(0, 0, 0));

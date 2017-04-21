@@ -51,7 +51,8 @@ namespace Automate.Model.GameWorldComponents {
 
         //intermediate state where the object is between current and next cell
         public void StartTransitionToNext() {
-            _isTransitioning = true;
+            if (_inMotion)
+                _isTransitioning = true;
         }
 
         public Movement GetNextMovement()
@@ -117,6 +118,13 @@ namespace Automate.Model.GameWorldComponents {
             _movementPath = _pendingNewPath;
             _isPendingNewPath = false;
             SetMotionStatus();
+        }
+
+        public Coordinate GetFinalDestination()
+        {
+            return (_inMotion) ? _movementPath.GetEndCoordinate() : _currentCoordinate;
+            
+        
         }
 
         public Guid GetId() { return _id; }
