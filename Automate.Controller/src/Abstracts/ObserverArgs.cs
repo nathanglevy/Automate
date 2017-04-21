@@ -5,7 +5,6 @@ namespace Automate.Controller.Abstracts
 {
     public abstract class ObserverArgs : IObserverArgs
     {
-        public string TargetId { get;  set; }
-        
+        public Guid TargetId { get; }
     }
 }

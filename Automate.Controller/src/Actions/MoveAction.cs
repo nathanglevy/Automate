@@ -1,4 +1,6 @@
-﻿using Automate.Controller.Abstracts;
+﻿using System;
+using Automate.Controller.Abstracts;
+using Automate.Controller.Interfaces;
 using Automate.Model.MapModelComponents;
 
 namespace Automate.Controller.Actions
@@ -8,12 +10,14 @@ namespace Automate.Controller.Actions
         public Coordinate To { get; private set; }
         public Coordinate CurrentCoordiate { get; private set; }
 
-        public MoveAction(Coordinate to, Coordinate currentCoordiate, string playerID) : base(ActionType.Movement,playerID)
+        public MoveAction(Coordinate to, Coordinate currentCoordiate, string id) : this(to,currentCoordiate,new Guid(id))
+        {
+        }
+
+        public MoveAction(Coordinate to, Coordinate currentCoordiate, Guid playerId) : base(ActionType.Movement,playerId)
         {
             To = to;
             CurrentCoordiate = currentCoordiate;
         }
-
-
     }
 }

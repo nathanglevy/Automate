@@ -4,7 +4,6 @@ using System.Threading;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Delegates;
 using Automate.Controller.Handlers;
-using Automate.Controller.Handlers.AcknowledgeNotification;
 using Automate.Controller.Handlers.PlaceAnObject;
 using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Handlers.SelectionNotification;
@@ -18,7 +17,7 @@ namespace Automate.Controller.Modules
 {
     public class GameController : IGameController
     {
-        private readonly List<IHandler<ObserverArgs>> _handlers;
+        private readonly List<IHandler<IObserverArgs>> _handlers;
         private event AcknowledgeActivation AcknowledgeActivation;
         private event HandleActivation HandlerActivation;
         private readonly ITimerScheduler<Abstracts.MasterAction> _timerSched;
@@ -34,10 +33,10 @@ namespace Automate.Controller.Modules
 
             MultiThreaded = true;
 
-            _handlers = new List<IHandler<ObserverArgs>>();
+            _handlers = new List<IHandler<IObserverArgs>>();
 
             // create the TimedOut Q and Link it
-            _timerSched = new TimersSchedular<MasterAction>(new TimedOut<MasterAction>(Acknowledge));
+            _timerSched = new TimersSchedular<MasterAction>(Handle);
 
             // create the controller-->View Schued
             OutputSched = new Scheduler<MasterAction>();
@@ -52,7 +51,7 @@ namespace Automate.Controller.Modules
             // Link the View Update to the TimerSched
             view.OnUpdate += OnViewUpdate;
             HandlerActivation += Handle;
-            AcknowledgeActivation += Acknowledge;
+            //AcknowledgeActivation += Acknowledge;
 
             // Link the 2 Sched
             OutputSched.OnPull += ForwardItemToTimerSched;
@@ -133,7 +132,7 @@ namespace Automate.Controller.Modules
         public Guid Model { get; private set; }
         public IGameView View { get; private set; }
 
-        public IList<ThreadInfo> Handle(ObserverArgs args)
+        public IList<ThreadInfo> Handle(IObserverArgs args)
         {
             IList<ThreadInfo> threads = new List<ThreadInfo>();
             foreach (var handler in _handlers)
@@ -162,7 +161,7 @@ namespace Automate.Controller.Modules
             return threads;
         }
 
-        private ThreadStart HandlePushAndNotify(ObserverArgs args, IHandler<ObserverArgs> handler, AutoResetEvent syncEvent)
+        private ThreadStart HandlePushAndNotify(IObserverArgs args, IHandler<IObserverArgs> handler, AutoResetEvent syncEvent)
         {
             return delegate ()
             {
@@ -178,57 +177,58 @@ namespace Automate.Controller.Modules
             };
         }
 
-        protected IList<ThreadInfo> Acknowledge(MasterAction action)
-        {
-            IList<ThreadInfo> threads = new List<ThreadInfo>();
-            foreach (var handler in _handlers)
-            {
-                if (handler.CanAcknowledge(action))
-                {
+        //protected IList<ThreadInfo> Acknowledge(MasterAction action)
+        //{
+        //    IList<ThreadInfo> threads = new List<ThreadInfo>();
+        //    foreach (var handler in _handlers)
+        //    {
+        //        if (handler.CanAcknowledge(action))
+        //        {
 
-                    //# create new thread to perform the action
-                    AutoResetEvent syncEvent = new AutoResetEvent(false);
-                    if (MultiThreaded)
-                    {
-                        var subHandler = new Thread(AcknowledgePushAndNotify(action, handler, syncEvent))
-                        { Name = String.Format("{0}_AcknowledgeWorkerThread", handler.GetType().ToString()) };
-                        threads.Add(new ThreadInfo(syncEvent, subHandler));
-                        subHandler.Start();
-                    }
-                    else
-                    {
-                        AcknowledgePushAndNotify(action, handler, syncEvent).Invoke();
-                    }
-                }
-            }
-            return threads;
-        }
+        //            //# create new thread to perform the action
+        //            AutoResetEvent syncEvent = new AutoResetEvent(false);
+        //            if (MultiThreaded)
+        //            {
+        //                var subHandler = new Thread(AcknowledgePushAndNotify(action, handler, syncEvent))
+        //                { Name = String.Format("{0}_AcknowledgeWorkerThread", handler.GetType().ToString()) };
+        //                threads.Add(new ThreadInfo(syncEvent, subHandler));
+        //                subHandler.Start();
+        //            }
+        //            else
+        //            {
+        //                AcknowledgePushAndNotify(action, handler, syncEvent).Invoke();
+        //            }
+        //        }
+        //    }
+        //    return threads;
+        //}
 
-        private ThreadStart AcknowledgePushAndNotify(MasterAction action, IHandler<ObserverArgs> handler, AutoResetEvent syncEvent)
-        {
-            return delegate ()
-            {
-                // Handle and Get Result
-                IAcknowledgeResult<MasterAction> acknowledgeResult = handler.Acknowledge(action,
-                    new HandlerUtils(Model, HandlerActivation, AcknowledgeActivation));
+        //private ThreadStart AcknowledgePushAndNotify(MasterAction action, IHandler<ObserverArgs> handler, AutoResetEvent syncEvent)
+        //{
+        //    return delegate ()
+        //    {
+        //        // Handle and Get Result
+        //        IAcknowledgeResult<MasterAction> acknowledgeResult = handler.Acknowledge(action,
+        //            new HandlerUtils(Model, HandlerActivation, AcknowledgeActivation));
 
-                // Push to Sched
-                OutputSched.GetPushInvoker().Invoke(acknowledgeResult);
+        //        // Push to Sched
+        //        OutputSched.GetPushInvoker().Invoke(acknowledgeResult);
 
-                // resume any waiting threads
-                syncEvent.Set();
-            };
-        }
+        //        // resume any waiting threads
+        //        syncEvent.Set();
+        //    };
+        //}
 
         public int GetHandlersCount()
         {
             return _handlers.Count;
         }
 
-        public void RegisterHandler(IHandler<ObserverArgs> handler)
+        public void RegisterHandler(IHandler<IObserverArgs> handler)
         {
             _handlers.Add(handler);
         }
+
 
         public IScheduler<MasterAction> OutputSched { get; private set; }
 

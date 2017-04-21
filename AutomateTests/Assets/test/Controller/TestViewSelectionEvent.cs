@@ -25,14 +25,14 @@ namespace AutomateTests.test.Controller
         public void TestCreateSelectionArgs_ExpectToPass()
         {
             IObserverArgs viewSelectionNotification = new ViewSelectionNotification(
-                new Coordinate(0, 30, 0), new Coordinate(10, 0, 0), "ObjectID");
+                new Coordinate(0, 30, 0), new Coordinate(10, 0, 0), Guid.NewGuid());
             Assert.IsNotNull(viewSelectionNotification);
         }
 
         [TestMethod]
         public void TestCreateSelectionHandler_ExpectToPss()
         {
-            Handler<ObserverArgs> viewSelectionHandler = new ViewSelectionHandler();
+            var viewSelectionHandler = new ViewSelectionHandler();
             Assert.IsNotNull(viewSelectionHandler);
 
         }
@@ -41,7 +41,7 @@ namespace AutomateTests.test.Controller
         public void TestHandleViewSelection_ExpectActionsToBeSentToView()
         {
             ObserverArgs viewSelectionNotification = new ViewSelectionNotification(
-                new Coordinate(1, 1, 0), new Coordinate(20, 10, 0), "ObjectID");
+                new Coordinate(1, 1, 0), new Coordinate(20, 10, 0), Guid.NewGuid());
 
 
             var mockGameView = new MockGameView();
@@ -98,36 +98,12 @@ namespace AutomateTests.test.Controller
         [TestMethod]
         public void TestCanHandleWithCorrectArgs_ExpectTrue()
         {
-            ObserverArgs rightClickNotification = new ViewSelectionNotification(new Coordinate(1, 0, 0), new Coordinate(1, 10, 0),"ID");
-            IHandler<ObserverArgs> rightClickNotificationHandler = new ViewSelectionHandler();
+            ObserverArgs rightClickNotification = new ViewSelectionNotification(new Coordinate(1, 0, 0), new Coordinate(1, 10, 0),Guid.NewGuid());
+            var rightClickNotificationHandler = new ViewSelectionHandler();
             Assert.IsTrue(rightClickNotificationHandler.CanHandle(rightClickNotification));
 
         }
 
-        [TestMethod]
-        public void TestCanAcknowledgeIncorrectArgs_ExpectFalse()
-        {
-            ObserverArgs clickNotification = new RightClickNotification(new Coordinate(0, 0, 0));
-            IHandler<ObserverArgs> rightClickNotificationHandler = new ViewSelectionHandler();
-            Assert.IsFalse(rightClickNotificationHandler.CanHandle(clickNotification));
-        }
-
-        [TestMethod]
-        public void TestCannotAcknowledgeWithCorrectAction_ExpectTrue()
-        {
-            MasterAction selectAction = new SelectMovableAction(new Coordinate(1, 0, 0), "MyPlayer");
-            IHandler<ObserverArgs> rightClickNotificationHandler = new ViewSelectionHandler();
-            Assert.IsTrue(rightClickNotificationHandler.CanAcknowledge(selectAction));
-
-        }
-
-        [TestMethod]
-        public void TestCannotAcknowledgeIncorrectAction_ExpectFalse()
-        {
-            MasterAction selectMovableAction = new MoveAction(new Coordinate(0, 0, 0), new Coordinate(1, 1, 0), "MyPlayer");
-            IHandler<ObserverArgs> rightClickNotificationHandler = new ViewSelectionHandler();
-            Assert.IsFalse(rightClickNotificationHandler.CanAcknowledge(selectMovableAction));
-        }
 
     }
 }

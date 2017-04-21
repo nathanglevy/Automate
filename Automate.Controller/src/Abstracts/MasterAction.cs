@@ -5,16 +5,18 @@ namespace Automate.Controller.Abstracts
 {
     public class MasterAction : IObserverArgs
     {
-        private string _targetId;
-
         public TimeSpan Duration { get; set; }
 
         public bool NeedAcknowledge { get; set; }
 
-        public MasterAction(ActionType type, string targetId)
+        public MasterAction(ActionType type, string targetId) : this(type, new Guid(targetId))
+        {}
+
+
+        public MasterAction(ActionType type, Guid targetId)
         {
             Type = type;
-            _targetId = targetId;
+            TargetId = targetId;
             Duration = new TimeSpan();
             NeedAcknowledge = false;
         }
@@ -26,11 +28,6 @@ namespace Automate.Controller.Abstracts
 
         public ActionType Type { get; protected set; }
 
-        public string TargetId
-        {
-            get { return _targetId; }
-            set { _targetId = value; }
-        }
-
+        public Guid TargetId { get; set; }
     }
 }

@@ -41,7 +41,7 @@ namespace AutomateTests.test.Controller
             ObserverArgs viewSelectionNotification = new RightClickNotification(
                 new Coordinate(18, 10, 0));
 
-            IHandler<ObserverArgs> rightClickNotificationHandler = new RightClickNotificationHandler();
+            IHandler<IObserverArgs> rightClickNotificationHandler = new RightClickNotificationHandler();
 
             var mockGameView = new MockGameView();
             Guid gameModel = GetMockGameWorld();
@@ -76,74 +76,10 @@ namespace AutomateTests.test.Controller
         public void TestCanHandleWithCorrectArgs_ExpectTrue()
         {
             ObserverArgs rightClickNotification = new RightClickNotification(new Coordinate(1, 0, 0));
-            IHandler<ObserverArgs> rightClickNotificationHandler = new RightClickNotificationHandler();
+            IHandler<IObserverArgs> rightClickNotificationHandler = new RightClickNotificationHandler();
             Assert.IsTrue(rightClickNotificationHandler.CanHandle(rightClickNotification));
 
         }
-
-        [TestMethod]
-        public void TestCanAcknowledgeIncorrectArgs_ExpectFalse()
-        {
-            ObserverArgs clickNotification = new ViewSelectionNotification(new Coordinate(0, 0, 0), new Coordinate(10, 10, 0),"MyID");
-            IHandler<ObserverArgs> rightClickNotificationHandler = new RightClickNotificationHandler();
-            Assert.IsFalse(rightClickNotificationHandler.CanHandle(clickNotification));
-        }
-
-        [TestMethod]
-        public void TestCanAcknowledgeWithCorrectAction_ExpectTrue()
-        {
-            MasterAction moveAction = new MoveAction(new Coordinate(1, 0, 0), new Coordinate(1, 1, 0), "MyPlayer");
-            IHandler<ObserverArgs> rightClickNotificationHandler = new RightClickNotificationHandler();
-            Assert.IsTrue(rightClickNotificationHandler.CanAcknowledge(moveAction));
-
-        }
-
-        [TestMethod]
-        public void TestCanAcknowledgeIncorrectAction_ExpectFalse()
-        {
-            MasterAction moveAction = new SelectMovableAction(new Coordinate(0, 0, 0),"MyPlayer");
-            IHandler<ObserverArgs> rightClickNotificationHandler = new RightClickNotificationHandler();
-            Assert.IsFalse(rightClickNotificationHandler.CanAcknowledge(moveAction));
-        }
-
-        [TestMethod]
-        public void TestAcknowledgeMoveAction_ExpectNewMoveActionWithXAxisGreaterByOne()
-        {
-
-            ObserverArgs viewSelectionNotification = new RightClickNotification(
-                new Coordinate(10, 10, 0));
-
-            IHandler<ObserverArgs> rightClickNotificationHandler = new RightClickNotificationHandler();
-
-            var mockGameView = new MockGameView();
-            var mockGameModel = GetMockGameWorld();
-            var controller = new GameController((IGameView) mockGameView);
-            controller.FocusGameWorld(mockGameModel);
-
-            IList<ThreadInfo> syncEvents = controller.Handle(viewSelectionNotification);
-            foreach (var threadInfo in syncEvents)
-            {
-                threadInfo.SyncEvent.WaitOne(200);
-            }
-
-            controller.OutputSched.OnPullStart(new ViewUpdateArgs());
-            Assert.AreEqual(2, controller.OutputSched.ItemsCount);
-            MasterAction action1 = controller.OutputSched.Pull();
-            MasterAction action2 = controller.OutputSched.Pull();
-            Assert.AreEqual(ActionType.Movement, action1.Type);
-            Assert.AreEqual(ActionType.Movement, action2.Type);
-
-
-            var acknowledgeResult = rightClickNotificationHandler.Acknowledge(action1,new HandlerUtils(mockGameModel, null, null));
-            Assert.AreEqual(1,acknowledgeResult.GetItems().Count);
-            var nextMoveAction = acknowledgeResult.GetItems()[0];
-            Assert.IsNotNull(nextMoveAction);
-            var realNextMoveAction = nextMoveAction as MoveAction;
-            Assert.IsNotNull(realNextMoveAction);
-            Assert.AreEqual(new Coordinate(5,5,0),realNextMoveAction.To);
-
-        }
-
 
     }
 }

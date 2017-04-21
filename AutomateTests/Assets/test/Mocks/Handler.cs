@@ -8,12 +8,12 @@ using AutomateTests.Mocks;
 namespace AutomateTests.test.Mocks
 {
 
-    public class MockHandler : Handler<ObserverArgs>
+    public class MockHandler : Handler<IObserverArgs>
     {
 
         public List<MasterAction> Actions { get; private set; }
 
-        public bool CanHandle<T>(T args) where T : ObserverArgs
+        public bool CanHandle<T>(T args) where T : IObserverArgs
         {
             if (args is MockNotificationArgs)
                 return true;
@@ -21,7 +21,7 @@ namespace AutomateTests.test.Mocks
         }
 
 
-        public override IHandlerResult<MasterAction> Handle(ObserverArgs args, IHandlerUtils utils)
+        public override IHandlerResult<MasterAction> Handle(IObserverArgs args, IHandlerUtils utils)
         {
             if (!CanHandle(args))
             {
@@ -42,28 +42,26 @@ namespace AutomateTests.test.Mocks
 
         }
 
-
-        public override IAcknowledgeResult<MasterAction> Acknowledge(MasterAction action, IHandlerUtils utils)
+        public override bool CanHandle(IObserverArgs args)
         {
-            List<MasterAction> actions =new List<MasterAction>();
-            actions.Add(new MasterAction(action.Type,action.TargetId + "_ACK"));
-            return new AcknowledgeResult(actions);
+            return args is MockMasterAction;
         }
 
-        public override bool CanAcknowledge(MasterAction action)
-        {
-            return action is MockMasterAction;
-        }
 
-        public override bool CanHandle(ObserverArgs args)
-        {
-            return args is MockNotificationArgs;
+        //public override IAcknowledgeResult<MasterAction> Acknowledge(MasterAction action, IHandlerUtils utils)
+        //{
+        //    List<MasterAction> actions =new List<MasterAction>();
+        //    actions.Add(new MasterAction(action.Type,action.TargetId + "_ACK"));
+        //    return new AcknowledgeResult(actions);
+        //}
 
-        }
+        //public override bool CanAcknowledge(MasterAction action)
+        //{
+        //    return action is MockMasterAction;
+        //}
 
-        protected override Type GetInputType()
-        {
-            return typeof(MockObserverArgs);
-        }
+       
+
+   
     }
 }

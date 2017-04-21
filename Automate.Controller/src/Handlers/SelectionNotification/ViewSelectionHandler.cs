@@ -8,9 +8,9 @@ using Automate.Model.MapModelComponents;
 
 namespace Automate.Controller.Handlers.SelectionNotification
 {
-    public class ViewSelectionHandler  : Handler<ObserverArgs>
+    public class ViewSelectionHandler  : Handler<IObserverArgs>
     {
-        public override IHandlerResult<MasterAction> Handle(ObserverArgs args, IHandlerUtils utils)
+        public override IHandlerResult<MasterAction> Handle(IObserverArgs args, IHandlerUtils utils)
         {
             ViewSelectionNotification notification = args as ViewSelectionNotification;
 
@@ -30,17 +30,8 @@ namespace Automate.Controller.Handlers.SelectionNotification
             return new HandlerResult(actions);
         }
 
-        public override IAcknowledgeResult<MasterAction> Acknowledge(MasterAction action, IHandlerUtils utils)
-        {
-            return new AcknowledgeResult(new List<MasterAction>());
-        }
 
-        public override bool CanAcknowledge(MasterAction action)
-        {
-            return action is SelectMovableAction;
-        }
-
-        public override bool CanHandle(ObserverArgs args)
+        public override bool CanHandle(IObserverArgs args)
         {
             return args is ViewSelectionNotification;
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using Automate.Controller.Abstracts;
@@ -21,8 +20,6 @@ namespace AutomateTests.test.Controller
     public class TestController
     {
 
-        private ConcurrentQueue<MasterAction> _queue = new ConcurrentQueue<MasterAction>();
-        private AutoResetEvent _syncEvent = new AutoResetEvent(false);
 
         private AutoResetEvent _ackSync = new AutoResetEvent(false);
         private int THREAD_TIMEOUT_VALUE = 1000;
@@ -91,8 +88,8 @@ namespace AutomateTests.test.Controller
             gameController.FocusGameWorld(gameModel);
             gameController.RegisterHandler(mockHandler);
             // Create the NotificationArgs
-            string playerID = "AhmadHamdan";
-            MockNotificationArgs mockNotificationArgs = new MockNotificationArgs(new Coordinate(12, 12, 3), playerID);
+            Guid playerID = Guid.NewGuid();
+            MockNotificationArgs mockNotificationArgs = new MockNotificationArgs(new Coordinate(12, 12, 3), playerID.ToString());
             System.Threading.Thread.CurrentThread.Name = "CurrentThread";
             IList<ThreadInfo> threads = gameController.Handle(mockNotificationArgs);
 

@@ -13,9 +13,9 @@ namespace Automate.Controller.Interfaces
         IGameView View { get; }
         IScheduler<MasterAction> OutputSched { get;}
         bool HasFocusedGameWorld { get; }
-        IList<ThreadInfo> Handle(ObserverArgs args);
+        IList<ThreadInfo> Handle(IObserverArgs args);
         int GetHandlersCount();
-        void RegisterHandler(IHandler<ObserverArgs> handler);
+        void RegisterHandler(IHandler<IObserverArgs> handler);
         void FocusGameWorld(Guid gameWorldId);
         Guid UnfocusGameWorld();
     }

@@ -1,15 +1,15 @@
-using Automate.Controller.Abstracts;
+//using Automate.Controller.Abstracts;
 
-namespace Automate.Controller.Handlers.AcknowledgeNotification
-{
-    public class AcknowledgeNotification : ObserverArgs
-    {
+//namespace Automate.Controller.Handlers.AcknowledgeNotification
+//{
+//    public class AcknowledgeNotification : ObserverArgs
+//    {
 
-        public AcknowledgeNotification(MasterAction executedAction)
-        {
-            ExecutedAction = executedAction;
-        }
+//        public AcknowledgeNotification(MasterAction executedAction)
+//        {
+//            ExecutedAction = executedAction;
+//        }
 
-        public MasterAction ExecutedAction { get; private set; }
-    }
-}
+//        public MasterAction ExecutedAction { get; private set; }
+//    }
+//}

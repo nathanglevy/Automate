@@ -114,7 +114,7 @@ namespace src.View
             _logger.Log(LogType.Log, HANDLE_ACTION, String.Format("MOVE OBJECT FROM: {0} to {1}", moveAction.CurrentCoordiate, moveAction.To));
             Vector3 movableStartVector = GetWorldVectorFromMapCoodinates(moveAction.CurrentCoordiate);
             Vector3 movableTargetVector = GetWorldVectorFromMapCoodinates(moveAction.To);
-            GameObject movableGameObject = _movableDictionary[new Guid(moveAction.TargetId)];
+            GameObject movableGameObject = _movableDictionary[moveAction.TargetId];
 
             movableGameObject.GetComponent<MovableBehaviour>().startPosition = movableStartVector;
             movableGameObject.GetComponent<MovableBehaviour>().targetPosition = movableTargetVector;

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using Automate.Controller.Abstracts;
@@ -11,17 +10,10 @@ namespace AutomateTests.test.Mocks
     public class MockGameView : IGameView
     {
         private readonly List<MasterAction> _list;
-        public ConcurrentQueue<IHandlerResult<MasterAction>> Results { get; private set; }
 
         public MockGameView()
         {
             _list =new List<MasterAction>();
-            Results = new ConcurrentQueue<IHandlerResult<MasterAction>>();
-        }
-
-        private void HandleResults(IHandlerResult<MasterAction> handlerResult)
-        {
-            Results.Enqueue(new TestingThreadWrapper(new ThreadInfo(null,Thread.CurrentThread), handlerResult));
         }
 
 
