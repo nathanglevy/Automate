@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Actions;
 using Automate.Controller.Interfaces;
+using Automate.Controller.Modules;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace Automate.Controller.Handlers.RightClockNotification
 {
     public class RightClickNotificationHandler : Handler<ObserverArgs>, IHandler<ObserverArgs>
     {
+        Logger _logger = new Logger(new AutomateLogHandler());
         bool IHandler.CanAcknowledge(MasterAction action)
         {
             return action is MoveAction;
@@ -25,8 +27,9 @@ namespace Automate.Controller.Handlers.RightClockNotification
             try
             {
                 // Get the RightClock Object
-
+                
                 RightClickNotification rightNotification = args as RightClickNotification;
+                _logger.Log(LogType.Log, "HANDLE_RIGHT_CLICK", "Right Click Fired, Target: " + rightNotification.Coordinate);
 
                 // Get All Selcted Objects
                 var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
@@ -41,7 +44,7 @@ namespace Automate.Controller.Handlers.RightClockNotification
                     var isInMotion = movable.IsInMotion();
                     movable.IssueMoveCommand(rightNotification.Coordinate);
 
-                    if (!isInMotion)
+                    if (!isInMotion || rightNotification.Force)
                     {
                         movable.StartTransitionToNext();
                         masterActions.Add(new MoveAction(movable.NextCoordinate, movable.CurrentCoordiate,
@@ -61,7 +64,7 @@ namespace Automate.Controller.Handlers.RightClockNotification
             catch (Exception e)
             {
                 Console.Out.Write("Cannot Move Object- "  + e.Message);
-                throw e;
+                return null;
             }
         }
 

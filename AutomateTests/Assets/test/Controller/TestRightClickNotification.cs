@@ -55,7 +55,7 @@ namespace AutomateTests.test.Controller
                 threadInfo.SyncEvent.WaitOne(TIMEOUT);
             }
 
-
+            controller.OutputSched.OnPullStart(new ViewUpdateArgs());
             Assert.AreEqual(2, controller.OutputSched.ItemsCount);
             Assert.AreEqual(ActionType.Movement, controller.OutputSched.Pull().Type);
             Assert.AreEqual(ActionType.Movement, controller.OutputSched.Pull().Type);
@@ -126,6 +126,7 @@ namespace AutomateTests.test.Controller
                 threadInfo.SyncEvent.WaitOne(200);
             }
 
+            controller.OutputSched.OnPullStart(new ViewUpdateArgs());
             Assert.AreEqual(2, controller.OutputSched.ItemsCount);
             MasterAction action1 = controller.OutputSched.Pull();
             MasterAction action2 = controller.OutputSched.Pull();

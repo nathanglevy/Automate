@@ -8,8 +8,6 @@ namespace Automate.Controller.Handlers.PlaceAnObject
 {
     public class PlaceAnObjectRequestHandler : Handler<ObserverArgs>, IHandler<ObserverArgs>
     {
-        public string Name { get; private set; }
-
 
         public override IHandlerResult<MasterAction> Handle(ObserverArgs args, IHandlerUtils utils)
         {
@@ -34,7 +32,6 @@ namespace Automate.Controller.Handlers.PlaceAnObject
                         break;
                     case ItemType.Cell:
                         throw new ArgumentOutOfRangeException();
-                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }

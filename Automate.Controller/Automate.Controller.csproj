@@ -54,10 +54,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Assets\Plugins\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -99,8 +95,11 @@
     <Compile Include="src\Interfaces\IObserverArgs.cs" />
     <Compile Include="src\Interfaces\IScheduler.cs" />
     <Compile Include="src\Interfaces\ITimerScheduler.cs" />
+    <Compile Include="src\Modules\AutomateLogHandler.cs" />
     <Compile Include="src\Modules\GameViewBase.cs" />
+    <Compile Include="src\Modules\LogTag.cs" />
     <Compile Include="src\Modules\PlaceAGameObjectAction.cs" />
+    <Compile Include="src\Modules\Scheduler - Copy.cs" />
     <Compile Include="src\Modules\TimerSchudulerUpdateArgs.cs" />
     <Compile Include="src\Modules\TimersSchedular.cs" />
     <Compile Include="src\Modules\GameController.cs" />

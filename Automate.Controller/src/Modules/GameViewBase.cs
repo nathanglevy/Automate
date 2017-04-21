@@ -60,11 +60,15 @@ namespace Automate.Controller.Modules
 
         public IEnumerable<MasterAction> PullFromController()
         {
+            List<MasterAction> actions= new List<MasterAction>();
             while (Controller.OutputSched.HasItems)
             {
                 var action = Controller.OutputSched.Pull();
-                yield return action;
+                actions.Add(action);
             }
+            Debug.Log("NUMBER OF ACTIONS:" + actions.Count);
+            return actions;
+            
         }
 
         public IGameController Controller { get; set; }

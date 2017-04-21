@@ -7,8 +7,9 @@ namespace Assets.Graphics.UltimateIsometricToolkit.Scripts.Core {
 	/// Wrapper class for the current sorting strategy
 	/// </summary>
 	[ExecuteInEditMode]
-	public class IsoSorting : Singleton<IsoSorting> {
-		[SerializeField] private SortingStrategy _sortingStrategy;
+	public class IsoSorting : Singleton<IsoSorting>
+	{
+	    [SerializeField] private SortingStrategy _sortingStrategy = null;
 		[HideInInspector]public bool Dirty = true;
 
 		

@@ -10,8 +10,6 @@ using Automate.Controller.Modules;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
-using log4net;
-using log4net.Config;
 using UnityEngine; 
 using Object = UnityEngine.Object;
 
@@ -22,29 +20,37 @@ namespace src.View
 
         // Use this for initialization
         public GameViewBase GameViewBase;
-        public bool IsGameBaseNull = false;
+        public bool MultiThreaded = true;
         public Dictionary<Guid, GameObject> _movableDictionary = new Dictionary<Guid, GameObject>();
         // Game Objects
         public GameObject CellObjectReference;
         public GameObject MovableObjectReference;
         public GameObject StructureObjectReference;
          
-        private ILog _logger;
+        Logger _logger = new Logger(new AutomateLogHandler());
+
+        // Log Tags
+        private string INPUT = "INPUT_CAPTURE";
+        private string START = "START";
+        private string UPDATE = "UPDATE";
+        private string HANDLE_ACTION = "HANDLE_ACTION";
 
         public void Start()
         {
-            
-            _logger = LogManager.GetLogger(typeof(UnityViewProxy));
-            BasicConfigurator.Configure();
-            _logger.Info("LOGGER CHECK");
+            _logger.Log(LogType.Log,START,"Start Method invoked");
             GameViewBase = new GameViewBase();
-            GameViewBase.OnActionReady += HandleAction;
-            var gameController = new GameController(GameViewBase);
 
-            IsGameBaseNull = GameViewBase == null;
+            
+            GameViewBase.OnActionReady += HandleAction;
+            var gameController = new GameController(GameViewBase) { MultiThreaded = MultiThreaded };
+
 
             // notify that Start being Done Now
+            _logger.Log(LogType.Log, START, "invoke gameViewBase OnStart Events");
             GameViewBase.PerformOnStart();
+
+            _logger.Log(LogType.Log, START, "Finish Start Method");
+
 
         }
 
@@ -52,24 +58,25 @@ namespace src.View
         {
             try
             {
-                IsGameBaseNull = GameViewBase == null;
 
+//                _logger.Log(LogType.Log, UPDATE, "Update Method invoked");
+//                _logger.Log(LogType.Log, UPDATE, "Check If Any key pressed and handle");
                 CheckForKeypressesAndAddItems();
 
-                if (IsGameBaseNull)
+
+                if (GameViewBase != null)
                 {
-                    Debug.LogError("GAME BASE IS NULL");
+                    GameViewBase.PerformCompleteUpdate();
                 }
                 else
                 {
-                    GameViewBase.PerformCompleteUpdate();
+                    throw new NullReferenceException("GameViewBaseIsNull At Update Method, it's not expected");   
                 }
                 
             }
             catch (Exception e)
             {
-//              EditorUtility.DisplayDialog("Caught An Exception", e.Message + "\n" + e.StackTrace, "OK, Got it");
-                Debug.LogError(e.ToString());
+                _logger.LogException(e);
             
             }
         }
@@ -77,8 +84,13 @@ namespace src.View
 
         private void HandleAction(ViewHandleActionArgs args)
         {
+            _logger.Log(LogType.Log,HANDLE_ACTION,"Handle Action invoked");
             var action = args.Action;
-            Debug.Log("HANDLE ACTION: " + action.Type);
+
+            if (action == null)
+                throw new NullReferenceException("cannot HandleAction because the recieved Action is null.");
+
+            _logger.Log(LogType.Log, HANDLE_ACTION, "Action Type: " + action.Type);
             switch (action.Type)
             {
                 case ActionType.AreaSelection:
@@ -99,7 +111,7 @@ namespace src.View
 
         private void MoveObject(MoveAction moveAction)
         {
-            Debug.Log(String.Format("MOVE OBJECT FROM: {0} to {1}",moveAction.CurrentCoordiate,moveAction.To));
+            _logger.Log(LogType.Log, HANDLE_ACTION, String.Format("MOVE OBJECT FROM: {0} to {1}", moveAction.CurrentCoordiate, moveAction.To));
             Vector3 movableStartVector = GetWorldVectorFromMapCoodinates(moveAction.CurrentCoordiate);
             Vector3 movableTargetVector = GetWorldVectorFromMapCoodinates(moveAction.To);
             GameObject movableGameObject = _movableDictionary[new Guid(moveAction.TargetId)];
@@ -111,21 +123,28 @@ namespace src.View
             movableGameObject.GetComponent<MovableBehaviour>().journeyFract = 0;
             string animationName = movableGameObject.GetComponent<MovableBehaviour>().DecideAnimation();
             movableGameObject.GetComponent<Animator>().Play(animationName);
-        }
+
+            _logger.Log(LogType.Log, HANDLE_ACTION, String.Format("Animate Selected: {0} for ID: {1}", animationName,moveAction.TargetId));}
 
         private void PlaceAnObject(PlaceAGameObjectAction action)
         {
             if (action == null)
                 throw new ArgumentException("got a null instead of PlaceAGameObjectAction");
 
+            _logger.Log(LogType.Log, HANDLE_ACTION, "Place an Object: " + action.ItemType);
+
             switch (action.ItemType)
             {
                 case ItemType.Movable:
+                    _logger.Log(LogType.Log, HANDLE_ACTION, String.Format("Adding Movable {0} at {1}.", "Human", action.Coordinate));
                     GameObject newGameObject = Object.Instantiate(MovableObjectReference,
                 GetWorldVectorFromMapCoodinates(action.Coordinate)  + Vector3.back * 2, Quaternion.identity);
                     _movableDictionary.Add(action.Id,newGameObject);
+
+
                     break;
                 case ItemType.Structure:
+                    _logger.Log(LogType.Log, HANDLE_ACTION, String.Format("Adding Structure at {0}.", action.Coordinate));
                     Object.Instantiate(StructureObjectReference,
                 GetWorldVectorFromMapCoodinates(action.Coordinate) + Vector3.back , Quaternion.identity);
                     break;
@@ -159,42 +178,41 @@ namespace src.View
             
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                Debug.Log("Key: 1 preseed, we will place Structure at " + mapCoordinate.ToString());
+                _logger.Log(LogType.Log,INPUT, "Key: 1 preseed, we will place Structure at " + mapCoordinate.ToString());
                 var placeAMovableRequest = new PlaceAStrcutureRequest(mapCoordinate,new Coordinate(1,1,1), StructureType.Basic);
                 GameViewBase.Controller.Handle(placeAMovableRequest);
             }
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                Debug.Log(worldPosition);
-                Debug.Log(mapCoordinate.ToString());
+                _logger.Log(LogType.Log, INPUT, "Key: 2 preseed, we will place movable at " + mapCoordinate.ToString());
                 Debug.Log("Key: 2 preseed, we will place movable at " + mapCoordinate.ToString());
                 var placeAMovableRequest = new PlaceAMovableRequest(mapCoordinate, MovableType.NormalHuman);
                 GameViewBase.Controller.Handle(placeAMovableRequest);
             }
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                Debug.Log("Key: 3 preseed, we will clear all selected items" + mapCoordinate.ToString());
-                Debug.Log(mapCoordinate.ToString());
+                _logger.Log(LogType.Log, INPUT, "Key: 3 preseed, we will clear selected items");
                 var gameWorldItemById = GameUniverse.GetGameWorldItemById(GameViewBase.Controller.Model);
                 gameWorldItemById.ClearSelectedItems();
             }
 
             if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log("Mouse Key: 0(LEFT) preseed, we will select any items at " + mapCoordinate.ToString());
-                var viewSelectionNotification = new ViewSelectionNotification(mapCoordinate, mapCoordinate, "");
+                _logger.Log(LogType.Log, INPUT, "Mouse Key: 0(LEFT) preseed, we will select any items at " + mapCoordinate.ToString());
+                    var viewSelectionNotification = new ViewSelectionNotification(mapCoordinate, mapCoordinate, "");
                 GameViewBase.Controller.Handle(viewSelectionNotification);
             }
             if (Input.GetMouseButtonDown(1))
             {
-                Debug.Log("Mouse Key: 1(RIGHT) preseed, we will move any selected objects to " + mapCoordinate.ToString());
+                _logger.Log(LogType.Log, INPUT, "Mouse Key: 1(RIGHT) preseed, we will move any selected objects to " + mapCoordinate.ToString());
                 var rightSelectNotification = new RightClickNotification(mapCoordinate);
                 GameViewBase.Controller.Handle(rightSelectNotification);
             }
             if (Input.GetMouseButtonDown(2))
             {
-            
-                //            _gameWorldItem.ClearSelectedItems();
+                _logger.Log(LogType.Log, INPUT, "Mouse Key: 2(MIDDLE) preseed, we will FORCE move selected objects to " + mapCoordinate.ToString());
+                var rightSelectNotification = new RightClickNotification(mapCoordinate) { Force = true };
+                GameViewBase.Controller.Handle(rightSelectNotification);
             }
         }
 
