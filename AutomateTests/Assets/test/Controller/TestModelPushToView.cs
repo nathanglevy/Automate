@@ -27,6 +27,7 @@ namespace AutomateTests.Assets.test.Controller
             mockGameView.PerformOnUpdateStart();
             mockGameView.PerformOnUpdate();
 
+            gameController.OutputSched.OnPullStart(new ViewUpdateArgs());
             Assert.AreEqual(101,gameController.OutputSched.ItemsCount);
             Assert.AreEqual(ActionType.PlaceGameObject,gameController.OutputSched.Pull().Type);
         }

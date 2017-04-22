@@ -106,7 +106,7 @@ namespace AutomateTests.test.Controller
             Assert.AreEqual("AutomateTests.test.Mocks.MockHandler_HandleWorkerThread", threads[0].Thread.Name);
             Assert.AreNotEqual("AutomateTests.test.Mocks.MockHandler_HandleWorkerThread", Thread.CurrentThread.Name);
 
-
+            gameController.OutputSched.OnPullStart(new ViewUpdateArgs());
             Assert.AreEqual(2, gameController.OutputSched.ItemsCount);
             MasterAction masterAction1 = gameController.OutputSched.Pull();
             MasterAction masterAction2 = gameController.OutputSched.Pull();
@@ -144,6 +144,7 @@ namespace AutomateTests.test.Controller
             gameview.PerformOnUpdateStart();
             gameview.PerformOnUpdate();
 
+            gameController.OutputSched.OnPullStart(new ViewUpdateArgs());
             Assert.AreEqual(102, gameController.OutputSched.ItemsCount);
             for (int i = 0; i < 102; i++)
             {
@@ -166,7 +167,7 @@ namespace AutomateTests.test.Controller
             Assert.AreEqual("AutomateTests.test.Mocks.MockHandler_HandleWorkerThread", threads[0].Thread.Name);
             Assert.AreNotEqual("AutomateTests.test.Mocks.MockHandler_HandleWorkerThread", Thread.CurrentThread.Name);
 
-
+            gameController.OutputSched.OnPullStart(new ViewUpdateArgs());
             Assert.AreEqual(2, gameController.OutputSched.ItemsCount);
             MasterAction masterAction1 = gameController.OutputSched.Pull();
             MasterAction masterAction2 = gameController.OutputSched.Pull();
@@ -183,6 +184,7 @@ namespace AutomateTests.test.Controller
             // wait till action being added to sched
             _ackSync.WaitOne(1000);
 
+            gameController.OutputSched.OnPullStart(new ViewUpdateArgs());
             MasterAction masterAction4 = gameController.OutputSched.Pull();
             Assert.AreEqual(ActionType.Movement, masterAction4.Type);
             Assert.AreEqual("NaphLevy_ACK", masterAction4.TargetId);

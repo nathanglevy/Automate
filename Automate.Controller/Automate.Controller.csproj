@@ -95,8 +95,11 @@
     <Compile Include="src\Interfaces\IObserverArgs.cs" />
     <Compile Include="src\Interfaces\IScheduler.cs" />
     <Compile Include="src\Interfaces\ITimerScheduler.cs" />
+    <Compile Include="src\Modules\AutomateLogHandler.cs" />
     <Compile Include="src\Modules\GameViewBase.cs" />
+    <Compile Include="src\Modules\LogTag.cs" />
     <Compile Include="src\Modules\PlaceAGameObjectAction.cs" />
+    <Compile Include="src\Modules\Scheduler - Copy.cs" />
     <Compile Include="src\Modules\TimerSchudulerUpdateArgs.cs" />
     <Compile Include="src\Modules\TimersSchedular.cs" />
     <Compile Include="src\Modules\GameController.cs" />

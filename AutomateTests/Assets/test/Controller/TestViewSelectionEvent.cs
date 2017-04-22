@@ -66,9 +66,9 @@ namespace AutomateTests.test.Controller
 
             mockGameView.PerformCompleteUpdate();
 
-            Assert.AreEqual(402, controller.OutputSched.ItemsCount);
+            Assert.AreEqual(404, controller.OutputSched.ItemsCount);
           
-            for (int i = 0; i < 400; i++)
+            for (int i = 0; i < 402; i++)
             {
                 MasterAction action = controller.OutputSched.Pull();
                 Assert.AreEqual(ActionType.PlaceGameObject, action.Type);

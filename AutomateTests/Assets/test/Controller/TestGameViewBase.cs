@@ -107,6 +107,7 @@ namespace AutomateTests.Assets.test.Controller
             view.PerformOnUpdate();
 
             // check that there are actions to be pul
+            gameController.OutputSched.OnPullStart(new ViewUpdateArgs());
             Assert.IsTrue(gameController.OutputSched.HasItems);
 
             // pull the actions from the controller to the View
@@ -129,19 +130,15 @@ namespace AutomateTests.Assets.test.Controller
 
             var gameController = new GameController(view);
 
-            // PerformOnStart to create the initial world
+            // at First update, Actions from Model being copied to the "Staging" Area in the Schudler
             view.PerformOnStart();
-
-            // Perform Update to propogate all actions to Scheduler
             view.PerformCompleteUpdate();
 
-            // check that there are actions to be pul
-           // Assert.IsTrue(gameController.OutputSched.HasItems);
+            // Performing hte second Update to propogate the Actions to be pulled
+            view.PerformOnStart();
+            view.PerformCompleteUpdate();
 
-            // pull the actions from the controller to the View
-            //IEnumerable<MasterAction> actions = view.PullFromController();
-
-            //view.HandleAction(actions.GetEnumerator().Current);
+            // we expect the actions to be executed
             Assert.AreEqual(200, _handledActionsCount);
         }
 

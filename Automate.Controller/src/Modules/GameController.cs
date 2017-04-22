@@ -23,13 +23,16 @@ namespace Automate.Controller.Modules
         private event HandleActivation HandlerActivation;
         private readonly ITimerScheduler<Abstracts.MasterAction> _timerSched;
 
+        public bool MultiThreaded { get; set; }
+
         public GameController(IGameView view)
         {
             Model = Guid.Empty;
             View = view;
-
             // register current Controller
             view.Controller = this;
+
+            MultiThreaded = true;
 
             _handlers = new List<IHandler<ObserverArgs>>();
 
@@ -57,7 +60,7 @@ namespace Automate.Controller.Modules
             // register handlers
             _handlers.Add(new ViewSelectionHandler());
             _handlers.Add(new RightClickNotificationHandler());
-//            _handlers.Add(new AcknowledgeNotificationHandler());
+            //            _handlers.Add(new AcknowledgeNotificationHandler());
             _handlers.Add(new PlaceAnObjectRequestHandler());
 
         }
@@ -90,6 +93,7 @@ namespace Automate.Controller.Modules
                     scheduler.Enqueue(new PlaceAGameObjectAction(item.Type, item.Guid, item,
                         GetCoordinate(item)));
                 }
+
                 gameWorldItem.ClearItemsToBePlaced();
             }
 
@@ -142,24 +146,36 @@ namespace Automate.Controller.Modules
 
                     //# create new thread to perform the action
                     AutoResetEvent syncEvent = new AutoResetEvent(false);
-                    var subHandler = new Thread(delegate ()
+                    if (MultiThreaded)
                     {
-                        // Handle and Get Result
-                        var handlerResult = handler.Handle(args,
-                            new HandlerUtils(Model, HandlerActivation, AcknowledgeActivation));
-
-                        // Push to Sched
-                        OutputSched.GetPushInvoker().Invoke(handlerResult);
-
-                        // resume any waiting threads
-                        syncEvent.Set();
-                    })
-                    { Name = String.Format("{0}_HandleWorkerThread", handler.GetType().ToString()) };
-                    threads.Add(new ThreadInfo(syncEvent, subHandler));
-                    subHandler.Start();
+                        var subHandler = new Thread(HandlePushAndNotify(args, handler, syncEvent))
+                        { Name = String.Format("{0}_HandleWorkerThread", handler.GetType().ToString()) };
+                        threads.Add(new ThreadInfo(syncEvent, subHandler));
+                        subHandler.Start();
+                    }
+                    else
+                    {
+                        HandlePushAndNotify(args, handler, syncEvent).Invoke();
+                    }
                 }
             }
             return threads;
+        }
+
+        private ThreadStart HandlePushAndNotify(ObserverArgs args, IHandler<ObserverArgs> handler, AutoResetEvent syncEvent)
+        {
+            return delegate ()
+            {
+                // Handle and Get Result
+                var handlerResult = handler.Handle(args,
+                    new HandlerUtils(Model, HandlerActivation, AcknowledgeActivation));
+
+                // Push to Sched
+                OutputSched.GetPushInvoker().Invoke(handlerResult);
+
+                // resume any waiting threads
+                syncEvent.Set();
+            };
         }
 
         protected IList<ThreadInfo> Acknowledge(MasterAction action)
@@ -169,26 +185,39 @@ namespace Automate.Controller.Modules
             {
                 if (handler.CanAcknowledge(action))
                 {
+
                     //# create new thread to perform the action
                     AutoResetEvent syncEvent = new AutoResetEvent(false);
-                    var subHandler = new Thread(delegate ()
-                        {
-                            // Handle and Get Result
-                            IAcknowledgeResult<MasterAction> acknowledgeResult = handler.Acknowledge(action,
-                                new HandlerUtils(Model, HandlerActivation, AcknowledgeActivation));
-
-                            // Push to Sched
-                            OutputSched.GetPushInvoker().Invoke(acknowledgeResult);
-
-                            // resume any waiting threads
-                            syncEvent.Set();
-                        })
-                    { Name = String.Format("{0}_AcknowledgeWorkerThread", handler.GetType().ToString()) };
-                    threads.Add(new ThreadInfo(syncEvent, subHandler));
-                    subHandler.Start();
+                    if (MultiThreaded)
+                    {
+                        var subHandler = new Thread(AcknowledgePushAndNotify(action, handler, syncEvent))
+                        { Name = String.Format("{0}_AcknowledgeWorkerThread", handler.GetType().ToString()) };
+                        threads.Add(new ThreadInfo(syncEvent, subHandler));
+                        subHandler.Start();
+                    }
+                    else
+                    {
+                        AcknowledgePushAndNotify(action, handler, syncEvent).Invoke();
+                    }
                 }
             }
             return threads;
+        }
+
+        private ThreadStart AcknowledgePushAndNotify(MasterAction action, IHandler<ObserverArgs> handler, AutoResetEvent syncEvent)
+        {
+            return delegate ()
+            {
+                // Handle and Get Result
+                IAcknowledgeResult<MasterAction> acknowledgeResult = handler.Acknowledge(action,
+                    new HandlerUtils(Model, HandlerActivation, AcknowledgeActivation));
+
+                // Push to Sched
+                OutputSched.GetPushInvoker().Invoke(acknowledgeResult);
+
+                // resume any waiting threads
+                syncEvent.Set();
+            };
         }
 
         public int GetHandlersCount()

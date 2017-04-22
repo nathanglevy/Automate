@@ -42,6 +42,7 @@ namespace AutomateTests.Assets.test.Controller
             List<MasterAction> actions = new List<MasterAction>();
             actions.Add(new MockMasterAction(ActionType.AreaSelection, "MyId"));
             scheduler.Enqueue(actions);
+            scheduler.OnPullStart(new ViewUpdateArgs());
             Assert.AreEqual(1, scheduler.ItemsCount);
         }
 
@@ -59,6 +60,7 @@ namespace AutomateTests.Assets.test.Controller
             List<MasterAction> actions = new List<MasterAction>();
             actions.Add(new MockMasterAction(ActionType.AreaSelection, "MyId"));
             scheduler.Enqueue(actions);
+            scheduler.OnPullStart(new ViewUpdateArgs());
             Assert.IsTrue(scheduler.HasItems);
         }
 
@@ -70,6 +72,7 @@ namespace AutomateTests.Assets.test.Controller
             actions.Add(new MockMasterAction(ActionType.AreaSelection, "MyId1"));
             actions.Add(new MockMasterAction(ActionType.Movement, "MyId2"));
             scheduler.Enqueue(actions);
+            scheduler.OnPullStart(new ViewUpdateArgs());
             MasterAction action = scheduler.Pull();
             Assert.IsNotNull(action);
             Assert.AreEqual(ActionType.AreaSelection,action.Type);
@@ -97,6 +100,7 @@ namespace AutomateTests.Assets.test.Controller
             Assert.IsNotNull(pusher);
             pusher(handlerResult);
             Thread.Sleep(100);
+            scheduler.OnPullStart(new ViewUpdateArgs());
             Assert.AreEqual(2, scheduler.ItemsCount);
             MasterAction action = scheduler.Pull();
             Assert.AreEqual(1, scheduler.ItemsCount);
@@ -123,6 +127,7 @@ namespace AutomateTests.Assets.test.Controller
             
             Thread.Sleep(20);
             //Assert.AreEqual(50, scheduler.ItemsCount);
+            scheduler.OnPullStart(new ViewUpdateArgs());
             for (int i = 0; i < 50; i++)
             {
                 MasterAction action = scheduler.Pull();
@@ -171,10 +176,12 @@ namespace AutomateTests.Assets.test.Controller
             Assert.IsNotNull(pusher);
             pusher(handlerResult);
             Thread.Sleep(100);
+            scheduler.OnPullStart(new ViewUpdateArgs());
             Assert.AreEqual(1, scheduler.ItemsCount);
             MasterAction action = scheduler.Pull();
             Assert.AreEqual(ActionType.Movement, action.Type);
             _onPullSync.WaitOne(200);
+            scheduler.OnPullStart(new ViewUpdateArgs());
             Assert.IsTrue(_listnerActivated);
         }
 
