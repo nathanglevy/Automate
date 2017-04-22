@@ -116,16 +116,17 @@ namespace src.View
             {
                 case ItemType.Movable:
                     GameObject newGameObject = Object.Instantiate(MovableObjectReference,
-                GetWorldVectorFromMapCoodinates(action.Coordinate)  + Vector3.back * 2, Quaternion.identity);
+                    GetWorldVectorFromMapCoodinates(action.Coordinate)  + Vector3.back * 2, Quaternion.identity);
                     _movableDictionary.Add(action.Id,newGameObject);
                     break;
                 case ItemType.Structure:
-                    Object.Instantiate(StructureObjectReference,
-                GetWorldVectorFromMapCoodinates(action.Coordinate) + Vector3.back , Quaternion.identity);
+                    GameObject newStructure = Object.Instantiate(StructureObjectReference,
+                    GetWorldVectorFromMapCoodinates(action.Coordinate) + Vector3.back , Quaternion.identity);
+                    newStructure.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("")
                     break;
                 case ItemType.Cell:
                      Object.Instantiate(CellObjectReference,
-                GetWorldVectorFromMapCoodinates(action.Coordinate) , Quaternion.identity);
+                    GetWorldVectorFromMapCoodinates(action.Coordinate) , Quaternion.identity);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
