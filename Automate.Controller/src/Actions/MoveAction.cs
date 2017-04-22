@@ -5,7 +5,7 @@ using Automate.Model.MapModelComponents;
 
 namespace Automate.Controller.Actions
 {
-    public class MoveAction : MasterAction
+    public class MoveAction : ModelMasterAction
     {
         public Coordinate To { get; private set; }
         public Coordinate CurrentCoordiate { get; private set; }
@@ -19,5 +19,7 @@ namespace Automate.Controller.Actions
             To = to;
             CurrentCoordiate = currentCoordiate;
         }
+
+
     }
 }

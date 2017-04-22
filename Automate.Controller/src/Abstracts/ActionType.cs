@@ -6,6 +6,7 @@
 
         Movement,
         SelectPlayer,
-        PlaceGameObject
+        PlaceGameObject,
+        PickUp
     }
 }

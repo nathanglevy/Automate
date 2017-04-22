@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Actions;
+using Automate.Controller.Handlers.GoAndPickUp;
 using Automate.Controller.Handlers.PlaceAnObject;
 using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Handlers.SelectionNotification;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
+using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
+using Automate.Model.Tasks;
+using UnityEditor;
 using UnityEngine; 
 using Object = UnityEngine.Object;
 
@@ -104,6 +108,12 @@ namespace src.View
                 case ActionType.PlaceGameObject:
                     PlaceAnObject(action as PlaceAGameObjectAction);
                     break;
+                case ActionType.PickUp:
+                    var pickUpAction = action as PickUpAction;
+            _logger.Log(string.Format("PickUp Is Executed of Amount: {0} AT Locatin: {1}",pickUpAction.Amount,pickUpAction.TargetDest));
+                    EditorUtility.DisplayDialog("PickUp Action",string.Format("PickUp Is Executed of Amount: {0} AT Locatin: {1}", pickUpAction.Amount, pickUpAction.TargetDest
+                        ), "Yes, Great ");
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -196,10 +206,48 @@ namespace src.View
                 gameWorldItemById.ClearSelectedItems();
             }
 
+            if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+
+                //_logger.Log(LogType.Log, INPUT, "Key: 2 preseed, we will place movable at " + mapCoordinate.ToString());
+                //Debug.Log("Key: 2 preseed, we will place movable at " + mapCoordinate.ToString());
+
+
+                //var placeAMovableRequest = new PlaceAMovableRequest(mapCoordinate, MovableType.NormalHuman);
+                //GameViewBase.Controller.Handle(placeAMovableRequest);
+
+
+                //var viewSelectionNotification = new ViewSelectionNotification(mapCoordinate, mapCoordinate, Guid.NewGuid());
+                //GameViewBase.Controller.Handle(viewSelectionNotification);
+
+                _logger.Log(LogType.Log, INPUT, "Key: 4 preseed, we will Add Component in 0,0,0");
+                var gameWorldItemById = GameUniverse.GetGameWorldItemById(GameViewBase.Controller.Model);
+                var movableListInCoordinate = gameWorldItemById.GetMovableListInCoordinate(mapCoordinate);
+                gameWorldItemById.SelectMovableItems(movableListInCoordinate);
+
+                EditorUtility.DisplayDialog(string.Format("Placing 100 Iron At 0,0,0"),"Go And PickThem", "You have No Other Choice");
+
+                gameWorldItemById.AddComponentStack(new IronOreComponent(), new Coordinate(0, 0, 0), 0);
+                var componentsAtCoordinate = gameWorldItemById.GetComponentsAtCoordinate(new Coordinate(0, 0, 0));
+                componentsAtCoordinate.AddAmount(100);
+
+                var newTask = gameWorldItemById.TaskDelegator.CreateNewTask();
+                newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0,0,0),100 );
+
+                var goAndPickUpAction = new GoAndPickUpAction(new Coordinate(0, 0, 0), 50,
+                        gameWorldItemById.GetSelectedMovableItemList()[0].Guid)
+                    {MasterTaskId = newTask.Guid};
+
+                GameViewBase.Controller.Handle(goAndPickUpAction);
+
+
+            }
+
+
             if (Input.GetMouseButtonDown(0))
             {
                 _logger.Log(LogType.Log, INPUT, "Mouse Key: 0(LEFT) preseed, we will select any items at " + mapCoordinate.ToString());
-                    var viewSelectionNotification = new ViewSelectionNotification(mapCoordinate, mapCoordinate, "");
+                    var viewSelectionNotification = new ViewSelectionNotification(mapCoordinate, mapCoordinate, Guid.NewGuid());
                 GameViewBase.Controller.Handle(viewSelectionNotification);
             }
             if (Input.GetMouseButtonDown(1))

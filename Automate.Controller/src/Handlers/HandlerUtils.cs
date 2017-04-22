@@ -14,6 +14,10 @@ namespace Automate.Controller.Handlers
             AcknowledgeHandler = ackowledgeHandler;
         }
 
+        public HandlerUtils(Guid gameWorldId): this(gameWorldId,null,null)
+        {
+        }
+
         public HandleActivation InvokeHandler { get; private set; }
         public AcknowledgeActivation AcknowledgeHandler { get; }
         public Guid GameWorldId { get; }

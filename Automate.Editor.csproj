@@ -189,6 +189,7 @@
   <ItemGroup>
     <None Include="Assets\Graphics\UltimateIsometricToolkit\License.txt" />
     <None Include="Assets\Graphics\openpixels-master\openpixels-master\README.txt" />
+    <None Include="Assets\Plugins\UnityEditor.xml" />
     <None Include="Assets\Plugins\UnityEngine.xml" />
     <None Include="Assets\Plugins\nunit.framework.xml" />
     <None Include="Assets\StreamingAssets\build_info.txt" />

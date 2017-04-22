@@ -29,5 +29,16 @@ namespace Automate.Controller.Abstracts
         public ActionType Type { get; protected set; }
 
         public Guid TargetId { get; set; }
+        public event ControllerNotification OnComplete;
+
+        public bool IsActionHasOver { get; set; }
+        public ControllerNotification OnCompleteDelegate { get; set; }
+
+        public void FireOnComplete(ControllerNotificationArgs controllerNotificationArgs)
+        {
+            if (OnCompleteDelegate == null) return;
+
+            OnCompleteDelegate.Invoke(controllerNotificationArgs);
+        }
     }
 }

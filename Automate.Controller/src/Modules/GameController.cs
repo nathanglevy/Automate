@@ -4,6 +4,8 @@ using System.Threading;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Delegates;
 using Automate.Controller.Handlers;
+using Automate.Controller.Handlers.GoAndPickUp;
+using Automate.Controller.Handlers.MoveHandler;
 using Automate.Controller.Handlers.PlaceAnObject;
 using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Handlers.SelectionNotification;
@@ -22,6 +24,12 @@ namespace Automate.Controller.Modules
         private event HandleActivation HandlerActivation;
         private readonly ITimerScheduler<Abstracts.MasterAction> _timerSched;
 
+        // events
+        public event ControllerNotification OnPreHandle;
+        public event ControllerNotification OnPostHandle;
+        public event ControllerNotification OnFinishHandle;
+
+
         public bool MultiThreaded { get; set; }
 
         public GameController(IGameView view)
@@ -36,7 +44,7 @@ namespace Automate.Controller.Modules
             _handlers = new List<IHandler<IObserverArgs>>();
 
             // create the TimedOut Q and Link it
-            _timerSched = new TimersSchedular<MasterAction>(Handle);
+            _timerSched = new TimersScheduler<MasterAction>(AssignAsOverAndHandle);
 
             // create the controller-->View Schued
             OutputSched = new Scheduler<MasterAction>();
@@ -57,11 +65,23 @@ namespace Automate.Controller.Modules
             OutputSched.OnPull += ForwardItemToTimerSched;
 
             // register handlers
+            _handlers.Add(new GoAndPickUpTaskHandler());
             _handlers.Add(new ViewSelectionHandler());
             _handlers.Add(new RightClickNotificationHandler());
-            //            _handlers.Add(new AcknowledgeNotificationHandler());
             _handlers.Add(new PlaceAnObjectRequestHandler());
+            _handlers.Add(new MoveActionHandler());
+            _handlers.Add(new PickUpActionHandler());
+            
 
+        }
+
+        private IList<ThreadInfo> AssignAsOverAndHandle(MasterAction args)
+        {
+            // Listner for Timeout, adding Flag to mark action is over
+            args.IsActionHasOver = true;
+
+            // Call Handle to Handle The Action (UpdateModel/GetNext...)
+            return Handle(args);
         }
 
         private void InitGameWorld(ViewUpdateArgs args)
@@ -161,19 +181,33 @@ namespace Automate.Controller.Modules
             return threads;
         }
 
+        
+
         private ThreadStart HandlePushAndNotify(IObserverArgs args, IHandler<IObserverArgs> handler, AutoResetEvent syncEvent)
         {
             return delegate ()
             {
+
+                // invoke Pre Handle
+                OnPreHandle?.Invoke(new ControllerNotificationArgs(args));
+
                 // Handle and Get Result
-                var handlerResult = handler.Handle(args,
-                    new HandlerUtils(Model, HandlerActivation, AcknowledgeActivation));
+                var handlerUtils = new HandlerUtils(Model, HandlerActivation, AcknowledgeActivation);
+                var handlerResult = handler.Handle(args,handlerUtils);
+
+                // invoke Pre Handle
+                OnPostHandle?.Invoke(new ControllerNotificationArgs(args));
 
                 // Push to Sched
                 OutputSched.GetPushInvoker().Invoke(handlerResult);
 
+                // invoke on Finish
+                OnFinishHandle?.Invoke(new ControllerNotificationArgs(args) {Utils = handlerUtils });
+
                 // resume any waiting threads
                 syncEvent.Set();
+
+
             };
         }
 
@@ -232,21 +266,7 @@ namespace Automate.Controller.Modules
 
         public IScheduler<MasterAction> OutputSched { get; private set; }
 
-        public void OnUpdateFinish(ViewUpdateArgs args)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnUpdate(ViewUpdateArgs args)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnUpdateStart(ViewUpdateArgs args)
-        {
-            throw new NotImplementedException();
-        }
-
+     
         public bool HasFocusedGameWorld
         {
             get { return !Model.Equals(Guid.Empty); }
@@ -263,6 +283,22 @@ namespace Automate.Controller.Modules
             Model = Guid.Empty;
             return focusedWorld;
         }
+
+        public void OnUpdateFinish(ViewUpdateArgs args)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public void OnUpdate(ViewUpdateArgs args)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public void OnUpdateStart(ViewUpdateArgs args)
+        {
+            //throw new NotImplementedException();
+        }
+
     }
 
     internal class ThreadControl

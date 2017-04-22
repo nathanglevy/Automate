@@ -13,14 +13,6 @@ namespace AutomateTests.test.Mocks
 
         public List<MasterAction> Actions { get; private set; }
 
-        public bool CanHandle<T>(T args) where T : IObserverArgs
-        {
-            if (args is MockNotificationArgs)
-                return true;
-            return false;
-        }
-
-
         public override IHandlerResult<MasterAction> Handle(IObserverArgs args, IHandlerUtils utils)
         {
             if (!CanHandle(args))
@@ -28,23 +20,41 @@ namespace AutomateTests.test.Mocks
                 throw new ArgumentException("args must be MockObserverArgs, current handler cannot Handle it");
             }
 
-            MockNotificationArgs mockArgs = args as MockNotificationArgs;
+            var mockArgs = args as MockNotificationArgs;
+            if (mockArgs != null)
+            {
 
-            var action = new MockMasterAction(ActionType.AreaSelection, "AhmadHamdan") {NeedAcknowledge = false};
-            var action2 = new MockMasterAction(ActionType.Movement, "NaphLevy") {NeedAcknowledge = true};
-            var actions = new List<MasterAction>();
-            actions.Add(action);
-            actions.Add(action2);
-            Actions = actions;
+                var actions = new List<MasterAction>();
+                var action =
+                    new MockMasterAction(ActionType.AreaSelection, "00000000-0000-0000-0000-000000000001")
+                    {
+                        NeedAcknowledge = false
+                    };
+                actions.Add(action);
+                var action2 =
+                    new MockMasterAction(ActionType.Movement, "00000000-0000-0000-0000-000000000002")
+                    {
+                        NeedAcknowledge = true
+                    };
 
 
-            return new HandlerResult(actions);
+                actions.Add(action2);
+                return new HandlerResult(actions);
+            }
+            else
+            {
+                var actions = new List<MasterAction>();
+                actions.Add(args as MockMasterAction);
+                return new HandlerResult(actions);
+            }
 
         }
 
         public override bool CanHandle(IObserverArgs args)
         {
-            return args is MockMasterAction;
+            if (args is MockNotificationArgs || args is MockMasterAction)
+                return true;
+            return false;
         }
 
 

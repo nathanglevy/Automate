@@ -37,21 +37,11 @@ namespace Automate.Controller.Handlers.RightClockNotification
                 {
                     //Debug.Log(String.Format("Build New Path From to {0}", rightNotification.Coordinate));
 
-                    var isInMotion = movable.IsInMotion();
-                    movable.IssueMoveCommand(rightNotification.Coordinate);
+                    var moveAction = new MoveAction(rightNotification.Coordinate, movable.CurrentCoordiate, movable.Guid);
+                    utils.InvokeHandler(moveAction);
 
-                    if (!isInMotion || rightNotification.Force)
-                    {
-                        movable.StartTransitionToNext();
-                        masterActions.Add(new MoveAction(movable.NextCoordinate, movable.CurrentCoordiate,
-                            movable.Guid.ToString())
-                        {
-                            Duration = new TimeSpan(0, 0, 0, 0, (int) (movable.NextMovementDuration * 1000/5)),
-                            NeedAcknowledge = true
-                        });
-                        //Debug.Log(String.Format("New Path: Go From {0} to {1}", movable.CurrentCoordiate,
-                        //    movable.NextCoordinate));
-                    }
+
+                 
                 }
 
                 return new HandlerResult(masterActions);

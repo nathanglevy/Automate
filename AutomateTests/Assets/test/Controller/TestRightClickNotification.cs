@@ -81,5 +81,19 @@ namespace AutomateTests.test.Controller
 
         }
 
+        //[TestMethod]
+        //public void TestOnActionFinish_ExpectEventToBeFired()
+        //{
+        //    ObserverArgs rightClickNotification = new RightClickNotification(new Coordinate(1, 0, 0));
+        //    rightClickNotification.OnComplete += OnRightClickComplete;
+        //    IHandler<IObserverArgs> rightClickNotificationHandler = new RightClickNotificationHandler();
+        //    Assert.IsTrue(rightClickNotificationHandler.CanHandle(rightClickNotification));
+        //    Assert.IsTrue(_onCompleteFired);
+        //}
+
+        private void OnRightClickComplete(ControllerNotificationArgs args)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
