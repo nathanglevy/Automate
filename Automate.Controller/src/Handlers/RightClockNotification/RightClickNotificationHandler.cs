@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Actions;
 using Automate.Controller.Interfaces;
@@ -36,7 +37,6 @@ namespace Automate.Controller.Handlers.RightClockNotification
                 foreach (var movable in selectedMovables)
                 {
                     //Debug.Log(String.Format("Build New Path From to {0}", rightNotification.Coordinate));
-
                     var moveAction = new MoveAction(rightNotification.Coordinate, movable.CurrentCoordiate, movable.Guid);
                     utils.InvokeHandler(moveAction);
                 }
