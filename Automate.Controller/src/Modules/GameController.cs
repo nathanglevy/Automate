@@ -67,7 +67,7 @@ namespace Automate.Controller.Modules
 
         private void InitGameWorld(ViewUpdateArgs args)
         {
-            var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(10, 10, 2));
+            var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 2));
             FocusGameWorld(gameWorldItem.Guid);
 
         }

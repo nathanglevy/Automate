@@ -147,8 +147,8 @@ namespace src.View
                     _logger.Log(LogType.Log, HANDLE_ACTION, String.Format("Adding Structure at {0}.", action.Coordinate));
                     GameObject structureObject =  Object.Instantiate(StructureObjectReference,
                     GetWorldVectorFromMapCoodinates(action.Coordinate) + Vector3.back , Quaternion.identity);
-                    GraphicsHandler.SetSpriteByName(structureObject, "ContainerLeft");
-                    GraphicsHandler.SetSpriteByPath(structureObject, "SpriteSheets/open_tileset_2x", 189);
+                    //GraphicsHandler.SetSpriteByName(structureObject, "ContainerLeft");
+                    GraphicsHandler.SetSpriteByPath(structureObject, "SpriteSheets/open_tileset_2x", 641);
                     break;
                 case ItemType.Cell:
                      Object.Instantiate(CellObjectReference,
@@ -212,9 +212,9 @@ namespace src.View
             }
             if (Input.GetMouseButtonDown(2))
             {
-                _logger.Log(LogType.Log, INPUT, "Mouse Key: 2(MIDDLE) preseed, we will FORCE move selected objects to " + mapCoordinate.ToString());
-                var rightSelectNotification = new RightClickNotification(mapCoordinate) { Force = true };
-                GameViewBase.Controller.Handle(rightSelectNotification);
+                //_logger.Log(LogType.Log, INPUT, "Mouse Key: 2(MIDDLE) preseed, we will FORCE move selected objects to " + mapCoordinate.ToString());
+                //var rightSelectNotification = new RightClickNotification(mapCoordinate) { Force = true };
+                //GameViewBase.Controller.Handle(rightSelectNotification);
             }
         }
 
