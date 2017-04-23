@@ -102,5 +102,7 @@ namespace AutomateTests.test.Mocks
         {
             return _handlerResult.GetItems();
         }
+
+        public bool IsInternal { get; set; }
     }
 }

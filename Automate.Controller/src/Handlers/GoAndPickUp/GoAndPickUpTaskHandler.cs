@@ -27,8 +27,13 @@ namespace Automate.Controller.Handlers.GoAndPickUp
 
             var goAndPickUpAction = args as GoAndPickUpAction;
             var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
+
             // TODO: Check With Naph, if Searching a non existing movable, what to expect
             var movableItem = gameWorldItem.GetMovableItem(goAndPickUpAction.MovableGuid);
+
+            // let's allocate the outgoing amount
+            var targetCombo = gameWorldItem.GetComponentsAtCoordinate(goAndPickUpAction.TargetDestCoordinate);
+            targetCombo.AssignOutgoingAmount(goAndPickUpAction.MovableGuid,goAndPickUpAction.Amount);
 
             var moveAction = new StartMoveAction(goAndPickUpAction.TargetDestCoordinate, movableItem.CurrentCoordiate, movableItem.Guid)
             {
@@ -47,7 +52,7 @@ namespace Automate.Controller.Handlers.GoAndPickUp
             var modelAction = args.Args as ModelMasterAction;
             var goAndPickUpAction = _goAndPickActionsdict[modelAction.MasterTaskId];
 
-            var pickUpAction = new PickUpAction(goAndPickUpAction.TargetDestCoordinate, goAndPickUpAction.Amount)
+            var pickUpAction = new PickUpAction(goAndPickUpAction.TargetDestCoordinate, goAndPickUpAction.Amount,goAndPickUpAction.MovableGuid )
             {
                 OnCompleteDelegate = AcknowledgeGoAndPickIsOver,
                 Duration = new TimeSpan(0),

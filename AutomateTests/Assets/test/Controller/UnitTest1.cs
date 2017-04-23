@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Actions;
 using Automate.Controller.Handlers;
 using Automate.Controller.Interfaces;
+using Automate.Controller.Modules;
+using Automate.Model.GameWorldInterface;
+using Automate.Model.MapModelComponents;
+using Automate.Model.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AutomateTests.test.Controller
@@ -21,7 +26,7 @@ namespace AutomateTests.test.Controller
         public void TestCanHandleWithCorrectArgs_ExpectTrue()
         {
             var taskHandler = new TaskHandler();
-            Assert.IsTrue(taskHandler.CanHandle(new TaskContainer()));
+            Assert.IsTrue(taskHandler.CanHandle(new TaskContainer(null)));
         }
 
         [TestMethod]
@@ -50,14 +55,37 @@ namespace AutomateTests.test.Controller
         [TestMethod]
         public void TestHandle_ExpectOnComplete()
         {
-            
-        }
-        
+            var taskHandler = new TaskHandler();
 
+            // build model, targetTask and Action
+            var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(5, 5, 1));
+            var newTask = gameWorldItem.TaskDelegator.CreateNewTask();
+            newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0, 1, 0), 100);
+
+            // Handle the TargetTask
+            // Expects --> to Handle Current Action
+            var taskContainer = new TaskContainer(newTask);
+            var handlerResult = taskHandler.Handle(taskContainer,new HandlerUtils(gameWorldItem.Guid,HandleMimic,null));
+
+
+        }
+
+        private IList<ThreadInfo> HandleMimic(IObserverArgs args)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class TaskContainer : IObserverArgs
     {
+        public Task TargetTask { get; }
+
+        public TaskContainer(Task targetTask)
+        {
+            TargetTask = targetTask;
+        }
+
+
         public Guid TargetId { get; }
         public event ControllerNotification OnComplete;
 

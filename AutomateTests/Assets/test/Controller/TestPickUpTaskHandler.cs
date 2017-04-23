@@ -86,7 +86,7 @@ namespace AutomateTests.Assets.test.Controller
             _gameWorldItem.AddComponentStack(new IronOreComponent(), new Coordinate(0, 0, 0), 0);
             var componentsAtCoordinate = _gameWorldItem.GetComponentsAtCoordinate(new Coordinate(0, 0, 0));
             componentsAtCoordinate.AddAmount(100);
-            componentsAtCoordinate.AssignOutgoingAmount(movableItem.Guid,100);
+          //  componentsAtCoordinate.AssignOutgoingAmount(movableItem.Guid,99);
         
 
             var GoAndpickUpAction = new GoAndPickUpAction(new Coordinate(0, 0, 0), 100, movableItem.Guid);

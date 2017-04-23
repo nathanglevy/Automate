@@ -86,7 +86,7 @@ namespace Automate.Controller.Modules
 
         private void InitGameWorld(ViewUpdateArgs args)
         {
-            var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(10, 10, 2));
+            var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 2));
             FocusGameWorld(gameWorldItem.Guid);
 
         }
@@ -199,7 +199,18 @@ namespace Automate.Controller.Modules
                 OnPostHandle?.Invoke(new ControllerNotificationArgs(args));
 
                 // Push to Sched
-                OutputSched.GetPushInvoker().Invoke(handlerResult);
+                if (handlerResult.IsInternal)
+                {
+                    foreach (var item in handlerResult.GetItems())
+                    {
+                        HandlePushAndNotify(item, handler, syncEvent);
+                    }
+                }
+                else
+                {
+                    OutputSched.GetPushInvoker().Invoke(handlerResult);
+                }
+                
 
                 // invoke on Finish
                 OnFinishHandle?.Invoke(new ControllerNotificationArgs(args) {Utils = handlerUtils });

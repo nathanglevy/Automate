@@ -16,7 +16,7 @@ namespace Automate.Controller.Abstracts
         {
         }
 
-        public Guid MovableId { get; set; }
+        
         public Guid MasterTaskId { get; set; }
     }
 }

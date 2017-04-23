@@ -39,9 +39,6 @@ namespace Automate.Controller.Handlers.RightClockNotification
 
                     var moveAction = new MoveAction(rightNotification.Coordinate, movable.CurrentCoordiate, movable.Guid);
                     utils.InvokeHandler(moveAction);
-
-
-                 
                 }
 
                 return new HandlerResult(masterActions);

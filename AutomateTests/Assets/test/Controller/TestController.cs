@@ -19,8 +19,6 @@ namespace AutomateTests.test.Controller
     [TestClass]
     public class TestController
     {
-
-
         private AutoResetEvent _ackSync = new AutoResetEvent(false);
         private int THREAD_TIMEOUT_VALUE = 1000;
 
@@ -417,5 +415,8 @@ namespace AutomateTests.test.Controller
             // enque should be 
             _ackSync.Set();
         }
+
+
+
     }
 }

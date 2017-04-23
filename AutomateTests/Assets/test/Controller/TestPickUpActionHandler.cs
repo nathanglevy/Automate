@@ -31,7 +31,7 @@ namespace AutomateTests.Assets.test.Controller
         [TestMethod]
         public void TestCreateNewPickUpAction_ShouldPass()
         {
-            var pickUpAction = new PickUpAction(new Coordinate(0, 0, 0), 150);
+            var pickUpAction = new PickUpAction(new Coordinate(0, 0, 0), 150, Guid.NewGuid());
             Assert.IsNotNull(pickUpAction);
             Assert.AreEqual(new Coordinate(0,0,0),pickUpAction.TargetDest);
             Assert.AreEqual(150,pickUpAction.Amount);
@@ -42,7 +42,7 @@ namespace AutomateTests.Assets.test.Controller
         public void TestCanHandleWithCorrectArgument_ExpectTrue()
         {
             var pickUpActionHandler = new PickUpActionHandler();
-            Assert.IsTrue(pickUpActionHandler.CanHandle(new PickUpAction(new Coordinate(0,0,0),100)));
+            Assert.IsTrue(pickUpActionHandler.CanHandle(new PickUpAction(new Coordinate(0,0,0),100, Guid.NewGuid())));
         }
 
         [TestMethod]
@@ -86,7 +86,7 @@ namespace AutomateTests.Assets.test.Controller
             componentsAtCoordinate.AssignOutgoingAmount(movableItem.Guid,70);
             
 
-            var pickUpAction = new PickUpAction(new Coordinate(0,0,0),70 )
+            var pickUpAction = new PickUpAction(new Coordinate(0,0,0),70, movableItem.Guid)
             {
                 MasterTaskId =  newTask.Guid,
                 MovableId          = movableItem.Guid,
