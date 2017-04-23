@@ -116,6 +116,7 @@ public class ControllerMock : MonoBehaviour
                 movableGameObject.GetComponent<MovableBehaviour>().journeyFract = 0;
                 string animationName = movableGameObject.GetComponent<MovableBehaviour>().DecideAnimation();
                 movableGameObject.GetComponent<Animator>().Play(animationName);
+                
                 movableItem.MoveToNext();
             }
         }

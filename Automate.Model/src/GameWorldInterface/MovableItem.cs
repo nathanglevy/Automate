@@ -18,6 +18,8 @@ namespace Automate.Model.GameWorldInterface
         public override Coordinate Coordinate => CurrentCoordiate;
 
         internal MovableItem(GameWorld gameWorld, Guid movableGuid) {
+            if (!gameWorld.GetMovableIdList().Contains(movableGuid))
+                throw new ArgumentException("Error getting movable from gameworld");
             Guid = movableGuid;
             Type = ItemType.Movable;
             _gameWorld = gameWorld;

@@ -85,9 +85,9 @@ namespace Automate.Model.GameWorldComponents
         public MovableItem CreateMovable(Coordinate coordinate, MovableType movableType)
         {
             Movable movable = new Movable(coordinate,movableType);
+            _movables.Add(movable.GetId(), movable);
             MovableItem movableItem = new MovableItem(this, movable.GetId());
             _itemsToBePlaced.Add(movableItem);
-            _movables.Add(movable.GetId(),movable);
             return movableItem;
         }
 
@@ -154,6 +154,7 @@ namespace Automate.Model.GameWorldComponents
                             currentMovable.GetEffectiveCoordinate(), currentMovable.GetEffectiveCoordinate());
                         currentMovable.SetPath(movementPath);
                     }
+                    currentMovable.PathToTargetHasBeenBroken = true;
                     return false;
                 }
                 catch (NoPathFoundException)

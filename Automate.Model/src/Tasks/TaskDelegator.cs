@@ -45,15 +45,16 @@ namespace Automate.Model.Tasks
             return GetDelegatedTasksForGuid(delegatedGuid).First();
         }
 
-        private void AddPendingTask(Task newTask)
-        {
-            _pendingDelegationTasks.Add(newTask);
-        }
+//        private void AddPendingTask(Task newTask)
+//        {
+//            _pendingDelegationTasks.Add(newTask);
+//        }
 
         public Task CreateNewTask()
         {
             Task newTask = new Task();
-            AddPendingTask(newTask);
+            _pendingDelegationTasks.Add(newTask);
+            _delegatedTasks[newTask.Guid] = newTask;
             return newTask;
         }
 
@@ -69,6 +70,13 @@ namespace Automate.Model.Tasks
             {
                 _delegatedTasks.Remove(taskToRemove);
             }
+        }
+
+        public Task GetTaskByGuid(Guid taskGuid)
+        {
+            if (!_delegatedTasks.ContainsKey(taskGuid))
+                throw new NoTaskException("Task with this GUID does not exist in task delegator");
+            return _delegatedTasks[taskGuid];
         }
     }
 }

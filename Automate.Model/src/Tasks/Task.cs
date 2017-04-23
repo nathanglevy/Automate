@@ -29,7 +29,7 @@ namespace Automate.Model.Tasks
                     throw new TaskActionException("is not assigned, cannot get assigned GUID");
                 return _assignedToGuid;
             }
-            internal set
+            set
             {
                 IsAssigned = true;
                 _assignedToGuid = value;
@@ -58,11 +58,9 @@ namespace Automate.Model.Tasks
             {
                 case TaskActionType.DeliveryTask:
                     TransportTaskAction deliveryAction = GetCurrentAction() as TransportTaskAction;
-                    deliveryAction?.ComponentStack.DeliverAmount(Guid, deliveryAction.Amount);
                     break;
                case TaskActionType.PickupTask:
                     TransportTaskAction pickupAction = GetCurrentAction() as TransportTaskAction;
-                    pickupAction?.ComponentStack.DeliverAmount(Guid, pickupAction.Amount);
                     break;
                 default:
                     break;
@@ -72,11 +70,13 @@ namespace Automate.Model.Tasks
             _taskActionNumber++;
         }
 
-        public void AddAction(TaskActionType taskActionType, Coordinate taskLocation, int amount)
+        public TaskAction AddAction(TaskActionType taskActionType, Coordinate taskLocation, int amount)
         {
-//            if ((taskActionType == TaskActionType.PickupTask) || (taskActionType == TaskActionType.DeliveryTask))
-//                throw new TaskActionException("Use AddTransportAction for these types of actions");
-            _taskActionList.Add(new TaskAction(Guid, taskLocation, taskActionType, amount));
+            //            if ((taskActionType == TaskActionType.PickupTask) || (taskActionType == TaskActionType.DeliveryTask))
+            //                throw new TaskActionException("Use AddTransportAction for these types of actions");
+            TaskAction newAction = new TaskAction(Guid, taskLocation, taskActionType, amount);
+            _taskActionList.Add(newAction);
+            return newAction;
         }
 
         public void AddTransportAction(TaskActionType taskActionType, Coordinate taskLocation, ComponentStack componentStack, int amount)
