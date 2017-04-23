@@ -138,15 +138,17 @@ namespace src.View
                 case ItemType.Movable:
                     _logger.Log(LogType.Log, HANDLE_ACTION, String.Format("Adding Movable {0} at {1}.", "Human", action.Coordinate));
                     GameObject newGameObject = Object.Instantiate(MovableObjectReference,
-                GetWorldVectorFromMapCoodinates(action.Coordinate)  + Vector3.back * 2, Quaternion.identity);
+                    GetWorldVectorFromMapCoodinates(action.Coordinate)  + Vector3.back * 2, Quaternion.identity);
                     _movableDictionary.Add(action.Id,newGameObject);
 
 
                     break;
                 case ItemType.Structure:
                     _logger.Log(LogType.Log, HANDLE_ACTION, String.Format("Adding Structure at {0}.", action.Coordinate));
-                    Object.Instantiate(StructureObjectReference,
-                GetWorldVectorFromMapCoodinates(action.Coordinate) + Vector3.back , Quaternion.identity);
+                    GameObject structureObject =  Object.Instantiate(StructureObjectReference,
+                    GetWorldVectorFromMapCoodinates(action.Coordinate) + Vector3.back , Quaternion.identity);
+                    GraphicsHandler.SetSpriteByName(structureObject, "ContainerLeft");
+                    GraphicsHandler.SetSpriteByPath(structureObject, "SpriteSheets/open_tileset_2x", 189);
                     break;
                 case ItemType.Cell:
                      Object.Instantiate(CellObjectReference,

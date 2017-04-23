@@ -96,7 +96,7 @@ public class Reporter : MonoBehaviour
 		}
 	}
 
-	List<Sample> samples = new List<Sample>(60 * 60 * 60);
+	List<Reporter.Sample> samples = new List<Sample>(60 * 60 * 60);
 
 	public class Log
 	{

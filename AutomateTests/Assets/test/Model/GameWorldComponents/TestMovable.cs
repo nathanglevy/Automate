@@ -160,5 +160,10 @@ namespace AutomateTests.Model.GameWorldComponents {
             //check when there are no more moves
             Assert.AreEqual(movable.GetNextCoordinate(), new Coordinate(1, 2, 0));
         }
+
+        [TestMethod()]
+        public void TestPathToTargetHasBeenBroken_CheckFlagIsRaised() {
+            throw new NotImplementedException();
+        }
     }
 }

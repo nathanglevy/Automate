@@ -17,6 +17,7 @@ namespace Automate.Model.GameWorldComponents {
         private MovementPath _pendingNewPath;
         private MovementPath _movementPath;
         private Guid _id = Guid.NewGuid();
+        public bool PathToTargetHasBeenBroken { get; internal set; } = false;
         public MovableType MovableType { get; private set; }
         private double _speed;
         private readonly Object AccessLock = new Object();
@@ -116,6 +117,7 @@ namespace Automate.Model.GameWorldComponents {
                     throw new ArgumentNullException();
                 _pendingNewPath = new MovementPath(movementPath);
                 _isPendingNewPath = true;
+                PathToTargetHasBeenBroken = false;
                 if (!_isTransitioning)
                 {
                     SetPendingPathAsActivePath();
@@ -143,11 +145,4 @@ namespace Automate.Model.GameWorldComponents {
             return AccessLock;
         }
     }
-}
-
-struct MovementPackage
-{
-    public Coordinate currentCoordinate;
-    public Coordinate NextCoordinate;
-    public Movement NextMovement;
 }

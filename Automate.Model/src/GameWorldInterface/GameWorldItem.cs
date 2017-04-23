@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
@@ -234,6 +235,11 @@ namespace Automate.Model.GameWorldInterface
 
         public ComponentStack GetComponentsAtCoordinate(Coordinate location) {
             return _focusedGameWorld.GetComponentsAtCoordinate(location);
+        }
+
+        public bool HasMovableWithGuid(Guid movableGuid)
+        {
+            return (_focusedGameWorld.GetMovableIdList().Contains(movableGuid));
         }
     }
 }
