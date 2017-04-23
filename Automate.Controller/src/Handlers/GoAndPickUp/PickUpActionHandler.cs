@@ -16,7 +16,11 @@ namespace Automate.Controller.Handlers.GoAndPickUp
             var pickUpAction = args as PickUpAction;
             var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
             var componentStack = gameWorldItem.GetComponentsAtCoordinate(pickUpAction.TargetDest);
-            componentStack.RemoveAmount(pickUpAction.Amount);
+            //if (componentStack.GetOutgoingAllocatedAmountForGuid(pickUpAction.MovableId) != pickUpAction.Amount)
+            //{
+                
+            //}
+            componentStack.PickupAmount(pickUpAction.MovableId,pickUpAction.Amount);
 
             // Pick Up Operation Ended, Fire On Complete
             pickUpAction.FireOnComplete(new ControllerNotificationArgs(pickUpAction));

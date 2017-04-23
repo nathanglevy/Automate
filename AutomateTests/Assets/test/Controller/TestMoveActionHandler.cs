@@ -96,6 +96,10 @@ namespace AutomateTests.Assets.test.Controller
             var sucess = movable.IssueMoveCommand(new Coordinate(3, 0, 0));
             Assert.IsTrue(sucess);
 
+            // 3,0
+            // 2,0 2,1
+            //
+            // 0.0
             gameWorld.CreateStructure(new Coordinate(2, 0, 0), new Coordinate(1, 1, 1), StructureType.Basic);
             gameWorld.CreateStructure(new Coordinate(2, 1, 0), new Coordinate(1, 1, 1), StructureType.Basic);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Actions;
 using Automate.Controller.Handlers.GoAndPickUp;
@@ -230,6 +231,7 @@ namespace src.View
                 gameWorldItemById.AddComponentStack(new IronOreComponent(), new Coordinate(0, 0, 0), 0);
                 var componentsAtCoordinate = gameWorldItemById.GetComponentsAtCoordinate(new Coordinate(0, 0, 0));
                 componentsAtCoordinate.AddAmount(100);
+                componentsAtCoordinate.AssignOutgoingAmount(movableListInCoordinate[0].Guid,50);
 
                 var newTask = gameWorldItemById.TaskDelegator.CreateNewTask();
                 newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0,0,0),100 );

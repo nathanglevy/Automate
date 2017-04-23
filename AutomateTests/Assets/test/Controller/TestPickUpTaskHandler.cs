@@ -68,7 +68,7 @@ namespace AutomateTests.Assets.test.Controller
 
         [TestMethod]
         [ExpectedException(typeof(MovableRelatedError))]
-        public void TestHandleGoAndPickUpWhenMovableNotExit_ExpectNoMovableAssignedExceptoin()
+        public void TestHandleGoAndPickUpWhenMovableNotExist_ExpectNoMovableAssignedExceptoin()
         {
             var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(5, 5, 1));
             var pickUpTaskHandler = new GoAndPickUpTaskHandler();
@@ -81,11 +81,13 @@ namespace AutomateTests.Assets.test.Controller
         public void TestCreatePickUpTaskAndHandleIt_ExpectMoveActionThenPickUpActions()
         {
             _gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
-            var movableItem = _gameWorldItem.CreateMovable(new Coordinate(3, 1, 0), MovableType.SimpleRobot);
+            var movableItem = _gameWorldItem.CreateMovable(new Coordinate(3, 1, 0), MovableType.NormalHuman);
 
             _gameWorldItem.AddComponentStack(new IronOreComponent(), new Coordinate(0, 0, 0), 0);
             var componentsAtCoordinate = _gameWorldItem.GetComponentsAtCoordinate(new Coordinate(0, 0, 0));
             componentsAtCoordinate.AddAmount(100);
+            componentsAtCoordinate.AssignOutgoingAmount(movableItem.Guid,100);
+        
 
             var GoAndpickUpAction = new GoAndPickUpAction(new Coordinate(0, 0, 0), 100, movableItem.Guid);
             GoAndpickUpAction.OnCompleteDelegate = PickUpOnCompleteFired;

@@ -79,10 +79,12 @@ namespace AutomateTests.Assets.test.Controller
             newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0,0,0),100 );
             var currentAction = newTask.GetCurrentAction();
 
-            gameWorldItem.AddComponentStack(new IronOreComponent(), new Coordinate(0, 0, 0), 0);
+            gameWorldItem.AddComponentStack(new IronOreComponent(), new Coordinate(0, 0, 0), 100);
             var componentsAtCoordinate = gameWorldItem.GetComponentsAtCoordinate(new Coordinate(0, 0, 0));
+            //componentsAtCoordinate.AddAmount(100);
+
+            componentsAtCoordinate.AssignOutgoingAmount(movableItem.Guid,70);
             
-            componentsAtCoordinate.AddAmount(100);
 
             var pickUpAction = new PickUpAction(new Coordinate(0,0,0),70 )
             {
