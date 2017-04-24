@@ -113,9 +113,10 @@ namespace src.View
                     break;
                 case ActionType.PickUp:
                     var pickUpAction = action as PickUpAction;
-            _logger.Log(string.Format("PickUp Is Executed of Amount: {0} AT Locatin: {1}",pickUpAction.Amount,pickUpAction.TargetDest));
-                    EditorUtility.DisplayDialog("PickUp Action",string.Format("PickUp Is Executed of Amount: {0} AT Locatin: {1}", pickUpAction.Amount, pickUpAction.TargetDest
-                        ), "Yes, Great ");
+                    SetStructureAtCoordinate(pickUpAction.TargetDest, "SpriteSheets/open_tileset_2x", 100);
+                    _logger.Log(string.Format("PickUp Is Executed of Amount: {0} AT Locatin: {1}", pickUpAction.Amount, pickUpAction.TargetDest));
+                    //EditorUtility.DisplayDialog("PickUp Action",string.Format("PickUp Is Executed of Amount: {0} AT Locatin: {1}", pickUpAction.Amount, pickUpAction.TargetDest
+                        //), "Yes, Great ");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -153,15 +154,12 @@ namespace src.View
                     GameObject newGameObject = Object.Instantiate(MovableObjectReference,
                     GetWorldVectorFromMapCoodinates(action.Coordinate)  + Vector3.back * 2, Quaternion.identity);
                     _movableDictionary.Add(action.Id,newGameObject);
-
-
                     break;
                 case ItemType.Structure:
                     _logger.Log(LogType.Log, HANDLE_ACTION, String.Format("Adding Structure at {0}.", action.Coordinate));
-                    GameObject structureObject =  Object.Instantiate(StructureObjectReference,
-                    GetWorldVectorFromMapCoodinates(action.Coordinate) + Vector3.back , Quaternion.identity);
-                    //GraphicsHandler.SetSpriteByName(structureObject, "ContainerLeft");
-                    GraphicsHandler.SetSpriteByPath(structureObject, "SpriteSheets/open_tileset_2x", 641);
+                    var spritesheetsOpenTilesetX = "SpriteSheets/open_tileset_2x";
+                    var spriteNum = 641;
+                    SetStructureAtCoordinate(action.Coordinate, spritesheetsOpenTilesetX, spriteNum);
                     break;
                 case ItemType.Cell:
                      Object.Instantiate(CellObjectReference,
@@ -170,11 +168,20 @@ namespace src.View
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
             
 
 
 
         }
+
+        private void SetStructureAtCoordinate(Coordinate cor, String spritePath, int SprintNum)
+        {
+            GameObject structureObject = Object.Instantiate(StructureObjectReference,
+                GetWorldVectorFromMapCoodinates(cor) + Vector3.back * 3, Quaternion.identity);
+            GraphicsHandler.SetSpriteByPath(structureObject, spritePath, SprintNum);
+        }
+
         Coordinate GetMapCoordinateFromWorldVector(Vector3 worldVector)
         {
             Vector3 spriteSize = GetSpriteRealSize(CellObjectReference);
@@ -225,12 +232,15 @@ namespace src.View
                 //var viewSelectionNotification = new ViewSelectionNotification(mapCoordinate, mapCoordinate, Guid.NewGuid());
                 //GameViewBase.Controller.Handle(viewSelectionNotification);
 
+
+                SetStructureAtCoordinate(new Coordinate(0,0,0), "SpriteSheets/open_tileset_2x",643);
+
                 _logger.Log(LogType.Log, INPUT, "Key: 4 preseed, we will Add Component in 0,0,0");
                 var gameWorldItemById = GameUniverse.GetGameWorldItemById(GameViewBase.Controller.Model);
                 var movableListInCoordinate = gameWorldItemById.GetMovableListInCoordinate(mapCoordinate);
                 gameWorldItemById.SelectMovableItems(movableListInCoordinate);
 
-                EditorUtility.DisplayDialog(string.Format("Placing 100 Iron At 0,0,0"),"Go And PickThem", "You have No Other Choice");
+                //EditorUtility.DisplayDialog(string.Format("Placing 100 Iron At 0,0,0"),"Go And PickThem", "You have No Other Choice");
 
                 gameWorldItemById.AddComponentStack(new IronOreComponent(), new Coordinate(0, 0, 0), 0);
                 var componentsAtCoordinate = gameWorldItemById.GetComponentsAtCoordinate(new Coordinate(0, 0, 0));
