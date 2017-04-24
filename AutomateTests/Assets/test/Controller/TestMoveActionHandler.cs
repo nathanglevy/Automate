@@ -38,6 +38,15 @@ namespace AutomateTests.Assets.test.Controller
         }
 
         [TestMethod]
+        public void TestCanHandleWithInCorrectArgsEspeciallStartMoveArgs_ExpectFalse()
+        {
+            Handler<IObserverArgs> moveHandler = new MoveActionHandler();
+            Assert.IsFalse(moveHandler.CanHandle(new StartMoveAction(new Coordinate(0, 0, 0), Guid.NewGuid())));
+        }
+
+
+
+        [TestMethod]
         [ExpectedException(typeof(NullReferenceException))]
         public void TestCanHandleWithNullArgs_ExpectException()
         {
@@ -49,14 +58,21 @@ namespace AutomateTests.Assets.test.Controller
         public void TestHandleMoveActionWhenPossible_ExpectToGetNewMoveCommandAsPartOfResult()
         {
             Handler<IObserverArgs> moveHandler = new MoveActionHandler();
+            Handler<IObserverArgs> startMoveHandler = new StartMoveActionHandler();
             var gameWorld = GameUniverse.CreateGameWorld(new Coordinate(10, 10, 1));
             var movable = gameWorld.CreateMovable(new Coordinate(1, 1, 0), MovableType.FastHuman);
 
-            // Call the Model To Calculate a Path
-            var sucess = movable.IssueMoveCommand(new Coordinate(4, 4, 0));
-
             IHandlerUtils utils = new HandlerUtils(gameWorld.Guid,null,null);
-            var handlerResult = moveHandler.Handle(new MoveAction(new Coordinate(1, 1, 0), new Coordinate(2, 2, 0), movable.Guid),utils);
+
+            var handlerResult0 = startMoveHandler.Handle(new StartMoveAction(new Coordinate(4, 4, 0), movable.Guid), utils);
+            Assert.AreEqual(1, handlerResult0.GetItems().Count);
+            Assert.IsNotNull(handlerResult0.GetItems()[0] as MoveAction);
+            var moveAction0 = handlerResult0.GetItems()[0] as MoveAction;
+            Assert.AreEqual(new Coordinate(1, 1, 0), moveAction0.CurrentCoordiate);
+            Assert.AreEqual(new Coordinate(2, 2, 0), moveAction0.To);
+
+
+            var handlerResult = moveHandler.Handle(new MoveAction(new Coordinate(3, 3, 0), movable.Coordinate, movable.Guid),utils);
             Assert.AreEqual(1, handlerResult.GetItems().Count);
             Assert.IsNotNull(handlerResult.GetItems()[0] as MoveAction);
             var moveAction = handlerResult.GetItems()[0] as MoveAction;
@@ -65,27 +81,10 @@ namespace AutomateTests.Assets.test.Controller
 
         }
 
-        [TestMethod]
-        public void TestHandleFirstMoveAction_ExpectFirstCoordinate()
-        {
-            Handler<IObserverArgs> moveHandler = new MoveActionHandler();
-            var gameWorld = GameUniverse.CreateGameWorld(new Coordinate(10, 10, 1));
-            var movable = gameWorld.CreateMovable(new Coordinate(1, 1, 0), MovableType.FastHuman);
-
-            IHandlerUtils utils = new HandlerUtils(gameWorld.Guid, null, null);
-            var handlerResult = moveHandler.Handle(new StartMoveAction(new Coordinate(4, 1, 0), new Coordinate(1, 1, 0), movable.Guid), utils);
-            Assert.AreEqual(1, handlerResult.GetItems().Count);
-            Assert.IsNotNull(handlerResult.GetItems()[0] as MoveAction);
-            var moveAction = handlerResult.GetItems()[0] as MoveAction;
-            Assert.AreEqual(new Coordinate(1, 1, 0), moveAction.CurrentCoordiate);
-            Assert.AreEqual(new Coordinate(2, 1, 0), moveAction.To);
-
-        }
 
 
 
-
-        [TestMethod]
+     //   [TestMethod]
         public void TestHandleMoveActionToNonLegalLocation_ExpectToGetMoveErrorActionAsPartOfResult()
         {
             Handler<IObserverArgs> moveHandler = new MoveActionHandler();

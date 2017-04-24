@@ -85,6 +85,7 @@
     <Compile Include="src\Actions\MoveAction.cs" />
     <Compile Include="src\Handlers\MoveHandler\MoveActionHandler.cs" />
     <Compile Include="src\Handlers\MoveHandler\StartMoveAction.cs" />
+    <Compile Include="src\Handlers\MoveHandler\StartMoveActionHandler.cs" />
     <Compile Include="src\Handlers\PlaceAnObject\PlaceAMovableRequest.cs" />
     <Compile Include="src\Handlers\PlaceAnObject\PlaceAnObjectRequest.cs" />
     <Compile Include="src\Handlers\PlaceAnObject\PlaceAnObjectRequestHandler.cs" />

@@ -6,7 +6,10 @@ namespace Automate.Controller.Handlers.MoveHandler
 {
     public class StartMoveAction : MoveAction
     {
-        public StartMoveAction(Coordinate to, Coordinate current, Guid movableGuid) : base(to,current,movableGuid)
-        {}
+        public StartMoveAction(Coordinate to, Guid movableGuid) : base(to, null, movableGuid)
+        {
+            IsNewMoveRequest = true;
+
+        }
     }
 }

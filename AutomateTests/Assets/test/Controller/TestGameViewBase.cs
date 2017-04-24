@@ -78,8 +78,13 @@ namespace AutomateTests.Assets.test.Controller
         {
             IGameView view = new GameViewBase();
             view.OnStart += onStart;
-            view.PerformOnStart();
+            view.PerformOnStart(GameWorldSize());
             Assert.IsTrue(_onStartFired);
+        }
+
+        private static Coordinate GameWorldSize()
+        {
+            return new Coordinate(5,5,1);
         }
 
         [TestMethod]
@@ -100,7 +105,7 @@ namespace AutomateTests.Assets.test.Controller
             var gameController = new GameController(view);
 
             // PerformOnStart to create the initial world
-            view.PerformOnStart();
+            view.PerformOnStart(GameWorldSize());
 
             // Perform Update to propogate all actions to Scheduler
             view.PerformOnUpdateStart();
@@ -131,15 +136,14 @@ namespace AutomateTests.Assets.test.Controller
             var gameController = new GameController(view);
 
             // at First update, Actions from Model being copied to the "Staging" Area in the Schudler
-            view.PerformOnStart();
+            view.PerformOnStart(GameWorldSize());
             view.PerformCompleteUpdate();
 
             // Performing hte second Update to propogate the Actions to be pulled
-            view.PerformOnStart();
             view.PerformCompleteUpdate();
 
             // we expect the actions to be executed
-            Assert.AreEqual(200, _handledActionsCount);
+            Assert.AreEqual(25, _handledActionsCount);
         }
 
         private void onActionReady(ViewHandleActionArgs args)

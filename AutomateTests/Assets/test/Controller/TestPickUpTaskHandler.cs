@@ -96,10 +96,14 @@ namespace AutomateTests.Assets.test.Controller
             var moveActionHandler = new MoveActionHandler();
             IHandlerUtils utils = new HandlerUtils(_gameWorldItem.Guid,HandlePickupAction,null);
             _startMoveSync = new AutoResetEvent(false);
-            var any = pickUpTaskHandler.Handle(GoAndpickUpAction, utils);
-            _startMoveSync.WaitOne();
+            var startMoveActionRequestResult = pickUpTaskHandler.Handle(GoAndpickUpAction, utils);
 
-            var result1 = _startMoveResult;
+            Assert.AreEqual(1, startMoveActionRequestResult.GetItems().Count);
+            Assert.AreEqual(ActionType.Movement, startMoveActionRequestResult.GetItems()[0].Type);
+            var startMoveAction = startMoveActionRequestResult.GetItems()[0] as StartMoveAction;
+            Assert.IsNotNull(startMoveAction);
+            Assert.AreEqual(new Coordinate(0, 0, 0), startMoveAction.To);
+
             // expectation
             // MoveAction (3,1,0) ==> (0,0,0) <-- Start Move Action
             // MoveAction (3,1,0) ==> (2,0,0)
@@ -107,7 +111,8 @@ namespace AutomateTests.Assets.test.Controller
             // MoveAction (1,0,0) ==> (0,0,0)
             // MoveAction (0,0,0) ==> (0,0,0)
             // PickUpAction (0,0,0) @ 100
-
+            var startMoveActionHandler = new StartMoveActionHandler();
+            var result1 = startMoveActionHandler.Handle(startMoveAction, utils);
             Assert.AreEqual(1, result1.GetItems().Count);
             Assert.AreEqual(ActionType.Movement, result1.GetItems()[0].Type);
             var moveAction0 = result1.GetItems()[0] as MoveAction;

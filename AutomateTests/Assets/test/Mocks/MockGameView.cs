@@ -4,6 +4,7 @@ using System.Threading;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
+using Automate.Model.MapModelComponents;
 
 namespace AutomateTests.test.Mocks
 {
@@ -49,6 +50,11 @@ namespace AutomateTests.test.Mocks
         public void PerformOnUpdateFinish()
         {
             if (OnUpdateFinish != null) OnUpdateFinish.Invoke(new ViewUpdateArgs());
+        }
+
+        public void PerformOnStart(Coordinate gameWorldSize)
+        {
+            throw new NotImplementedException();
         }
 
         public void PerformOnStart()

@@ -75,6 +75,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Assets\test\Controller\TestStartMoveActionHandler.cs" />
     <Compile Include="Assets\test\Controller\TestScheduler.cs" />
     <Compile Include="Assets\test\Controller\TestAcknowledgeNotification.cs" />
     <Compile Include="Assets\test\Controller\TestModelPushToView.cs" />

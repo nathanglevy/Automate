@@ -39,6 +39,8 @@ namespace src.View
         private string START = "START";
         private string UPDATE = "UPDATE";
         private string HANDLE_ACTION = "HANDLE_ACTION";
+        public int GameXSize = 10;
+        public int GameYSize = 10;
 
         public void Start()
         {
@@ -52,7 +54,7 @@ namespace src.View
 
             // notify that Start being Done Now
             _logger.Log(LogType.Log, START, "invoke gameViewBase OnStart Events");
-            GameViewBase.PerformOnStart();
+            GameViewBase.PerformOnStart(new Coordinate(GameXSize,GameYSize,1));
 
             _logger.Log(LogType.Log, START, "Finish Start Method");
 

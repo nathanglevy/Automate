@@ -9,6 +9,7 @@ namespace Automate.Controller.Actions
     {
         public Coordinate To { get; private set; }
         public Coordinate CurrentCoordiate { get; private set; }
+        public bool IsNewMoveRequest { get; set; }
 
         public MoveAction(Coordinate to, Coordinate currentCoordiate, string id) : this(to,currentCoordiate,new Guid(id))
         {

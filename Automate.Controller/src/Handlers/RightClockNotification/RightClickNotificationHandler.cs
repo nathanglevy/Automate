@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Actions;
+using Automate.Controller.Handlers.MoveHandler;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 using Automate.Model.GameWorldComponents;
@@ -37,11 +38,13 @@ namespace Automate.Controller.Handlers.RightClockNotification
                 foreach (var movable in selectedMovables)
                 {
                     //Debug.Log(String.Format("Build New Path From to {0}", rightNotification.Coordinate));
-                    var moveAction = new MoveAction(rightNotification.Coordinate, movable.CurrentCoordiate, movable.Guid);
-                    utils.InvokeHandler(moveAction);
+                    var moveAction = new StartMoveAction(rightNotification.Coordinate,
+                        movable.Guid);
+                    masterActions.Add(moveAction);
+                    //utils.InvokeHandler(moveAction);
                 }
 
-                return new HandlerResult(masterActions);
+                return new HandlerResult(masterActions) {IsInternal = true};
 
             }
             catch (Exception e)

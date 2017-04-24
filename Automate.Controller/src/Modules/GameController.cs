@@ -70,6 +70,7 @@ namespace Automate.Controller.Modules
             _handlers.Add(new RightClickNotificationHandler());
             _handlers.Add(new PlaceAnObjectRequestHandler());
             _handlers.Add(new MoveActionHandler());
+            _handlers.Add(new StartMoveActionHandler());
             _handlers.Add(new PickUpActionHandler());
             
 
@@ -86,7 +87,7 @@ namespace Automate.Controller.Modules
 
         private void InitGameWorld(ViewUpdateArgs args)
         {
-            var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 2));
+            var gameWorldItem = GameUniverse.CreateGameWorld(args.GameWorldSize);
             FocusGameWorld(gameWorldItem.Guid);
 
         }
@@ -203,7 +204,12 @@ namespace Automate.Controller.Modules
                 {
                     foreach (var item in handlerResult.GetItems())
                     {
-                        HandlePushAndNotify(item, handler, syncEvent);
+                        var waitSync = handlerUtils.InvokeHandler(item);
+                        foreach (var threadInfo in waitSync)
+                        {
+                            threadInfo.SyncEvent.WaitOne();
+                        }
+                        //HandlePushAndNotify(item, handler, new AutoResetEvent(false)).Invoke();
                     }
                 }
                 else

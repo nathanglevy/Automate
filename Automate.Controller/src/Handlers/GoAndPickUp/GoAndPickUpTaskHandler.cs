@@ -35,15 +35,14 @@ namespace Automate.Controller.Handlers.GoAndPickUp
             var targetCombo = gameWorldItem.GetComponentsAtCoordinate(goAndPickUpAction.TargetDestCoordinate);
             targetCombo.AssignOutgoingAmount(goAndPickUpAction.MovableGuid,goAndPickUpAction.Amount);
 
-            var moveAction = new StartMoveAction(goAndPickUpAction.TargetDestCoordinate, movableItem.CurrentCoordiate, movableItem.Guid)
+            var moveAction = new StartMoveAction(goAndPickUpAction.TargetDestCoordinate, movableItem.Guid)
             {
                 OnCompleteDelegate = OnMovableAtTargetDest,
             };
 
             _goAndPickActionsdict.Add(moveAction.MasterTaskId, goAndPickUpAction);
 
-            utils.InvokeHandler(moveAction);
-            return new HandlerResult(new List<MasterAction>());
+            return new HandlerResult(new List<MasterAction>() {moveAction}) {IsInternal = true};
 
         }
 
