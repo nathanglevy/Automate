@@ -34,8 +34,6 @@ namespace Automate.Controller.Interfaces
         //}
         public abstract bool CanHandle(T args);
 
-        
-
 
      
     }

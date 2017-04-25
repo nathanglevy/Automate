@@ -4,6 +4,7 @@ using System.Threading;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Delegates;
 using Automate.Controller.Handlers;
+using Automate.Controller.Handlers.GoAndDoSomething;
 using Automate.Controller.Handlers.GoAndPickUp;
 using Automate.Controller.Handlers.MoveHandler;
 using Automate.Controller.Handlers.PlaceAnObject;
@@ -66,12 +67,14 @@ namespace Automate.Controller.Modules
 
             // register handlers
             _handlers.Add(new GoAndPickUpTaskHandler());
+            _handlers.Add(new GoAndDeliverTaskHandler());
             _handlers.Add(new ViewSelectionHandler());
             _handlers.Add(new RightClickNotificationHandler());
             _handlers.Add(new PlaceAnObjectRequestHandler());
             _handlers.Add(new MoveActionHandler());
             _handlers.Add(new StartMoveActionHandler());
             _handlers.Add(new PickUpActionHandler());
+            _handlers.Add(new DeliverActionHandler());
             
 
         }
