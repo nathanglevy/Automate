@@ -93,7 +93,6 @@
     <Compile Include="src\PathFinding\NoPathFoundException.cs" />
     <Compile Include="src\PathFinding\PathFinderAStar.cs" />
     <Compile Include="src\Tasks\NoTaskException.cs" />
-    <Compile Include="src\Tasks\PickupTask.cs" />
     <Compile Include="src\Tasks\Task.cs" />
     <Compile Include="src\Tasks\TaskAction.cs" />
     <Compile Include="src\Tasks\TaskActionException.cs" />

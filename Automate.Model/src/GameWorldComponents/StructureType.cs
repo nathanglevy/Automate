@@ -6,6 +6,8 @@
         Machine,
         InputPort,
         OutputPort,
-        NonBlocking
+        NonBlocking,
+        Construction,
+        Storage
     }
 }

@@ -9,42 +9,47 @@ namespace Automate.Model.Components
     {
         public Guid Guid { get; }
         public Component ComponentType { get; }
-        public int Amount { get; private set; }
-        public int UnallocatedAmount => Amount - OutgoingAllocatedAmount;
+        public int CurrentAmount { get; private set; }
+        public int RemainingAmountForOutgoing => CurrentAmount - OutgoingAllocatedAmount;
+        public int RemainingAmountForIncoming => MaxAmountInStack - CurrentAmount - IncomingAllocatedAmount;
         public int OutgoingAllocatedAmount => _outgoingAllocations.Values.Sum();
         public int IncomingAllocatedAmount => _incomingAllocations.Values.Sum();
-
+        public int StackMax { get; internal set; } = 1000;
+        public int MaxAmountInStack => (int) (StackMax / ComponentType.Size);
         private Dictionary<Guid,int> _outgoingAllocations = new Dictionary<Guid, int>();
         private Dictionary<Guid,int> _incomingAllocations = new Dictionary<Guid, int>();
 
-        public ComponentStack(Component componentType, int amount)
+        public ComponentStack(Component componentType, int currentAmount)
         {
-            CheckPositiveValue(amount);
+            CheckPositiveValue(currentAmount);
             Guid = Guid.NewGuid();
             ComponentType = componentType;
-            Amount = amount;
+            CurrentAmount = currentAmount;
         }
 
         public int AddAmount(int amount)
         {
             CheckPositiveValue(amount);
-            return Amount += amount;
+            if (amount + CurrentAmount > MaxAmountInStack)
+                throw new ArgumentOutOfRangeException(nameof(amount), "Cannot add the following amount: " + amount + ", currentAmount " + CurrentAmount + " would be higher than stack max: " + StackMax);
+
+            return CurrentAmount += amount;
         }
 
         public int RemoveAmount(int amount)
         {
             CheckPositiveValue(amount);
-            if (amount > Amount)
-                throw new ArgumentOutOfRangeException(nameof(amount),"Cannot remove the following amount: " + amount + ", amount is higher than existing amount: " + Amount);
+            if (amount > CurrentAmount)
+                throw new ArgumentOutOfRangeException(nameof(amount), "Cannot remove the following amount: " + amount + ", currentAmount is higher than existing currentAmount: " + CurrentAmount);
 
-            return Amount -= amount;
+            return CurrentAmount -= amount;
         }
 
         public void AssignOutgoingAmount(Guid targetGuid, int amount)
         {
             CheckPositiveValue(amount);
-            if (UnallocatedAmount < amount)
-                throw new ArgumentOutOfRangeException(nameof(amount), "Cannot allocate outgoing more than existing amount");
+            if (RemainingAmountForOutgoing < amount)
+                throw new ArgumentOutOfRangeException(nameof(amount), "Cannot allocate outgoing more than existing currentAmount");
 
             if (_outgoingAllocations.ContainsKey(targetGuid))
                 _outgoingAllocations[targetGuid] += amount;
@@ -57,7 +62,7 @@ namespace Automate.Model.Components
             if (!_outgoingAllocations.ContainsKey(targetGuid))
                 throw new ArgumentException("Target Guid does not have an outgoing assignment: " + targetGuid);
             if (_outgoingAllocations[targetGuid] < amount)
-                throw new ArgumentOutOfRangeException(nameof(amount), "Cannot unassign more than assigned amount");
+                throw new ArgumentOutOfRangeException(nameof(amount), "Cannot unassign more than assigned currentAmount");
 
             if (_outgoingAllocations[targetGuid] == amount)
                 _outgoingAllocations.Remove(targetGuid);
@@ -68,6 +73,9 @@ namespace Automate.Model.Components
         public void AssignIncomingAmount(Guid targetGuid, int amount)
         {
             CheckPositiveValue(amount);
+            if (RemainingAmountForIncoming < amount)
+                throw new ArgumentOutOfRangeException(nameof(amount), "Cannot assign for incoming more than stack size");
+
             if (_incomingAllocations.ContainsKey(targetGuid))
                 _incomingAllocations[targetGuid] += amount;
             else
@@ -79,7 +87,7 @@ namespace Automate.Model.Components
             if (!_incomingAllocations.ContainsKey(targetGuid))
                 throw new ArgumentException("Target Guid does not have an outgoing assignment: " + targetGuid);
             if (_incomingAllocations[targetGuid] < amount)
-                throw new ArgumentOutOfRangeException(nameof(amount), "Cannot unassign more than assigned amount");
+                throw new ArgumentOutOfRangeException(nameof(amount), "Cannot unassign more than assigned currentAmount");
 
             if (_incomingAllocations[targetGuid] == amount)
                 _incomingAllocations.Remove(targetGuid);
@@ -125,7 +133,7 @@ namespace Automate.Model.Components
         private void CheckPositiveValue(int amount)
         {
             if (amount < 0)
-                throw new ArgumentException("Method does not accept a negative amount");
+                throw new ArgumentException("Method does not accept a negative currentAmount");
         }
     }
 }

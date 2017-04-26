@@ -45,12 +45,12 @@ namespace Automate.Model.GameWorldComponents
             Guid = Guid.NewGuid();
         }
 
-        public Movable GetMovable(Guid movableGuid)
+        internal Movable GetMovable(Guid movableGuid)
         {
             return _movables[movableGuid];
         }
 
-        public Structure GetStructure(Guid structureGuid)
+        internal Structure GetStructure(Guid structureGuid)
         {
             return _structures[structureGuid];
         }
@@ -260,11 +260,22 @@ namespace Automate.Model.GameWorldComponents
 
         public ComponentStack AddComponentStack(Component component, Coordinate location, int amount)
         {
-            if (_componentStacks.ContainsKey(location) && _componentStacks[location].GetType() != component.GetType())
+            if (_componentStacks.ContainsKey(location)) // && _componentStacks[location].GetType() != component.GetType())
                 throw new ArgumentException("Coordinate: " + location + " already has an item stack");
             ComponentStack componentStack = new ComponentStack(component, amount);
             _componentStacks[location] = componentStack;
             return componentStack;
+        }
+
+        public void RemoveComponentStack(Coordinate location) {
+            if (!_componentStacks.ContainsKey(location))
+                throw new ArgumentException("Coordinate: " + location + " does not have an item stack to remove");
+            _componentStacks.Remove(location);
+        }
+
+        public Dictionary<Coordinate, ComponentStack> GetAllComponentStackMapping()
+        {
+            return new Dictionary<Coordinate, ComponentStack>(_componentStacks);
         }
 
         public bool IsComponentStackAtCoordinate(Coordinate location)

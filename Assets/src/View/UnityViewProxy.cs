@@ -140,20 +140,21 @@ namespace src.View
                     GameObject newGameObject = Object.Instantiate(MovableObjectReference,
                     GetWorldVectorFromMapCoodinates(action.Coordinate)  + Vector3.back * 2, Quaternion.identity);
                     _movableDictionary.Add(action.Id,newGameObject);
-
-
                     break;
+
                 case ItemType.Structure:
                     _logger.Log(LogType.Log, HANDLE_ACTION, String.Format("Adding Structure at {0}.", action.Coordinate));
                     GameObject structureObject =  Object.Instantiate(StructureObjectReference,
                     GetWorldVectorFromMapCoodinates(action.Coordinate) + Vector3.back , Quaternion.identity);
                     //GraphicsHandler.SetSpriteByName(structureObject, "ContainerLeft");
-                    GraphicsHandler.SetSpriteByPath(structureObject, "SpriteSheets/open_tileset_2x", 641);
+                    //GraphicsHandler.SetSpriteByPath(structureObject, "SpriteSheets/open_tileset_2x", 641);
                     break;
+
                 case ItemType.Cell:
-                     Object.Instantiate(CellObjectReference,
-                GetWorldVectorFromMapCoodinates(action.Coordinate) , Quaternion.identity);
+                    Object.Instantiate(CellObjectReference,
+                    GetWorldVectorFromMapCoodinates(action.Coordinate) , Quaternion.identity);
                     break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }

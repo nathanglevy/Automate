@@ -26,8 +26,8 @@ namespace Automate.Model.Components.Tests {
         [TestMethod()]
         public void TestAmount_Remaining_Allocated() {
             ComponentStack componentStack = new ComponentStack(new IronOreComponent(), 10);
-            Assert.AreEqual(componentStack.Amount,10);
-            Assert.AreEqual(componentStack.UnallocatedAmount,10);
+            Assert.AreEqual(componentStack.CurrentAmount,10);
+            Assert.AreEqual(componentStack.RemainingAmountForOutgoing,10);
             Assert.AreEqual(componentStack.OutgoingAllocatedAmount,0);
         }
 
@@ -35,11 +35,11 @@ namespace Automate.Model.Components.Tests {
         public void TestAddAmount_ExpectCorrectValues() {
             ComponentStack componentStack = new ComponentStack(new IronOreComponent(), 10);
             componentStack.AddAmount(10);
-            Assert.AreEqual(componentStack.Amount, 20);
-            Assert.AreEqual(componentStack.UnallocatedAmount, 20);
+            Assert.AreEqual(componentStack.CurrentAmount, 20);
+            Assert.AreEqual(componentStack.RemainingAmountForOutgoing, 20);
             Assert.AreEqual(componentStack.OutgoingAllocatedAmount, 0);
             componentStack.AddAmount(10);
-            Assert.AreEqual(componentStack.Amount, 30);
+            Assert.AreEqual(componentStack.CurrentAmount, 30);
         }
 
         [TestMethod()]
@@ -53,11 +53,11 @@ namespace Automate.Model.Components.Tests {
         public void TestRemoveAmount_ExpectCorrectValues() {
             ComponentStack componentStack = new ComponentStack(new IronOreComponent(), 20);
             componentStack.RemoveAmount(10);
-            Assert.AreEqual(componentStack.Amount, 10);
-            Assert.AreEqual(componentStack.UnallocatedAmount, 10);
+            Assert.AreEqual(componentStack.CurrentAmount, 10);
+            Assert.AreEqual(componentStack.RemainingAmountForOutgoing, 10);
             Assert.AreEqual(componentStack.OutgoingAllocatedAmount, 0);
             componentStack.RemoveAmount(10);
-            Assert.AreEqual(componentStack.Amount, 0);
+            Assert.AreEqual(componentStack.CurrentAmount, 0);
         }
 
         [TestMethod()]
@@ -119,6 +119,15 @@ namespace Automate.Model.Components.Tests {
         }
 
         [TestMethod()]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void TestAssignIncomingAmount_AssignOverMax_ExpectArgumentOutOfRangeException() {
+            ComponentStack componentStack = new ComponentStack(new IronOreComponent(), 30);
+            Guid targetGuid = Guid.NewGuid();
+            componentStack.AssignIncomingAmount(targetGuid, 101);
+            Assert.AreEqual(componentStack.IncomingAllocatedAmount, 10);
+        }
+
+        [TestMethod()]
         public void TestGetIncomingAllocatedAmountForGuid_ExpectCorrectValue() {
             ComponentStack componentStack = new ComponentStack(new IronOreComponent(), 30);
             Guid targetGuid = Guid.NewGuid();
@@ -176,7 +185,7 @@ namespace Automate.Model.Components.Tests {
             componentStack.AssignIncomingAmount(targetGuid2, 20);
             componentStack.DeliverAmount(targetGuid2, 10);
 
-            Assert.AreEqual(componentStack.Amount, 15);
+            Assert.AreEqual(componentStack.CurrentAmount, 15);
             Assert.AreEqual(componentStack.IncomingAllocatedAmount, 15);
             Assert.AreEqual(componentStack.GetIncomingAllocatedAmountForGuid(targetGuid), 5);
             Assert.AreEqual(componentStack.GetIncomingAllocatedAmountForGuid(targetGuid2), 10);
@@ -217,9 +226,9 @@ namespace Automate.Model.Components.Tests {
             componentStack.AssignOutgoingAmount(targetGuid2, 20);
             componentStack.PickupAmount(targetGuid2, 10);
 
-            Assert.AreEqual(componentStack.Amount, 15);
+            Assert.AreEqual(componentStack.CurrentAmount, 15);
             Assert.AreEqual(componentStack.OutgoingAllocatedAmount, 15);
-            Assert.AreEqual(componentStack.UnallocatedAmount, 0);
+            Assert.AreEqual(componentStack.RemainingAmountForOutgoing, 0);
             Assert.AreEqual(componentStack.GetOutgoingAllocatedAmountForGuid(targetGuid), 5);
             Assert.AreEqual(componentStack.GetOutgoingAllocatedAmountForGuid(targetGuid2), 10);
         }

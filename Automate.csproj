@@ -52,6 +52,9 @@
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.Advertisements">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Advertisements.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -66,6 +69,9 @@
     </Reference>
     <Reference Include="UnityEngine.HoloLens">
       <HintPath>Library\UnityAssemblies\UnityEngine.HoloLens.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Purchasing">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Purchasing.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.VR">
       <HintPath>Library\UnityAssemblies\UnityEngine.VR.dll</HintPath>
@@ -106,12 +112,6 @@
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\Isometric.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\MethodExtensionForMonoBehaviourTransform.cs" />
     <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\Singleton.cs" />
-    <Compile Include="Assets\Unity-Logs-Viewer\Reporter\MultiKeyDictionary.cs" />
-    <Compile Include="Assets\Unity-Logs-Viewer\Reporter\Reporter.cs" />
-    <Compile Include="Assets\Unity-Logs-Viewer\Reporter\ReporterGUI.cs" />
-    <Compile Include="Assets\Unity-Logs-Viewer\Reporter\ReporterMessageReceiver.cs" />
-    <Compile Include="Assets\Unity-Logs-Viewer\Reporter\Test\Rotate.cs" />
-    <Compile Include="Assets\Unity-Logs-Viewer\Reporter\Test\TestReporter.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\AssertionComponent.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\AssertionException.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\Assertions.cs" />

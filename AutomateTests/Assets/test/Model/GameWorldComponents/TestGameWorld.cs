@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
@@ -154,6 +155,98 @@ namespace AutomateTests.Model.GameWorldComponents {
         public void TestRecalculateMovablePaths_ExpectSucess() {
             GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
             gameWorld.RecalculateMovablePaths();
+        }
+
+        [TestMethod()]
+        public void TestAddComponentStack_ExpectSucess() {
+            GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
+            gameWorld.AddComponentStack(Component.GetComponent(ComponentType.IronOre), new Coordinate(1, 1, 1), 10);
+            gameWorld.AddComponentStack(Component.GetComponent(ComponentType.IronOre), new Coordinate(2, 1, 1), 10);
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestAddComponentStack_StackExists_ExpectArgumentException() {
+            GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
+            gameWorld.AddComponentStack(Component.GetComponent(ComponentType.IronOre), new Coordinate(1, 1, 1), 10);
+            gameWorld.AddComponentStack(Component.GetComponent(ComponentType.IronOre), new Coordinate(1, 1, 1), 10);
+        }
+
+        [TestMethod()]
+        public void TestRemoveComponentStack_ExpectSucess() {
+            GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
+            gameWorld.AddComponentStack(Component.GetComponent(ComponentType.IronOre), new Coordinate(1, 1, 1), 10);
+            gameWorld.AddComponentStack(Component.GetComponent(ComponentType.IronOre), new Coordinate(2, 1, 1), 10);
+            gameWorld.RemoveComponentStack(new Coordinate(1, 1, 1));
+            gameWorld.RemoveComponentStack(new Coordinate(2, 1, 1));
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestRemoveComponentStack_NoStackExists_ExpectArgumentException() {
+            GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
+            gameWorld.AddComponentStack(Component.GetComponent(ComponentType.IronOre), new Coordinate(1, 1, 1), 10);
+            gameWorld.AddComponentStack(Component.GetComponent(ComponentType.IronOre), new Coordinate(2, 1, 1), 10);
+            gameWorld.RemoveComponentStack(new Coordinate(3, 1, 1));
+        }
+
+        [TestMethod()]
+        public void TestIsComponentStackAtCoordinate_ExpectSuccess() {
+            GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
+            gameWorld.AddComponentStack(Component.GetComponent(ComponentType.IronOre), new Coordinate(1, 1, 1), 10);
+            gameWorld.AddComponentStack(Component.GetComponent(ComponentType.IronOre), new Coordinate(2, 1, 1), 10);
+            Assert.IsTrue(gameWorld.IsComponentStackAtCoordinate(new Coordinate(1, 1, 1)));
+            Assert.IsTrue(gameWorld.IsComponentStackAtCoordinate(new Coordinate(2, 1, 1)));
+            gameWorld.RemoveComponentStack(new Coordinate(1, 1, 1));
+            Assert.IsFalse(gameWorld.IsComponentStackAtCoordinate(new Coordinate(1, 1, 1)));
+            Assert.IsTrue(gameWorld.IsComponentStackAtCoordinate(new Coordinate(2, 1, 1)));
+            gameWorld.RemoveComponentStack(new Coordinate(2, 1, 1));
+            Assert.IsFalse(gameWorld.IsComponentStackAtCoordinate(new Coordinate(1, 1, 1)));
+            Assert.IsFalse(gameWorld.IsComponentStackAtCoordinate(new Coordinate(2, 1, 1)));
+        }
+
+        [TestMethod()]
+        public void TestGetComponentsAtCoordinate_ExpectSuccess() {
+            GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
+            gameWorld.AddComponentStack(Component.GetComponent(ComponentType.IronOre), new Coordinate(1, 1, 1), 10);
+            gameWorld.AddComponentStack(Component.GetComponent(ComponentType.IronOre), new Coordinate(2, 1, 1), 20);
+            gameWorld.GetComponentsAtCoordinate(new Coordinate(1, 1, 1));
+        }
+
+        [TestMethod()]
+        public void TestGetComponentsAtCoordinate_ExpectCorrectValue() {
+            GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
+            gameWorld.AddComponentStack(Component.GetComponent(ComponentType.IronOre), new Coordinate(1, 1, 1), 10);
+            gameWorld.AddComponentStack(Component.GetComponent(ComponentType.IronOre), new Coordinate(2, 1, 1), 20);
+            Assert.AreEqual(10,gameWorld.GetComponentsAtCoordinate(new Coordinate(1, 1, 1)).CurrentAmount);
+            Assert.AreEqual(20,gameWorld.GetComponentsAtCoordinate(new Coordinate(2, 1, 1)).CurrentAmount);
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestGetComponentsAtCoordinate_NoComponent_ExpectArgumentException() {
+            GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
+            gameWorld.AddComponentStack(Component.GetComponent(ComponentType.IronOre), new Coordinate(1, 1, 1), 10);
+            gameWorld.AddComponentStack(Component.GetComponent(ComponentType.IronOre), new Coordinate(2, 1, 1), 20);
+            gameWorld.GetComponentsAtCoordinate(new Coordinate(3, 1, 1));
+        }
+
+        [TestMethod()]
+        public void TestGetAllComponentStackMapping_ExpectSuccess() {
+            GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
+            gameWorld.AddComponentStack(Component.GetComponent(ComponentType.IronOre), new Coordinate(1, 1, 1), 10);
+            gameWorld.AddComponentStack(Component.GetComponent(ComponentType.IronOre), new Coordinate(2, 1, 1), 20);
+            gameWorld.AddComponentStack(Component.GetComponent(ComponentType.IronOre), new Coordinate(3, 1, 1), 20);
+            Assert.AreEqual(3, gameWorld.GetAllComponentStackMapping().Count);
+        }
+
+        [TestMethod()]
+        public void TestGetGetMovableItemsInMotion_ExpectSuccess() {
+            GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
+            MovableItem movable1 = gameWorld.CreateMovable(new Coordinate(1, 1, 1), MovableType.NormalHuman);
+            MovableItem movable2 = gameWorld.CreateMovable(new Coordinate(1, 1, 1), MovableType.NormalHuman);
+            movable1.IssueMoveCommand(new Coordinate(2, 2, 1));
+            Assert.AreEqual(movable1.Guid, gameWorld.GetMovableItemsInMotion().First().Guid);
         }
 
         [TestMethod()]

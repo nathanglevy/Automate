@@ -19,6 +19,7 @@ namespace Automate.Model.GameWorldInterface
         private readonly GameWorld _focusedGameWorld;
         public override Coordinate Coordinate => _focusedGameWorld.GetWorldBoundary().topLeft;
         public TaskDelegator TaskDelegator => _focusedGameWorld.TaskDelegator;
+        public GameWorld GameWorld => _focusedGameWorld;
         internal GameWorldItem(GameWorld gameWorld) {
             _focusedGameWorld = gameWorld;
             Guid = gameWorld.Guid;
@@ -224,7 +225,6 @@ namespace Automate.Model.GameWorldInterface
             return _focusedGameWorld.GetMovableItemsInMotion();
         }
 
-
         public ComponentStack AddComponentStack(Component component, Coordinate location, int amount) {
             return _focusedGameWorld.AddComponentStack(component, location, amount);
         }
@@ -241,5 +241,7 @@ namespace Automate.Model.GameWorldInterface
         {
             return (_focusedGameWorld.GetMovableIdList().Contains(movableGuid));
         }
+
+
     }
 }
