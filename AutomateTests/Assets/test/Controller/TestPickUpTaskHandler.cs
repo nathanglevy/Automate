@@ -158,7 +158,7 @@ namespace AutomateTests.Assets.test.Controller
             var resultNotRelvant = moveActionHandler.Handle(moveAction4, utils);
             _pickupHandleSync.WaitOne(300);
             var result5 = _PickUpHandlerResult;
-            Assert.AreEqual(0, componentsAtCoordinate.Amount);
+            Assert.AreEqual(0, componentsAtCoordinate.CurrentAmount);
             Assert.IsTrue(_pickUpOnCompleteFired);
 
         }

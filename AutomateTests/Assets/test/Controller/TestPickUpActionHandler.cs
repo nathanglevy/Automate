@@ -93,10 +93,10 @@ namespace AutomateTests.Assets.test.Controller
                 OnCompleteDelegate = OnCompleteSniffer,
             };
 
-            Assert.AreEqual(componentsAtCoordinate.Amount, 100);
+            Assert.AreEqual(componentsAtCoordinate.CurrentAmount, 100);
             var pickUpActionHandler = new PickUpActionHandler();
             var handlerResult = pickUpActionHandler.Handle(pickUpAction, new HandlerUtils(gameWorldItem.Guid));
-            Assert.AreEqual(componentsAtCoordinate.Amount,30);
+            Assert.AreEqual(componentsAtCoordinate.CurrentAmount, 30);
             Assert.IsTrue(_onCompleteFired);
 
         }

@@ -160,7 +160,7 @@ namespace AutomateTests.Assets.test.Controller
             var resultNotRelvant = moveActionHandler.Handle(moveAction4, utils);
             _DeliverHandleSync.WaitOne(300);
             var result5 = _DeliverHandlerResult;
-            Assert.AreEqual(200, componentsAtCoordinate.Amount);
+            Assert.AreEqual(200, componentsAtCoordinate.CurrentAmount);
             Assert.IsTrue(_DeliverOnCompleteFired);
 
         }
