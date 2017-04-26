@@ -12,7 +12,6 @@ namespace Automate.Model.GameWorldComponents
         private StructureType structureType;
         private Boundary boundary;
         private Dictionary<string, ComponentStack> _internalComponentStacks = new Dictionary<string, ComponentStack>();
-        private int[] array = new int[10];
         public Guid Guid { get; private set; }
 
         internal Structure(Coordinate coordinate, Coordinate dimensions, StructureType structureType) {
