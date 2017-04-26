@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Modules;
+using Automate.Model.MapModelComponents;
 
 namespace Automate.Controller.Interfaces
 {
@@ -10,7 +11,7 @@ namespace Automate.Controller.Interfaces
         void PerformOnUpdate();
         void PerformOnUpdateStart();
         void PerformOnUpdateFinish();
-        void PerformOnStart();
+        void PerformOnStart(Coordinate gameWorldSize);
 
         void PerformOnActionReady(ViewHandleActionArgs viewHandleArgs);
 
@@ -41,6 +42,7 @@ namespace Automate.Controller.Interfaces
     public class ViewUpdateArgs
     {
         public List<ThreadInfo> ThreadsInfo { get; set; }
+        public Coordinate GameWorldSize { get; set; }
     }
 
 }

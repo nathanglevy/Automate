@@ -4,6 +4,7 @@ namespace Automate.Controller.Interfaces
 {
     public interface IObserverArgs
     {
-        string TargetId { get; }
+        Guid TargetId { get; }
+        event ControllerNotification OnComplete;
     }
 }

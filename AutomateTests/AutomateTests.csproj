@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AutomateTests</RootNamespace>
     <AssemblyName>AutomateTests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -75,11 +75,20 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Assets\test\Controller\TestDeliverActionHandler.cs" />
+    <Compile Include="Assets\test\Controller\TestDeliverTaskHandler.cs" />
+    <Compile Include="Assets\test\Controller\TestStartMoveActionHandler.cs" />
     <Compile Include="Assets\test\Controller\TestScheduler.cs" />
     <Compile Include="Assets\test\Controller\TestAcknowledgeNotification.cs" />
     <Compile Include="Assets\test\Controller\TestModelPushToView.cs" />
     <Compile Include="Assets\test\Controller\TestGameViewBase.cs" />
+    <Compile Include="Assets\test\Controller\TestPlaceAnObjectRequestHandler.cs" />
+    <Compile Include="Assets\test\Controller\TestPickUpTaskHandler.cs" />
+    <Compile Include="Assets\test\Controller\TestMoveActionHandler.cs" />
+    <Compile Include="Assets\test\Controller\TestTimersSched.cs" />
+    <Compile Include="Assets\test\Controller\TestPickUpActionHandler.cs" />
     <Compile Include="Assets\test\Controller\UnitTest1.cs" />
+    <Compile Include="Assets\test\Mocks\MockGameView.cs" />
     <Compile Include="Assets\test\Model\GameWorldComponents\TestMovable.cs" />
     <Compile Include="Assets\test\Model\GameWorldInterface\TestGameWorldItem.cs" />
     <Compile Include="Assets\test\Model\GameWorldInterface\TestMovableItem.cs" />
@@ -95,7 +104,6 @@
     <Compile Include="Assets\test\Model\PathFinding\TestPathFinderAStar.cs" />
     <Compile Include="Assets\test\Mocks\MockNotificationARgs.cs" />
     <Compile Include="Assets\test\Mocks\MockGameModel.cs" />
-    <Compile Include="Assets\test\Mocks\MockGameView.cs" />
     <Compile Include="Assets\test\Controller\TestController.cs" />
     <Compile Include="Assets\test\Model\MapModelComponents\TestBoundary.cs" />
     <Compile Include="Assets\test\Model\MapModelComponents\TestCellInfo.cs" />

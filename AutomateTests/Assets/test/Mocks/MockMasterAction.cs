@@ -1,4 +1,5 @@
-﻿using Automate.Controller.Abstracts;
+﻿using System;
+using Automate.Controller.Abstracts;
 
 namespace AutomateTests.test.Mocks
 {
@@ -6,7 +7,7 @@ namespace AutomateTests.test.Mocks
     {
         public MockMasterAction(ActionType type, string id) : base(type)
         {
-            TargetId = id;
+            TargetId = new Guid(id);
         }
     }
 }

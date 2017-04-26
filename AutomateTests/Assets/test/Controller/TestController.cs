@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using Automate.Controller.Abstracts;
@@ -20,10 +19,6 @@ namespace AutomateTests.test.Controller
     [TestClass]
     public class TestController
     {
-
-        private ConcurrentQueue<MasterAction> _queue = new ConcurrentQueue<MasterAction>();
-        private AutoResetEvent _syncEvent = new AutoResetEvent(false);
-
         private AutoResetEvent _ackSync = new AutoResetEvent(false);
         private int THREAD_TIMEOUT_VALUE = 1000;
 
@@ -91,8 +86,8 @@ namespace AutomateTests.test.Controller
             gameController.FocusGameWorld(gameModel);
             gameController.RegisterHandler(mockHandler);
             // Create the NotificationArgs
-            string playerID = "AhmadHamdan";
-            MockNotificationArgs mockNotificationArgs = new MockNotificationArgs(new Coordinate(12, 12, 3), playerID);
+            Guid playerID = Guid.NewGuid();
+            MockNotificationArgs mockNotificationArgs = new MockNotificationArgs(new Coordinate(12, 12, 3), playerID.ToString());
             System.Threading.Thread.CurrentThread.Name = "CurrentThread";
             IList<ThreadInfo> threads = gameController.Handle(mockNotificationArgs);
 
@@ -112,9 +107,75 @@ namespace AutomateTests.test.Controller
             MasterAction masterAction2 = gameController.OutputSched.Pull();
             Assert.AreEqual(ActionType.AreaSelection, masterAction1.Type);
             Assert.AreEqual(ActionType.Movement, masterAction2.Type);
-            Assert.AreEqual("AhmadHamdan", masterAction1.TargetId);
-            Assert.AreEqual("NaphLevy", masterAction2.TargetId);
+            Assert.AreEqual(new Guid("00000000-0000-0000-0000-000000000001"), masterAction1.TargetId);
+            Assert.AreEqual(new Guid("00000000-0000-0000-0000-000000000002"), masterAction2.TargetId);
 
+        }
+
+        private Guid _onPreHandleGuid;
+        private Guid _onPostHandleGuid;
+        private Guid _onFinishHandleGuid;
+
+        [TestMethod]
+        public void TestPreAndPostHandleEventsInvoke_ExpectEventsToFiredInCorrectOrder()
+        {
+
+            // Create View Object
+            MockGameView gameview = new MockGameView();
+
+            // Create GameWorldId Object
+            Guid gameModel = GetMockGameWorld();
+
+            // Create Handler
+            var mockHandler = new MockHandler();
+
+            // Init the Controller
+            IGameController gameController = new GameController((IGameView)gameview);
+            gameController.FocusGameWorld(gameModel);
+            gameController.RegisterHandler(mockHandler);
+
+
+            gameController.OnPreHandle += PreHandle;
+            gameController.OnPostHandle += PostHandle;
+            gameController.OnFinishHandle += FinishHandle;
+
+
+            // Create the NotificationArgs
+            Guid playerID = Guid.NewGuid();
+            MockNotificationArgs mockNotificationArgs = new MockNotificationArgs(new Coordinate(12, 12, 3), playerID.ToString());
+            IList<ThreadInfo> threads = gameController.Handle(mockNotificationArgs);
+
+            foreach (var threadInfo in threads)
+            {
+                threadInfo.SyncEvent.WaitOne(300);
+            }
+
+            Assert.AreEqual(new Guid("00000000-0000-0000-0000-000000000001"),_onPreHandleGuid);
+            Assert.AreEqual(new Guid("00000000-0000-0000-0000-000000000002"),_onPostHandleGuid);
+            Assert.AreEqual(new Guid("00000000-0000-0000-0000-000000000003"),_onFinishHandleGuid);
+
+
+        }
+
+        private void FinishHandle(ControllerNotificationArgs controllerNotificationArgs)
+        {
+            var mockNotificationArgs = controllerNotificationArgs.Args as MockNotificationArgs;
+            mockNotificationArgs.EventGuid = new Guid("00000000-0000-0000-0000-000000000003");
+            _onFinishHandleGuid = mockNotificationArgs.EventGuid;
+        }
+
+        private void PostHandle(ControllerNotificationArgs controllerNotificationArgs)
+        {
+            var mockNotificationArgs = controllerNotificationArgs.Args as MockNotificationArgs;
+            mockNotificationArgs.EventGuid = new Guid("00000000-0000-0000-0000-000000000002");
+            _onPostHandleGuid = mockNotificationArgs.EventGuid;
+        }
+
+        private void PreHandle(ControllerNotificationArgs controllerNotificationArgs)
+        {
+            var mockNotificationArgs = controllerNotificationArgs.Args as MockNotificationArgs;
+            mockNotificationArgs.EventGuid = new Guid("00000000-0000-0000-0000-000000000001");
+            _onPreHandleGuid = mockNotificationArgs.EventGuid;
         }
 
 
@@ -173,21 +234,20 @@ namespace AutomateTests.test.Controller
             MasterAction masterAction2 = gameController.OutputSched.Pull();
             Assert.AreEqual(ActionType.AreaSelection, masterAction1.Type);
             Assert.AreEqual(ActionType.Movement, masterAction2.Type);
-            Assert.AreEqual("AhmadHamdan", masterAction1.TargetId);
-            Assert.AreEqual("NaphLevy", masterAction2.TargetId);
+            Assert.AreEqual(new Guid("00000000-0000-0000-0000-000000000001"), masterAction1.TargetId);
+            Assert.AreEqual(new Guid("00000000-0000-0000-0000-000000000002"), masterAction2.TargetId);
 
             gameController.OutputSched.OnEnqueue += ActionsAddedtoSched;
             // mimic update from the view
             gameview.PerformOnUpdateStart();
             gameview.PerformOnUpdate();
 
-            // wait till action being added to sched
-            _ackSync.WaitOne(1000);
-
             gameController.OutputSched.OnPullStart(new ViewUpdateArgs());
             MasterAction masterAction4 = gameController.OutputSched.Pull();
             Assert.AreEqual(ActionType.Movement, masterAction4.Type);
-            Assert.AreEqual("NaphLevy_ACK", masterAction4.TargetId);
+            Assert.AreEqual(new Guid("00000000-0000-0000-0000-000000000002"), masterAction4.TargetId);
+            Assert.IsTrue(masterAction4.IsActionHasOver);
+
         }
 
       //  [TestMethod]
@@ -269,8 +329,9 @@ namespace AutomateTests.test.Controller
 
 
 
-            string playerID = "AhmadHamdan";
-            MockNotificationArgs mockNotificationArgs = new MockNotificationArgs(new Coordinate(12, 12, 3), playerID);
+            string playerID1 = "00000000-0000-0000-0000-000000000001";
+            string playerID2 = "00000000-0000-0000-0000-000000000002";
+            MockNotificationArgs mockNotificationArgs = new MockNotificationArgs(new Coordinate(12, 12, 3), playerID1);
             //            System.Threading.Thread.CurrentThread.Name = "CurrentThread";
             IList<ThreadInfo> threads = gameController.Handle(mockNotificationArgs);
 
@@ -290,8 +351,8 @@ namespace AutomateTests.test.Controller
             MasterAction masterAction2 = gameController.OutputSched.Pull();
             Assert.AreEqual(ActionType.AreaSelection, masterAction1.Type);
             Assert.AreEqual(ActionType.Movement, masterAction2.Type);
-            Assert.AreEqual("AhmadHamdan", masterAction1.TargetId);
-            Assert.AreEqual("NaphLevy", masterAction2.TargetId);
+            Assert.AreEqual(new Guid(playerID1), masterAction1.TargetId);
+            Assert.AreEqual(new Guid(playerID2), masterAction2.TargetId);
 
             gameController.OutputSched.OnEnqueue += ActionsAddedtoSched;
             // mimic update from the view
@@ -354,5 +415,8 @@ namespace AutomateTests.test.Controller
             // enque should be 
             _ackSync.Set();
         }
+
+
+
     }
 }

@@ -6,6 +6,9 @@
 
         Movement,
         SelectPlayer,
-        PlaceGameObject
+        PlaceGameObject,
+        PickUp,
+        Deliver,
+        DEFAULT
     }
 }

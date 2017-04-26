@@ -40,7 +40,7 @@ namespace AutomateTests.Assets.test.Controller
         {
             IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
             List<MasterAction> actions = new List<MasterAction>();
-            actions.Add(new MockMasterAction(ActionType.AreaSelection, "MyId"));
+            actions.Add(new MockMasterAction(ActionType.AreaSelection, Guid.Empty.ToString()));
             scheduler.Enqueue(actions);
             scheduler.OnPullStart(new ViewUpdateArgs());
             Assert.AreEqual(1, scheduler.ItemsCount);
@@ -58,7 +58,7 @@ namespace AutomateTests.Assets.test.Controller
         {
             IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
             List<MasterAction> actions = new List<MasterAction>();
-            actions.Add(new MockMasterAction(ActionType.AreaSelection, "MyId"));
+            actions.Add(new MockMasterAction(ActionType.AreaSelection, Guid.Empty.ToString()));
             scheduler.Enqueue(actions);
             scheduler.OnPullStart(new ViewUpdateArgs());
             Assert.IsTrue(scheduler.HasItems);
@@ -69,8 +69,8 @@ namespace AutomateTests.Assets.test.Controller
         {
             IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
             List<MasterAction> actions = new List<MasterAction>();
-            actions.Add(new MockMasterAction(ActionType.AreaSelection, "MyId1"));
-            actions.Add(new MockMasterAction(ActionType.Movement, "MyId2"));
+            actions.Add(new MockMasterAction(ActionType.AreaSelection, Guid.Empty.ToString()));
+            actions.Add(new MockMasterAction(ActionType.Movement, Guid.Empty.ToString()));
             scheduler.Enqueue(actions);
             scheduler.OnPullStart(new ViewUpdateArgs());
             MasterAction action = scheduler.Pull();
@@ -92,8 +92,8 @@ namespace AutomateTests.Assets.test.Controller
         {
             IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
             List<MasterAction> actions = new List<MasterAction>();
-            actions.Add(new MockMasterAction(ActionType.AreaSelection, "MyId1"));
-            actions.Add(new MockMasterAction(ActionType.Movement, "MyId2"));
+            actions.Add(new MockMasterAction(ActionType.AreaSelection, Guid.Empty.ToString()));
+            actions.Add(new MockMasterAction(ActionType.Movement, Guid.Empty.ToString()));
             IHandlerResult<MasterAction> handlerResult = new HandlerResult(actions);
 
             HandlerResultListner<MasterAction> pusher = scheduler.GetPushInvoker();
@@ -115,9 +115,11 @@ namespace AutomateTests.Assets.test.Controller
 
             IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
             List<MasterAction> actions = new List<MasterAction>();
+            var ids = new Dictionary<int, Guid>();
             for (int i = 0; i < 50; i++)
             {
-                actions.Add(new MockMasterAction(ActionType.Movement, "MyId" + i));
+                ids.Add(i,Guid.NewGuid());
+                actions.Add(new MockMasterAction(ActionType.Movement, ids[i].ToString()));
             }
             IHandlerResult<MasterAction> handlerResult = new HandlerResult(actions);
 
@@ -132,7 +134,7 @@ namespace AutomateTests.Assets.test.Controller
             {
                 MasterAction action = scheduler.Pull();
                 Assert.AreEqual(ActionType.Movement, action.Type);
-                Assert.AreEqual("MyId" + i,action.TargetId);
+                Assert.AreEqual(ids[i],action.TargetId);
             }
 
 
@@ -145,7 +147,7 @@ namespace AutomateTests.Assets.test.Controller
         {
             IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
             List<MasterAction> actions = new List<MasterAction>();
-            actions.Add(new MockMasterAction(ActionType.Movement, "MyId2"));
+            actions.Add(new MockMasterAction(ActionType.Movement, Guid.Empty.ToString()));
             IHandlerResult<MasterAction> handlerResult = new HandlerResult(actions);
 
             HandlerResultListner<MasterAction> pusher = scheduler.GetPushInvoker();
@@ -169,7 +171,7 @@ namespace AutomateTests.Assets.test.Controller
             IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
             scheduler.OnPull += PullListner;
             List<MasterAction> actions = new List<MasterAction>();
-            actions.Add(new MockMasterAction(ActionType.Movement, "MyId2"));
+            actions.Add(new MockMasterAction(ActionType.Movement, Guid.Empty.ToString()));
             IHandlerResult<MasterAction> handlerResult = new HandlerResult(actions);
 
             HandlerResultListner<MasterAction> pusher = scheduler.GetPushInvoker();
@@ -209,7 +211,7 @@ namespace AutomateTests.Assets.test.Controller
 
         private void PullListner(MasterAction item)
         {
-            Assert.AreEqual("MyId2", item.TargetId);
+            Assert.AreEqual(Guid.Empty, item.TargetId);
             _listnerActivated = true;
             _onPullSync.Set();
         }

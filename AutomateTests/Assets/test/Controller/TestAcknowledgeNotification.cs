@@ -1,64 +1,64 @@
-﻿using System.Collections.Generic;
-using Automate.Controller.Abstracts;
-using Automate.Controller.Actions;
-using Automate.Controller.Handlers;
-using Automate.Controller.Handlers.AcknowledgeNotification;
-using Automate.Controller.Interfaces;
-using Automate.Controller.Modules;
-using Automate.Model.MapModelComponents;
-using AutomateTests.test.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿//using System.Collections.Generic;
+//using Automate.Controller.Abstracts;
+//using Automate.Controller.Actions;
+//using Automate.Controller.Handlers;
+//using Automate.Controller.Handlers.AcknowledgeNotification;
+//using Automate.Controller.Interfaces;
+//using Automate.Controller.Modules;
+//using Automate.Model.MapModelComponents;
+//using AutomateTests.test.Mocks;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.test.Controller
-{
-    [TestClass]
-    public class TestAcknowledgeNotification
-    {
-        [TestMethod]
-        public void TestCreateNew_ShouldPass()
-        {
-            ObserverArgs args = new AcknowledgeNotification(null);
-            Assert.IsNotNull(args);
-        }
-
-        [TestMethod]
-        public void TestGetExecutedActionOnView_ExpectNotNull()
-        {
-            MoveAction executedAction = new MoveAction(new Coordinate(1,0,0), new Coordinate(1, 1, 0),"MyId");
-            AcknowledgeNotification args = new AcknowledgeNotification(executedAction);
-            Assert.IsNotNull(args.ExecutedAction);
-        }
-
-        [TestMethod]
-        public void TestCreateNewHandler_ExpectPass()
-        {
-            var handler = new AcknowledgeNotificationHandler();
-            Assert.IsNotNull(handler);
-        }
-
+//namespace AutomateTests.test.Controller
+//{
+//    [TestClass]
+//    public class TestAcknowledgeNotification
+//    {
 //        [TestMethod]
-//        public void TestAcknowledgeHandleDelegationToOtherHandler_ExpectMasterActionWithPlayerMovment()
+//        public void TestCreateNew_ShouldPass()
 //        {
-//            
-//            IHandlerUtils utils = new HandlerUtils(new MockGameModel(),testingSnifferMethod,ackknowledgeMethod);
-//            var handler = new AcknowledgeNotificationHandler();
-//            AcknowledgeNotification acknowledgeNotificationArgs = new AcknowledgeNotification(new MoveAction(new Coordinate(5,5,5),new Coordinate(3,3,3),"MyID"  ));
-//            var handlerResult = handler.Handle(acknowledgeNotificationArgs, utils);
-//            Assert.AreEqual(1,handlerResult.GetItems().Count);
-//            Assert.AreEqual(ActionType.Movement,handlerResult.GetItems()[0].Type);
-//            Assert.IsTrue(handlerResult.GetItems()[0] is MoveAction);
-//
+//            ObserverArgs args = new AcknowledgeNotification(null);
+//            Assert.IsNotNull(args);
 //        }
 
+//        [TestMethod]
+//        public void TestGetExecutedActionOnView_ExpectNotNull()
+//        {
+//            MoveAction executedAction = new MoveAction(new Coordinate(1,0,0), new Coordinate(1, 1, 0),"MyId");
+//            AcknowledgeNotification args = new AcknowledgeNotification(executedAction);
+//            Assert.IsNotNull(args.ExecutedAction);
+//        }
 
-        private IList<ThreadInfo> ackknowledgeMethod(MasterAction args)
-        {
-            throw new System.NotImplementedException();
-        }
+//        [TestMethod]
+//        public void TestCreateNewHandler_ExpectPass()
+//        {
+//            var handler = new AcknowledgeNotificationHandler();
+//            Assert.IsNotNull(handler);
+//        }
 
-        private IList<ThreadInfo> testingSnifferMethod(ObserverArgs args)
-        {
-            throw new System.NotImplementedException();
-        }
-    }
-}
+////        [TestMethod]
+////        public void TestAcknowledgeHandleDelegationToOtherHandler_ExpectMasterActionWithPlayerMovment()
+////        {
+////            
+////            IHandlerUtils utils = new HandlerUtils(new MockGameModel(),testingSnifferMethod,ackknowledgeMethod);
+////            var handler = new AcknowledgeNotificationHandler();
+////            AcknowledgeNotification acknowledgeNotificationArgs = new AcknowledgeNotification(new MoveAction(new Coordinate(5,5,5),new Coordinate(3,3,3),"MyID"  ));
+////            var handlerResult = handler.Handle(acknowledgeNotificationArgs, utils);
+////            Assert.AreEqual(1,handlerResult.GetItems().Count);
+////            Assert.AreEqual(ActionType.Movement,handlerResult.GetItems()[0].Type);
+////            Assert.IsTrue(handlerResult.GetItems()[0] is MoveAction);
+////
+////        }
+
+
+//        private IList<ThreadInfo> ackknowledgeMethod(MasterAction args)
+//        {
+//            throw new System.NotImplementedException();
+//        }
+
+//        private IList<ThreadInfo> testingSnifferMethod(ObserverArgs args)
+//        {
+//            throw new System.NotImplementedException();
+//        }
+//    }
+//}

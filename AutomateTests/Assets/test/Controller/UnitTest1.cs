@@ -1,47 +1,113 @@
-﻿using Automate.Controller.Handlers;
-using Automate.Controller.Handlers.PlaceAnObject;
-using Automate.Model.GameWorldComponents;
+﻿using System;
+using System.Collections.Generic;
+using Automate.Controller.Abstracts;
+using Automate.Controller.Actions;
+using Automate.Controller.Handlers;
+using Automate.Controller.Interfaces;
+using Automate.Controller.Modules;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
+using Automate.Model.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AutomateTests.test.Controller
 {
     [TestClass]
-    public class TestPlaceAnObjectRequestHandler
+    public class TestTaskHandler
     {
         [TestMethod]
-        public void TestCreateNew_ShouldPass()
+        public void CreateNew_ShouldPass()
         {
-            PlaceAnObjectRequestHandler handler = new PlaceAnObjectRequestHandler();
-            Assert.IsNotNull(handler);
+            var taskHandler = new TaskHandler();
+            Assert.IsNotNull(taskHandler);
         }
 
         [TestMethod]
-        public void TestHandlePlaceAStructure_ExpectStructureToBeAdded()
+        public void TestCanHandleWithCorrectArgs_ExpectTrue()
         {
-            var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(10, 10, 1));
-            var placeAnObjectRequest = new PlaceAStrcutureRequest(new Coordinate(3, 2, 0),
-                new Coordinate(1, 1, 1), StructureType.Basic);
-            var handler = new PlaceAnObjectRequestHandler();
-            var handlerResult = handler.Handle(placeAnObjectRequest, new HandlerUtils(gameWorldItem.Guid, null, null));
-            Assert.AreEqual(0, handlerResult.GetItems().Count);
-            Assert.IsTrue(gameWorldItem.IsThereAnItemToBePlaced());
-            Assert.AreEqual(ItemType.Structure, gameWorldItem.GetItemsToBePlaced().FindLast(p => p.Type == ItemType.Structure).Type);
+            var taskHandler = new TaskHandler();
+            Assert.IsTrue(taskHandler.CanHandle(new TaskContainer(null)));
+        }
+
+        [TestMethod]
+        public void TestCanHandleWithInCorrectArgs_ExpectFalse()
+        {
+            var taskHandler = new TaskHandler();
+            Assert.IsFalse(taskHandler.CanHandle(new MoveAction(null,null,Guid.NewGuid())));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void TestCanHandleWithNull_ExpectException()
+        {
+            var taskHandler = new TaskHandler();
+            taskHandler.CanHandle(null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestHandleWithIncorrectArgs_ExpectException()
+        {
+            var taskHandler = new TaskHandler();
+            taskHandler.Handle(new MoveAction(null, null, Guid.Empty), null);
+        }
+
+        [TestMethod]
+        public void TestHandle_ExpectOnComplete()
+        {
+            var taskHandler = new TaskHandler();
+
+            // build model, targetTask and Action
+            var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(5, 5, 1));
+            var newTask = gameWorldItem.TaskDelegator.CreateNewTask();
+            newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0, 1, 0), 100);
+
+            // Handle the TargetTask
+            // Expects --> to Handle Current Action
+            var taskContainer = new TaskContainer(newTask);
+            var handlerResult = taskHandler.Handle(taskContainer,new HandlerUtils(gameWorldItem.Guid,HandleMimic,null));
+
+
+        }
+
+        private IList<ThreadInfo> HandleMimic(IObserverArgs args)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class TaskContainer : IObserverArgs
+    {
+        public Task TargetTask { get; }
+
+        public TaskContainer(Task targetTask)
+        {
+            TargetTask = targetTask;
         }
 
 
-        [TestMethod]
-        public void TestHandlePlaceAMovable_ExpectMovableToBeAdded()
+        public Guid TargetId { get; }
+        public event ControllerNotification OnComplete;
+
+
+    }
+
+    public class TaskHandler : Handler<IObserverArgs>
+    {
+        public override IHandlerResult<MasterAction> Handle(IObserverArgs args, IHandlerUtils utils)
         {
-            var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(10, 10, 1));
-            var placeAnObjectRequest = new PlaceAMovableRequest(new Coordinate(3, 2, 0),
-                 MovableType.SimpleRobot);
-            var handler = new PlaceAnObjectRequestHandler();
-            var handlerResult = handler.Handle(placeAnObjectRequest, new HandlerUtils(gameWorldItem.Guid, null, null));
-            Assert.AreEqual(0, handlerResult.GetItems().Count);
-            Assert.IsTrue(gameWorldItem.IsThereAnItemToBePlaced());
-            Assert.AreEqual(ItemType.Movable, gameWorldItem.GetItemsToBePlaced().FindLast(p => p.Type == ItemType.Movable).Type);
+            if (!CanHandle(args))
+                throw new ArgumentException("Args is not expected, Handler Expects TaskContainer");
+
+            return null;
+
+        }
+
+        public override bool CanHandle(IObserverArgs args)
+        {
+            if (args == null)
+                throw new NullReferenceException("Args is null, cannot determine if Handler should be activated");
+            return args is TaskContainer;
         }
     }
 }

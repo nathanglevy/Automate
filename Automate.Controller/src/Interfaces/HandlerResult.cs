@@ -7,6 +7,11 @@ namespace Automate.Controller.Interfaces
     {
         private readonly List<MasterAction> _actions;
 
+        /// <summary>
+        /// bool attribute to indicate if Handled Actions should be pushed to View or Just ReHandled
+        /// </summary>
+        public bool IsInternal { get; set; } 
+
         public HandlerResult(List<MasterAction> actions)
         {
             _actions = actions;

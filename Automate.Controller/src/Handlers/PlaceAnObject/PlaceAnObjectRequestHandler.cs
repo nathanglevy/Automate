@@ -6,10 +6,10 @@ using Automate.Model.GameWorldInterface;
 
 namespace Automate.Controller.Handlers.PlaceAnObject
 {
-    public class PlaceAnObjectRequestHandler : Handler<ObserverArgs>, IHandler<ObserverArgs>
+    public class PlaceAnObjectRequestHandler : Handler<IObserverArgs>
     {
 
-        public override IHandlerResult<MasterAction> Handle(ObserverArgs args, IHandlerUtils utils)
+        public override IHandlerResult<MasterAction> Handle(IObserverArgs args, IHandlerUtils utils)
         {
             if (!CanHandle(args))
                 throw new ArgumentException("Handler got non PlaceAnObjectRequset as args");
@@ -44,19 +44,10 @@ namespace Automate.Controller.Handlers.PlaceAnObject
             }
         }
 
-        public override bool CanHandle(ObserverArgs args)
+        public override bool CanHandle(IObserverArgs args)
         {
             return args is PlaceAStrcutureRequest || args is PlaceAMovableRequest;
         }
 
-        public override IAcknowledgeResult<MasterAction> Acknowledge(MasterAction action, IHandlerUtils utils)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool CanAcknowledge(MasterAction action)
-        {
-            return false;
-        }
     }
 }

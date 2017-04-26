@@ -11,8 +11,7 @@
     <AssemblyName>Automate.Controller</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -60,6 +59,9 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UnityEditor">
+      <HintPath>..\Library\UnityAssemblies\UnityEditor.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
@@ -69,13 +71,27 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Abstracts\ActionType.cs" />
     <Compile Include="src\Abstracts\MasterAction.cs" />
+    <Compile Include="src\Abstracts\ModelMasterAction.cs" />
     <Compile Include="src\Abstracts\ObserverArgs.cs" />
     <Compile Include="src\Delegates\HandlerResultListner.cs" />
     <Compile Include="src\Handlers\AcknowledgeNotification\AcknowledgeNotification.cs" />
     <Compile Include="src\Handlers\AcknowledgeNotification\AcknowledgeNotificationHandler.cs" />
+    <Compile Include="src\Handlers\GoAndDoSomething\DeliverAction.cs" />
+    <Compile Include="src\Handlers\GoAndDoSomething\DeliverActionHandler.cs" />
+    <Compile Include="src\Handlers\GoAndDoSomething\GoAndDeliverAction.cs" />
+    <Compile Include="src\Handlers\GoAndDoSomething\GoAndDeliverTaskHandler.cs" />
+    <Compile Include="src\Handlers\GoAndDoSomething\GoAndDoSomethingAction.cs" />
+    <Compile Include="src\Handlers\GoAndDoSomething\GoAndDoSomethingHandler.cs" />
+    <Compile Include="src\Handlers\GoAndDoSomething\GoAndPickUpAction.cs" />
+    <Compile Include="src\Handlers\GoAndDoSomething\GoAndPickUpTaskHandler.cs" />
+    <Compile Include="src\Handlers\GoAndDoSomething\PickUpAction.cs" />
+    <Compile Include="src\Handlers\GoAndDoSomething\PickUpActionHandler.cs" />
     <Compile Include="src\Handlers\HandlerUtils.cs" />
     <Compile Include="src\Handlers\IHandlerUtils.cs" />
     <Compile Include="src\Actions\MoveAction.cs" />
+    <Compile Include="src\Handlers\MoveHandler\MoveActionHandler.cs" />
+    <Compile Include="src\Handlers\MoveHandler\StartMoveAction.cs" />
+    <Compile Include="src\Handlers\MoveHandler\StartMoveActionHandler.cs" />
     <Compile Include="src\Handlers\PlaceAnObject\PlaceAMovableRequest.cs" />
     <Compile Include="src\Handlers\PlaceAnObject\PlaceAnObjectRequest.cs" />
     <Compile Include="src\Handlers\PlaceAnObject\PlaceAnObjectRequestHandler.cs" />
@@ -85,6 +101,10 @@
     <Compile Include="src\Actions\SelectMovableAction.cs" />
     <Compile Include="src\Handlers\SelectionNotification\ViewSelectionHandler.cs" />
     <Compile Include="src\Handlers\SelectionNotification\ViewSelectionNotification.cs" />
+    <Compile Include="src\Handlers\TaskActionHandler\TaskActionContainer.cs" />
+    <Compile Include="src\Handlers\TaskActionHandler\TaskActionHandler.cs" />
+    <Compile Include="src\Interfaces\ControllerNotification.cs" />
+    <Compile Include="src\Interfaces\ControllerNotificationArgs.cs" />
     <Compile Include="src\Interfaces\HandlerResult.cs" />
     <Compile Include="src\Interfaces\IAcknowledgeResult.cs" />
     <Compile Include="src\Interfaces\IAcknowledgeResult1.cs" />
@@ -96,12 +116,15 @@
     <Compile Include="src\Interfaces\IScheduler.cs" />
     <Compile Include="src\Interfaces\ITimerScheduler.cs" />
     <Compile Include="src\Modules\AutomateLogHandler.cs" />
+    <Compile Include="src\Modules\ErrorType.cs" />
     <Compile Include="src\Modules\GameViewBase.cs" />
     <Compile Include="src\Modules\LogTag.cs" />
+    <Compile Include="src\Modules\MovableErrorAction.cs" />
+    <Compile Include="src\Modules\MovableRelatedError.cs" />
     <Compile Include="src\Modules\PlaceAGameObjectAction.cs" />
     <Compile Include="src\Modules\Scheduler - Copy.cs" />
     <Compile Include="src\Modules\TimerSchudulerUpdateArgs.cs" />
-    <Compile Include="src\Modules\TimersSchedular.cs" />
+    <Compile Include="src\Modules\TimersScheduler.cs" />
     <Compile Include="src\Modules\GameController.cs" />
     <Compile Include="src\Modules\HandleActivation.cs" />
     <Compile Include="src\Modules\Scheduler.cs" />
@@ -115,7 +138,9 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="src\Handlers\TaskHandler\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

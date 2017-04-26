@@ -1,27 +1,20 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
+using Automate.Model.MapModelComponents;
 
 namespace AutomateTests.test.Mocks
 {
     public class MockGameView : IGameView
     {
         private readonly List<MasterAction> _list;
-        public ConcurrentQueue<IHandlerResult<MasterAction>> Results { get; private set; }
 
         public MockGameView()
         {
             _list =new List<MasterAction>();
-            Results = new ConcurrentQueue<IHandlerResult<MasterAction>>();
-        }
-
-        private void HandleResults(IHandlerResult<MasterAction> handlerResult)
-        {
-            Results.Enqueue(new TestingThreadWrapper(new ThreadInfo(null,Thread.CurrentThread), handlerResult));
         }
 
 
@@ -57,6 +50,11 @@ namespace AutomateTests.test.Mocks
         public void PerformOnUpdateFinish()
         {
             if (OnUpdateFinish != null) OnUpdateFinish.Invoke(new ViewUpdateArgs());
+        }
+
+        public void PerformOnStart(Coordinate gameWorldSize)
+        {
+            throw new NotImplementedException();
         }
 
         public void PerformOnStart()
@@ -110,5 +108,7 @@ namespace AutomateTests.test.Mocks
         {
             return _handlerResult.GetItems();
         }
+
+        public bool IsInternal { get; set; }
     }
 }

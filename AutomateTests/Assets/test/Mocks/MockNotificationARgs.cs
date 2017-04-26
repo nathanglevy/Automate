@@ -1,3 +1,4 @@
+using System;
 using Automate.Controller.Abstracts;
 using Automate.Model.MapModelComponents;
 
@@ -9,6 +10,8 @@ namespace AutomateTests.Mocks
         {
             DropCoordinate = dropCoordinate;
         }
+
+        public Guid EventGuid { get; set; }
 
         public Coordinate DropCoordinate { get; private set; }
 

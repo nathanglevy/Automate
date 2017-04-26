@@ -35,7 +35,12 @@ namespace Automate.Controller.Modules
 
         public void PerformOnStart()
         {
-            if (OnStart != null) OnStart.Invoke(new ViewUpdateArgs());
+            throw new NotImplementedException();
+        }
+
+        public void PerformOnStart(Coordinate coordinate)
+        {
+            if (OnStart != null) OnStart.Invoke(new ViewUpdateArgs() {GameWorldSize = coordinate});
         }
 
         public void PerformCompleteUpdate()
