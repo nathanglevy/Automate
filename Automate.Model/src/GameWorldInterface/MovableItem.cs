@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 using Automate.Model.PathFinding;
@@ -156,6 +158,18 @@ namespace Automate.Model.GameWorldInterface
         public Object GetAccessLock()
         {
             return _gameWorld.GetMovable(Guid).GetMovableAccessLock();
+        }
+
+        public Dictionary<string, ComponentStack> GetComponentStacks() {
+            return _gameWorld.GetMovable(Guid).GetComponentStacks();
+        }
+
+        public void AddNewStack(Component componentType, int amount) {
+            _gameWorld.GetMovable(Guid).AddNewStack(componentType, amount);
+        }
+
+        public void RemoveStack(Component componentType) {
+            _gameWorld.GetMovable(Guid).RemoveStack(componentType);
         }
 
     }

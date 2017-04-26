@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Automate.Model.Components;
 using Automate.Model.MapModelComponents;
 using Automate.Model.PathFinding;
 using Automate.Model.Tasks;
@@ -22,7 +23,7 @@ namespace Automate.Model.GameWorldComponents {
         private double _speed;
         private readonly Object AccessLock = new Object();
         private List<Task> _taskList = new List<Task>();
-
+        private Dictionary<string, ComponentStack> _componentStacks = new Dictionary<string, ComponentStack>();
 
         internal Movable(Coordinate startinCoordinate, MovableType movableType)
         {
@@ -143,6 +144,21 @@ namespace Automate.Model.GameWorldComponents {
         public Object GetMovableAccessLock()
         {
             return AccessLock;
+        }
+
+        public Dictionary<string, ComponentStack> GetComponentStacks()
+        {
+            return new Dictionary<string, ComponentStack>(_componentStacks);
+        }
+
+        public void AddNewStack(Component componentType, int amount) {
+            if (_componentStacks.ContainsKey(componentType.Type))
+                throw new ArgumentException("Stack already contains component of this type");
+            _componentStacks.Add(componentType.Type, new ComponentStack(componentType, amount));
+        }
+
+        public void RemoveStack(Component componentType) {
+            _componentStacks.Remove(componentType.Type);
         }
     }
 }
