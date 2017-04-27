@@ -121,7 +121,7 @@ namespace Automate.Model.GameWorldComponents
             StructureItem structureItem = new StructureItem(this, structure.Guid);
             _structures.Add(structure.Guid, structure);
             _itemsToBePlaced.Add(structureItem);
-            foreach (Coordinate coordinteInBoundary in structure.GetStructureBoundary().GetListOfCoordinatesInBoundary())
+            foreach (Coordinate coordinteInBoundary in structure.Boundary.GetListOfCoordinatesInBoundary())
             {
                 _coordinateToStructureMap.Add(coordinteInBoundary,structure.Guid);
                 if (!structureType.Equals(StructureType.NonBlocking))

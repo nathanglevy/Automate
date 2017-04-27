@@ -28,12 +28,17 @@ namespace Automate.Model.Components
             MaxStacks = DEFAULT_STACKS_COUNT;
         }
 
-        public void AddComponentStack(Component component, int amount)
+        public ComponentStack AddComponentStack(Component component, int amount)
         {
             ComponentStack newStack = new ComponentStack(component, amount);
             if (CurrentTotalSpace + newStack.CurrentTotalSpace > MaxSize)
                 throw new ArgumentOutOfRangeException("Not enough space in stackgroup to add: " + amount + " of " + component.Type);
             _componentStacks.Add(newStack.ComponentType.Type, newStack);
+            return newStack;
+        }
+
+        public ComponentStack AddComponentStack(ComponentType componentType, int amount) {
+            return AddComponentStack(Component.GetComponent(componentType), amount);
         }
 
         public ComponentStack GetComponentStack(Component component) {
@@ -55,6 +60,10 @@ namespace Automate.Model.Components
             _componentStacks.Remove(component.Type);
         }
 
+        public void RemoveComponentStack(ComponentType componentType) {
+            RemoveComponentStack(Component.GetComponent(componentType));
+        }
+
         public List<string> GetListOfComponentsInGroup()
         {
             return _componentStacks.Select(pair => pair.Key).ToList();
@@ -69,6 +78,13 @@ namespace Automate.Model.Components
             //TODO add checks and only commit transfer if it is successful!!!
             _componentStacks[component.Type].PickupAmount(idOfTransferer, amount);
             componentStackGroup.GetComponentStack(component).DeliverAmount(idOfTransferer, amount);
+        }
+
+        public void TransferToStackGroup(Guid idOfTransferer, ComponentStackGroup componentStackGroup,
+            ComponentType componentType, int amount)
+        {
+            TransferToStackGroup(idOfTransferer, componentStackGroup,
+            Component.GetComponent(componentType), amount);
         }
 
         public void TransferToStack(Guid idOfTransferer, ComponentStack componentStack, int amount) {

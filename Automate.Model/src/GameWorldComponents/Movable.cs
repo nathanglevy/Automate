@@ -153,10 +153,22 @@ namespace Automate.Model.GameWorldComponents {
             ComponentStackGroup.GetComponentStack(component).DeliverAmount(_id,amount);
         }
 
+        public void PickupFromComponentStackGroup(ComponentStackGroup pickupFromComponentStackGroup, ComponentType componentType,
+            int amount)
+        {
+            PickupFromComponentStackGroup(pickupFromComponentStackGroup, Component.GetComponent(componentType), amount);
+        }
+
         public void DeliverToComponentStackGroup(ComponentStackGroup deliverToComponentStackGroup, Component component,
             int amount) {
             ComponentStackGroup.GetComponentStack(component).PickupAmount(_id, amount);
             deliverToComponentStackGroup.GetComponentStack(component).DeliverAmount(_id, amount);
+        }
+
+        public void DeliverToComponentStackGroup(ComponentStackGroup deliverToComponentStackGroup, ComponentType componentType,
+            int amount)
+        {
+            DeliverToComponentStackGroup(deliverToComponentStackGroup, Component.GetComponent(componentType), amount);
         }
     }
 }
