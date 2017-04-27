@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Automate.Controller.Abstracts;
@@ -14,6 +15,7 @@ using Automate.Model.Tasks;
 using AutomateTests.test.Controller;
 using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Component = Automate.Model.Components.Component;
 
 namespace AutomateTests.Assets.test.Controller
 {
@@ -69,6 +71,12 @@ namespace AutomateTests.Assets.test.Controller
             var deliverActionHandler = new DeliverActionHandler();
             var handlerResult = deliverActionHandler.Handle(new MockMasterAction(ActionType.AreaSelection,Guid.NewGuid().ToString()),null);
         }
+
+        [TestMethod]
+        public void TestThatDeliverAndAssignIncomingAtTheSameType_ExpectException()
+        {
+            throw new NotImplementedException();
+        }
             
         [TestMethod]
         public void TestHandleDeliverAction_ExpectModelToBeUpdatedAndOnCompleteToBeFired()
@@ -80,7 +88,9 @@ namespace AutomateTests.Assets.test.Controller
             newTask.AddAction(TaskActionType.DeliveryTask, new Coordinate(0,0,0),100 );
             var currentAction = newTask.GetCurrentAction();
 
-            gameWorldItem.AddComponentStack(new IronOreComponent(), new Coordinate(0, 0, 0), 100);
+
+            var component = Component.GetComponent(ComponentType.IronOre);
+            gameWorldItem.AddComponentStack(component, new Coordinate(0, 0, 0), 20);
             var componentsAtCoordinate = gameWorldItem.GetComponentsAtCoordinate(new Coordinate(0, 0, 0));
             //componentsAtCoordinate.AddAmount(100);
 
@@ -94,19 +104,14 @@ namespace AutomateTests.Assets.test.Controller
                 OnCompleteDelegate = OnCompleteSniffer,
             };
 
-            Assert.AreEqual(componentsAtCoordinate.CurrentAmount, 100);
+            Assert.AreEqual(componentsAtCoordinate.CurrentAmount, 20);
             var deliverActionHandler = new DeliverActionHandler();
             var handlerResult = deliverActionHandler.Handle(deliverAction, new HandlerUtils(gameWorldItem.Guid));
-            Assert.AreEqual(componentsAtCoordinate.CurrentAmount, 170);
+            Assert.AreEqual(componentsAtCoordinate.CurrentAmount, 90);
             Assert.IsTrue(_onCompleteFired);
 
         }
 
-        [TestMethod]
-        public void TestAssignedAndDeliverdNotTheSame_ExpectException()
-        {
-            throw new NotImplementedException();
-        }
 
         private void OnCompleteSniffer(ControllerNotificationArgs args)
         {

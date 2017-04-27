@@ -101,6 +101,13 @@ namespace AutomateTests.Assets.test.Controller
 
         }
 
+        [TestMethod]
+        public void TestThatPickupAndAssignIncomingAtTheSameType_ExpectException()
+        {
+            throw new NotImplementedException();
+        }
+
+
         private void OnCompleteSniffer(ControllerNotificationArgs args)
         {
             _onCompleteFired = true;

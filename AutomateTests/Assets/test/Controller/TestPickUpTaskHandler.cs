@@ -67,13 +67,45 @@ namespace AutomateTests.Assets.test.Controller
         }
 
         [TestMethod]
-        [ExpectedException(typeof(MovableRelatedError))]
+        [ExpectedException(typeof(ArgumentException))]
         public void TestHandleGoAndPickUpWhenMovableNotExist_ExpectNoMovableAssignedExceptoin()
         {
             var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(5, 5, 1));
             var pickUpTaskHandler = new GoAndPickUpTaskHandler();
             pickUpTaskHandler.Handle(new GoAndPickUpAction(new Coordinate(0, 0, 0), 100, Guid.Empty),
                 new HandlerUtils(gameWorldItem.Guid));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestPickUpFromALocationWithoutComponenet_ExpectException()
+        {
+            _gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
+            var movableItem = _gameWorldItem.CreateMovable(new Coordinate(3, 1, 0), MovableType.NormalHuman);
+            var GoAndpickUpAction = new GoAndPickUpAction(new Coordinate(0, 0, 0), 100, movableItem.Guid);
+
+            IHandlerUtils utils = new HandlerUtils(_gameWorldItem.Guid, HandlePickupAction, null);
+            var pickUpTaskHandler = new GoAndPickUpTaskHandler();
+            var startMoveActionRequestResult = pickUpTaskHandler.Handle(GoAndpickUpAction, utils);
+
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void TestPickUpMoreThanExists_ExpectOutOFRangeException()
+        {
+            _gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
+            var movableItem = _gameWorldItem.CreateMovable(new Coordinate(3, 1, 0), MovableType.NormalHuman);
+            var GoAndpickUpAction = new GoAndPickUpAction(new Coordinate(0, 0, 0), 100, movableItem.Guid);
+
+            _gameWorldItem.AddComponentStack(new IronOreComponent(), new Coordinate(0, 0, 0), 20);
+            var componentsAtCoordinate = _gameWorldItem.GetComponentsAtCoordinate(new Coordinate(0, 0, 0));
+
+
+            IHandlerUtils utils = new HandlerUtils(_gameWorldItem.Guid, HandlePickupAction, null);
+            var pickUpTaskHandler = new GoAndPickUpTaskHandler();
+            var startMoveActionRequestResult = pickUpTaskHandler.Handle(GoAndpickUpAction, utils);
+
         }
 
 

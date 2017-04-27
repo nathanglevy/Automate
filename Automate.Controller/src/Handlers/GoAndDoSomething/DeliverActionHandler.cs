@@ -16,17 +16,21 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
             var deliverAction = args as DeliverAction;
             var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
             var movableItem = gameWorldItem.GetMovableItem(deliverAction.MovableId);
+            // Get Stack at Target Coordinate
             var componentStack = gameWorldItem.GetComponentsAtCoordinate(deliverAction.TargetDest);
-            //if (componentStack.GetOutgoingAllocatedAmountForGuid(pickUpAction.MovableId) != pickUpAction.Amount)
-            //{
 
-            //}
+            // TODO: move to new code
+
+            // Deliver 
+            //movableItem.Deliver(deliverAction.Amount,componentStack)
             componentStack.DeliverAmount(deliverAction.MovableId, deliverAction.Amount);
+
+            // TODO: 
 
             // Pick Up Operation Ended, Fire On Complete
             deliverAction.FireOnComplete(new ControllerNotificationArgs(deliverAction));
 
-            return new HandlerResult(new List<MasterAction>() { deliverAction });
+            return new HandlerResult(new List<MasterAction>() {deliverAction});
         }
 
         public override bool CanHandle(IObserverArgs args)
