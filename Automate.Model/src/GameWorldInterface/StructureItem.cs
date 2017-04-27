@@ -9,13 +9,11 @@ namespace Automate.Model.GameWorldInterface
     public class StructureItem : Item
     {
         private readonly GameWorld _gameWorld;
-
         public override Coordinate Coordinate => StructureBoundary.topLeft;
+        //public ComponentStackGroup ComponentStackGroup => _gameWorld.GetStructure(Guid).ComponentStackGroup;
 
-        public Boundary StructureBoundary
-        {
-            get { return _gameWorld.GetStructure(Guid).GetStructureBoundary(); }
-        }
+        public Boundary StructureBoundary => _gameWorld.GetStructure(Guid).Boundary;
+        public Structure Structure => _gameWorld.GetStructure(Guid);
 
         internal StructureItem(GameWorld gameWorld, Guid structureGuid) {
             Guid = structureGuid;
@@ -23,19 +21,20 @@ namespace Automate.Model.GameWorldInterface
             _gameWorld = gameWorld;
         }
 
+
         //public Structure Structure => _gameWorld.GetStructure(Guid);
 
-        public Dictionary<string, ComponentStack> GetInternalComponentStacks() {
-            return _gameWorld.GetStructure(Guid).GetInternalComponentStacks();
-        }
+//        public Dictionary<string, ComponentStack> GetInternalComponentStacks() {
+//            return _gameWorld.GetStructure(Guid).GetInternalComponentStacks();
+//        }
 
-        public void AddNewStack(Component componentType, int amount) {
-            _gameWorld.GetStructure(Guid).AddNewStack(componentType, amount);
-        }
-
-        public void RemoveStack(Component componentType) {
-            _gameWorld.GetStructure(Guid).RemoveStack(componentType);
-        }
+//        public void AddNewStack(Component componentType, int amount) {
+//            _gameWorld.GetStructure(Guid).AddNewStack(componentType, amount);
+//        }
+//
+//        public void RemoveStack(Component componentType) {
+//            _gameWorld.GetStructure(Guid).RemoveStack(componentType);
+//        }
 
         //        public override bool Equals(Object obj) {
         //            // Check for null values and compare run-time types.

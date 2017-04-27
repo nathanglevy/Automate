@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Interfaces;
+using Automate.Model.Components;
 using Automate.Model.GameWorldInterface;
 
 namespace Automate.Controller.Handlers.GoAndPickUp
@@ -15,7 +16,7 @@ namespace Automate.Controller.Handlers.GoAndPickUp
 
             var pickUpAction = args as PickUpAction;
             var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
-            var componentStack = gameWorldItem.GetComponentsAtCoordinate(pickUpAction.TargetDest);
+            var componentStack = gameWorldItem.GetComponentStackGroupAtCoordinate(pickUpAction.TargetDest).GetComponentStack(ComponentType.IronOre);
             //if (componentStack.GetOutgoingAllocatedAmountForGuid(pickUpAction.MovableId) != pickUpAction.Amount)
             //{
                 

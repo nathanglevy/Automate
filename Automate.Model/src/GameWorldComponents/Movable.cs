@@ -23,7 +23,7 @@ namespace Automate.Model.GameWorldComponents {
         private double _speed;
         private readonly Object AccessLock = new Object();
         private List<Task> _taskList = new List<Task>();
-        private Dictionary<string, ComponentStack> _componentStacks = new Dictionary<string, ComponentStack>();
+        public ComponentStackGroup ComponentStackGroup { get; } = new ComponentStackGroup(1000,1000);
 
         internal Movable(Coordinate startinCoordinate, MovableType movableType)
         {
@@ -146,19 +146,29 @@ namespace Automate.Model.GameWorldComponents {
             return AccessLock;
         }
 
-        public Dictionary<string, ComponentStack> GetComponentStacks()
+        public void PickupFromComponentStackGroup(ComponentStackGroup pickupFromComponentStackGroup, Component component,
+            int amount)
         {
-            return new Dictionary<string, ComponentStack>(_componentStacks);
+            pickupFromComponentStackGroup.GetComponentStack(component).PickupAmount(_id, amount);
+            ComponentStackGroup.GetComponentStack(component).DeliverAmount(_id,amount);
         }
 
-        public void AddNewStack(Component componentType, int amount) {
-            if (_componentStacks.ContainsKey(componentType.Type))
-                throw new ArgumentException("Stack already contains component of this type");
-            _componentStacks.Add(componentType.Type, new ComponentStack(componentType, amount));
+        public void PickupFromComponentStackGroup(ComponentStackGroup pickupFromComponentStackGroup, ComponentType componentType,
+            int amount)
+        {
+            PickupFromComponentStackGroup(pickupFromComponentStackGroup, Component.GetComponent(componentType), amount);
         }
 
-        public void RemoveStack(Component componentType) {
-            _componentStacks.Remove(componentType.Type);
+        public void DeliverToComponentStackGroup(ComponentStackGroup deliverToComponentStackGroup, Component component,
+            int amount) {
+            ComponentStackGroup.GetComponentStack(component).PickupAmount(_id, amount);
+            deliverToComponentStackGroup.GetComponentStack(component).DeliverAmount(_id, amount);
+        }
+
+        public void DeliverToComponentStackGroup(ComponentStackGroup deliverToComponentStackGroup, ComponentType componentType,
+            int amount)
+        {
+            DeliverToComponentStackGroup(deliverToComponentStackGroup, Component.GetComponent(componentType), amount);
         }
     }
 }

@@ -225,22 +225,28 @@ namespace Automate.Model.GameWorldInterface
             return _focusedGameWorld.GetMovableItemsInMotion();
         }
 
-        public ComponentStack AddComponentStack(Component component, Coordinate location, int amount) {
-            return _focusedGameWorld.AddComponentStack(component, location, amount);
-        }
-
-        public bool IsComponentStackAtCoordinate(Coordinate location) {
-            return _focusedGameWorld.IsComponentStackAtCoordinate(location);
-        }
-
-        public ComponentStack GetComponentsAtCoordinate(Coordinate location) {
-            return _focusedGameWorld.GetComponentsAtCoordinate(location);
+//        public ComponentStack AddComponentStack(Component component, Coordinate location, int amount) {
+//            return _focusedGameWorld.AddComponentStack(component, location, amount);
+//        }
+//
+//        public bool IsComponentStackAtCoordinate(Coordinate location) {
+//            return _focusedGameWorld.IsComponentStackAtCoordinate(location);
+//        }
+//
+        public ComponentStackGroup GetComponentStackGroupAtCoordinate(Coordinate location) {
+            return _focusedGameWorld.GetComponentStackGroupAtCoordinate(location);
         }
 
         public bool HasMovableWithGuid(Guid movableGuid)
         {
             return (_focusedGameWorld.GetMovableIdList().Contains(movableGuid));
         }
+
+        public float GetMoveCostBetweenCoordinates(Coordinate startCoordinate, Coordinate endCoordinate)
+        {
+            return _focusedGameWorld.GetMoveCostBetweenCoordinates(startCoordinate, endCoordinate);
+        }
+
 
 
     }

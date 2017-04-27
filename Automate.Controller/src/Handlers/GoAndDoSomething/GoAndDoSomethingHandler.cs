@@ -27,7 +27,7 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
             var movableItem = gameWorldItem.GetMovableItem(goAndDoSomethingAction.MovableGuid);
 
             // let's allocate the outgoing amount
-            var targetCombo = gameWorldItem.GetComponentsAtCoordinate(GetComponentCoordinate(goAndDoSomethingAction, movableItem));
+            var targetCombo = gameWorldItem.GetComponentStackGroupAtCoordinate(GetComponentCoordinate(goAndDoSomethingAction, movableItem)).GetComponentStack(ComponentType.IronOre);
             AssignComponentStack(targetCombo, goAndDoSomethingAction);
 
             var moveAction = new StartMoveAction(GetGoDestination(goAndDoSomethingAction, movableItem), movableItem.Guid)

@@ -51,7 +51,12 @@ namespace Automate.Model.PathFinding
             return _moveCost;
         }
 
-        public double GetMoveMultiplier(Coordinate coordinate)
+        /// <summary>
+        /// used internally
+        /// </summary>
+        /// <param name="coordinate"></param>
+        /// <returns></returns>
+        internal double GetMoveMultiplier(Coordinate coordinate)
         {
             return Math.Sqrt(Math.Abs(coordinate.x) + Math.Abs(coordinate.y) + Math.Abs(coordinate.z));
         }

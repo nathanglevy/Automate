@@ -18,6 +18,7 @@ namespace Automate.Model.GameWorldInterface
     {
         private readonly GameWorld _gameWorld;
         public override Coordinate Coordinate => CurrentCoordiate;
+        public ComponentStackGroup ComponentStackGroup => _gameWorld.GetMovable(Guid).ComponentStackGroup;
 
         internal MovableItem(GameWorld gameWorld, Guid movableGuid) {
             if (!gameWorld.GetMovableIdList().Contains(movableGuid))
@@ -160,17 +161,16 @@ namespace Automate.Model.GameWorldInterface
             return _gameWorld.GetMovable(Guid).GetMovableAccessLock();
         }
 
-        public Dictionary<string, ComponentStack> GetComponentStacks() {
-            return _gameWorld.GetMovable(Guid).GetComponentStacks();
+        public void PickupFromComponentStackGroup(ComponentStackGroup pickupFromComponentStackGroup, Component component,
+            int amount)
+        {
+            _gameWorld.GetMovable(Guid).PickupFromComponentStackGroup(pickupFromComponentStackGroup, component, amount);
         }
 
-        public void AddNewStack(Component componentType, int amount) {
-            _gameWorld.GetMovable(Guid).AddNewStack(componentType, amount);
+        public void DeliverToComponentStackGroup(ComponentStackGroup deliverToComponentStackGroup, Component component,
+            int amount)
+        {
+            _gameWorld.GetMovable(Guid).DeliverToComponentStackGroup(deliverToComponentStackGroup, component, amount);
         }
-
-        public void RemoveStack(Component componentType) {
-            _gameWorld.GetMovable(Guid).RemoveStack(componentType);
-        }
-
     }
 }
