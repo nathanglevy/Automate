@@ -13,6 +13,7 @@ using Automate.Model.MapModelComponents;
 using Automate.Model.Tasks;
 using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Component = Automate.Model.Components.Component;
 
 namespace AutomateTests.Assets.test.Controller
 {
@@ -79,8 +80,8 @@ namespace AutomateTests.Assets.test.Controller
             newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0,0,0),100 );
             var currentAction = newTask.GetCurrentAction();
 
-            gameWorldItem.AddComponentStack(new IronOreComponent(), new Coordinate(0, 0, 0), 100);
-            var componentsAtCoordinate = gameWorldItem.GetComponentsAtCoordinate(new Coordinate(0, 0, 0));
+            gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0)).AddComponentStack(Component.GetComponent(ComponentType.IronOre), 100);
+            var componentsAtCoordinate = gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0)) .GetComponentStack(ComponentType.IronOre);
             //componentsAtCoordinate.AddAmount(100);
 
             componentsAtCoordinate.AssignOutgoingAmount(movableItem.Guid,70);

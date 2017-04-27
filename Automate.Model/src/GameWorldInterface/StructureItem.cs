@@ -9,8 +9,8 @@ namespace Automate.Model.GameWorldInterface
     public class StructureItem : Item
     {
         private readonly GameWorld _gameWorld;
-
         public override Coordinate Coordinate => StructureBoundary.topLeft;
+        public ComponentStackGroup ComponentStackGroup => _gameWorld.GetStructure(Guid).ComponentStackGroup;
 
         public Boundary StructureBoundary
         {

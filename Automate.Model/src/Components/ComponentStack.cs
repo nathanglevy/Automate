@@ -10,11 +10,15 @@ namespace Automate.Model.Components
         public Guid Guid { get; }
         public Component ComponentType { get; }
         public int CurrentAmount { get; private set; }
+        public float CurrentTotalSpace => CurrentAmount * ComponentType.Size; 
+        public float CurrentTotalWeight => CurrentAmount * ComponentType.Weight;
+        public float TotalIncomingSpace => IncomingAllocatedAmount * ComponentType.Size; 
+        public float TotalIncomingWeight => IncomingAllocatedAmount * ComponentType.Weight; 
         public int RemainingAmountForOutgoing => CurrentAmount - OutgoingAllocatedAmount;
         public int RemainingAmountForIncoming => MaxAmountInStack - CurrentAmount - IncomingAllocatedAmount;
         public int OutgoingAllocatedAmount => _outgoingAllocations.Values.Sum();
         public int IncomingAllocatedAmount => _incomingAllocations.Values.Sum();
-        public int StackMax { get; internal set; } = 1000;
+        public int StackMax { get; set; } = 1000;
         public int MaxAmountInStack => (int) (StackMax / ComponentType.Size);
         private Dictionary<Guid,int> _outgoingAllocations = new Dictionary<Guid, int>();
         private Dictionary<Guid,int> _incomingAllocations = new Dictionary<Guid, int>();

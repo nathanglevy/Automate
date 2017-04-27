@@ -16,7 +16,8 @@ using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Tasks;
 using UnityEditor;
-using UnityEngine; 
+using UnityEngine;
+using Component = Automate.Model.Components.Component;
 using Object = UnityEngine.Object;
 
 namespace src.View
@@ -251,12 +252,12 @@ namespace src.View
 
                 //EditorUtility.DisplayDialog(string.Format("Placing 100 Iron At 0,0,0"),"Go And PickThem", "You have No Other Choice");
 
-                gameWorldItemById.AddComponentStack(new IronOreComponent(), new Coordinate(0, 0, 0), 0);
-                gameWorldItemById.AddComponentStack(new IronOreComponent(), new Coordinate(9, 0, 0), 0);
-                gameWorldItemById.AddComponentStack(new IronOreComponent(), new Coordinate(9, 9, 0), 0);
-                var componentsAtCoordinate = gameWorldItemById.GetComponentsAtCoordinate(new Coordinate(0, 0, 0));
-                componentsAtCoordinate.AddAmount(100);
-                componentsAtCoordinate.AssignOutgoingAmount(movableListInCoordinate[0].Guid,50);
+                gameWorldItemById.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0)).AddComponentStack(Component.GetComponent(ComponentType.IronOre), 0);
+                gameWorldItemById.GetComponentStackGroupAtCoordinate(new Coordinate(9, 0, 0)).AddComponentStack(Component.GetComponent(ComponentType.IronOre), 0);
+                gameWorldItemById.GetComponentStackGroupAtCoordinate(new Coordinate(9, 9, 0)).AddComponentStack(Component.GetComponent(ComponentType.IronOre), 0);
+                var componentsAtCoordinate = gameWorldItemById.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0));
+                componentsAtCoordinate.GetComponentStack(ComponentType.IronOre).AddAmount(100);
+                componentsAtCoordinate.GetComponentStack(ComponentType.IronOre).AssignOutgoingAmount(movableListInCoordinate[0].Guid,50);
 
                 var newTask = gameWorldItemById.TaskDelegator.CreateNewTask();
                 newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0,0,0),100 );

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Interfaces;
+using Automate.Model.Components;
 using Automate.Model.GameWorldInterface;
 
 namespace Automate.Controller.Handlers.GoAndDoSomething
@@ -16,12 +17,12 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
             var deliverAction = args as DeliverAction;
             var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
             var movableItem = gameWorldItem.GetMovableItem(deliverAction.MovableId);
-            var componentStack = gameWorldItem.GetComponentsAtCoordinate(deliverAction.TargetDest);
+            var componentStackGroup = gameWorldItem.GetComponentStackGroupAtCoordinate(deliverAction.TargetDest);
             //if (componentStack.GetOutgoingAllocatedAmountForGuid(pickUpAction.MovableId) != pickUpAction.Amount)
             //{
 
             //}
-            componentStack.DeliverAmount(deliverAction.MovableId, deliverAction.Amount);
+            movableItem.DeliverToComponentStackGroup(componentStackGroup, Component.GetComponent(ComponentType.IronOre), deliverAction.Amount );
 
             // Pick Up Operation Ended, Fire On Complete
             deliverAction.FireOnComplete(new ControllerNotificationArgs(deliverAction));

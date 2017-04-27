@@ -16,7 +16,7 @@ namespace Automate.Model.GameWorldComponents
     public class GameWorld
     {
         private readonly Dictionary<Guid, Movable> _movables = new Dictionary<Guid, Movable>();
-        private readonly Dictionary<Coordinate, ComponentStack> _componentStacks = new Dictionary<Coordinate, ComponentStack>();
+        private readonly Dictionary<Coordinate, ComponentStackGroup> _componentStacks = new Dictionary<Coordinate, ComponentStackGroup>();
         private readonly Dictionary<Guid, Structure> _structures = new Dictionary<Guid, Structure>();
         private readonly Dictionary<Coordinate, Guid> _coordinateToStructureMap = new Dictionary<Coordinate, Guid>();
         private readonly HashSet<Guid> _selectedItems = new HashSet<Guid>();
@@ -258,35 +258,26 @@ namespace Automate.Model.GameWorldComponents
             return result;
         }
 
-        public ComponentStack AddComponentStack(Component component, Coordinate location, int amount)
-        {
-            if (_componentStacks.ContainsKey(location)) // && _componentStacks[location].GetType() != component.GetType())
-                throw new ArgumentException("Coordinate: " + location + " already has an item stack");
-            ComponentStack componentStack = new ComponentStack(component, amount);
-            _componentStacks[location] = componentStack;
-            return componentStack;
-        }
+//        [Obsolete]
+//        public ComponentStack AddComponentStack(Component component, Coordinate location, int amount)
+//        {
+//            if (_componentStacks.ContainsKey(location)) // && _componentStacks[location].GetType() != component.GetType())
+//                throw new ArgumentException("Coordinate: " + location + " already has an item stack");
+//            ComponentStack componentStack = new ComponentStack(component, amount);
+//            _componentStacks[location] = componentStack;
+//            return componentStack;
+//        }
 
-        public void RemoveComponentStack(Coordinate location) {
-            if (!_componentStacks.ContainsKey(location))
-                throw new ArgumentException("Coordinate: " + location + " does not have an item stack to remove");
-            _componentStacks.Remove(location);
-        }
+//        public void RemoveComponentStack(Coordinate location) {
+//            if (!_componentStacks.ContainsKey(location))
+//                throw new ArgumentException("Coordinate: " + location + " does not have an item stack to remove");
+//            _componentStacks.Remove(location);
+//        }
 
-        public Dictionary<Coordinate, ComponentStack> GetAllComponentStackMapping()
-        {
-            return new Dictionary<Coordinate, ComponentStack>(_componentStacks);
-        }
-
-        public bool IsComponentStackAtCoordinate(Coordinate location)
-        {
-            return _componentStacks.ContainsKey(location);
-        }
-
-        public ComponentStack GetComponentsAtCoordinate(Coordinate location)
+        public ComponentStackGroup GetComponentStackGroupAtCoordinate(Coordinate location)
         {
             if (!_componentStacks.ContainsKey(location))
-                throw new ArgumentException("Coordinate: " + location + " does not have an item stack");
+                _componentStacks.Add(location, new ComponentStackGroup());
             return _componentStacks[location];
         }
 

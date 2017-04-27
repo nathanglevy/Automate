@@ -13,6 +13,7 @@ namespace Automate.Model.GameWorldComponents
         private Boundary boundary;
         private Dictionary<string, ComponentStack> _internalComponentStacks = new Dictionary<string, ComponentStack>();
         public Guid Guid { get; private set; }
+        public ComponentStackGroup ComponentStackGroup { get; } = new ComponentStackGroup(1000, 1000);
 
         internal Structure(Coordinate coordinate, Coordinate dimensions, StructureType structureType) {
             this.coordinate = coordinate;
