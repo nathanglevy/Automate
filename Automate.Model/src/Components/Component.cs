@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = System.Object;
 
 namespace Automate.Model.Components
 {
@@ -42,6 +43,19 @@ namespace Automate.Model.Components
 
         internal Component()
         {
+        }
+
+        public override bool Equals(Object obj) {
+            // Check for null values and compare run-time types.
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            Component component = (Component)obj;
+            return (Type.Equals(component.Type)) && (Size == component.Size) && (Weight == component.Weight);
+        }
+
+        public override int GetHashCode() {
+            return 1;
         }
 
     }

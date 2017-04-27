@@ -14,6 +14,7 @@ using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
+using Automate.Model.Movables;
 using AutomateTests.Model.GameWorldComponents;
 using AutomateTests.Model.GameWorldInterface;
 using AutomateTests.test.Controller;
@@ -85,8 +86,8 @@ namespace AutomateTests.Assets.test.Controller
             _gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
             var movableItem = _gameWorldItem.CreateMovable(new Coordinate(3, 1, 0), MovableType.NormalHuman);
 
-            _gameWorldItem.AddComponentStack(new IronOreComponent(), new Coordinate(0, 0, 0), 0);
-            var componentsAtCoordinate = _gameWorldItem.GetComponentsAtCoordinate(new Coordinate(0, 0, 0));
+            ComponentStack componentsAtCoordinate = _gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0))
+                .AddComponentStack(Component.GetComponent(ComponentType.IronOre), 0);
             componentsAtCoordinate.AddAmount(100);
           //  componentsAtCoordinate.AssignOutgoingAmount(movableItem.Guid,99);
         

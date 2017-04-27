@@ -1,6 +1,7 @@
 ﻿using System;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
+using Automate.Model.Movables;
 using Automate.Model.PathFinding;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

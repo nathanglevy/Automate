@@ -1,4 +1,4 @@
-﻿namespace Automate.Model.GameWorldComponents
+﻿namespace Automate.Model.Movables
 {
     public enum MovableType
     {

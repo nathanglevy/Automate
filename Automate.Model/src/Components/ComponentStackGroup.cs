@@ -6,7 +6,7 @@ namespace Automate.Model.Components
 {
     public class ComponentStackGroup
     {
-        public const int DEFAULT_STACK_MAX_SIZE = 1000;
+        public const int DEFAULT_STACK_MAX_SIZE = 2000;
         public const int DEFAULT_STACKS_COUNT = 1;
         private Dictionary<string, ComponentStack> _componentStacks = new Dictionary<string, ComponentStack>();
         public float CurrentTotalWeight => _componentStacks.Sum(pair => pair.Value.CurrentTotalWeight);
@@ -33,8 +33,15 @@ namespace Automate.Model.Components
             ComponentStack newStack = new ComponentStack(component, amount);
             if (CurrentTotalSpace + newStack.CurrentTotalSpace > MaxSize)
                 throw new ArgumentOutOfRangeException("Not enough space in stackgroup to add: " + amount + " of " + component.Type);
-            _componentStacks.Add(newStack.ComponentType.Type, newStack);
-            return newStack;
+
+            if (_componentStacks.ContainsKey(component.Type))
+            {
+                _componentStacks[component.Type].AddAmount(amount);
+                return _componentStacks[component.Type];
+            } else {
+                _componentStacks.Add(newStack.ComponentType.Type, newStack);
+                return newStack;
+            }
         }
 
         public ComponentStack AddComponentStack(ComponentType componentType, int amount) {
@@ -64,9 +71,19 @@ namespace Automate.Model.Components
             RemoveComponentStack(Component.GetComponent(componentType));
         }
 
-        public List<string> GetListOfComponentsInGroup()
+        public bool IsContainingComponentStack(Component component)
         {
-            return _componentStacks.Select(pair => pair.Key).ToList();
+            return _componentStacks.ContainsKey(component.Type);
+        }
+
+        public bool IsContainingComponentStack(ComponentType componentType)
+        {
+            return IsContainingComponentStack(Component.GetComponent(componentType));
+        }
+
+        public List<Component> GetListOfComponentsInGroup()
+        {
+            return _componentStacks.Select(pair => pair.Value.ComponentType).ToList();
         }
 
         public List<ComponentStack> GetListOfComponentStacksInGroup() {

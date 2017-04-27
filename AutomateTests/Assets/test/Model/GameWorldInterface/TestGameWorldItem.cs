@@ -4,6 +4,7 @@ using System.Linq;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
+using Automate.Model.Movables;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AutomateTests.Model.GameWorldInterface {

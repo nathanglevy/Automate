@@ -18,7 +18,7 @@ namespace Automate.Model.Components
         public int RemainingAmountForIncoming => MaxAmountInStack - CurrentAmount - IncomingAllocatedAmount;
         public int OutgoingAllocatedAmount => _outgoingAllocations.Values.Sum();
         public int IncomingAllocatedAmount => _incomingAllocations.Values.Sum();
-        public int StackMax { get; set; } = 1000;
+        public int StackMax { get; set; } = 2000;
         public int MaxAmountInStack => (int) (StackMax / ComponentType.Size);
         private Dictionary<Guid,int> _outgoingAllocations = new Dictionary<Guid, int>();
         private Dictionary<Guid,int> _incomingAllocations = new Dictionary<Guid, int>();

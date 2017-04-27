@@ -5,6 +5,7 @@ using Automate.Controller.Modules;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
+using Automate.Model.Movables;
 using AutomateTests.Mocks;
 using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
