@@ -9,6 +9,7 @@ namespace Automate.Model.PathFinding
     {
         private Dictionary<string, Movement> _movementMap;
         private List<Movement> _movements;
+        public float TotalCost => (float) _movements.Sum(value => value.GetMoveCost());
         private readonly Coordinate _startCoordinate;
         private Coordinate _endCoordinate;
 

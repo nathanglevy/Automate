@@ -242,6 +242,12 @@ namespace Automate.Model.GameWorldInterface
             return (_focusedGameWorld.GetMovableIdList().Contains(movableGuid));
         }
 
+        public float GetMoveCostBetweenCoordinates(Coordinate startCoordinate, Coordinate endCoordinate)
+        {
+            return _focusedGameWorld.GetMoveCostBetweenCoordinates(startCoordinate, endCoordinate);
+        }
+
+
 
     }
 }

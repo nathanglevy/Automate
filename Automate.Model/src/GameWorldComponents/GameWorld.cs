@@ -131,6 +131,12 @@ namespace Automate.Model.GameWorldComponents
             return structureItem;
         }
 
+        public float GetMoveCostBetweenCoordinates(Coordinate startCoordinate, Coordinate endCoordinate)
+        {
+            MovementPath movementPath = PathFinderAStar.FindShortestPath(_map, startCoordinate, endCoordinate);
+            return movementPath.TotalCost;
+        }
+
         //TODO: need to test false issue move command
         public bool IssueMoveCommand(Guid id, [NotNull] Coordinate targetCoordinate)
         {
