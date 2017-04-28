@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using Automate.Model.Components;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
+using Automate.Model.Movables;
 using Automate.Model.PathFinding;
 using JetBrains.Annotations;
 using Automate.Model.Tasks;

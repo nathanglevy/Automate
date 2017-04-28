@@ -7,7 +7,7 @@ using Automate.Model.PathFinding;
 using Automate.Model.Tasks;
 
 [assembly: InternalsVisibleTo("AutomateTests")]
-namespace Automate.Model.GameWorldComponents {
+namespace Automate.Model.Movables {
     //TODO: Need to do comments!
     public class Movable
     {
@@ -23,7 +23,8 @@ namespace Automate.Model.GameWorldComponents {
         private double _speed;
         private readonly Object AccessLock = new Object();
         private List<Task> _taskList = new List<Task>();
-        public ComponentStackGroup ComponentStackGroup { get; } = new ComponentStackGroup(1000,1000);
+        public ComponentStackGroup ComponentStackGroup { get; } = new ComponentStackGroup();
+
 
         internal Movable(Coordinate startinCoordinate, MovableType movableType)
         {

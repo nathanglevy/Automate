@@ -4,6 +4,7 @@ using Automate.Model;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
+using Automate.Model.Movables;
 
 namespace AutomateTests.test.Mocks
 {

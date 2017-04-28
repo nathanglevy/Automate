@@ -14,6 +14,7 @@ using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
+using Automate.Model.Movables;
 using AutomateTests.Model.GameWorldComponents;
 using AutomateTests.Model.GameWorldInterface;
 using AutomateTests.test.Controller;
@@ -69,7 +70,7 @@ namespace AutomateTests.Assets.test.Controller
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(MovableRelatedError))]
         public void TestHandleGoAndDeliverWhenMovableNotExist_ExpectNoMovableAssignedExceptoin()
         {
             var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(5, 5, 1));
@@ -78,63 +79,20 @@ namespace AutomateTests.Assets.test.Controller
                 new HandlerUtils(gameWorldItem.Guid));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void TestCreateDeliverTaskToaDestWitoutComponent_ExpectAnException()
-        {
-            _gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
-            var movableItem = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
 
-            var GoAndDeliverAction = new GoAndDeliverAction(new Coordinate(3, 1, 0), 30, movableItem.Guid);
-            GoAndDeliverAction.OnCompleteDelegate = DeliverOnCompleteFired;
-
-            var DeliverTaskHandler = new GoAndDeliverTaskHandler();
-            var moveActionHandler = new MoveActionHandler();
-            IHandlerUtils utils = new HandlerUtils(_gameWorldItem.Guid, HandleDeliverAction, null);
-            _startMoveSync = new AutoResetEvent(false);
-            var startMoveActionRequestResult = DeliverTaskHandler.Handle(GoAndDeliverAction, utils);
-
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void TestAssignIncomingExceedMax_ExpectAnException()
-        {
-            _gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
-            var movableItem = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
-
-            var componentStackGroupAtCoordinate = _gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(3, 1, 0));
-            var componentStack = componentStackGroupAtCoordinate.AddComponentStack(ComponentType.IronOre, 20);
-
-
-            //_gameWorldItem.AddComponentStack(new IronOreComponent(), new Coordinate(3, 1, 0), 20);
-            //var componentsAtCoordinate = _gameWorldItem.GetComponentsAtCoordinate(new Coordinate(3, 1, 0));
-            componentStack.AssignIncomingAmount(movableItem.Guid, 100);
-
-            var GoAndDeliverAction = new GoAndDeliverAction(new Coordinate(3, 1, 0), 100, movableItem.Guid);
-            GoAndDeliverAction.OnCompleteDelegate = DeliverOnCompleteFired;
-
-            var DeliverTaskHandler = new GoAndDeliverTaskHandler();
-            var moveActionHandler = new MoveActionHandler();
-            IHandlerUtils utils = new HandlerUtils(_gameWorldItem.Guid, HandleDeliverAction, null);
-            _startMoveSync = new AutoResetEvent(false);
-            var startMoveActionRequestResult = DeliverTaskHandler.Handle(GoAndDeliverAction, utils);
-
-        }
         [TestMethod]
         public void TestCreateDeliverTaskAndHandleIt_ExpectMoveActionThenDeliverActions()
         {
             _gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
-            var movableItem = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
+            var movableItem = _gameWorldItem.CreateMovable(new Coordinate(3, 1, 0), MovableType.NormalHuman);
 
-            var componentStackGroupAtCoordinate = _gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(3, 1, 0));
-            var componentStack = componentStackGroupAtCoordinate.AddComponentStack(ComponentType.IronOre, 20);
-
-            componentStack.AssignIncomingAmount(movableItem.Guid,30);
+            ComponentStack componentsAtCoordinate = _gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0))
+                .AddComponentStack(Component.GetComponent(ComponentType.IronOre), 0);
+            componentsAtCoordinate.AddAmount(100);
           //  componentsAtCoordinate.AssignOutgoingAmount(movableItem.Guid,99);
         
 
-            var GoAndDeliverAction = new GoAndDeliverAction(new Coordinate(3, 1, 0), 30, movableItem.Guid);
+            var GoAndDeliverAction = new GoAndDeliverAction(new Coordinate(0, 0, 0), 100, movableItem.Guid);
             GoAndDeliverAction.OnCompleteDelegate = DeliverOnCompleteFired;
 
             var DeliverTaskHandler = new GoAndDeliverTaskHandler();
@@ -147,22 +105,23 @@ namespace AutomateTests.Assets.test.Controller
             Assert.AreEqual(ActionType.Movement, startMoveActionRequestResult.GetItems()[0].Type);
             var startMoveAction = startMoveActionRequestResult.GetItems()[0] as StartMoveAction;
             Assert.IsNotNull(startMoveAction);
-            Assert.AreEqual(new Coordinate(3, 1, 0), startMoveAction.To);
+            Assert.AreEqual(new Coordinate(0, 0, 0), startMoveAction.To);
 
             // expectation
-            // MoveAction (0,0,0) ==> (3,1,0) <-- Start Move Action
-            // MoveAction (0,0,0) ==> (1,1,0)
-            // MoveAction (1,1,0) ==> (2,1,0)
-            // MoveAction (2,1,0) ==> (3,1,0)
-            // DeliverAction (0,0,0) @ 75
+            // MoveAction (3,1,0) ==> (0,0,0) <-- Start Move Action
+            // MoveAction (3,1,0) ==> (2,0,0)
+            // MoveAction (2,0,0) ==> (1,0,0)
+            // MoveAction (1,0,0) ==> (0,0,0)
+            // MoveAction (0,0,0) ==> (0,0,0)
+            // DeliverAction (0,0,0) @ 100
             var startMoveActionHandler = new StartMoveActionHandler();
             var result1 = startMoveActionHandler.Handle(startMoveAction, utils);
             Assert.AreEqual(1, result1.GetItems().Count);
             Assert.AreEqual(ActionType.Movement, result1.GetItems()[0].Type);
             var moveAction0 = result1.GetItems()[0] as MoveAction;
             Assert.IsNotNull(moveAction0);
-            Assert.AreEqual(new Coordinate(1, 1, 0), moveAction0.To);
-            Assert.AreEqual(new Coordinate(0, 0, 0), moveAction0.CurrentCoordiate);
+            Assert.AreEqual(new Coordinate(2, 0, 0), moveAction0.To);
+            Assert.AreEqual(new Coordinate(3, 1, 0), moveAction0.CurrentCoordiate);
 
             //// expect 
             //var result0 = moveActionHandler.Handle(moveAction0, utils);
@@ -178,16 +137,16 @@ namespace AutomateTests.Assets.test.Controller
             Assert.AreEqual(ActionType.Movement, result2.GetItems()[0].Type);
             var moveAction2 = result2.GetItems()[0] as MoveAction;
             Assert.IsNotNull(moveAction2);
-            Assert.AreEqual(new Coordinate(2, 1, 0), moveAction2.To);
-            Assert.AreEqual(new Coordinate(1, 1, 0), moveAction2.CurrentCoordiate);
+            Assert.AreEqual(new Coordinate(1, 0, 0), moveAction2.To);
+            Assert.AreEqual(new Coordinate(2, 0, 0), moveAction2.CurrentCoordiate);
 
             var result3 = moveActionHandler.Handle(moveAction2, utils);
             Assert.AreEqual(1, result3.GetItems().Count);
             Assert.AreEqual(ActionType.Movement, result3.GetItems()[0].Type);
             var moveAction3 = result3.GetItems()[0] as MoveAction;
             Assert.IsNotNull(moveAction3);
-            Assert.AreEqual(new Coordinate(3, 1, 0), moveAction3.To);
-            Assert.AreEqual(new Coordinate(2, 1, 0), moveAction3.CurrentCoordiate);
+            Assert.AreEqual(new Coordinate(0, 0, 0), moveAction3.To);
+            Assert.AreEqual(new Coordinate(1, 0, 0), moveAction3.CurrentCoordiate);
 
 
             var result4 = moveActionHandler.Handle(moveAction2, utils);
@@ -195,14 +154,14 @@ namespace AutomateTests.Assets.test.Controller
             Assert.AreEqual(ActionType.Movement, result4.GetItems()[0].Type);
             var moveAction4 = result4.GetItems()[0] as MoveAction;
             Assert.IsNotNull(moveAction4);
-            Assert.AreEqual(new Coordinate(3, 1, 0), moveAction4.To);
-            Assert.AreEqual(new Coordinate(3, 1, 0), moveAction4.CurrentCoordiate);
+            Assert.AreEqual(new Coordinate(0, 0, 0), moveAction4.To);
+            Assert.AreEqual(new Coordinate(0, 0, 0), moveAction4.CurrentCoordiate);
 
             _DeliverHandleSync = new AutoResetEvent(false);
             var resultNotRelvant = moveActionHandler.Handle(moveAction4, utils);
             _DeliverHandleSync.WaitOne(300);
             var result5 = _DeliverHandlerResult;
-            Assert.AreEqual(50, componentStack.CurrentAmount);
+            Assert.AreEqual(200, componentsAtCoordinate.CurrentAmount);
             Assert.IsTrue(_DeliverOnCompleteFired);
 
         }

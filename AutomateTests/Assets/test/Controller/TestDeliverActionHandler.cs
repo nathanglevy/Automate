@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Automate.Controller.Abstracts;
@@ -11,6 +10,7 @@ using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
+using Automate.Model.Movables;
 using Automate.Model.Tasks;
 using AutomateTests.test.Controller;
 using AutomateTests.test.Mocks;
@@ -34,7 +34,7 @@ namespace AutomateTests.Assets.test.Controller
         [TestMethod]
         public void TestCreateDeliverUpAction_ShouldPass()
         {
-            var deliverAction = new DeliverAction(ComponentType.IronOre, new Coordinate(0, 0, 0), new Coordinate(1,0,0), 150, Guid.NewGuid());
+            var deliverAction = new DeliverAction(new Coordinate(0, 0, 0), new Coordinate(1,0,0), 150, Guid.NewGuid());
             Assert.IsNotNull(deliverAction);
             Assert.AreEqual(new Coordinate(0,0,0),deliverAction.TargetDest);
             Assert.AreEqual(150,deliverAction.Amount);
@@ -45,7 +45,7 @@ namespace AutomateTests.Assets.test.Controller
         public void TestCanHandleWithCorrectArgument_ExpectTrue()
         {
             var deliverActionHandler = new DeliverActionHandler();
-            Assert.IsTrue(deliverActionHandler.CanHandle(new DeliverAction(ComponentType.IronOre, new Coordinate(0,0,0), new Coordinate(1, 0, 0), 100, Guid.NewGuid())));
+            Assert.IsTrue(deliverActionHandler.CanHandle(new DeliverAction(new Coordinate(0,0,0), new Coordinate(1, 0, 0), 100, Guid.NewGuid())));
         }
 
         [TestMethod]
@@ -71,12 +71,6 @@ namespace AutomateTests.Assets.test.Controller
             var deliverActionHandler = new DeliverActionHandler();
             var handlerResult = deliverActionHandler.Handle(new MockMasterAction(ActionType.AreaSelection,Guid.NewGuid().ToString()),null);
         }
-
-        [TestMethod]
-        public void TestThatDeliverAndAssignIncomingAtTheSameType_ExpectException()
-        {
-            throw new NotImplementedException();
-        }
             
         [TestMethod]
         public void TestHandleDeliverAction_ExpectModelToBeUpdatedAndOnCompleteToBeFired()
@@ -88,31 +82,33 @@ namespace AutomateTests.Assets.test.Controller
             newTask.AddAction(TaskActionType.DeliveryTask, new Coordinate(0,0,0),100 );
             var currentAction = newTask.GetCurrentAction();
 
-
-            var componentStackGroupAtCoordinate = gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0));
-            var componentStack = componentStackGroupAtCoordinate.AddComponentStack(ComponentType.IronOre, 20);
-
-
+            ComponentStack componentsAtCoordinate = gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0))
+                .AddComponentStack(Component.GetComponent(ComponentType.IronOre), 100);
             //componentsAtCoordinate.AddAmount(100);
 
-            componentStack.AssignIncomingAmount(movableItem.Guid,70);
+            componentsAtCoordinate.AssignIncomingAmount(movableItem.Guid,70);
             
 
-            var deliverAction = new DeliverAction(ComponentType.IronOre, new Coordinate(0,0,0), new Coordinate(1, 0, 0), 70, movableItem.Guid)
+            var deliverAction = new DeliverAction(new Coordinate(0,0,0), new Coordinate(1, 0, 0), 70, movableItem.Guid)
             {
                 MasterTaskId =  newTask.Guid,
                 MovableId          = movableItem.Guid,
                 OnCompleteDelegate = OnCompleteSniffer,
             };
 
-            Assert.AreEqual(componentStack.CurrentAmount, 20);
+            Assert.AreEqual(componentsAtCoordinate.CurrentAmount, 100);
             var deliverActionHandler = new DeliverActionHandler();
             var handlerResult = deliverActionHandler.Handle(deliverAction, new HandlerUtils(gameWorldItem.Guid));
-            Assert.AreEqual(componentStack.CurrentAmount, 90);
+            Assert.AreEqual(componentsAtCoordinate.CurrentAmount, 170);
             Assert.IsTrue(_onCompleteFired);
 
         }
 
+        [TestMethod]
+        public void TestAssignedAndDeliverdNotTheSame_ExpectException()
+        {
+            throw new NotImplementedException();
+        }
 
         private void OnCompleteSniffer(ControllerNotificationArgs args)
         {

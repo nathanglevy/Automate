@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
+using Automate.Model.Movables;
 
 namespace Automate.Model
 {

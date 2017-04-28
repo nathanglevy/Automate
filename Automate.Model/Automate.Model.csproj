@@ -76,9 +76,9 @@
     <Compile Include="src\GameWorldComponents\GameWorld.cs" />
     <Compile Include="src\GameWorldInterface\GameWorldItem.cs" />
     <Compile Include="src\GameWorldInterface\Item.cs" />
-    <Compile Include="src\GameWorldComponents\Movable.cs" />
+    <Compile Include="src\Movables\Movable.cs" />
     <Compile Include="src\GameWorldInterface\MovableItem.cs" />
-    <Compile Include="src\GameWorldComponents\MovableType.cs" />
+    <Compile Include="src\Movables\MovableType.cs" />
     <Compile Include="src\GameWorldComponents\Structure.cs" />
     <Compile Include="src\GameWorldInterface\StructureItem.cs" />
     <Compile Include="src\GameWorldComponents\StructureType.cs" />
@@ -101,7 +101,6 @@
     <Compile Include="src\Tasks\TaskAssignmentException.cs" />
     <Compile Include="src\Tasks\TaskDelegator.cs" />
     <Compile Include="src\Tasks\TransportTaskAction.cs" />
-    <Compile Include="src\Utility\CommonUtility.cs" />
     <Compile Include="src\Utility\DuplicateKeyComparer.cs" />
   </ItemGroup>
   <ItemGroup>
