@@ -98,8 +98,9 @@ namespace AutomateTests.Assets.test.Controller
             var movableItem = _gameWorldItem.CreateMovable(new Coordinate(3, 1, 0), MovableType.NormalHuman);
             var GoAndpickUpAction = new GoAndPickUpAction(new Coordinate(0, 0, 0), 100, movableItem.Guid);
 
-            _gameWorldItem.AddComponentStack(new IronOreComponent(), new Coordinate(0, 0, 0), 20);
-            var componentsAtCoordinate = _gameWorldItem.GetComponentsAtCoordinate(new Coordinate(0, 0, 0));
+            var componentStackGroupAtCoordinate = _gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0));
+            var componentStack = componentStackGroupAtCoordinate.AddComponentStack(ComponentType.IronOre, 20);
+
 
 
             IHandlerUtils utils = new HandlerUtils(_gameWorldItem.Guid, HandlePickupAction, null);
@@ -115,9 +116,10 @@ namespace AutomateTests.Assets.test.Controller
             _gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
             var movableItem = _gameWorldItem.CreateMovable(new Coordinate(3, 1, 0), MovableType.NormalHuman);
 
-            _gameWorldItem.AddComponentStack(new IronOreComponent(), new Coordinate(0, 0, 0), 0);
-            var componentsAtCoordinate = _gameWorldItem.GetComponentsAtCoordinate(new Coordinate(0, 0, 0));
-            componentsAtCoordinate.AddAmount(100);
+            var componentStackGroupAtCoordinate = _gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0));
+            var componentStack = componentStackGroupAtCoordinate.AddComponentStack(ComponentType.IronOre, 100);
+
+
           //  componentsAtCoordinate.AssignOutgoingAmount(movableItem.Guid,99);
         
 
@@ -190,7 +192,7 @@ namespace AutomateTests.Assets.test.Controller
             var resultNotRelvant = moveActionHandler.Handle(moveAction4, utils);
             _pickupHandleSync.WaitOne(300);
             var result5 = _PickUpHandlerResult;
-            Assert.AreEqual(0, componentsAtCoordinate.CurrentAmount);
+            Assert.AreEqual(0, componentStack.CurrentAmount);
             Assert.IsTrue(_pickUpOnCompleteFired);
 
         }

@@ -17,13 +17,16 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
             var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
             var movableItem = gameWorldItem.GetMovableItem(deliverAction.MovableId);
             // Get Stack at Target Coordinate
-            var componentStack = gameWorldItem.GetComponentsAtCoordinate(deliverAction.TargetDest);
+
+            var componentStackGroup = gameWorldItem.GetComponentStackGroupAtCoordinate(deliverAction.TargetDest);
+            var componentStack = componentStackGroup.GetComponentStack(deliverAction.ComponentType);
 
             // TODO: move to new code
 
             // Deliver 
             //movableItem.Deliver(deliverAction.Amount,componentStack)
-            componentStack.DeliverAmount(deliverAction.MovableId, deliverAction.Amount);
+            movableItem.ComponentStackGroup.TransferToStack(deliverAction.MovableId, componentStack, deliverAction.Amount);
+            //componentStackGroup.DeliverAmount(deliverAction.MovableId, deliverAction.Amount);
 
             // TODO: 
 

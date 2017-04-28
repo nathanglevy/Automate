@@ -32,7 +32,7 @@ namespace AutomateTests.Assets.test.Controller
         [TestMethod]
         public void TestCreateNewPickUpAction_ShouldPass()
         {
-            var pickUpAction = new PickUpAction(new Coordinate(0, 0, 0), 150, Guid.NewGuid());
+            var pickUpAction = new PickUpAction(ComponentType.IronOre, new Coordinate(0, 0, 0), 150, Guid.NewGuid());
             Assert.IsNotNull(pickUpAction);
             Assert.AreEqual(new Coordinate(0,0,0),pickUpAction.TargetDest);
             Assert.AreEqual(150,pickUpAction.Amount);
@@ -43,7 +43,7 @@ namespace AutomateTests.Assets.test.Controller
         public void TestCanHandleWithCorrectArgument_ExpectTrue()
         {
             var pickUpActionHandler = new PickUpActionHandler();
-            Assert.IsTrue(pickUpActionHandler.CanHandle(new PickUpAction(new Coordinate(0,0,0),100, Guid.NewGuid())));
+            Assert.IsTrue(pickUpActionHandler.CanHandle(new PickUpAction(ComponentType.IronOre, new Coordinate(0,0,0),100, Guid.NewGuid())));
         }
 
         [TestMethod]
@@ -75,6 +75,7 @@ namespace AutomateTests.Assets.test.Controller
         {
             var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(5, 5, 1));
             var movableItem = gameWorldItem.CreateMovable(new Coordinate(3, 2, 0), MovableType.NormalHuman);
+
             var newTask = gameWorldItem.TaskDelegator.CreateNewTask();
             gameWorldItem.TaskDelegator.AssignTask(movableItem.Guid,newTask);
             newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0,0,0),100 );
@@ -87,7 +88,7 @@ namespace AutomateTests.Assets.test.Controller
             componentsAtCoordinate.AssignOutgoingAmount(movableItem.Guid,70);
             
 
-            var pickUpAction = new PickUpAction(new Coordinate(0,0,0),70, movableItem.Guid)
+            var pickUpAction = new PickUpAction(ComponentType.IronOre, new Coordinate(0,0,0),70, movableItem.Guid)
             {
                 MasterTaskId =  newTask.Guid,
                 MovableId          = movableItem.Guid,

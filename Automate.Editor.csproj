@@ -115,6 +115,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>Assets\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Assembly-UnityScript">
+      <HintPath>Assets\Plugins\Assembly-UnityScript.dll</HintPath>
+    </Reference>
     <Reference Include="Automate.Controller">
       <HintPath>Assets\Plugins\Automate.Controller.dll</HintPath>
     </Reference>

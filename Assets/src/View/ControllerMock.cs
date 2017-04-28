@@ -42,7 +42,7 @@ public class ControllerMock : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0))
         {
-            _gameWorldItem.SelectMovableItems(_gameWorldItem.GetMovableListInBoundary(new Boundary(mapCoordinate, mapCoordinate)));
+            _gameWorldItem.SelectMovableItems(_gameWorldItem.GetMovableListInBoundary(new Automate.Model.MapModelComponents.Boundary(mapCoordinate, mapCoordinate)));
             print(_gameWorldItem.GetSelectedIdList());
         }
         if (Input.GetMouseButtonDown(1))

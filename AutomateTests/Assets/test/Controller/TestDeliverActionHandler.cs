@@ -34,7 +34,7 @@ namespace AutomateTests.Assets.test.Controller
         [TestMethod]
         public void TestCreateDeliverUpAction_ShouldPass()
         {
-            var deliverAction = new DeliverAction(new Coordinate(0, 0, 0), new Coordinate(1,0,0), 150, Guid.NewGuid());
+            var deliverAction = new DeliverAction(ComponentType.IronOre, new Coordinate(0, 0, 0), new Coordinate(1,0,0), 150, Guid.NewGuid());
             Assert.IsNotNull(deliverAction);
             Assert.AreEqual(new Coordinate(0,0,0),deliverAction.TargetDest);
             Assert.AreEqual(150,deliverAction.Amount);
@@ -45,7 +45,7 @@ namespace AutomateTests.Assets.test.Controller
         public void TestCanHandleWithCorrectArgument_ExpectTrue()
         {
             var deliverActionHandler = new DeliverActionHandler();
-            Assert.IsTrue(deliverActionHandler.CanHandle(new DeliverAction(new Coordinate(0,0,0), new Coordinate(1, 0, 0), 100, Guid.NewGuid())));
+            Assert.IsTrue(deliverActionHandler.CanHandle(new DeliverAction(ComponentType.IronOre, new Coordinate(0,0,0), new Coordinate(1, 0, 0), 100, Guid.NewGuid())));
         }
 
         [TestMethod]
@@ -89,25 +89,26 @@ namespace AutomateTests.Assets.test.Controller
             var currentAction = newTask.GetCurrentAction();
 
 
-            var component = Component.GetComponent(ComponentType.IronOre);
-            gameWorldItem.AddComponentStack(component, new Coordinate(0, 0, 0), 20);
-            var componentsAtCoordinate = gameWorldItem.GetComponentsAtCoordinate(new Coordinate(0, 0, 0));
+            var componentStackGroupAtCoordinate = gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0));
+            var componentStack = componentStackGroupAtCoordinate.AddComponentStack(ComponentType.IronOre, 20);
+
+
             //componentsAtCoordinate.AddAmount(100);
 
-            componentsAtCoordinate.AssignIncomingAmount(movableItem.Guid,70);
+            componentStack.AssignIncomingAmount(movableItem.Guid,70);
             
 
-            var deliverAction = new DeliverAction(new Coordinate(0,0,0), new Coordinate(1, 0, 0), 70, movableItem.Guid)
+            var deliverAction = new DeliverAction(ComponentType.IronOre, new Coordinate(0,0,0), new Coordinate(1, 0, 0), 70, movableItem.Guid)
             {
                 MasterTaskId =  newTask.Guid,
                 MovableId          = movableItem.Guid,
                 OnCompleteDelegate = OnCompleteSniffer,
             };
 
-            Assert.AreEqual(componentsAtCoordinate.CurrentAmount, 20);
+            Assert.AreEqual(componentStack.CurrentAmount, 20);
             var deliverActionHandler = new DeliverActionHandler();
             var handlerResult = deliverActionHandler.Handle(deliverAction, new HandlerUtils(gameWorldItem.Guid));
-            Assert.AreEqual(componentsAtCoordinate.CurrentAmount, 90);
+            Assert.AreEqual(componentStack.CurrentAmount, 90);
             Assert.IsTrue(_onCompleteFired);
 
         }

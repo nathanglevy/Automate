@@ -23,7 +23,7 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
             var gameWorld = GameUniverse.GetGameWorldItemById(args.Utils.GameWorldId);
             var movableItem = gameWorld.GetMovableItem(goAndDeliver.MovableGuid);
 
-            var deliverAction = new DeliverAction(GetGoDestination(goAndDeliver,movableItem),GetComponentCoordinate(goAndDeliver,movableItem), goAndDeliver.Amount, goAndDeliver.MovableGuid)
+            var deliverAction = new DeliverAction(ComponentType.IronOre, GetGoDestination(goAndDeliver,movableItem), GetComponentCoordinate(goAndDeliver,movableItem), goAndDeliver.Amount, goAndDeliver.MovableGuid)
             {
                 OnCompleteDelegate = AcknowledgeGoAndDoIsOver,
                 Duration = new TimeSpan(0),

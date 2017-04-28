@@ -103,9 +103,13 @@ namespace AutomateTests.Assets.test.Controller
             _gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
             var movableItem = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
 
-            _gameWorldItem.AddComponentStack(new IronOreComponent(), new Coordinate(3, 1, 0), 20);
-            var componentsAtCoordinate = _gameWorldItem.GetComponentsAtCoordinate(new Coordinate(3, 1, 0));
-            componentsAtCoordinate.AssignIncomingAmount(movableItem.Guid, 100);
+            var componentStackGroupAtCoordinate = _gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(3, 1, 0));
+            var componentStack = componentStackGroupAtCoordinate.AddComponentStack(ComponentType.IronOre, 20);
+
+
+            //_gameWorldItem.AddComponentStack(new IronOreComponent(), new Coordinate(3, 1, 0), 20);
+            //var componentsAtCoordinate = _gameWorldItem.GetComponentsAtCoordinate(new Coordinate(3, 1, 0));
+            componentStack.AssignIncomingAmount(movableItem.Guid, 100);
 
             var GoAndDeliverAction = new GoAndDeliverAction(new Coordinate(3, 1, 0), 100, movableItem.Guid);
             GoAndDeliverAction.OnCompleteDelegate = DeliverOnCompleteFired;
@@ -123,9 +127,10 @@ namespace AutomateTests.Assets.test.Controller
             _gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
             var movableItem = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
 
-            _gameWorldItem.AddComponentStack(new IronOreComponent(), new Coordinate(3, 1, 0), 20);
-            var componentsAtCoordinate = _gameWorldItem.GetComponentsAtCoordinate(new Coordinate(3, 1, 0));
-            componentsAtCoordinate.AssignIncomingAmount(movableItem.Guid,30);
+            var componentStackGroupAtCoordinate = _gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(3, 1, 0));
+            var componentStack = componentStackGroupAtCoordinate.AddComponentStack(ComponentType.IronOre, 20);
+
+            componentStack.AssignIncomingAmount(movableItem.Guid,30);
           //  componentsAtCoordinate.AssignOutgoingAmount(movableItem.Guid,99);
         
 
@@ -197,7 +202,7 @@ namespace AutomateTests.Assets.test.Controller
             var resultNotRelvant = moveActionHandler.Handle(moveAction4, utils);
             _DeliverHandleSync.WaitOne(300);
             var result5 = _DeliverHandlerResult;
-            Assert.AreEqual(50, componentsAtCoordinate.CurrentAmount);
+            Assert.AreEqual(50, componentStack.CurrentAmount);
             Assert.IsTrue(_DeliverOnCompleteFired);
 
         }

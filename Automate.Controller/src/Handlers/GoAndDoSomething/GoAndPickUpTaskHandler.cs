@@ -28,7 +28,7 @@ namespace Automate.Controller.Handlers.GoAndPickUp
             var gameWorld = GameUniverse.GetGameWorldItemById(args.Utils.GameWorldId);
             var movableItem = gameWorld.GetMovableItem(goAndPickUpAction.MovableGuid);
 
-            var pickUpAction = new PickUpAction(GetComponentCoordinate(goAndPickUpAction, movableItem), goAndPickUpAction.Amount, goAndPickUpAction.MovableGuid)
+            var pickUpAction = new PickUpAction(ComponentType.IronOre, GetComponentCoordinate(goAndPickUpAction, movableItem), goAndPickUpAction.Amount, goAndPickUpAction.MovableGuid)
             {
                 OnCompleteDelegate = AcknowledgeGoAndDoIsOver,
                 Duration = new TimeSpan(0),
