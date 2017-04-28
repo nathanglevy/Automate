@@ -1,13 +1,10 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Linq;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Actions;
 using Automate.Controller.Handlers;
 using Automate.Controller.Handlers.GoAndPickUp;
 using Automate.Controller.Interfaces;
 using Automate.Model.Components;
-using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
@@ -16,7 +13,7 @@ using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Component = Automate.Model.Components.Component;
 
-namespace AutomateTests.Assets.test.Controller
+namespace AutomateTests.test.Controller
 {
     [TestClass]
     public class TestPickUpActionHandler
@@ -83,8 +80,7 @@ namespace AutomateTests.Assets.test.Controller
             var currentAction = newTask.GetCurrentAction();
 
             gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0)).AddComponentStack(Component.GetComponent(ComponentType.IronOre), 100);
-            var componentsAtCoordinate = gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0)) .GetComponentStack(ComponentType.IronOre);
-            //componentsAtCoordinate.AddAmount(100);
+            var componentsAtCoordinate = gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0)).GetComponentStack(ComponentType.IronOre);
 
             componentsAtCoordinate.AssignOutgoingAmount(movableItem.Guid,70);
             
@@ -104,11 +100,6 @@ namespace AutomateTests.Assets.test.Controller
 
         }
 
-        [TestMethod]
-        public void TestThatPickupAndAssignIncomingAtTheSameType_ExpectException()
-        {
-            throw new NotImplementedException();
-        }
 
 
         private void OnCompleteSniffer(ControllerNotificationArgs args)

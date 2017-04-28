@@ -77,6 +77,7 @@
     <Compile Include="src\Abstracts\ModelMasterAction.cs" />
     <Compile Include="src\Abstracts\ObserverArgs.cs" />
     <Compile Include="src\Delegates\HandlerResultListner.cs" />
+    <Compile Include="src\Exceptions\ComponentStackAssignError.cs" />
     <Compile Include="src\Handlers\AcknowledgeNotification\AcknowledgeNotification.cs" />
     <Compile Include="src\Handlers\AcknowledgeNotification\AcknowledgeNotificationHandler.cs" />
     <Compile Include="src\Handlers\GoAndDoSomething\DeliverAction.cs" />

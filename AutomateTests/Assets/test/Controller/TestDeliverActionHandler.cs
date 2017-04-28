@@ -1,23 +1,19 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Linq;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Actions;
 using Automate.Controller.Handlers;
 using Automate.Controller.Handlers.GoAndDoSomething;
 using Automate.Controller.Interfaces;
 using Automate.Model.Components;
-using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using Automate.Model.Tasks;
-using AutomateTests.test.Controller;
 using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Component = Automate.Model.Components.Component;
 
-namespace AutomateTests.Assets.test.Controller
+namespace AutomateTests.test.Controller
 {
     [TestClass]
     public class TestDeliverActionHandler
@@ -34,7 +30,7 @@ namespace AutomateTests.Assets.test.Controller
         [TestMethod]
         public void TestCreateDeliverUpAction_ShouldPass()
         {
-            var deliverAction = new DeliverAction(new Coordinate(0, 0, 0), new Coordinate(1,0,0), 150, Guid.NewGuid());
+            var deliverAction = new DeliverAction(ComponentType.Steel,new Coordinate(0, 0, 0), new Coordinate(1,0,0), 150, Guid.NewGuid());
             Assert.IsNotNull(deliverAction);
             Assert.AreEqual(new Coordinate(0,0,0),deliverAction.TargetDest);
             Assert.AreEqual(150,deliverAction.Amount);
@@ -45,7 +41,7 @@ namespace AutomateTests.Assets.test.Controller
         public void TestCanHandleWithCorrectArgument_ExpectTrue()
         {
             var deliverActionHandler = new DeliverActionHandler();
-            Assert.IsTrue(deliverActionHandler.CanHandle(new DeliverAction(new Coordinate(0,0,0), new Coordinate(1, 0, 0), 100, Guid.NewGuid())));
+            Assert.IsTrue(deliverActionHandler.CanHandle(new DeliverAction(ComponentType.Steel,new Coordinate(0,0,0), new Coordinate(1, 0, 0), 100, Guid.NewGuid())));
         }
 
         [TestMethod]
@@ -84,17 +80,24 @@ namespace AutomateTests.Assets.test.Controller
 
             ComponentStack componentsAtCoordinate = gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0))
                 .AddComponentStack(Component.GetComponent(ComponentType.IronOre), 100);
-            //componentsAtCoordinate.AddAmount(100);
 
             componentsAtCoordinate.AssignIncomingAmount(movableItem.Guid,70);
             
 
-            var deliverAction = new DeliverAction(new Coordinate(0,0,0), new Coordinate(1, 0, 0), 70, movableItem.Guid)
+            var deliverAction = new DeliverAction(ComponentType.IronOre, new Coordinate(0,0,0), new Coordinate(1, 0, 0), 70, movableItem.Guid)
             {
                 MasterTaskId =  newTask.Guid,
                 MovableId          = movableItem.Guid,
                 OnCompleteDelegate = OnCompleteSniffer,
             };
+
+            // add amount to movable
+            movableItem.ComponentStackGroup.AddComponentStack(ComponentType.IronOre, 0);
+            var ironOreStack = movableItem.ComponentStackGroup.GetComponentStack(ComponentType.IronOre);
+            ironOreStack.AddAmount(70);
+
+            // Assign OutGoing
+            ironOreStack.AssignOutgoingAmount(movableItem.Guid,deliverAction.Amount);
 
             Assert.AreEqual(componentsAtCoordinate.CurrentAmount, 100);
             var deliverActionHandler = new DeliverActionHandler();
@@ -104,11 +107,6 @@ namespace AutomateTests.Assets.test.Controller
 
         }
 
-        [TestMethod]
-        public void TestAssignedAndDeliverdNotTheSame_ExpectException()
-        {
-            throw new NotImplementedException();
-        }
 
         private void OnCompleteSniffer(ControllerNotificationArgs args)
         {

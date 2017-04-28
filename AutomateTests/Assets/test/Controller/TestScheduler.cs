@@ -5,12 +5,10 @@ using Automate.Controller.Abstracts;
 using Automate.Controller.Delegates;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
-using AutomateTests.test.Controller;
 using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using UnityEngine;
 
-namespace AutomateTests.Assets.test.Controller
+namespace AutomateTests.test.Controller
 {
     [TestClass]
     public class TestScheduler

@@ -2,16 +2,14 @@
 using Automate.Controller.Actions;
 using Automate.Controller.Handlers;
 using Automate.Controller.Handlers.MoveHandler;
-using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Interfaces;
-using Automate.Controller.Modules;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.Assets.test.Controller
+namespace AutomateTests.test.Controller
 {
     [TestClass]
     public class TestStartMoveActionHandler

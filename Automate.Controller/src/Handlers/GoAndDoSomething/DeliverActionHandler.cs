@@ -13,22 +13,21 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
             if (!CanHandle(args))
                 throw new ArgumentException("cannot Handle passed Args, only PickUpAction is allowed");
 
+            // Do a safe casting
             var deliverAction = args as DeliverAction;
+
+            // Get Game World and Movable
             var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
             var movableItem = gameWorldItem.GetMovableItem(deliverAction.MovableId);
-            // Get Stack at Target Coordinate
 
+            // Get Target Stack Group at Target Coordinate
             var componentStackGroup = gameWorldItem.GetComponentStackGroupAtCoordinate(deliverAction.TargetDest);
+
+            // Get Target Component Stack for Transfer
             var componentStack = componentStackGroup.GetComponentStack(deliverAction.ComponentType);
 
-            // TODO: move to new code
-
-            // Deliver 
-            //movableItem.Deliver(deliverAction.Amount,componentStack)
+            // Transfer Amount from Movable to ComponentStack
             movableItem.ComponentStackGroup.TransferToStack(deliverAction.MovableId, componentStack, deliverAction.Amount);
-            //componentStackGroup.DeliverAmount(deliverAction.MovableId, deliverAction.Amount);
-
-            // TODO: 
 
             // Pick Up Operation Ended, Fire On Complete
             deliverAction.FireOnComplete(new ControllerNotificationArgs(deliverAction));

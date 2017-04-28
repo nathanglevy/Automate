@@ -37,9 +37,9 @@ namespace Automate.Controller.Handlers.GoAndPickUp
             args.Utils.InvokeHandler(pickUpAction);
         }
 
-        protected override void AssignComponentStack(ComponentStack targetCombo, GoAndDoSomethingAction goAndPickUpAction)
+        protected override void AssignComponentStack(ComponentStack targetComponentStack, GoAndDoSomethingAction goAndDeliverAction, MovableItem movable)
         {
-            targetCombo.AssignOutgoingAmount(goAndPickUpAction.MovableGuid, goAndPickUpAction.Amount);
+            targetComponentStack.AssignOutgoingAmount(goAndDeliverAction.MovableGuid, goAndDeliverAction.Amount);
         }
 
         protected override Coordinate GetGoDestination(GoAndDoSomethingAction goAndDoSomethingAction, MovableItem movableItem)
