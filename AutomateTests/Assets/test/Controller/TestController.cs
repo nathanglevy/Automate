@@ -221,7 +221,7 @@ namespace AutomateTests.test.Controller
 
             foreach (var threadInfo in threads)
             {
-                threadInfo.SyncEvent.WaitOne(300);
+                threadInfo.SyncEvent.WaitOne(400);
             }
 
             // check that only a single thread is executed
@@ -244,7 +244,7 @@ namespace AutomateTests.test.Controller
             gameview.PerformOnUpdate();
 
             gameController.OutputSched.OnPullStart(new ViewUpdateArgs());
-            MasterAction masterAction4 = gameController.OutputSched.Pull();
+             MasterAction masterAction4 = gameController.OutputSched.Pull();
             Assert.AreEqual(ActionType.Movement, masterAction4.Type);
             Assert.AreEqual(new Guid("00000000-0000-0000-0000-000000000002"), masterAction4.TargetId);
             Assert.IsTrue(masterAction4.IsActionHasOver);

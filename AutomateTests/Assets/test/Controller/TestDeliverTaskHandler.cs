@@ -11,16 +11,12 @@ using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 using Automate.Model.Components;
-using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
-using AutomateTests.Model.GameWorldComponents;
-using AutomateTests.Model.GameWorldInterface;
-using AutomateTests.test.Controller;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.Assets.test.Controller
+namespace AutomateTests.test.Controller
 {
     [TestClass]
     public class TestDeliverTaskHandler
@@ -43,7 +39,7 @@ namespace AutomateTests.Assets.test.Controller
         public void TestCanHandleWithCorrectArgs_ExpectTrue()
         {
             Handler<IObserverArgs> moveHandler = new GoAndDeliverTaskHandler();
-            Assert.IsTrue(moveHandler.CanHandle(new GoAndDeliverAction(new Coordinate(0, 0, 0), 100, Guid.NewGuid())));
+            Assert.IsTrue(moveHandler.CanHandle(new GoAndDeliverAction(ComponentType.IronOre, new Coordinate(0, 0, 0), 100, Guid.NewGuid())));
         }
 
         [TestMethod]
@@ -70,15 +66,44 @@ namespace AutomateTests.Assets.test.Controller
         }
 
         [TestMethod]
-        [ExpectedException(typeof(MovableRelatedError))]
+        [ExpectedException(typeof(ArgumentException))]
         public void TestHandleGoAndDeliverWhenMovableNotExist_ExpectNoMovableAssignedExceptoin()
         {
             var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(5, 5, 1));
             var DeliverTaskHandler = new GoAndDeliverTaskHandler();
-            DeliverTaskHandler.Handle(new GoAndDeliverAction(new Coordinate(0, 0, 0), 100, Guid.Empty),
+            DeliverTaskHandler.Handle(new GoAndDeliverAction(ComponentType.IronOre, new Coordinate(0, 0, 0), 100, Guid.Empty),
                 new HandlerUtils(gameWorldItem.Guid));
         }
 
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestDeliverRequestForAMovableLackOfComponentType_ExpectException()
+        {
+            var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(5, 5, 1));
+            var DeliverTaskHandler = new GoAndDeliverTaskHandler();
+            var movableItem = gameWorldItem.CreateMovable(new Coordinate(1, 1, 0), MovableType.NormalHuman);
+
+            DeliverTaskHandler.Handle(new GoAndDeliverAction(ComponentType.IronOre, new Coordinate(0, 0, 0), 100, movableItem.Guid),
+                new HandlerUtils(gameWorldItem.Guid));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestDeliverRequestAndMovableHasLessAmountThanRequired_ExpectException()
+        {
+            var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(5, 5, 1));
+            var DeliverTaskHandler = new GoAndDeliverTaskHandler();
+            var movableItem = gameWorldItem.CreateMovable(new Coordinate(1, 1, 0), MovableType.NormalHuman);
+
+            // Create Component At Dest
+            var componentStackGroup = gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0));
+            componentStackGroup.AddComponentStack(ComponentType.IronOre, 0);
+
+            // Here we should get an exception because movable has no Amount of IronOre
+            DeliverTaskHandler.Handle(new GoAndDeliverAction(ComponentType.IronOre, new Coordinate(0, 0, 0), 100, movableItem.Guid),
+                new HandlerUtils(gameWorldItem.Guid));
+        }
 
         [TestMethod]
         public void TestCreateDeliverTaskAndHandleIt_ExpectMoveActionThenDeliverActions()
@@ -87,12 +112,13 @@ namespace AutomateTests.Assets.test.Controller
             var movableItem = _gameWorldItem.CreateMovable(new Coordinate(3, 1, 0), MovableType.NormalHuman);
 
             ComponentStack componentsAtCoordinate = _gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0))
-                .AddComponentStack(Component.GetComponent(ComponentType.IronOre), 0);
-            componentsAtCoordinate.AddAmount(100);
-          //  componentsAtCoordinate.AssignOutgoingAmount(movableItem.Guid,99);
-        
+                .AddComponentStack(Component.GetComponent(ComponentType.IronOre), 20);
 
-            var GoAndDeliverAction = new GoAndDeliverAction(new Coordinate(0, 0, 0), 100, movableItem.Guid);
+            // create a stack in movable mimic the Pickup
+            movableItem.ComponentStackGroup.AddComponentStack(ComponentType.IronOre, 55);
+
+            // Create the Main Action to Go and Deliver
+            var GoAndDeliverAction = new GoAndDeliverAction(ComponentType.IronOre, new Coordinate(0, 0, 0), 55, movableItem.Guid);
             GoAndDeliverAction.OnCompleteDelegate = DeliverOnCompleteFired;
 
             var DeliverTaskHandler = new GoAndDeliverTaskHandler();
@@ -161,7 +187,7 @@ namespace AutomateTests.Assets.test.Controller
             var resultNotRelvant = moveActionHandler.Handle(moveAction4, utils);
             _DeliverHandleSync.WaitOne(300);
             var result5 = _DeliverHandlerResult;
-            Assert.AreEqual(200, componentsAtCoordinate.CurrentAmount);
+            Assert.AreEqual(75, componentsAtCoordinate.CurrentAmount);
             Assert.IsTrue(_DeliverOnCompleteFired);
 
         }

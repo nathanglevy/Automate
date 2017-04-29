@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Interfaces;
-using Automate.Model.Components;
 using Automate.Model.GameWorldInterface;
 
 namespace Automate.Controller.Handlers.GoAndDoSomething
@@ -14,20 +13,26 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
             if (!CanHandle(args))
                 throw new ArgumentException("cannot Handle passed Args, only PickUpAction is allowed");
 
+            // Do a safe casting
             var deliverAction = args as DeliverAction;
+
+            // Get Game World and Movable
             var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
             var movableItem = gameWorldItem.GetMovableItem(deliverAction.MovableId);
-            var componentStackGroup = gameWorldItem.GetComponentStackGroupAtCoordinate(deliverAction.TargetDest);
-            //if (componentStack.GetOutgoingAllocatedAmountForGuid(pickUpAction.MovableId) != pickUpAction.Amount)
-            //{
 
-            //}
-            movableItem.DeliverToComponentStackGroup(componentStackGroup, Component.GetComponent(ComponentType.IronOre), deliverAction.Amount );
+            // Get Target Stack Group at Target Coordinate
+            var componentStackGroup = gameWorldItem.GetComponentStackGroupAtCoordinate(deliverAction.TargetDest);
+
+            // Get Target Component Stack for Transfer
+            var componentStack = componentStackGroup.GetComponentStack(deliverAction.ComponentType);
+
+            // Transfer Amount from Movable to ComponentStack
+            movableItem.ComponentStackGroup.TransferToStack(deliverAction.MovableId, componentStack, deliverAction.Amount);
 
             // Pick Up Operation Ended, Fire On Complete
             deliverAction.FireOnComplete(new ControllerNotificationArgs(deliverAction));
 
-            return new HandlerResult(new List<MasterAction>() { deliverAction });
+            return new HandlerResult(new List<MasterAction>() {deliverAction});
         }
 
         public override bool CanHandle(IObserverArgs args)

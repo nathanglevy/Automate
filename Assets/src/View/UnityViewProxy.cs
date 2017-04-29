@@ -297,7 +297,7 @@ namespace src.View
         private void CreateGoAndDeliver(ControllerNotificationArgs args)
         {
             var pickUpAction = args.Args as GoAndPickUpAction;
-            var goAndDeliverAction = new GoAndDeliverAction(new Coordinate(9, 0, 0), 50, pickUpAction.MovableGuid);
+            var goAndDeliverAction = new GoAndDeliverAction(ComponentType.IronOre, new Coordinate(9, 0, 0), 50, pickUpAction.MovableGuid);
             goAndDeliverAction.OnCompleteDelegate = AddRestOfAmount;
 
             GameViewBase.Controller.Handle(goAndDeliverAction);
@@ -306,7 +306,7 @@ namespace src.View
         private void AddRestOfAmount(ControllerNotificationArgs args)
         {
             var deliverAction = args.Args as GoAndDeliverAction;
-            var goAndDeliverAction = new GoAndDeliverAction(new Coordinate(9, 9, 0), 50, deliverAction.MovableGuid);
+            var goAndDeliverAction = new GoAndDeliverAction(ComponentType.IronOre, new Coordinate(9, 9, 0), 50, deliverAction.MovableGuid);
             goAndDeliverAction.OnCompleteDelegate = GoToMid;
 
             GameViewBase.Controller.Handle(goAndDeliverAction);

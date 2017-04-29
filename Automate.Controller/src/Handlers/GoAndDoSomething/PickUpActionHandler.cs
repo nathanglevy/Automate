@@ -4,6 +4,7 @@ using Automate.Controller.Abstracts;
 using Automate.Controller.Interfaces;
 using Automate.Model.Components;
 using Automate.Model.GameWorldInterface;
+using UnityEngine.VR.WSA.WebCam;
 
 namespace Automate.Controller.Handlers.GoAndPickUp
 {
@@ -14,14 +15,24 @@ namespace Automate.Controller.Handlers.GoAndPickUp
             if (!CanHandle(args))
                 throw new ArgumentException("cannot Handle passed Args, only PickUpAction is allowed");
 
+            // do the casting
             var pickUpAction = args as PickUpAction;
-            var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
-            var componentStack = gameWorldItem.GetComponentStackGroupAtCoordinate(pickUpAction.TargetDest).GetComponentStack(ComponentType.IronOre);
-            //if (componentStack.GetOutgoingAllocatedAmountForGuid(pickUpAction.MovableId) != pickUpAction.Amount)
-            //{
-                
-            //}
-            componentStack.PickupAmount(pickUpAction.MovableId,pickUpAction.Amount);
+
+            // Get Game World
+            var gameWorldItem= GameUniverse.GetGameWorldItemById(utils.GameWorldId);
+
+            // Get the Component Stack Group in the Pickup Location - Source
+            var sourceComponentStackGroup = gameWorldItem.GetComponentStackGroupAtCoordinate(pickUpAction.TargetDest);
+
+            // Get the Movable Object - Target
+            var movableItem = gameWorldItem.GetMovableItem(pickUpAction.MovableId);
+
+            // TODO: HOW TO CHECK IF IT HAS COMPONENT STACK
+
+            var componentStack = movableItem.ComponentStackGroup.AddComponentStack(pickUpAction.ComponentType, 0);
+            componentStack.AssignIncomingAmount(movableItem.Guid,pickUpAction.Amount);
+            // Transfer Amount from Source to Target
+            sourceComponentStackGroup.TransferToStackGroup(pickUpAction.MovableId,movableItem.ComponentStackGroup,pickUpAction.ComponentType,pickUpAction.Amount);
 
             // Pick Up Operation Ended, Fire On Complete
             pickUpAction.FireOnComplete(new ControllerNotificationArgs(pickUpAction));

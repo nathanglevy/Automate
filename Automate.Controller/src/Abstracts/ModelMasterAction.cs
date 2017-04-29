@@ -1,4 +1,5 @@
 ﻿using System;
+using Automate.Model.Components;
 
 namespace Automate.Controller.Abstracts
 {
@@ -18,5 +19,6 @@ namespace Automate.Controller.Abstracts
 
         
         public Guid MasterTaskId { get; set; }
+        public ComponentType ComponentType { get; protected set; }
     }
 }

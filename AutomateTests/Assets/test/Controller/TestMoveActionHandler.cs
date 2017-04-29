@@ -11,7 +11,7 @@ using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.Assets.test.Controller
+namespace AutomateTests.test.Controller
 {
     [TestClass]
     public class TestMoveActionHandler

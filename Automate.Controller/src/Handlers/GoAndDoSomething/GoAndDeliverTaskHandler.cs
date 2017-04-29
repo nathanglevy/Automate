@@ -1,5 +1,6 @@
 using System;
 using Automate.Controller.Abstracts;
+using Automate.Controller.Exceptions;
 using Automate.Controller.Handlers.GoAndPickUp;
 using Automate.Controller.Interfaces;
 using Automate.Model.Components;
@@ -23,7 +24,19 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
             var gameWorld = GameUniverse.GetGameWorldItemById(args.Utils.GameWorldId);
             var movableItem = gameWorld.GetMovableItem(goAndDeliver.MovableGuid);
 
-            var deliverAction = new DeliverAction(GetGoDestination(goAndDeliver,movableItem),GetComponentCoordinate(goAndDeliver,movableItem), goAndDeliver.Amount, goAndDeliver.MovableGuid)
+            try
+            {
+                var movableCSG = movableItem.ComponentStackGroup;
+                var componentStack = movableCSG.GetComponentStack(goAndDeliver.ComponentType);
+
+            }
+            catch (Exception e)
+            {
+                throw new ComponentStackAssignError(e.ToString());
+            }
+            
+
+            var deliverAction = new DeliverAction(goAndDeliver.ComponentType, GetGoDestination(goAndDeliver,movableItem), GetComponentCoordinate(goAndDeliver,movableItem), goAndDeliver.Amount, goAndDeliver.MovableGuid)
             {
                 OnCompleteDelegate = AcknowledgeGoAndDoIsOver,
                 Duration = new TimeSpan(0),
@@ -39,10 +52,16 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
             return goAndDoSomethingAction.TargetDestCoordinate;
         }
 
-        protected override void AssignComponentStack(ComponentStack targetCombo, GoAndDoSomethingAction goAndPickUpAction)
+        protected override void AssignComponentStack(ComponentStack targetComponentStack, GoAndDoSomethingAction goAndDeliverAction, MovableItem movable)
         {
-            targetCombo.AssignIncomingAmount(goAndPickUpAction.MovableGuid, goAndPickUpAction.Amount);
+            // Assign Incoming to Target Component Stack
+            targetComponentStack.AssignIncomingAmount(goAndDeliverAction.MovableGuid, goAndDeliverAction.Amount);
+
+            // Assign OutComing to Movable
+            var movableComponentStack = movable.ComponentStackGroup.GetComponentStack(targetComponentStack.ComponentType);
+            movableComponentStack.AssignOutgoingAmount(movable.Guid,goAndDeliverAction.Amount);
         }
+
 
 
         public override bool CanHandle(IObserverArgs args)

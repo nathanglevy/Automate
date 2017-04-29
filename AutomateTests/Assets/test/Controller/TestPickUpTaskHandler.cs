@@ -10,15 +10,12 @@ using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 using Automate.Model.Components;
-using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
-using AutomateTests.Model.GameWorldComponents;
-using AutomateTests.Model.GameWorldInterface;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.Assets.test.Controller
+namespace AutomateTests.test.Controller
 {
     [TestClass]
     public class TestPickUpTaskHandler
@@ -68,7 +65,7 @@ namespace AutomateTests.Assets.test.Controller
         }
 
         [TestMethod]
-        [ExpectedException(typeof(MovableRelatedError))]
+        [ExpectedException(typeof(ArgumentException))]
         public void TestHandleGoAndPickUpWhenMovableNotExist_ExpectNoMovableAssignedExceptoin()
         {
             var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(5, 5, 1));
@@ -76,6 +73,7 @@ namespace AutomateTests.Assets.test.Controller
             pickUpTaskHandler.Handle(new GoAndPickUpAction(new Coordinate(0, 0, 0), 100, Guid.Empty),
                 new HandlerUtils(gameWorldItem.Guid));
         }
+
 
 
         [TestMethod]
@@ -89,7 +87,7 @@ namespace AutomateTests.Assets.test.Controller
           //  componentsAtCoordinate.AssignOutgoingAmount(movableItem.Guid,99);
         
 
-            var GoAndpickUpAction = new GoAndPickUpAction(new Coordinate(0, 0, 0), 100, movableItem.Guid);
+            var GoAndpickUpAction = new GoAndPickUpAction(new Coordinate(0, 0, 0), 50, movableItem.Guid);
             GoAndpickUpAction.OnCompleteDelegate = PickUpOnCompleteFired;
 
             var pickUpTaskHandler = new GoAndPickUpTaskHandler();
@@ -158,8 +156,9 @@ namespace AutomateTests.Assets.test.Controller
             var resultNotRelvant = moveActionHandler.Handle(moveAction4, utils);
             _pickupHandleSync.WaitOne(300);
             var result5 = _PickUpHandlerResult;
-            Assert.AreEqual(0, componentsAtCoordinate.CurrentAmount);
+            Assert.AreEqual(50, componentsAtCoordinate.CurrentAmount);
             Assert.IsTrue(_pickUpOnCompleteFired);
+            Assert.AreEqual(50,movableItem.ComponentStackGroup.GetComponentStack(GoAndpickUpAction.ComponentType).CurrentAmount);
 
         }
 
