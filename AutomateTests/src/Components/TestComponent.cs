@@ -32,8 +32,8 @@ namespace Automate.Model.Components.Tests {
         public void TestEquals() {
             Assert.AreEqual(Component.GetComponent(ComponentType.IronIngot), Component.GetComponent("IronIngot"));
             Assert.AreEqual(Component.GetComponent("IronIngot"), Component.GetComponent("IronIngot"));
-            Component.NewComponent("OilBreaker", 2, 1);
-            Assert.AreNotEqual(Component.GetComponent("OilBreaker"), Component.GetComponent("IronIngot"));
+            Component.NewComponent("TestMe", 2, 1);
+            Assert.AreNotEqual(Component.GetComponent("TestMe"), Component.GetComponent("IronIngot"));
             Assert.AreNotEqual(Component.GetComponent(ComponentType.IronOre), Component.GetComponent("IronIngot"));
             Assert.AreNotEqual(Component.GetComponent(ComponentType.IronOre), Component.GetComponent(ComponentType.IronIngot));
 
