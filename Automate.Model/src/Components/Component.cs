@@ -38,7 +38,7 @@ namespace Automate.Model.Components
         {
             if (_componentMap.ContainsKey(componentName))
                 throw new ArgumentException(componentName + " component type already exists");
-            _componentMap[componentName] = new Component() {Weight = weight, Size = size};
+            _componentMap[componentName] = new Component() {Type = componentName, Weight = weight, Size = size};
         }
 
         internal Component()
