@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Automate.Controller.Abstracts;
+using Automate.Controller.Handlers.GoAndPickUp;
 using Automate.Controller.Interfaces;
+using Automate.Model.GameWorldInterface;
+using Automate.Model.Tasks;
 
 namespace Automate.Controller.Handlers.TaskActionHandler
 {
@@ -9,12 +13,36 @@ namespace Automate.Controller.Handlers.TaskActionHandler
 
         public override bool CanHandle(IObserverArgs args)
         {
-            throw new NotImplementedException();
+            if (args == null)
+                throw new NullReferenceException("Args is null, cannot determine if Handler should be activated");
+            return args is TaskActionContainer;
         }
 
         public override IHandlerResult<MasterAction> Handle(IObserverArgs args, IHandlerUtils utils)
         {
-            throw new NotImplementedException();
+          if (!CanHandle(args))
+                throw new ArgumentException("Args must be TaskActionContainer, incorrect argument received");
+
+            var taskActionContainer = args as TaskActionContainer;
+            switch (taskActionContainer.TargetAction.TaskActionType)
+            {
+                case TaskActionType.PickupTask:
+                    // TODO: Ask Naph how to get Movable Assigned to a TASK
+                    Guid assigneGuid = Guid.Empty;
+                    var goAndPickUpAction = new GoAndPickUpAction(taskActionContainer.TargetAction.TaskLocation,
+                        taskActionContainer.TargetAction.Amount, assigneGuid);
+                    return new HandlerResult(new List<MasterAction>() {goAndPickUpAction}){ IsInternal = true};
+                    break;
+                case TaskActionType.DeliveryTask:
+                    break;
+                case TaskActionType.BuildTask:
+                    break;
+                case TaskActionType.WorkTask:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("Unkown TaskActionType");
+            }
+            return null;
         }
 
     }

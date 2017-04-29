@@ -34,7 +34,7 @@ namespace src.View
         public GameObject CellObjectReference;
         public GameObject MovableObjectReference;
         public GameObject StructureObjectReference;
-         
+
         Logger _logger = new Logger(new AutomateLogHandler());
 
         // Log Tags
@@ -47,17 +47,17 @@ namespace src.View
 
         public void Start()
         {
-            _logger.Log(LogType.Log,START,"Start Method invoked");
+            _logger.Log(LogType.Log, START, "Start Method invoked");
             GameViewBase = new GameViewBase();
 
-            
+
             GameViewBase.OnActionReady += HandleAction;
             var gameController = new GameController(GameViewBase) { MultiThreaded = MultiThreaded };
 
 
             // notify that Start being Done Now
             _logger.Log(LogType.Log, START, "invoke gameViewBase OnStart Events");
-            GameViewBase.PerformOnStart(new Coordinate(GameXSize,GameYSize,1));
+            GameViewBase.PerformOnStart(new Coordinate(GameXSize, GameYSize, 1));
 
             _logger.Log(LogType.Log, START, "Finish Start Method");
 
@@ -69,8 +69,8 @@ namespace src.View
             try
             {
 
-//                _logger.Log(LogType.Log, UPDATE, "Update Method invoked");
-//                _logger.Log(LogType.Log, UPDATE, "Check If Any key pressed and handle");
+                //                _logger.Log(LogType.Log, UPDATE, "Update Method invoked");
+                //                _logger.Log(LogType.Log, UPDATE, "Check If Any key pressed and handle");
                 CheckForKeypressesAndAddItems();
 
 
@@ -80,21 +80,21 @@ namespace src.View
                 }
                 else
                 {
-                    throw new NullReferenceException("GameViewBaseIsNull At Update Method, it's not expected");   
+                    throw new NullReferenceException("GameViewBaseIsNull At Update Method, it's not expected");
                 }
-                
+
             }
             catch (Exception e)
             {
                 _logger.LogException(e);
-            
+
             }
         }
 
 
         private void HandleAction(ViewHandleActionArgs args)
         {
-            _logger.Log(LogType.Log,HANDLE_ACTION,"Handle Action invoked");
+            _logger.Log(LogType.Log, HANDLE_ACTION, "Handle Action invoked");
             var action = args.Action;
 
             if (action == null)
@@ -106,7 +106,7 @@ namespace src.View
                 case ActionType.AreaSelection:
                     break;
                 case ActionType.Movement:
-                    
+
                     MoveObject(action as MoveAction);
                     break;
                 case ActionType.SelectPlayer:
@@ -116,12 +116,12 @@ namespace src.View
                     break;
                 case ActionType.Deliver:
                     var deliverAction = action as DeliverAction;
-                    SetStructureAtCoordinate(deliverAction.TargetDest, "SpriteSheets/open_tileset_2x", 120,CellObjectReference, 1);
+                    SetStructureAtCoordinate(deliverAction.TargetDest, "SpriteSheets/open_tileset_2x", 120, CellObjectReference, 1);
                     _logger.Log(string.Format("Delvier Is Executed of Amount: {0} AT Locatin: {1}", deliverAction.Amount, deliverAction.TargetDest));
                     break;
                 case ActionType.PickUp:
                     var pickUpAction = action as PickUpAction;
-                    SetStructureAtCoordinate(pickUpAction.TargetDest, "SpriteSheets/open_tileset_2x", 641, CellObjectReference, 1 );
+                    SetStructureAtCoordinate(pickUpAction.TargetDest, "SpriteSheets/open_tileset_2x", 641, CellObjectReference, 1);
                     _logger.Log(string.Format("PickUp Is Executed of Amount: {0} AT Locatin: {1}", pickUpAction.Amount, pickUpAction.TargetDest));
                     Object.Instantiate(CellObjectReference,
                         GetWorldVectorFromMapCoodinates(pickUpAction.TargetDest), Quaternion.identity);
@@ -143,13 +143,14 @@ namespace src.View
 
             movableGameObject.GetComponent<MovableBehaviour>().startPosition = movableStartVector;
             movableGameObject.GetComponent<MovableBehaviour>().targetPosition = movableTargetVector;
-            movableGameObject.GetComponent<MovableBehaviour>().animationSpeed = (float) moveAction.Duration.TotalSeconds ;
+            movableGameObject.GetComponent<MovableBehaviour>().animationSpeed = (float)moveAction.Duration.TotalSeconds;
             movableGameObject.GetComponent<MovableBehaviour>().isMoving = true;
             movableGameObject.GetComponent<MovableBehaviour>().journeyFract = 0;
             string animationName = movableGameObject.GetComponent<MovableBehaviour>().DecideAnimation();
             movableGameObject.GetComponent<Animator>().Play(animationName);
 
-            _logger.Log(LogType.Log, HANDLE_ACTION, String.Format("Animate Selected: {0} for ID: {1}", animationName,moveAction.TargetId));}
+            _logger.Log(LogType.Log, HANDLE_ACTION, String.Format("Animate Selected: {0} for ID: {1}", animationName, moveAction.TargetId));
+        }
 
         private void PlaceAnObject(PlaceAGameObjectAction action)
         {
@@ -163,8 +164,8 @@ namespace src.View
                 case ItemType.Movable:
                     _logger.Log(LogType.Log, HANDLE_ACTION, String.Format("Adding Movable {0} at {1}.", "Human", action.Coordinate));
                     GameObject newGameObject = Object.Instantiate(MovableObjectReference,
-                    GetWorldVectorFromMapCoodinates(action.Coordinate)  + Vector3.back * 2, Quaternion.identity);
-                    _movableDictionary.Add(action.Id,newGameObject);
+                        GetWorldVectorFromMapCoodinates(action.Coordinate) + Vector3.back * 2, Quaternion.identity);
+                    _movableDictionary.Add(action.Id, newGameObject);
                     break;
                 case ItemType.Structure:
                     _logger.Log(LogType.Log, HANDLE_ACTION, String.Format("Adding Structure at {0}.", action.Coordinate));
@@ -173,14 +174,14 @@ namespace src.View
                     SetStructureAtCoordinate(action.Coordinate, spritesheetsOpenTilesetX, spriteNum, StructureObjectReference, 3);
                     break;
                 case ItemType.Cell:
-                     Object.Instantiate(CellObjectReference,
-                GetWorldVectorFromMapCoodinates(action.Coordinate) , Quaternion.identity);
+                    Object.Instantiate(CellObjectReference,
+                        GetWorldVectorFromMapCoodinates(action.Coordinate), Quaternion.identity);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
 
-            
+
 
 
 
@@ -208,11 +209,11 @@ namespace src.View
         {
             Vector3 worldPosition = GetMouseEffectiveWorldLocation();
             Coordinate mapCoordinate = GetMapCoordinateFromWorldVector(worldPosition);
-            
+
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                _logger.Log(LogType.Log,INPUT, "Key: 1 preseed, we will place Structure at " + mapCoordinate.ToString());
-                var placeAMovableRequest = new PlaceAStrcutureRequest(mapCoordinate,new Coordinate(1,1,1), StructureType.Basic);
+                _logger.Log(LogType.Log, INPUT, "Key: 1 preseed, we will place Structure at " + mapCoordinate.ToString());
+                var placeAMovableRequest = new PlaceAStrcutureRequest(mapCoordinate, new Coordinate(1, 1, 1), StructureType.Basic);
                 GameViewBase.Controller.Handle(placeAMovableRequest);
             }
             if (Input.GetKeyDown(KeyCode.Alpha2))
@@ -244,7 +245,7 @@ namespace src.View
                 //GameViewBase.Controller.Handle(viewSelectionNotification);
 
 
-                SetStructureAtCoordinate(new Coordinate(0,0,0), "SpriteSheets/open_tileset_2x",643, CellObjectReference, 1);
+                SetStructureAtCoordinate(new Coordinate(0, 0, 0), "SpriteSheets/open_tileset_2x", 643, CellObjectReference, 1);
 
                 _logger.Log(LogType.Log, INPUT, "Key: 4 preseed, we will Add Component in 0,0,0");
                 var gameWorldItemById = GameUniverse.GetGameWorldItemById(GameViewBase.Controller.Model);
@@ -258,14 +259,14 @@ namespace src.View
                 gameWorldItemById.GetComponentStackGroupAtCoordinate(new Coordinate(9, 9, 0)).AddComponentStack(Component.GetComponent(ComponentType.IronOre), 0);
                 var componentsAtCoordinate = gameWorldItemById.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0));
                 componentsAtCoordinate.GetComponentStack(ComponentType.IronOre).AddAmount(100);
-                componentsAtCoordinate.GetComponentStack(ComponentType.IronOre).AssignOutgoingAmount(movableListInCoordinate[0].Guid,50);
+                componentsAtCoordinate.GetComponentStack(ComponentType.IronOre).AssignOutgoingAmount(movableListInCoordinate[0].Guid, 50);
 
                 var newTask = gameWorldItemById.TaskDelegator.CreateNewTask();
-                newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0,0,0),100 );
+                newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0, 0, 0), 100);
 
                 var goAndPickUpAction = new GoAndPickUpAction(new Coordinate(0, 0, 0), 50,
                         gameWorldItemById.GetSelectedMovableItemList()[0].Guid)
-                    {MasterTaskId = newTask.Guid};
+                    { MasterTaskId = newTask.Guid };
                 goAndPickUpAction.OnCompleteDelegate = CreateGoAndDeliver;
 
                 GameViewBase.Controller.Handle(goAndPickUpAction);
@@ -277,7 +278,7 @@ namespace src.View
             if (Input.GetMouseButtonDown(0))
             {
                 _logger.Log(LogType.Log, INPUT, "Mouse Key: 0(LEFT) preseed, we will select any items at " + mapCoordinate.ToString());
-                    var viewSelectionNotification = new ViewSelectionNotification(mapCoordinate, mapCoordinate, Guid.NewGuid());
+                var viewSelectionNotification = new ViewSelectionNotification(mapCoordinate, mapCoordinate, Guid.NewGuid());
                 GameViewBase.Controller.Handle(viewSelectionNotification);
             }
             if (Input.GetMouseButtonDown(1))
@@ -293,7 +294,7 @@ namespace src.View
                 //GameViewBase.Controller.Handle(rightSelectNotification);
             }
         }
-        
+
         private void CreateGoAndDeliver(ControllerNotificationArgs args)
         {
             var pickUpAction = args.Args as GoAndPickUpAction;
@@ -336,7 +337,7 @@ namespace src.View
 
 
 
- 
+
 
     }
 }

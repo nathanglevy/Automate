@@ -87,7 +87,8 @@
     <Compile Include="Assets\test\Controller\TestMoveActionHandler.cs" />
     <Compile Include="Assets\test\Controller\TestTimersSched.cs" />
     <Compile Include="Assets\test\Controller\TestPickUpActionHandler.cs" />
-    <Compile Include="Assets\test\Controller\UnitTest1.cs" />
+    <Compile Include="Assets\test\Controller\TestTaskHandler.cs" />
+    <Compile Include="Assets\test\Controller\TestTaskActionHandler.cs" />
     <Compile Include="Assets\test\Mocks\MockGameView.cs" />
     <Compile Include="Assets\test\Model\GameWorldComponents\TestMovable.cs" />
     <Compile Include="Assets\test\Model\GameWorldInterface\TestGameWorldItem.cs" />
