@@ -22,12 +22,15 @@ namespace Automate.Controller.Handlers.GoAndPickUp
 
         protected override void OnMovableAtTargetDest(ControllerNotificationArgs args)
         {
+            if (args.Utils == null)
+                throw new ArgumentNullException("Utils Is Null, cannot get GameWorld ID.");
+
             var modelAction = args.Args as ModelMasterAction;
             var goAndPickUpAction = GetGoAndDoActionByMasterId(modelAction);
 
             var gameWorld = GameUniverse.GetGameWorldItemById(args.Utils.GameWorldId);
             var movableItem = gameWorld.GetMovableItem(goAndPickUpAction.MovableGuid);
-
+ 
             var pickUpAction = new PickUpAction(ComponentType.IronOre, GetComponentCoordinate(goAndPickUpAction, movableItem), goAndPickUpAction.Amount, goAndPickUpAction.MovableGuid)
             {
                 OnCompleteDelegate = AcknowledgeGoAndDoIsOver,

@@ -32,11 +32,20 @@ namespace Automate.Controller.Handlers.TaskActionHandler
             {
                 case TaskActionType.PickupTask:
                     var goAndPickUpAction = new GoAndPickUpAction(taskActionContainer.TargetAction.TaskLocation,
-                        taskActionContainer.TargetAction.Amount, task.AssignedToGuid) {OnCompleteDelegate = taskActionContainer.OnCompleteDelegate};
-                    return new HandlerResult(new List<MasterAction>() {goAndPickUpAction}){ IsInternal = true};
+                        taskActionContainer.TargetAction.Amount, task.AssignedToGuid)
+                    {
+                        OnCompleteDelegate = taskActionContainer.OnCompleteDelegate,
+                        MasterTaskId = taskActionContainer.MasterTaskId
+                    } ;
+                    return new HandlerResult(new List<MasterAction>() {goAndPickUpAction}){ IsInternal = true };
                 case TaskActionType.DeliveryTask:
                     var goAndDeliverAction = new GoAndDeliverAction(taskActionContainer.ComponentType,taskActionContainer.TargetAction.TaskLocation,
-                        taskActionContainer.TargetAction.Amount, task.AssignedToGuid) { OnCompleteDelegate = taskActionContainer.OnCompleteDelegate};
+                        taskActionContainer.TargetAction.Amount, task.AssignedToGuid)
+                    {
+                        OnCompleteDelegate = taskActionContainer.OnCompleteDelegate,
+                        MasterTaskId = taskActionContainer.MasterTaskId
+
+                    };
                     return new HandlerResult(new List<MasterAction>() { goAndDeliverAction }) { IsInternal = true };
                 case TaskActionType.BuildTask:
                     break;

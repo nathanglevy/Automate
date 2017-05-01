@@ -75,7 +75,8 @@ namespace AutomateTests.test.Controller
             var movableItem = gameWorldItem.CreateMovable(new Coordinate(3, 2, 0), MovableType.NormalHuman);
             var newTask = gameWorldItem.TaskDelegator.CreateNewTask();
             gameWorldItem.TaskDelegator.AssignTask(movableItem.Guid,newTask);
-            newTask.AddAction(TaskActionType.DeliveryTask, new Coordinate(0,0,0),100 );
+            var cmpntGrp = gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0));
+            newTask.AddTransportAction(TaskActionType.DeliveryTask, new Coordinate(0,0,0),cmpntGrp,Component.IronOre, 100 );
             var currentAction = newTask.GetCurrentAction();
 
             ComponentStack componentsAtCoordinate = gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0))

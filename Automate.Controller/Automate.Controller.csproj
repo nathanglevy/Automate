@@ -76,7 +76,6 @@
     <Compile Include="src\Abstracts\ModelMasterAction.cs" />
     <Compile Include="src\Abstracts\ObserverArgs.cs" />
     <Compile Include="src\Delegates\HandlerResultListner.cs" />
-    <Compile Include="src\Exceptions\ComponentStackAssignError.cs" />
     <Compile Include="src\Handlers\AcknowledgeNotification\AcknowledgeNotification.cs" />
     <Compile Include="src\Handlers\AcknowledgeNotification\AcknowledgeNotificationHandler.cs" />
     <Compile Include="src\Handlers\GoAndDoSomething\DeliverAction.cs" />
@@ -111,8 +110,6 @@
     <Compile Include="src\Interfaces\ControllerNotification.cs" />
     <Compile Include="src\Interfaces\ControllerNotificationArgs.cs" />
     <Compile Include="src\Interfaces\HandlerResult.cs" />
-    <Compile Include="src\Interfaces\IAcknowledgeResult.cs" />
-    <Compile Include="src\Interfaces\IAcknowledgeResult1.cs" />
     <Compile Include="src\Interfaces\IGameController.cs" />
     <Compile Include="src\Interfaces\IGameView.cs" />
     <Compile Include="src\Interfaces\IHandler.cs" />
@@ -143,7 +140,9 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="src\Exceptions\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

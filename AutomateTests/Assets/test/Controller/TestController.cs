@@ -120,6 +120,7 @@ namespace AutomateTests.test.Controller
         private Guid _onPreHandleGuid;
         private Guid _onPostHandleGuid;
         private Guid _onFinishHandleGuid;
+        private bool _taskCompleteFired;
 
         [TestMethod]
         public void TestPreAndPostHandleEventsInvoke_ExpectEventsToFiredInCorrectOrder()
@@ -189,7 +190,7 @@ namespace AutomateTests.test.Controller
         {
 
             // Create View Object
-            GameViewBase gameview = new GameViewBase();
+            var gameview = new GameViewBase();
 
             // Create GameWorldId Object
             Guid gameModel = GetMockGameWorld();
@@ -200,7 +201,7 @@ namespace AutomateTests.test.Controller
             var mockHandler = new MockHandler();
 
             // Init the Controller
-            IGameController gameController = new GameController((IGameView)gameview);
+            IGameController gameController = new GameController(gameview);
             gameController.FocusGameWorld(gameModel);
             gameController.RegisterHandler(mockHandler);
             // Create the NotificationArgs
@@ -428,31 +429,30 @@ namespace AutomateTests.test.Controller
             IGameController gameController = new GameController(gameWorldBase) {MultiThreaded = false};
 
             // mimic on Start Method to create the world
-            gameWorldBase.PerformOnStart(new Coordinate(20,20,1));
-
-           
-
+            gameWorldBase.PerformOnStart(new Coordinate(20, 20, 1));
 
             var gameWorld = GameUniverse.GetGameWorldItemById(gameController.Model);
 
             // create Pickup Component Stack
-            var componentStackGroupAtCoordinate = gameWorld.GetComponentStackGroupAtCoordinate(new Coordinate(3, 3, 0));
-            var ironat330 = componentStackGroupAtCoordinate.AddComponentStack(ComponentType.IronOre, 50);
+            var cmpntGrp330 = gameWorld.GetComponentStackGroupAtCoordinate(new Coordinate(3, 3, 0));
+            var ironat330 = cmpntGrp330.AddComponentStack(ComponentType.IronOre, 50);
 
             // create Pickup Component Stack
-            var componentStackGroupAtTarget = gameWorld.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0));
-            var ironat000 = componentStackGroupAtTarget.AddComponentStack(ComponentType.IronOre, 0);
+            var cmpntGrp000 = gameWorld.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0));
+            var ironat000 = cmpntGrp000.AddComponentStack(ComponentType.IronOre, 0);
 
 
 
             // Create the Task and Actions
             var PickupAndDeliverTask = gameWorld.TaskDelegator.CreateNewTask();
-            PickupAndDeliverTask.AddAction(TaskActionType.PickupTask, new Coordinate(3, 3, 0), 30);
-            PickupAndDeliverTask.AddAction(TaskActionType.DeliveryTask, new Coordinate(0, 0, 0), 30);
+            PickupAndDeliverTask.AddTransportAction(TaskActionType.PickupTask, new Coordinate(3, 3, 0), cmpntGrp330,
+                Component.IronOre, 30);
+            PickupAndDeliverTask.AddTransportAction(TaskActionType.DeliveryTask, new Coordinate(0, 0, 0), cmpntGrp000,
+                Component.IronOre, 30);
 
             // Create the movable and Assign the task
             var movableItem = gameWorld.CreateMovable(new Coordinate(6, 3, 0), MovableType.NormalHuman);
-            gameWorld.TaskDelegator.AssignTask(movableItem.Guid,PickupAndDeliverTask);
+            gameWorld.TaskDelegator.AssignTask(movableItem.Guid, PickupAndDeliverTask);
 
             gameWorldBase.PerformOnUpdateStart();
             // Handle all actions from Model
@@ -460,7 +460,7 @@ namespace AutomateTests.test.Controller
 
             // Move from Push to Pull Q
             gameWorldBase.PerformOnUpdateStart();
-            
+
             gameWorldBase.PerformOnUpdate();
 
             for (int i = 0; i < 401; i++)
@@ -498,44 +498,52 @@ namespace AutomateTests.test.Controller
             gameWorldBase.PerformOnUpdate();
 
             List<MasterAction> actions = new List<MasterAction>();
-            for (int i = 0; i < 10; i++)
+            var index = 0;
+            while (!PickupAndDeliverTask.IsTaskComplete() )
             {
-
-
+                index++;
                 gameWorldBase.PerformOnUpdateStart();
                 gameWorldBase.PerformOnUpdate();
 
-                if (gameController.OutputSched.HasItems)
+                while (gameController.OutputSched.HasItems)
                 {
                     var action = gameController.OutputSched.Pull();
                     actions.Add(action);
+           
+
                 }
                 gameWorldBase.PerformOnUpdateStart();
                 gameWorldBase.PerformOnUpdate();
-
-                //threadInfos = gameController.Handle(action);
-                //foreach (var threadInfo in threadInfos)
-                //{
-                //    threadInfo.SyncEvent.WaitOne();
-                //}
-
-
-                //Assert.IsTrue(action is MoveAction);
-                //Assert.AreEqual(new Coordinate(5, 3, 0), (action as MoveAction).To);
             }
+
+
+
+            //threadInfos = gameController.Handle(action);
+            //foreach (var threadInfo in threadInfos)
+            //{
+            //    threadInfo.SyncEvent.WaitOne();
+            //}
+
+
+            //Assert.IsTrue(action is MoveAction);
+            //Assert.AreEqual(new Coordinate(5, 3, 0), (action as MoveAction).To);
             // First Action
-            
+
 
             // Second Action
             //var moveAction0Result = gameController.Handle(moveAction0);
 
 
-            Assert.AreEqual(new Coordinate(0,0,0),movableItem.CurrentCoordiate );
+            Assert.AreEqual(new Coordinate(0, 0, 0), gameWorld.GetMovableItem(movableItem.Guid).CurrentCoordiate);
+            Assert.IsTrue(_taskCompleteFired);
+            Assert.AreEqual(20, ironat330.CurrentAmount);
+            Assert.AreEqual(30, ironat000.CurrentAmount);
+
         }
 
         private void TaskonCompleteFired(ControllerNotificationArgs args)
         {
-            throw new NotImplementedException();
+            _taskCompleteFired = true;
         }
     }
 }

@@ -83,7 +83,7 @@ namespace Automate.Controller.Handlers.MoveHandler
                     Console.Out.WriteLine(String.Format("Player {0} reached the Target - Good Job :-)",
                         movableItem.Guid.ToString()));
 
-                    moveAction.FireOnComplete(new ControllerNotificationArgs(moveAction) {Utils = utils});
+                    moveAction.FireOnComplete(new ControllerNotificationArgs(moveAction, utils));
                     return new HandlerResult(new List<MasterAction>());
                 }
 

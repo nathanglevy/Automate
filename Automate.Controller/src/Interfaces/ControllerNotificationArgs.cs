@@ -8,9 +8,10 @@ namespace Automate.Controller.Interfaces
         public IObserverArgs Args { get; }
         public IHandlerUtils Utils { get; set; }
 
-        public ControllerNotificationArgs(IObserverArgs args)
+        public ControllerNotificationArgs(IObserverArgs args, IHandlerUtils utils)
         {
             Args = args;
+            Utils = utils;
         }
     }
 }

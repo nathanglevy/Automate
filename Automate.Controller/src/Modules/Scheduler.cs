@@ -110,9 +110,11 @@ namespace Automate.Controller.Modules
             // SWAP Between Pull and Push
             lock (_targetQLock)
             {
-                var temp = _targetPullQ;
-                _targetPullQ = _targetPushQ;
-                _targetPushQ = temp;
+                // move all items under push Q to pull Q
+                while (_targetPushQ.Count > 0)
+                {
+                    _targetPullQ.Enqueue(_targetPushQ.Dequeue());
+                }
             }
 
         }

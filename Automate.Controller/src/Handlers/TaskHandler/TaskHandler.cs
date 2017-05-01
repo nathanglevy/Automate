@@ -30,7 +30,7 @@ namespace Automate.Controller.Handlers.TaskHandler
             var currentAction = task.GetCurrentAction();
 
             // Create ActionContainer and Fire it
-            var taskActionContainer = new TaskActionContainer(currentAction);
+            var taskActionContainer = new TaskActionContainer(currentAction, task.Guid);
             taskActionContainer.OnCompleteDelegate = UpdateAndHandleNextAction;
 
             return new HandlerResult(new List<MasterAction>() {taskActionContainer}){IsInternal = true};
@@ -38,7 +38,7 @@ namespace Automate.Controller.Handlers.TaskHandler
 
         private void UpdateAndHandleNextAction(ControllerNotificationArgs args)
         {
-            var taskActionContainer = args.Args as TaskActionContainer;
+            var taskActionContainer = args.Args as ModelMasterAction;
             var masterTaskId = taskActionContainer.MasterTaskId;
 
             var gameWorldItem = GameUniverse.GetGameWorldItemById(args.Utils.GameWorldId);
@@ -49,12 +49,13 @@ namespace Automate.Controller.Handlers.TaskHandler
             if (targetTask.IsTaskComplete())
             {
                 var taskContainer = _tasks[targetTask.Guid];
-                taskContainer.OnCompleteDelegate.Invoke(new ControllerNotificationArgs(taskContainer));
+                taskContainer.OnCompleteDelegate.Invoke(
+                    new ControllerNotificationArgs(taskContainer, utils: args.Utils));
             }
             else
             {
                 var currentAction = targetTask.GetCurrentAction();
-                var newTaskActionContainer = new TaskActionContainer(currentAction);
+                var newTaskActionContainer = new TaskActionContainer(currentAction, targetTask.Guid);
                 newTaskActionContainer.OnCompleteDelegate = UpdateAndHandleNextAction;
                 args.Utils.InvokeHandler(newTaskActionContainer);
             }

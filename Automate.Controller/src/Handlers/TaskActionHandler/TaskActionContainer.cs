@@ -7,16 +7,16 @@ namespace Automate.Controller.Handlers.TaskActionHandler
 {
     public class TaskActionContainer : ModelMasterAction
     {
-        public TaskAction TargetAction { get; }
+        public ITaskAction TargetAction { get; }
 
-        public TaskActionContainer(TaskAction taskAction) : base(ActionType.DEFAULT)
+        public TaskActionContainer(ITaskAction taskAction, Guid masterTaskId) : base(ActionType.DEFAULT)
         {
+            MasterTaskId = masterTaskId;
             TargetAction = taskAction;
         }
 
         public Guid TargetId { get; }
         public event ControllerNotification OnComplete;
-
-        public new Guid MasterTaskId => TargetAction.MasterTask;
+     
     }
 }

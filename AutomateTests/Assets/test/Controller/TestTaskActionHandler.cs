@@ -4,6 +4,7 @@ using Automate.Controller.Handlers;
 using Automate.Controller.Handlers.GoAndPickUp;
 using Automate.Controller.Handlers.TaskActionHandler;
 using Automate.Controller.Interfaces;
+using Automate.Model.Components;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Tasks;
@@ -27,7 +28,7 @@ namespace AutomateTests.test.Controller
         public void TestCanHandleWithCorrectArgs_ExpectTrue()
         {
             var taskHandler = new TaskActionHandler();
-            Assert.IsTrue(taskHandler.CanHandle(new TaskActionContainer(null)));
+            Assert.IsTrue(taskHandler.CanHandle(new TaskActionContainer(null, Guid.Empty)));
         }
 
         [TestMethod]
@@ -58,12 +59,15 @@ namespace AutomateTests.test.Controller
         {
             var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(10, 10, 1));
             var newTask = gameWorldItem.TaskDelegator.CreateNewTask();
-            var taskAction = newTask.AddAction(TaskActionType.PickupTask, new Coordinate(3, 3, 0), 30);
+            ComponentStackGroup grp = gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(3, 3, 0));
+            grp.AddComponentStack(ComponentType.IronOre, 0);
+
+            var taskAction = newTask.AddTransportAction(TaskActionType.PickupTask, new Coordinate(3, 3, 0),grp,Component.IronOre , 30);
             var newGuid = Guid.NewGuid();
             gameWorldItem.TaskDelegator.AssignTask(newGuid,newTask);
 
             var taskActionHandler = new TaskActionHandler();
-            var handlerResult = taskActionHandler.Handle(new TaskActionContainer(taskAction) {OnCompleteDelegate = OnCompleteCheck}, new HandlerUtils(gameWorldItem.Guid));
+            var handlerResult = taskActionHandler.Handle(new TaskActionContainer(taskAction, newTask.Guid) {OnCompleteDelegate = OnCompleteCheck}, new HandlerUtils(gameWorldItem.Guid));
 
             Assert.AreEqual(1,handlerResult.GetItems().Count);
 
@@ -81,14 +85,16 @@ namespace AutomateTests.test.Controller
         [TestMethod]
         public void TestHandleDeliver_ExpectGoAndDeliverTaskGenerated()
         {
+
             var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(10, 10, 1));
             var newTask = gameWorldItem.TaskDelegator.CreateNewTask();
-            var taskAction = newTask.AddAction(TaskActionType.DeliveryTask, new Coordinate(3, 3, 0), 30);
+            var cmpntGrp = gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(3, 3, 0));
+            var taskAction = newTask.AddTransportAction(TaskActionType.DeliveryTask, new Coordinate(3, 3, 0),cmpntGrp,Component.IronOre,  30);
             var newGuid = Guid.NewGuid();
             gameWorldItem.TaskDelegator.AssignTask(newGuid, newTask);
 
             var taskActionHandler = new TaskActionHandler();
-            var handlerResult = taskActionHandler.Handle(new TaskActionContainer(taskAction) {OnCompleteDelegate = OnCompleteCheck}, new HandlerUtils(gameWorldItem.Guid));
+            var handlerResult = taskActionHandler.Handle(new TaskActionContainer(taskAction, newTask.Guid) {OnCompleteDelegate = OnCompleteCheck}, new HandlerUtils(gameWorldItem.Guid));
 
             Assert.AreEqual(1, handlerResult.GetItems().Count);
 

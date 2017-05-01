@@ -104,7 +104,7 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
         {
             var modelAction = args.Args as ModelMasterAction;
             var goAndPickUpAction = GetGoAndDoActionByMasterId(modelAction);
-            goAndPickUpAction.FireOnComplete(new ControllerNotificationArgs(goAndPickUpAction) { Utils = args.Utils });
+            goAndPickUpAction.FireOnComplete(new ControllerNotificationArgs(goAndPickUpAction, utils:args.Utils));
         }
 
         // Help Methods
