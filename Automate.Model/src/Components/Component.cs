@@ -45,6 +45,9 @@ namespace Automate.Model.Components
         {
         }
 
+        public static Component IronOre => GetComponent(ComponentType.IronOre);
+        public static Component IronIngot => GetComponent(ComponentType.IronIngot);
+
         public override bool Equals(Object obj) {
             // Check for null values and compare run-time types.
             if (obj == null || GetType() != obj.GetType())

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Utility;
 
@@ -22,17 +23,37 @@ namespace Automate.Model.PathFinding
         {
             if (mapInfo == null || source == null || target == null)
                 throw new ArgumentNullException();
-            if (!(mapInfo.IsCoordinateIsWithinBounds(source) && mapInfo.IsCoordinateIsWithinBounds(target)))
+            return FindShortestPath(mapInfo, new List<Coordinate>() { source }, new Boundary(target, target), true);
+        }
+
+        public static MovementPath FindShortestPath(MapInfo mapInfo, List<Coordinate> source, Coordinate target) {
+            if (mapInfo == null || source == null || target == null)
+                throw new ArgumentNullException();
+            return FindShortestPath(mapInfo, source, new Boundary(target, target), true);
+        }
+
+        public static MovementPath FindShortestPath(MapInfo mapInfo, List<Coordinate> source, Boundary target, bool targetAccessible)
+        {
+            if (mapInfo == null || source == null || target == null)
+                throw new ArgumentNullException();
+            if (!(mapInfo.IsCoordinateIsWithinBounds(target.topLeft) && mapInfo.IsCoordinateIsWithinBounds(target.bottomRight)))
                 throw new ArgumentOutOfRangeException();
-
-            MovementPath resultPath = new MovementPath(source);
-
-            if (source == target)
-                return resultPath;
+            foreach (Coordinate sourceCoordinate in source)
+            {
+                if (!(mapInfo.IsCoordinateIsWithinBounds(sourceCoordinate)))
+                    throw new ArgumentOutOfRangeException();
+                if (target.IsCoordinateInBoundary(sourceCoordinate))
+                {
+                    return new MovementPath(sourceCoordinate);
+                }
+            }
 
             // target of path is inaccessible -- throw an exception
-            if (!mapInfo.GetCell(target).IsPassable())
+            if (!target.GetListOfCoordinatesInBoundary().Any(item => mapInfo.GetCell(item).IsPassable()) && targetAccessible)
                 throw new NoPathFoundException();
+
+//            if (!mapInfo.GetCell(target).IsPassable())
+//                throw new NoPathFoundException();
 
             Dictionary<Coordinate,Movement> movementList = new Dictionary<Coordinate, Movement>();
             SortedList<double, Coordinate> toVisitList = new SortedList<double, Coordinate>(new DuplicateKeyComparer<double>());
@@ -40,10 +61,15 @@ namespace Automate.Model.PathFinding
             List<Coordinate> pathingMovements = GetPathingMovements();
 
             //start from target and work backwards
-            toVisitList.Add(0, target);
+            IEnumerable<Coordinate> targetCoordinates = target.GetListOfCoordinatesInBoundary().Where(item => mapInfo.GetCell(item).IsPassable());
+            foreach (var targetCoordinate in targetCoordinates)
+            {
+                toVisitList.Add(0, targetCoordinate);
+            }
+            
 
             //while the to visit list is not empty
-            while ((toVisitList.Count > 0) && !visitedSet.Contains(source))
+            while ((toVisitList.Count > 0) && !visitedSet.Intersect(source).Any())
             {
                 Coordinate currentCoordinate = toVisitList.Values[0];
                 double currentWeight = toVisitList.Keys[0];
@@ -79,22 +105,20 @@ namespace Automate.Model.PathFinding
             }
 
             // no path -- throw an exception
-            if (!visitedSet.Contains(source))
+            if (!visitedSet.Intersect(source).Any())
                 throw new NoPathFoundException();
 
-            //debug
-            //Console.Out.WriteLine("Now working backwards, starting at: " + resultPath.GetStartCoordinate().ToString());
+            MovementPath resultPath = new MovementPath(visitedSet.Intersect(source).First());
+
             //build the return path
-            while (resultPath.GetEndCoordinate() != target)
+            while(!target.GetListOfCoordinatesInBoundary().Contains(resultPath.GetEndCoordinate()))
             {
-                //Console.Out.WriteLine("Moving by: " + movementList[resultPath.GetEndCoordinate()].GetMoveDirection().ToString());
                 resultPath.AddMovement(movementList[resultPath.GetEndCoordinate()]);
-                //Console.Out.WriteLine("End is now: " + resultPath.GetEndCoordinate().ToString());
-
             }
-
             return resultPath;
         }
+
+
 
         private static List<Coordinate> GetPathingMovements()
         {

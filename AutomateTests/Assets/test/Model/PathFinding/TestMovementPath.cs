@@ -131,5 +131,28 @@ namespace AutomateTests.Model.PathFinding
             //now they should not be equal
             Assert.AreNotEqual(movementPath, movementPathClone);
         }
+
+        [TestMethod()]
+        public void TestRemoveLastMovement_ExpectSuccess() {
+            MovementPath movementPath = new MovementPath(new Coordinate(0, 0, 0));
+            movementPath.AddMovement(new Movement(new Coordinate(0, 0, 1), 1));
+            movementPath.AddMovement(new Movement(new Coordinate(0, 0, 1), 1));
+            movementPath.AddMovement(new Movement(new Coordinate(0, 1, 1), 1));
+            Assert.AreEqual(movementPath.GetEndCoordinate(), new Coordinate(0, 1, 3));
+            movementPath.RemoveLastMovement();
+            Assert.AreEqual(movementPath.GetEndCoordinate(), new Coordinate(0, 0, 2));
+            movementPath.RemoveLastMovement();
+            Assert.AreEqual(movementPath.GetEndCoordinate(), new Coordinate(0, 0, 1));
+            movementPath.RemoveLastMovement();
+            Assert.AreEqual(movementPath.GetEndCoordinate(), new Coordinate(0, 0, 0));
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(PathOperationException))]
+        public void TestRemoveLastMovement_RemoveFromEmptyPath_ExpectPathOperationException() {
+            MovementPath movementPath = new MovementPath(new Coordinate(0, 0, 0));
+            movementPath.RemoveLastMovement();
+        }
+
     }
 }

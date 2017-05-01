@@ -43,7 +43,7 @@ namespace AutomateTests.Model.PathFinding {
         public void TestFindShortestPath_NullSource_ExpectArgumentNullException() {
             MapInfo mapInfo = new MapInfo(10, 10, 1);
             mapInfo.FillMapWithCells(new CellInfo(true, 1));
-            PathFinderAStar.FindShortestPath(mapInfo, null, new Coordinate(1, 1, 0));
+            PathFinderAStar.FindShortestPath(mapInfo, new Coordinate(1, 1, 0), null);
         }
 
         [TestMethod()]

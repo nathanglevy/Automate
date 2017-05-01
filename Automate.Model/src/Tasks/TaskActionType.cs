@@ -5,6 +5,7 @@
         PickupTask,
         DeliveryTask,
         BuildTask,
-        WorkTask
+        WorkTask,
+        GenericTask
     }
 }

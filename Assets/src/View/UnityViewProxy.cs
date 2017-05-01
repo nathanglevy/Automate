@@ -261,7 +261,7 @@ namespace src.View
                 componentsAtCoordinate.GetComponentStack(ComponentType.IronOre).AssignOutgoingAmount(movableListInCoordinate[0].Guid,50);
 
                 var newTask = gameWorldItemById.TaskDelegator.CreateNewTask();
-                newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0,0,0),100 );
+                var newAction = newTask.AddTransportAction(TaskActionType.PickupTask, new Coordinate(0,0,0), componentsAtCoordinate, Component.GetComponent(ComponentType.IronOre), 100);
 
                 var goAndPickUpAction = new GoAndPickUpAction(new Coordinate(0, 0, 0), 50,
                         gameWorldItemById.GetSelectedMovableItemList()[0].Guid)
