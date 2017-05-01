@@ -437,18 +437,25 @@ namespace AutomateTests.test.Controller
             var cmpntGrp330 = gameWorld.GetComponentStackGroupAtCoordinate(new Coordinate(3, 3, 0));
             var ironat330 = cmpntGrp330.AddComponentStack(ComponentType.IronOre, 50);
 
-            // create Pickup Component Stack
+            // create Delivery Component Stack
             var cmpntGrp000 = gameWorld.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0));
             var ironat000 = cmpntGrp000.AddComponentStack(ComponentType.IronOre, 0);
+
+            // create Delivery Component Stack
+            var cmpntGrp220 = gameWorld.GetComponentStackGroupAtCoordinate(new Coordinate(2, 2, 0));
+            var ironat220 = cmpntGrp220.AddComponentStack(ComponentType.IronOre, 0);
+
 
 
 
             // Create the Task and Actions
             var PickupAndDeliverTask = gameWorld.TaskDelegator.CreateNewTask();
             PickupAndDeliverTask.AddTransportAction(TaskActionType.PickupTask, new Coordinate(3, 3, 0), cmpntGrp330,
-                Component.IronOre, 30);
+                Component.IronOre, 40);
             PickupAndDeliverTask.AddTransportAction(TaskActionType.DeliveryTask, new Coordinate(0, 0, 0), cmpntGrp000,
                 Component.IronOre, 30);
+            PickupAndDeliverTask.AddTransportAction(TaskActionType.DeliveryTask, new Coordinate(2, 2, 0), cmpntGrp000,
+                Component.IronOre, 10);
 
             // Create the movable and Assign the task
             var movableItem = gameWorld.CreateMovable(new Coordinate(6, 3, 0), MovableType.NormalHuman);
@@ -534,10 +541,11 @@ namespace AutomateTests.test.Controller
             //var moveAction0Result = gameController.Handle(moveAction0);
 
 
-            Assert.AreEqual(new Coordinate(0, 0, 0), gameWorld.GetMovableItem(movableItem.Guid).CurrentCoordiate);
+            Assert.AreEqual(new Coordinate(2, 2, 0), gameWorld.GetMovableItem(movableItem.Guid).CurrentCoordiate);
             Assert.IsTrue(_taskCompleteFired);
-            Assert.AreEqual(20, ironat330.CurrentAmount);
+            Assert.AreEqual(10, ironat330.CurrentAmount);
             Assert.AreEqual(30, ironat000.CurrentAmount);
+            Assert.AreEqual(10, ironat220.CurrentAmount);
 
         }
 
