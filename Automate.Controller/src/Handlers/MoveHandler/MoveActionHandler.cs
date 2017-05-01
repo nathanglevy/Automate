@@ -23,8 +23,8 @@ namespace Automate.Controller.Handlers.MoveHandler
             if (!CanHandle(args))
                 throw new ArgumentException("Current Handler Can TimedOut only MoveAction");
 
-            try
-            {
+            //try
+            //{
                 // get the move Action
                 var moveAction = args as MoveAction;
 
@@ -90,12 +90,12 @@ namespace Automate.Controller.Handlers.MoveHandler
                 throw new Exception("Not Good, we shoudn;t reach here");
                
 
-            }
-            catch (Exception e)
-            {
-                Console.Out.Write("Cannot ACK to Move Object- " + e.Message);
-                throw e;
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.Out.Write("Cannot ACK to Move Object- " + e.Message);
+            //    throw e;
+            //}
         }
 
     }

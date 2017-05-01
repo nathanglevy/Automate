@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using System.Threading;
 using Automate.Controller.Abstracts;
+using Automate.Controller.Actions;
 using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Handlers.SelectionNotification;
+using Automate.Controller.Handlers.TaskHandler;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 using Automate.Model;
+using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
+using Automate.Model.Tasks;
 using AutomateTests.Mocks;
 using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -417,7 +421,121 @@ namespace AutomateTests.test.Controller
             _ackSync.Set();
         }
 
+        [TestMethod]
+        public void TestTaskAndSubAction_ExpectActionsToBeExecutedOneByOneAndOnCompleteFired()
+        {
+            IGameView gameWorldBase = new GameViewBase();
+            IGameController gameController = new GameController(gameWorldBase) {MultiThreaded = false};
+
+            // mimic on Start Method to create the world
+            gameWorldBase.PerformOnStart(new Coordinate(20,20,1));
+
+           
 
 
+            var gameWorld = GameUniverse.GetGameWorldItemById(gameController.Model);
+
+            // create Pickup Component Stack
+            var componentStackGroupAtCoordinate = gameWorld.GetComponentStackGroupAtCoordinate(new Coordinate(3, 3, 0));
+            var ironat330 = componentStackGroupAtCoordinate.AddComponentStack(ComponentType.IronOre, 50);
+
+            // create Pickup Component Stack
+            var componentStackGroupAtTarget = gameWorld.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0));
+            var ironat000 = componentStackGroupAtTarget.AddComponentStack(ComponentType.IronOre, 0);
+
+
+
+            // Create the Task and Actions
+            var PickupAndDeliverTask = gameWorld.TaskDelegator.CreateNewTask();
+            PickupAndDeliverTask.AddAction(TaskActionType.PickupTask, new Coordinate(3, 3, 0), 30);
+            PickupAndDeliverTask.AddAction(TaskActionType.DeliveryTask, new Coordinate(0, 0, 0), 30);
+
+            // Create the movable and Assign the task
+            var movableItem = gameWorld.CreateMovable(new Coordinate(6, 3, 0), MovableType.NormalHuman);
+            gameWorld.TaskDelegator.AssignTask(movableItem.Guid,PickupAndDeliverTask);
+
+            gameWorldBase.PerformOnUpdateStart();
+            // Handle all actions from Model
+            gameWorldBase.PerformOnUpdate();
+
+            // Move from Push to Pull Q
+            gameWorldBase.PerformOnUpdateStart();
+            
+            gameWorldBase.PerformOnUpdate();
+
+            for (int i = 0; i < 401; i++)
+            {
+                gameController.OutputSched.Pull();
+            }
+
+
+            // handle the Task
+            var taskContainer = new TaskContainer(PickupAndDeliverTask) {OnCompleteDelegate = TaskonCompleteFired};
+            var threadInfos = gameController.Handle(taskContainer);
+
+            // Check that Something being executed
+            //   Assert.IsTrue(threadInfos.Count > 0);
+
+
+            // Wait till it finish
+            //foreach (var threadInfo in threadInfos)
+            //{
+            //    threadInfo.SyncEvent.WaitOne();
+            //}
+
+            // 6,3,0 --> 5,3,0
+            // 5,3,0 --> 4,3,0
+            // 4,3,0 --> 3,3,0
+            // 3,3,0 --> 3,3,0
+            // PickupAction
+            // 3,3,0 --> 2,2,0
+            // 2,2,0 --> 1,1,0
+            // 1,1,0 --> 0,0,0
+            // 0,0,0 --> 0,0,0
+            // DeliverAction
+
+            gameWorldBase.PerformOnUpdateStart();
+            gameWorldBase.PerformOnUpdate();
+
+            List<MasterAction> actions = new List<MasterAction>();
+            for (int i = 0; i < 10; i++)
+            {
+
+
+                gameWorldBase.PerformOnUpdateStart();
+                gameWorldBase.PerformOnUpdate();
+
+                if (gameController.OutputSched.HasItems)
+                {
+                    var action = gameController.OutputSched.Pull();
+                    actions.Add(action);
+                }
+                gameWorldBase.PerformOnUpdateStart();
+                gameWorldBase.PerformOnUpdate();
+
+                //threadInfos = gameController.Handle(action);
+                //foreach (var threadInfo in threadInfos)
+                //{
+                //    threadInfo.SyncEvent.WaitOne();
+                //}
+
+
+                //Assert.IsTrue(action is MoveAction);
+                //Assert.AreEqual(new Coordinate(5, 3, 0), (action as MoveAction).To);
+            }
+            // First Action
+            
+
+            // Second Action
+            //var moveAction0Result = gameController.Handle(moveAction0);
+
+
+            Assert.AreEqual(new Coordinate(0,0,0),movableItem.CurrentCoordiate );
+        }
+
+        private void TaskonCompleteFired(ControllerNotificationArgs args)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -47,8 +47,6 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
 
         protected override Coordinate GetComponentCoordinate(GoAndDoSomethingAction goAndDoSomethingAction, MovableItem movableItem)
         {
-            // it should be at movable Current Coordinate
-            // TODO: add check that movable Current has Component
             return goAndDoSomethingAction.TargetDestCoordinate;
         }
 

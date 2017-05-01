@@ -106,6 +106,8 @@
     <Compile Include="src\Handlers\SelectionNotification\ViewSelectionNotification.cs" />
     <Compile Include="src\Handlers\TaskActionHandler\TaskActionContainer.cs" />
     <Compile Include="src\Handlers\TaskActionHandler\TaskActionHandler.cs" />
+    <Compile Include="src\Handlers\TaskHandler\TaskContainer.cs" />
+    <Compile Include="src\Handlers\TaskHandler\TaskHandler.cs" />
     <Compile Include="src\Interfaces\ControllerNotification.cs" />
     <Compile Include="src\Interfaces\ControllerNotificationArgs.cs" />
     <Compile Include="src\Interfaces\HandlerResult.cs" />
@@ -141,9 +143,7 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\Handlers\TaskHandler\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

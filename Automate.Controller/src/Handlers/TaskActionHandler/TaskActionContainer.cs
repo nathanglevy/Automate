@@ -16,5 +16,7 @@ namespace Automate.Controller.Handlers.TaskActionHandler
 
         public Guid TargetId { get; }
         public event ControllerNotification OnComplete;
+
+        public new Guid MasterTaskId => TargetAction.MasterTask;
     }
 }

@@ -245,7 +245,8 @@ namespace src.View
                 //GameViewBase.Controller.Handle(viewSelectionNotification);
 
 
-                SetStructureAtCoordinate(new Coordinate(0, 0, 0), "SpriteSheets/open_tileset_2x", 643, CellObjectReference, 1);
+                SetStructureAtCoordinate(new Coordinate(0, 0, 0), "SpriteSheets/open_tileset_2x", 643,
+                    CellObjectReference, 1);
 
                 _logger.Log(LogType.Log, INPUT, "Key: 4 preseed, we will Add Component in 0,0,0");
                 var gameWorldItemById = GameUniverse.GetGameWorldItemById(GameViewBase.Controller.Model);
@@ -254,19 +255,24 @@ namespace src.View
 
                 //EditorUtility.DisplayDialog(string.Format("Placing 100 Iron At 0,0,0"),"Go And PickThem", "You have No Other Choice");
 
-                gameWorldItemById.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0)).AddComponentStack(Component.GetComponent(ComponentType.IronOre), 0);
-                gameWorldItemById.GetComponentStackGroupAtCoordinate(new Coordinate(9, 0, 0)).AddComponentStack(Component.GetComponent(ComponentType.IronOre), 0);
-                gameWorldItemById.GetComponentStackGroupAtCoordinate(new Coordinate(9, 9, 0)).AddComponentStack(Component.GetComponent(ComponentType.IronOre), 0);
-                var componentsAtCoordinate = gameWorldItemById.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0));
+                gameWorldItemById.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0))
+                    .AddComponentStack(Component.GetComponent(ComponentType.IronOre), 0);
+                gameWorldItemById.GetComponentStackGroupAtCoordinate(new Coordinate(9, 0, 0))
+                    .AddComponentStack(Component.GetComponent(ComponentType.IronOre), 0);
+                gameWorldItemById.GetComponentStackGroupAtCoordinate(new Coordinate(9, 9, 0))
+                    .AddComponentStack(Component.GetComponent(ComponentType.IronOre), 0);
+                var componentsAtCoordinate =
+                    gameWorldItemById.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0));
                 componentsAtCoordinate.GetComponentStack(ComponentType.IronOre).AddAmount(100);
-                componentsAtCoordinate.GetComponentStack(ComponentType.IronOre).AssignOutgoingAmount(movableListInCoordinate[0].Guid, 50);
+                componentsAtCoordinate.GetComponentStack(ComponentType.IronOre)
+                    .AssignOutgoingAmount(movableListInCoordinate[0].Guid, 50);
 
                 var newTask = gameWorldItemById.TaskDelegator.CreateNewTask();
                 newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0, 0, 0), 100);
 
                 var goAndPickUpAction = new GoAndPickUpAction(new Coordinate(0, 0, 0), 50,
                         gameWorldItemById.GetSelectedMovableItemList()[0].Guid)
-                    { MasterTaskId = newTask.Guid };
+                    {MasterTaskId = newTask.Guid};
                 goAndPickUpAction.OnCompleteDelegate = CreateGoAndDeliver;
 
                 GameViewBase.Controller.Handle(goAndPickUpAction);

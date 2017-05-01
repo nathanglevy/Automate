@@ -26,7 +26,6 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
             // Get the World Item
             var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
 
-            // TODO: Check With Naph, if Searching a non existing movable, what to expect
             var movableItem = gameWorldItem.GetMovableItem(goAndDoSomethingAction.MovableGuid);
 
             // Get the target component Stack

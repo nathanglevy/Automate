@@ -3,6 +3,7 @@ using Automate.Controller.Actions;
 using Automate.Controller.Handlers;
 using Automate.Controller.Handlers.GoAndPickUp;
 using Automate.Controller.Handlers.TaskActionHandler;
+using Automate.Controller.Interfaces;
 using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Tasks;
@@ -13,6 +14,7 @@ namespace AutomateTests.test.Controller
     [TestClass]
     public class TestTaskActionHandler
     {
+        private bool _onCompletePickup;
 
         [TestMethod]
         public void CreateNew_ShouldPass()
@@ -57,12 +59,45 @@ namespace AutomateTests.test.Controller
             var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(10, 10, 1));
             var newTask = gameWorldItem.TaskDelegator.CreateNewTask();
             var taskAction = newTask.AddAction(TaskActionType.PickupTask, new Coordinate(3, 3, 0), 30);
+            var newGuid = Guid.NewGuid();
+            gameWorldItem.TaskDelegator.AssignTask(newGuid,newTask);
 
             var taskActionHandler = new TaskActionHandler();
-            var handlerResult = taskActionHandler.Handle(new TaskActionContainer(taskAction), new HandlerUtils(gameWorldItem.Guid));
+            var handlerResult = taskActionHandler.Handle(new TaskActionContainer(taskAction) {OnCompleteDelegate = OnCompleteCheck}, new HandlerUtils(gameWorldItem.Guid));
 
             Assert.AreEqual(1,handlerResult.GetItems().Count);
-            Assert.IsTrue(condition: handlerResult.GetItems()[0] is GoAndPickUpTaskHandler);
+
+            Assert.IsTrue(condition: handlerResult.GetItems()[0] is GoAndPickUpAction);
+            var goAndPickUpAction = handlerResult.GetItems()[0] as GoAndPickUpAction;
+            Assert.AreEqual(newGuid,goAndPickUpAction.MovableGuid);
+            Assert.AreEqual(OnCompleteCheck,goAndPickUpAction.OnCompleteDelegate);
         }
+
+        private void OnCompleteCheck(ControllerNotificationArgs args)
+        {
+            _onCompletePickup = true;
+        }
+
+        [TestMethod]
+        public void TestHandleDeliver_ExpectGoAndDeliverTaskGenerated()
+        {
+            var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(10, 10, 1));
+            var newTask = gameWorldItem.TaskDelegator.CreateNewTask();
+            var taskAction = newTask.AddAction(TaskActionType.DeliveryTask, new Coordinate(3, 3, 0), 30);
+            var newGuid = Guid.NewGuid();
+            gameWorldItem.TaskDelegator.AssignTask(newGuid, newTask);
+
+            var taskActionHandler = new TaskActionHandler();
+            var handlerResult = taskActionHandler.Handle(new TaskActionContainer(taskAction) {OnCompleteDelegate = OnCompleteCheck}, new HandlerUtils(gameWorldItem.Guid));
+
+            Assert.AreEqual(1, handlerResult.GetItems().Count);
+
+            Assert.IsTrue(condition: handlerResult.GetItems()[0] is GoAndDeliverAction);
+            var goAndDeliverAction = handlerResult.GetItems()[0] as GoAndDeliverAction;
+            Assert.AreEqual(newGuid, goAndDeliverAction.MovableGuid);
+            Assert.AreEqual(OnCompleteCheck, goAndDeliverAction.OnCompleteDelegate);
+
+        }
+
     }
 }

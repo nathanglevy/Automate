@@ -27,8 +27,6 @@ namespace Automate.Controller.Handlers.GoAndPickUp
             // Get the Movable Object - Target
             var movableItem = gameWorldItem.GetMovableItem(pickUpAction.MovableId);
 
-            // TODO: HOW TO CHECK IF IT HAS COMPONENT STACK
-
             var componentStack = movableItem.ComponentStackGroup.AddComponentStack(pickUpAction.ComponentType, 0);
             componentStack.AssignIncomingAmount(movableItem.Guid,pickUpAction.Amount);
             // Transfer Amount from Source to Target

@@ -138,6 +138,16 @@ namespace AutomateTests.test.Controller
 
         }
 
+        [TestMethod]
+        public void TestOnPullStartWhenPullOnlyQHasItems_ExpectToBeCopied()
+        {
+            IScheduler<MasterAction> scheduler = new Scheduler<MasterAction>();
+            scheduler.Enqueue(new MasterAction(ActionType.AreaSelection));
+            // At This Stage 
+            scheduler.OnPullStart(new ViewUpdateArgs());
+
+
+        }
 
         //TODO: i think we should add another event to notify that jobs added
        // [TestMethod]

@@ -24,17 +24,20 @@ namespace Automate.Controller.Handlers.TaskActionHandler
                 throw new ArgumentException("Args must be TaskActionContainer, incorrect argument received");
 
             var taskActionContainer = args as TaskActionContainer;
+            var taskGuid = taskActionContainer.MasterTaskId;
+            var gameWorld = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
+            var task = gameWorld.TaskDelegator.GetTaskByGuid(taskGuid);
+            
             switch (taskActionContainer.TargetAction.TaskActionType)
             {
                 case TaskActionType.PickupTask:
-                    // TODO: Ask Naph how to get Movable Assigned to a TASK
-                    Guid assigneGuid = Guid.Empty;
                     var goAndPickUpAction = new GoAndPickUpAction(taskActionContainer.TargetAction.TaskLocation,
-                        taskActionContainer.TargetAction.Amount, assigneGuid);
+                        taskActionContainer.TargetAction.Amount, task.AssignedToGuid) {OnCompleteDelegate = taskActionContainer.OnCompleteDelegate};
                     return new HandlerResult(new List<MasterAction>() {goAndPickUpAction}){ IsInternal = true};
-                    break;
                 case TaskActionType.DeliveryTask:
-                    break;
+                    var goAndDeliverAction = new GoAndDeliverAction(taskActionContainer.ComponentType,taskActionContainer.TargetAction.TaskLocation,
+                        taskActionContainer.TargetAction.Amount, task.AssignedToGuid) { OnCompleteDelegate = taskActionContainer.OnCompleteDelegate};
+                    return new HandlerResult(new List<MasterAction>() { goAndDeliverAction }) { IsInternal = true };
                 case TaskActionType.BuildTask:
                     break;
                 case TaskActionType.WorkTask:

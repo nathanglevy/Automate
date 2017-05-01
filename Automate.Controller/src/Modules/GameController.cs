@@ -10,6 +10,8 @@ using Automate.Controller.Handlers.MoveHandler;
 using Automate.Controller.Handlers.PlaceAnObject;
 using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Handlers.SelectionNotification;
+using Automate.Controller.Handlers.TaskActionHandler;
+using Automate.Controller.Handlers.TaskHandler;
 using Automate.Controller.Interfaces;
 using Automate.Model;
 using Automate.Model.GameWorldComponents;
@@ -67,15 +69,22 @@ namespace Automate.Controller.Modules
 
             // register handlers
             _handlers.Add(new GoAndPickUpTaskHandler());
-            _handlers.Add(new GoAndDeliverTaskHandler());
+            _handlers.Add(new GoAndDeliverTaskHandler())
+                ;
             _handlers.Add(new ViewSelectionHandler());
             _handlers.Add(new RightClickNotificationHandler());
             _handlers.Add(new PlaceAnObjectRequestHandler());
+
             _handlers.Add(new MoveActionHandler());
             _handlers.Add(new StartMoveActionHandler());
+
             _handlers.Add(new PickUpActionHandler());
             _handlers.Add(new DeliverActionHandler());
-            
+
+            _handlers.Add(new TaskHandler());
+            _handlers.Add(new TaskActionHandler());
+
+
 
         }
 
