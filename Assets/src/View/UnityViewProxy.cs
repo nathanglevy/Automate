@@ -45,6 +45,7 @@ namespace src.View
         private string HANDLE_ACTION = "HANDLE_ACTION";
         public int GameXSize = 10;
         public int GameYSize = 10;
+        private Coordinate _GoldCoordinate = new Coordinate(0,0,0);
 
         public void Start()
         {
@@ -238,8 +239,9 @@ namespace src.View
 
             if (Input.GetKeyDown(KeyCode.Alpha5))
             {
-                SetStructureAtCoordinate(new Coordinate(0, 9, 0), "SpriteSheets/open_tileset_2x", 548,
+                SetStructureAtCoordinate(mapCoordinate, "SpriteSheets/open_tileset_2x", 548,
                     CellObjectReference, 1);
+                _GoldCoordinate = mapCoordinate;
             }
             if (Input.GetKeyDown(KeyCode.Alpha4))
             {
@@ -248,7 +250,7 @@ namespace src.View
                 var gameWorld = GameUniverse.GetGameWorldItemById(GameViewBase.Controller.Model);
 
                 // create Pickup Component Stack
-                var cmpntGrp330 = gameWorld.GetComponentStackGroupAtCoordinate(new Coordinate(0, 9, 0));
+                var cmpntGrp330 = gameWorld.GetComponentStackGroupAtCoordinate(_GoldCoordinate);
                 var ironat330 = cmpntGrp330.AddComponentStack(ComponentType.IronOre, 50);
 
                 // create Delivery Component Stack
@@ -263,7 +265,7 @@ namespace src.View
 
                 // Create the Task and Actions
                 var PickupAndDeliverTask = gameWorld.TaskDelegator.CreateNewTask();
-                PickupAndDeliverTask.AddTransportAction(TaskActionType.PickupTask, new Coordinate(0, 9, 0), cmpntGrp330,
+                PickupAndDeliverTask.AddTransportAction(TaskActionType.PickupTask, _GoldCoordinate, cmpntGrp330,
                     Component.IronOre, 40);
                 PickupAndDeliverTask.AddTransportAction(TaskActionType.DeliveryTask, new Coordinate(0, 0, 0), cmpntGrp000,
                     Component.IronOre, 30);
@@ -274,7 +276,7 @@ namespace src.View
                 
 
                 var movementPathWithLowestCostToCoordinate = gameWorld.GetMovementPathWithLowestCostToCoordinate(
-                    movableListInCoordinate.Select(p => p.CurrentCoordiate).ToList(), new Coordinate(0, 9, 0));
+                    movableListInCoordinate.Select(p => p.CurrentCoordiate).ToList(), _GoldCoordinate);
                 var targetMovable = movableListInCoordinate.First(p => p.CurrentCoordiate.Equals(movementPathWithLowestCostToCoordinate.GetStartCoordinate()));
                 gameWorld.TaskDelegator.AssignTask(targetMovable.Guid, PickupAndDeliverTask);
                 gameWorld.SelectMovableItems(new List<MovableItem>() { targetMovable });
