@@ -12,7 +12,7 @@ namespace Automate.Model.Tasks
         public Guid Guid { get; } = Guid.NewGuid();
         private Guid _assignedToGuid;
         public bool IsAssigned { get; private set; }
-        private List<TaskAction> _taskActionList = new List<TaskAction>();
+        private List<ITaskAction> _taskActionList = new List<ITaskAction>();
         private int _taskActionNumber = 0;
         //private IEnumerable<TaskAction> _taskActionList = new List<TaskAction>();
 
@@ -43,7 +43,7 @@ namespace Automate.Model.Tasks
             return !_taskActionList[_taskActionNumber].TaskLocation.Equals(currentPosition);
         }
 
-        public TaskAction GetCurrentAction()
+        public ITaskAction GetCurrentAction()
         {
             if (IsTaskComplete())
                 throw new TaskActionException("Task is complete, cannot get current action!");
@@ -54,44 +54,46 @@ namespace Automate.Model.Tasks
         {
             if (IsTaskComplete())
                 throw new TaskActionException("Task is complete, cannot move to next action!");
-            switch (GetCurrentAction().TaskActionType)
+            GetCurrentAction().OnCompleted();
+            /*switch (GetCurrentAction().TaskActionType)
             {
                 case TaskActionType.DeliveryTask:
-                    TransportTaskAction deliveryAction = GetCurrentAction() as TransportTaskAction;
+                    DeliverTaskAction deliveryAction = GetCurrentAction() as DeliverTaskAction;
                     break;
                case TaskActionType.PickupTask:
-                    TransportTaskAction pickupAction = GetCurrentAction() as TransportTaskAction;
+                    DeliverTaskAction pickupAction = GetCurrentAction() as DeliverTaskAction;
                     break;
                 default:
                     break;
-            }
-
-
+            }*/
             _taskActionNumber++;
         }
 
-        public TaskAction AddAction(TaskActionType taskActionType, Coordinate taskLocation, int amount)
+        public ITaskAction AddAction(Coordinate taskLocation, int amount)
         {
             //            if ((taskActionType == TaskActionType.PickupTask) || (taskActionType == TaskActionType.DeliveryTask))
             //                throw new TaskActionException("Use AddTransportAction for these types of actions");
-            TaskAction newAction = new TaskAction(Guid, taskLocation, taskActionType, amount);
+            ITaskAction newAction = new TaskAction(Guid, taskLocation, amount);
             _taskActionList.Add(newAction);
             return newAction;
         }
 
-        public void AddTransportAction(TaskActionType taskActionType, Coordinate taskLocation, ComponentStack componentStack, int amount)
+        public ITaskAction AddTransportAction(TaskActionType taskActionType, Coordinate taskLocation, ComponentStackGroup componentStackGroup, Component component, int amount)
         {
             if (taskActionType == TaskActionType.PickupTask)
             {
-                componentStack.AssignOutgoingAmount(Guid, amount);
+                ITaskAction pickupTaskAction = new PickupTaskAction(Guid, componentStackGroup, taskLocation, component, amount);
+                _taskActionList.Add(pickupTaskAction);
+                return pickupTaskAction;
             }
             if (taskActionType == TaskActionType.DeliveryTask)
             {
-                /*to check if is full*/
-                componentStack.AssignIncomingAmount(Guid, amount);
+                ITaskAction deliverTaskAction = new DeliverTaskAction(Guid, componentStackGroup, taskLocation, component, amount);
+                _taskActionList.Add(deliverTaskAction);
+                return deliverTaskAction;
             }
+            throw new TaskActionException("Give action type is not a transport type");
 
-            _taskActionList.Add(new TransportTaskAction(Guid, componentStack, taskLocation, taskActionType, amount));
         }
 
         public bool IsTaskComplete()
@@ -110,6 +112,11 @@ namespace Automate.Model.Tasks
 
         public override int GetHashCode() {
             return Guid.GetHashCode();
+        }
+
+        public void AddAction(TaskActionType taskLocation, Coordinate coordinate, int amount)
+        {
+            throw new NotImplementedException("This method should no longer be used -- use AddAction generic, AddTransportAction, or AddWorkAction accordingly");
         }
     }
 }

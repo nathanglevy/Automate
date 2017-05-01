@@ -68,6 +68,10 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Components\Component.cs" />
+    <Compile Include="src\Requirements\BaseRequirement.cs" />
+    <Compile Include="src\Requirements\ComponentPickupRequirement.cs" />
+    <Compile Include="src\Requirements\ComponentDeliveryRequirement.cs" />
+    <Compile Include="src\Requirements\ComponentTransportRequirement.cs" />
     <Compile Include="src\Components\ComponentStack.cs" />
     <Compile Include="src\Components\ComponentStackGroup.cs" />
     <Compile Include="src\Components\IronOreComponent.cs" />
@@ -93,14 +97,23 @@
     <Compile Include="src\PathFinding\MovementPath.cs" />
     <Compile Include="src\PathFinding\NoPathFoundException.cs" />
     <Compile Include="src\PathFinding\PathFinderAStar.cs" />
+    <Compile Include="src\PathFinding\PathOperationException.cs" />
+    <Compile Include="src\Requirements\IRequirement.cs" />
+    <Compile Include="src\Requirements\RequirementContainer.cs" />
+    <Compile Include="src\Requirements\RequirementException.cs" />
+    <Compile Include="src\Tasks\TaskActionEventHandler.cs" />
+    <Compile Include="src\Requirements\WorkRequirement.cs" />
+    <Compile Include="src\Tasks\ITaskAction.cs" />
+    <Compile Include="src\Tasks\ITaskAttachable.cs" />
     <Compile Include="src\Tasks\NoTaskException.cs" />
+    <Compile Include="src\Tasks\PickupTaskAction.cs" />
     <Compile Include="src\Tasks\Task.cs" />
     <Compile Include="src\Tasks\TaskAction.cs" />
     <Compile Include="src\Tasks\TaskActionException.cs" />
     <Compile Include="src\Tasks\TaskActionType.cs" />
     <Compile Include="src\Tasks\TaskAssignmentException.cs" />
     <Compile Include="src\Tasks\TaskDelegator.cs" />
-    <Compile Include="src\Tasks\TransportTaskAction.cs" />
+    <Compile Include="src\Tasks\DeliverTaskAction.cs" />
     <Compile Include="src\Utility\DuplicateKeyComparer.cs" />
   </ItemGroup>
   <ItemGroup>

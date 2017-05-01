@@ -36,6 +36,16 @@ namespace Automate.Model.PathFinding
             _endCoordinate = _endCoordinate + newMovement.GetMoveDirection();
         }
 
+        public void RemoveLastMovement()
+        {
+            if (_movements.Count == 0)
+                throw new PathOperationException("Cannot remove last movement, path is now empty!");
+            Movement movement = _movements[_movements.Count - 1];
+            _movements.RemoveAt(_movements.Count - 1);
+            _endCoordinate = _endCoordinate - movement.GetMoveDirection();
+            _movementMap.Remove(_endCoordinate.ToString());
+        }
+
         public Coordinate GetStartCoordinate()
         {
             return _startCoordinate;

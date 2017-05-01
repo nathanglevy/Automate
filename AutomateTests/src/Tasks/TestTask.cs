@@ -4,22 +4,36 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Automate.Model.Components;
 using Automate.Model.MapModelComponents;
 
 namespace Automate.Model.Tasks.Tests {
     [TestClass()]
-    public class TestTask {
+    public class TestTask
+    {
+        public ComponentStackGroup ComponentStackGroup;
+        //ComponentStackGroup
+        [TestInitialize]
+        public void TestInit() {
+            ComponentStackGroup = new ComponentStackGroup();
+        }
 
         [TestMethod()]
         public void TestAddAction_ExpectSuccess() {
             Task newTask = new Task();
-            newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0, 0, 0), 10);
+            newTask.AddAction(new Coordinate(0, 0, 0), 10);
+        }
+
+        [TestMethod()]
+        public void TestAddTransportAction_ExpectSuccess() {
+            Task newTask = new Task();
+            newTask.AddTransportAction(TaskActionType.DeliveryTask, new Coordinate(0, 0, 0), ComponentStackGroup, Component.IronOre, 10);
         }
 
         [TestMethod()]
         public void TestGetCurrentAction_ExpectSuccess() {
             Task newTask = new Task();
-            newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0, 0, 0), 10);
+            newTask.AddAction(new Coordinate(0, 0, 0), 10);
             newTask.GetCurrentAction();
         }
 
@@ -33,7 +47,7 @@ namespace Automate.Model.Tasks.Tests {
         [TestMethod()]
         public void TestGetCurrentAction_ExpectCorrectValue() {
             Task newTask = new Task();
-            newTask.AddAction(TaskActionType.PickupTask, new Coordinate(1, 0, 1), 10);
+            newTask.AddTransportAction(TaskActionType.PickupTask, new Coordinate(1, 0, 1), ComponentStackGroup, Component.IronOre, 10);
             Assert.AreEqual(newTask.GetCurrentAction().TaskActionType,TaskActionType.PickupTask);
             Assert.AreEqual(newTask.GetCurrentAction().TaskLocation, new Coordinate(1, 0, 1));
             Assert.AreEqual(newTask.GetCurrentAction().Amount, 10);
@@ -45,8 +59,8 @@ namespace Automate.Model.Tasks.Tests {
             Task newTask = new Task();
             //should be false always when no actions attached
             Assert.IsFalse(newTask.IsPositionChangeRequiredForCurrentAction(new Coordinate(0,0,0)));
-            newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0,0,0), 10);
-            newTask.AddAction(TaskActionType.PickupTask, new Coordinate(1,1,1), 10);
+            newTask.AddAction(new Coordinate(0,0,0), 10);
+            newTask.AddAction(new Coordinate(1,1,1), 10);
             Assert.IsTrue(newTask.IsPositionChangeRequiredForCurrentAction(new Coordinate(1,1,1)));
             Assert.IsTrue(newTask.IsPositionChangeRequiredForCurrentAction(new Coordinate(2,1,2)));
             Assert.IsFalse(newTask.IsPositionChangeRequiredForCurrentAction(new Coordinate(0,0,0)));
@@ -55,7 +69,7 @@ namespace Automate.Model.Tasks.Tests {
         [TestMethod()]
         public void TestMoveTaskToNextAction_ExpectSuccess() {
             Task newTask = new Task();
-            newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0, 0, 0), 10);
+            newTask.AddAction(new Coordinate(0, 0, 0), 10);
             newTask.CommitActionAndMoveTaskToNextAction();
         }
 

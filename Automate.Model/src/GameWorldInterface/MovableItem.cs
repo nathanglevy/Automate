@@ -173,5 +173,9 @@ namespace Automate.Model.GameWorldInterface
         {
             _gameWorld.GetMovable(Guid).DeliverToComponentStackGroup(deliverToComponentStackGroup, component, amount);
         }
+
+        public Coordinate GetFinalDestination() {
+            return _gameWorld.GetMovable(Guid).GetFinalDestination();
+        }
     }
 }

@@ -132,12 +132,6 @@ namespace Automate.Model.GameWorldComponents
             return structureItem;
         }
 
-        public float GetMoveCostBetweenCoordinates(Coordinate startCoordinate, Coordinate endCoordinate)
-        {
-            MovementPath movementPath = PathFinderAStar.FindShortestPath(_map, startCoordinate, endCoordinate);
-            return movementPath.TotalCost;
-        }
-
         //TODO: need to test false issue move command
         public bool IssueMoveCommand(Guid id, [NotNull] Coordinate targetCoordinate)
         {
@@ -147,27 +141,20 @@ namespace Automate.Model.GameWorldComponents
             Coordinate startCoordinate = currentMovable.GetEffectiveCoordinate();
             try
             {
-                MovementPath movementPath = PathFinderAStar.FindShortestPath(_map, startCoordinate, targetCoordinate);
+                MovementPath movementPath = GetMovementPathWithLowestCostToCoordinate(startCoordinate, targetCoordinate);
                 currentMovable.SetPath(movementPath);
                 return true;
             }
             catch (NoPathFoundException)
             {
-                try
+                if (currentMovable.IsInMotion())
                 {
-                    if (currentMovable.IsInMotion())
-                    {
-                        MovementPath movementPath = PathFinderAStar.FindShortestPath(_map,
-                            currentMovable.GetEffectiveCoordinate(), currentMovable.GetEffectiveCoordinate());
-                        currentMovable.SetPath(movementPath);
-                    }
-                    currentMovable.PathToTargetHasBeenBroken = true;
-                    return false;
+                    MovementPath movementPath = PathFinderAStar.FindShortestPath(_map,
+                        currentMovable.GetEffectiveCoordinate(), currentMovable.GetEffectiveCoordinate());
+                    currentMovable.SetPath(movementPath);
                 }
-                catch (NoPathFoundException)
-                {
-                    return false;
-                }
+                currentMovable.PathToTargetHasBeenBroken = true;
+                return false;
             }
         }
 
@@ -298,5 +285,21 @@ namespace Automate.Model.GameWorldComponents
         }
 
         //public Task CreateTask
+        public MovementPath GetMovementPathWithLowestCostToBoundary(List<Coordinate> startCoordinates, Boundary endBoundary, bool inclusive)
+        {
+            MovementPath movementPath = PathFinderAStar.FindShortestPath(_map, startCoordinates, endBoundary, inclusive);
+            return movementPath;
+        }
+
+        public MovementPath GetMovementPathWithLowestCostToCoordinate(Coordinate startCoordinate, Coordinate endCoordinate) {
+            MovementPath movementPath = PathFinderAStar.FindShortestPath(_map, startCoordinate, endCoordinate);
+            return movementPath;
+        }
+
+        public MovementPath GetMovementPathWithLowestCostToCoordinate(List<Coordinate> startCoordinates, Coordinate endCoordinate) {
+            MovementPath movementPath = PathFinderAStar.FindShortestPath(_map, startCoordinates, endCoordinate);
+            return movementPath;
+        }
+
     }
 }

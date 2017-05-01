@@ -5,6 +5,7 @@ using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
+using Automate.Model.PathFinding;
 using Automate.Model.Tasks;
 
 namespace Automate.Model.GameWorldInterface
@@ -243,12 +244,21 @@ namespace Automate.Model.GameWorldInterface
             return (_focusedGameWorld.GetMovableIdList().Contains(movableGuid));
         }
 
-        public float GetMoveCostBetweenCoordinates(Coordinate startCoordinate, Coordinate endCoordinate)
+        public MovementPath GetMovementPathWithLowestCostToCoordinate(Coordinate startCoordinate, Coordinate endCoordinate)
         {
-            return _focusedGameWorld.GetMoveCostBetweenCoordinates(startCoordinate, endCoordinate);
+            return _focusedGameWorld.GetMovementPathWithLowestCostToCoordinate(startCoordinate, endCoordinate);
         }
 
+        public MovementPath GetMovementPathWithLowestCostToCoordinate(List<Coordinate> startCoordinates,
+            Coordinate endCoordinate)
+        {
+            return _focusedGameWorld.GetMovementPathWithLowestCostToCoordinate(startCoordinates, endCoordinate);
+        }
 
+        public MovementPath GetMovementPathWithLowestCostToBoundary(List<Coordinate> startCoordinates,
+            Boundary endBoundary, bool inclusive) {
+            return _focusedGameWorld.GetMovementPathWithLowestCostToBoundary(startCoordinates, endBoundary, inclusive);
+        }
 
     }
 }
