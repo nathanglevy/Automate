@@ -29,17 +29,17 @@ namespace Automate.Model.Requirements
             return IsSatisfied;
         }
 
-        public void AttachAction(TaskAction taskAction)
+        public void AttachAction(ITaskAction taskAction)
         {
             throw new System.NotImplementedException();
         }
 
-        public void DettachAction(TaskAction taskAction)
+        public void DettachAction(ITaskAction taskAction)
         {
             throw new System.NotImplementedException();
         }
 
-        public bool CanAttachToAction(TaskAction taskAction)
+        public bool CanAttachToAction(ITaskAction taskAction)
         {
             throw new System.NotImplementedException();
         }

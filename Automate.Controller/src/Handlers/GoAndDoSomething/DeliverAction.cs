@@ -15,8 +15,6 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
             this.DeliveryPickup = DeliveryPickup;
         }
 
-        public Guid TargetId { get; }
-
         public event ControllerNotification OnComplete;
     }
 }

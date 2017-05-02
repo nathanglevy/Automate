@@ -6,8 +6,9 @@ namespace Automate.Model.Requirements
     public class RequirementContainer
     {
         private List<IRequirement> _requirements = new List<IRequirement>();
-        public void AddRequirement(IRequirement requirement) {
+        public IRequirement AddRequirement(IRequirement requirement) {
             _requirements.Add(requirement);
+            return requirement;
         }
 
         public bool HasIncompleteRequirements()
@@ -15,17 +16,17 @@ namespace Automate.Model.Requirements
             return _requirements.Any(item => !item.IsSatisfied);
         }
 
-        public IEnumerable<IRequirement> GetIncompleteRequirements()
+        public List<IRequirement> GetIncompleteRequirements()
         {
-            return _requirements.Where(item => !item.IsSatisfied);
+            return _requirements.Where(item => !item.IsSatisfied).ToList();
         }
 
-        public IEnumerable<IRequirement> GetCompleteRequirements() {
-            return _requirements.Where(item => item.IsSatisfied);
+        public List<IRequirement> GetCompleteRequirements() {
+            return _requirements.Where(item => item.IsSatisfied).ToList();
         }
 
-        public IEnumerable<IRequirement> GetAllRequirements() {
-            return _requirements.Where(item => item.IsSatisfied || !item.IsSatisfied);
+        public List<IRequirement> GetAllRequirements() {
+            return _requirements.Where(item => item.IsSatisfied || !item.IsSatisfied).ToList();
         }
 
         public void RemoveRequirement(IRequirement requirementToClear) {

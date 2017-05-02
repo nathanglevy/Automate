@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Automate.Model.Components;
 using Automate.Model.MapModelComponents;
-using Automate.Model.Tasks;
 
-namespace Automate.Model.src.Tasks {
+namespace Automate.Model.Tasks {
     class DeliverTaskAction : TaskAction, ITaskAction
     {
         public ComponentStackGroup TargetComponentStackGroup { get; }

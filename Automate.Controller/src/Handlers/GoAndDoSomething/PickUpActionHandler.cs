@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Interfaces;
 using Automate.Model.Components;
-using Automate.Model.GameWorldInterface;
+using Automate.Model.GameWorldComponents;
 using UnityEngine.VR.WSA.WebCam;
 
 namespace Automate.Controller.Handlers.GoAndPickUp
@@ -25,7 +25,7 @@ namespace Automate.Controller.Handlers.GoAndPickUp
             var sourceComponentStackGroup = gameWorldItem.GetComponentStackGroupAtCoordinate(pickUpAction.TargetDest);
 
             // Get the Movable Object - Target
-            var movableItem = gameWorldItem.GetMovableItem(pickUpAction.MovableId);
+            var movableItem = gameWorldItem.GetMovable(pickUpAction.MovableId);
 
             // TODO: HOW TO CHECK IF IT HAS COMPONENT STACK
 

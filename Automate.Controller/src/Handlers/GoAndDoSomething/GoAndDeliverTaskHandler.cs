@@ -4,14 +4,14 @@ using Automate.Controller.Exceptions;
 using Automate.Controller.Handlers.GoAndPickUp;
 using Automate.Controller.Interfaces;
 using Automate.Model.Components;
-using Automate.Model.GameWorldInterface;
+using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 
 namespace Automate.Controller.Handlers.GoAndDoSomething
 {
     public class GoAndDeliverTaskHandler : GoAndDoSomethingHandler    
     {
-        protected override Coordinate GetGoDestination(GoAndDoSomethingAction goAndDoSomethingAction, MovableItem movableItem)
+        protected override Coordinate GetGoDestination(GoAndDoSomethingAction goAndDoSomethingAction, IMovable movableItem)
         {
             return goAndDoSomethingAction.TargetDestCoordinate;
         }
@@ -22,7 +22,7 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
             var goAndDeliver = GetGoAndDoActionByMasterId(modelAction);
 
             var gameWorld = GameUniverse.GetGameWorldItemById(args.Utils.GameWorldId);
-            var movableItem = gameWorld.GetMovableItem(goAndDeliver.MovableGuid);
+            var movableItem = gameWorld.GetMovable(goAndDeliver.MovableGuid);
 
             try
             {
@@ -45,14 +45,14 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
             args.Utils.InvokeHandler(deliverAction);
         }
 
-        protected override Coordinate GetComponentCoordinate(GoAndDoSomethingAction goAndDoSomethingAction, MovableItem movableItem)
+        protected override Coordinate GetComponentCoordinate(GoAndDoSomethingAction goAndDoSomethingAction, IMovable movableItem)
         {
             // it should be at movable Current Coordinate
             // TODO: add check that movable Current has Component
             return goAndDoSomethingAction.TargetDestCoordinate;
         }
 
-        protected override void AssignComponentStack(ComponentStack targetComponentStack, GoAndDoSomethingAction goAndDeliverAction, MovableItem movable)
+        protected override void AssignComponentStack(ComponentStack targetComponentStack, GoAndDoSomethingAction goAndDeliverAction, IMovable movable)
         {
             // Assign Incoming to Target Component Stack
             targetComponentStack.AssignIncomingAmount(goAndDeliverAction.MovableGuid, goAndDeliverAction.Amount);

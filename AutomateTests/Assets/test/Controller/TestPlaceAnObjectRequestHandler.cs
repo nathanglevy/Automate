@@ -1,7 +1,6 @@
 ﻿using Automate.Controller.Handlers;
 using Automate.Controller.Handlers.PlaceAnObject;
 using Automate.Model.GameWorldComponents;
-using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -28,7 +27,7 @@ namespace AutomateTests.test.Controller
             var handlerResult = handler.Handle(placeAnObjectRequest, new HandlerUtils(gameWorldItem.Guid, null, null));
             Assert.AreEqual(0, handlerResult.GetItems().Count);
             Assert.IsTrue(gameWorldItem.IsThereAnItemToBePlaced());
-            Assert.AreEqual(ItemType.Structure, gameWorldItem.GetItemsToBePlaced().FindLast(p => p.Type == ItemType.Structure).Type);
+            Assert.AreEqual(ItemType.Structure, gameWorldItem.GetItemsToBePlaced().FindLast(p => p.ItemType == ItemType.Structure).ItemType);
         }
 
 
@@ -42,7 +41,7 @@ namespace AutomateTests.test.Controller
             var handlerResult = handler.Handle(placeAnObjectRequest, new HandlerUtils(gameWorldItem.Guid, null, null));
             Assert.AreEqual(0, handlerResult.GetItems().Count);
             Assert.IsTrue(gameWorldItem.IsThereAnItemToBePlaced());
-            Assert.AreEqual(ItemType.Movable, gameWorldItem.GetItemsToBePlaced().FindLast(p => p.Type == ItemType.Movable).Type);
+            Assert.AreEqual(ItemType.Movable, gameWorldItem.GetItemsToBePlaced().FindLast(p => p.ItemType == ItemType.Movable).ItemType);
         }
     }
 }

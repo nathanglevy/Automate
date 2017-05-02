@@ -1,5 +1,4 @@
 ﻿using Automate.Model.GameWorldComponents;
-using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 
@@ -9,7 +8,7 @@ namespace Automate.Controller.Handlers.PlaceAnObject
     {
         public MovableType MovableType { get; private set; }
 
-        public PlaceAMovableRequest(Coordinate coordinate) : base(ItemType.Movable, coordinate)
+        public PlaceAMovableRequest(Coordinate coordinate) : base(Model.GameWorldComponents.ItemType.Movable, coordinate)
         {
         }
 

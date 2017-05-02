@@ -113,6 +113,7 @@
     <Compile Include="src\Components\TestComponent.cs" />
     <Compile Include="src\Components\TestComponentStack.cs" />
     <Compile Include="src\Components\TestComponentStackGroup.cs" />
+    <Compile Include="src\Requirements\TestRequirementContainer.cs" />
     <Compile Include="src\Tasks\TestTask.cs" />
     <Compile Include="src\Tasks\TestTaskDelegator.cs" />
   </ItemGroup>

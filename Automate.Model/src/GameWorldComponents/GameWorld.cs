@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Automate.Model.Components;
-using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using Automate.Model.PathFinding;
@@ -14,7 +13,7 @@ using Automate.Model.Tasks;
 namespace Automate.Model.GameWorldComponents
 {
     //TODO: Need to do comments!
-    public class GameWorld
+    public class GameWorld : IGameWorld
     {
         private readonly Dictionary<Guid, Movable> _movables = new Dictionary<Guid, Movable>();
         private readonly Dictionary<Coordinate, ComponentStackGroup> _componentStacks = new Dictionary<Coordinate, ComponentStackGroup>();
@@ -46,28 +45,25 @@ namespace Automate.Model.GameWorldComponents
             Guid = Guid.NewGuid();
         }
 
-        internal Movable GetMovable(Guid movableGuid)
+        public IMovable GetMovable(Guid movableGuid)
         {
+            if (!_movables.ContainsKey(movableGuid))
+                throw new ArgumentException("Cannot get movable with GUID -- does not exist!");
             return _movables[movableGuid];
         }
 
-        internal Structure GetStructure(Guid structureGuid)
+        public IStructure GetStructure(Guid structureGuid)
         {
+            if (!_structures.ContainsKey(structureGuid))
+                throw new ArgumentException("Cannot get structure with GUID -- does not exist!");
             return _structures[structureGuid];
         }
 
         public CellInfo GetCellInfo(Coordinate cellCoordinate)
         {
+            if (!GetWorldBoundary().IsCoordinateInBoundary(cellCoordinate))
+                throw new ArgumentOutOfRangeException(nameof(cellCoordinate), "cellcoordinate is out of map border bounds");
             return _map.GetCell(cellCoordinate);
-        }
-
-        public MovableItem GetMovableItem(Guid movableGuid) {
-            return new MovableItem(this, movableGuid);
-        }
-
-        public StructureItem GetStructureItem(Guid structureGuid)
-        {
-            return new StructureItem(this, structureGuid);
         }
 
         public bool IsStructureAtCoordinate(Coordinate coordinate)
@@ -75,21 +71,20 @@ namespace Automate.Model.GameWorldComponents
             return _coordinateToStructureMap.ContainsKey(coordinate);
         }
 
-        public StructureItem GetStructureItemAtCoordinate(Coordinate coordinate)
+        public IStructure GetStructureAtCoordinate(Coordinate coordinate)
         {
             if (!IsStructureAtCoordinate(coordinate))
                 throw new ArgumentException("There is no structure at given coordinate");
             Guid structureGuid = _coordinateToStructureMap[coordinate];
-            return new StructureItem(this, structureGuid);
+            return _structures[structureGuid];
         }
 
-        public MovableItem CreateMovable(Coordinate coordinate, MovableType movableType)
+        public IMovable CreateMovable(Coordinate coordinate, MovableType movableType)
         {
             Movable movable = new Movable(coordinate,movableType);
             _movables.Add(movable.GetId(), movable);
-            MovableItem movableItem = new MovableItem(this, movable.GetId());
-            _itemsToBePlaced.Add(movableItem);
-            return movableItem;
+            _itemsToBePlaced.Add(movable);
+            return movable;
         }
 
         public bool CanStructureBePlaced(Coordinate coordinate, Coordinate dimensions)
@@ -113,15 +108,14 @@ namespace Automate.Model.GameWorldComponents
         }
 
         //needs to check if it can even place the structure
-        public StructureItem CreateStructure(Coordinate coordinate, Coordinate dimensions, StructureType structureType) {
+        public IStructure CreateStructure(Coordinate coordinate, Coordinate dimensions, StructureType structureType) {
             //throw new NotImplementedException();
             //check that we can make the structure with these dimensions:
             if (!CanStructureBePlaced(coordinate, dimensions))
                 throw new ArgumentException("cannot create structure in this location -- occupied!");
             Structure structure = new Structure(coordinate,dimensions,structureType);
-            StructureItem structureItem = new StructureItem(this, structure.Guid);
             _structures.Add(structure.Guid, structure);
-            _itemsToBePlaced.Add(structureItem);
+            _itemsToBePlaced.Add(structure);
             foreach (Coordinate coordinteInBoundary in structure.Boundary.GetListOfCoordinatesInBoundary())
             {
                 _coordinateToStructureMap.Add(coordinteInBoundary,structure.Guid);
@@ -129,7 +123,7 @@ namespace Automate.Model.GameWorldComponents
                     _map.GetCell(coordinteInBoundary).SetPassability(false);
             }
             RecalculateMovablePaths();
-            return structureItem;
+            return structure;
         }
 
         //TODO: need to test false issue move command
@@ -163,24 +157,22 @@ namespace Automate.Model.GameWorldComponents
             return new List<Guid>(_movables.Keys);
         }
 
-        public List<MovableItem> GetMovableItemList()
+        public List<IMovable> GetMovableList()
         {
-            List<MovableItem> movableItemList = new List<MovableItem>();
-            foreach (Guid movable in _movables.Keys)
-            {
-                movableItemList.Add(new MovableItem(this,movable));
-            }
-            return movableItemList;
+            List<IMovable> movableList = new List<IMovable>();
+            foreach (Movable movablesValue in _movables.Values)
+                movableList.Add(movablesValue);
+            return movableList;
         }
 
         public List<Guid> GetSelectedIdList() {
             return new List<Guid>(_selectedItems);
         }
 
-        public List<MovableItem> GetSelectedMovableItemList() {
-            List<MovableItem> movableItemList = new List<MovableItem>();
+        public List<IMovable> GetSelectedMovableItemList() {
+            List<IMovable> movableItemList = new List<IMovable>();
             foreach (Guid movable in _selectedItems) {
-                movableItemList.Add(new MovableItem(this, movable));
+                movableItemList.Add(_movables[movable]);
             }
             return movableItemList;
         }
@@ -190,7 +182,7 @@ namespace Automate.Model.GameWorldComponents
             _selectedItems.UnionWith(itemListToSelect);
         }
 
-        public void SelectMovableItems(List<MovableItem> itemListToSelect) {
+        public void SelectMovableItems(List<IMovable> itemListToSelect) {
             _selectedItems.Clear();
             AddToSelectedMovableItems(itemListToSelect);
         }
@@ -199,8 +191,8 @@ namespace Automate.Model.GameWorldComponents
             _selectedItems.UnionWith(itemListToSelect);
         }
 
-        public void AddToSelectedMovableItems(List<MovableItem> itemListToSelect) {
-            foreach (MovableItem movableItem in itemListToSelect) {
+        public void AddToSelectedMovableItems(List<IMovable> itemListToSelect) {
+            foreach (IMovable movableItem in itemListToSelect) {
                 _selectedItems.Add(movableItem.Guid);
             }
         }
@@ -209,14 +201,14 @@ namespace Automate.Model.GameWorldComponents
             _selectedItems.Clear();
         }
 
-        public List<MovableItem> GetMovableListInBoundary(Boundary boundary)
+        public List<IMovable> GetMovableListInBoundary(Boundary boundary)
         {
-            List<MovableItem> movableList = new List<MovableItem>();
+            List<IMovable> movableList = new List<IMovable>();
             foreach (Guid movableId in _movables.Keys)
             {
                 Coordinate currentMovableCoordinate = _movables[movableId].GetCurrentCoordinate();
                 if (boundary.IsCoordinateInBoundary(currentMovableCoordinate))
-                    movableList.Add(new MovableItem(this, movableId));
+                    movableList.Add(_movables[movableId]);
             }
             return movableList;
         }
@@ -241,15 +233,9 @@ namespace Automate.Model.GameWorldComponents
             _itemsToBePlaced.Clear();
         }
 
-        public List<MovableItem> GetMovableItemsInMotion()
+        public List<IMovable> GetMovablesInMotion()
         {
-            List<MovableItem> result = new List<MovableItem>();
-            foreach (Movable movable in _movables.Values)
-            {
-                if (movable.IsInMotion())
-                    result.Add(new MovableItem(this,movable.GetId()));
-            }
-            return result;
+            return _movables.Values.Where(item => item.IsInMotion()).Select(item => item as IMovable).ToList();
         }
 
 //        [Obsolete]
@@ -301,5 +287,19 @@ namespace Automate.Model.GameWorldComponents
             return movementPath;
         }
 
+        public List<IStructure> GetStructuresList()
+        {
+            return _structures.Values.Select(item => item as IStructure).ToList();
+        }
+
+        public List<IMovable> GetMovableListInCoordinate(Coordinate selectionCoordinate)
+        {
+            return GetMovableListInBoundary(new Boundary(selectionCoordinate, selectionCoordinate));
+        }
+
+        public bool HasMovableWithGuid(Guid movableGuid)
+        {
+            return _movables.ContainsKey(movableGuid);
+        }
     }
 }

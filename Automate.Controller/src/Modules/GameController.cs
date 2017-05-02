@@ -13,7 +13,6 @@ using Automate.Controller.Handlers.SelectionNotification;
 using Automate.Controller.Interfaces;
 using Automate.Model;
 using Automate.Model.GameWorldComponents;
-using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 
 namespace Automate.Controller.Modules
@@ -105,7 +104,7 @@ namespace Automate.Controller.Modules
             ForwardUpdateToTimerSched(args);
         }
 
-        private void PushFromModelToView(GameWorldItem gameWorldItem,
+        private void PushFromModelToView(IGameWorld gameWorldItem,
             IScheduler<MasterAction> scheduler)
         {
 
@@ -113,7 +112,7 @@ namespace Automate.Controller.Modules
             {
                 foreach (var item in gameWorldItem.GetItemsToBePlaced())
                 {
-                    scheduler.Enqueue(new PlaceAGameObjectAction(item.Type, item.Guid, item,
+                    scheduler.Enqueue(new PlaceAGameObjectAction(item.ItemType, item.Guid, item,
                         GetCoordinate(item)));
                 }
 
@@ -125,14 +124,14 @@ namespace Automate.Controller.Modules
         //TODO: MOVE TO Item Object
         private Coordinate GetCoordinate(Item item)
         {
-            switch (item.Type)
+            switch (item.ItemType)
             {
                 case ItemType.Cell:
-                    return (item as CellItem).Coordinate;
+                    return (item as CellItem)?.Coordinate;
                 case ItemType.Movable:
-                    return (item as MovableItem).CurrentCoordiate;
+                    return (item as IMovable)?.CurrentCoordinate;
                 case ItemType.Structure:
-                    return (item as StructureItem).StructureBoundary.topLeft;
+                    return (item as IStructure)?.Boundary.topLeft;
                 default:
                     throw new Exception("Unexpected item type!");
             }

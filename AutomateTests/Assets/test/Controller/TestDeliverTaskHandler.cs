@@ -11,7 +11,7 @@ using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 using Automate.Model.Components;
-using Automate.Model.GameWorldInterface;
+using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -22,7 +22,7 @@ namespace AutomateTests.test.Controller
     public class TestDeliverTaskHandler
     {
         private bool _DeliverOnCompleteFired;
-        private GameWorldItem _gameWorldItem;
+        private IGameWorld _gameWorldItem;
         private IHandlerResult<MasterAction> _DeliverHandlerResult;
         private AutoResetEvent _DeliverHandleSync;
         private AutoResetEvent _startMoveSync;

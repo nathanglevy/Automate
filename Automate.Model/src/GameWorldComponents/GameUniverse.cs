@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 
-namespace Automate.Model.GameWorldInterface {
+namespace Automate.Model.GameWorldComponents {
 
     /// <summary>
     /// Game Universe Interface, this is the main object used to interract with the model.
@@ -11,32 +10,26 @@ namespace Automate.Model.GameWorldInterface {
     /// The Game Universe holds all existing worlds currently loaded by the game and should be accessed through it.
     /// </summary>
     public static class GameUniverse {
-        private static Dictionary<Guid, GameWorld> _gameWorldDictionary = new Dictionary<Guid, GameWorld>();
+        private static Dictionary<Guid, IGameWorld> _gameWorldDictionary = new Dictionary<Guid, IGameWorld>();
 
         /// <summary>
         /// Create a new Game World and get the GameWorld interface item.
         /// </summary>
         /// <param name="mapDimensions">The map dimensions of the world to generate. For example, giving (2,2,1) will generate a 2x2 map with one layer.</param>
         /// <returns>Returns a GameWorld interface item to a new Game World</returns>
-        public static GameWorldItem CreateGameWorld(Coordinate mapDimensions) {
-            GameWorld newGameWorld = new GameWorld(mapDimensions);
+        public static IGameWorld CreateGameWorld(Coordinate mapDimensions) {
+            IGameWorld newGameWorld = new GameWorld(mapDimensions);
             _gameWorldDictionary.Add(newGameWorld.Guid, newGameWorld);
-            GameWorldItem gameWorldItem = new GameWorldItem(newGameWorld);
-            return gameWorldItem;
+            return newGameWorld;
         }
 
         /// <summary>
         /// Get all of Game Worlds existing in game via a list of GameWorld interface items
         /// </summary>
         /// <returns>List of all GameWorld interface items</returns>
-        public static List<GameWorldItem> GetGameWorldItemsInUniverse()
+        public static List<IGameWorld> GetGameWorldItemsInUniverse()
         {
-            List<GameWorldItem> result = new List<GameWorldItem>();
-            foreach (GameWorld gameWorld in _gameWorldDictionary.Values)
-            {
-                result.Add(new GameWorldItem(gameWorld));
-            }
-            return result;
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -44,9 +37,9 @@ namespace Automate.Model.GameWorldInterface {
         /// </summary>
         /// <param name="gameWorldGuid">Guid of GameWorld to fetch the interface for</param>
         /// <returns>A GameWorld interface item matching the given Guid</returns>
-        public static GameWorldItem GetGameWorldItemById(Guid gameWorldGuid)
+        public static IGameWorld GetGameWorldItemById(Guid gameWorldGuid)
         {
-            return new GameWorldItem(_gameWorldDictionary[gameWorldGuid]);
+            return _gameWorldDictionary[gameWorldGuid];
         }
     }
 }

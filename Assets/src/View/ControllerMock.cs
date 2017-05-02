@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Automate.Model.GameWorldComponents;
-using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using UnityEngine;
@@ -13,7 +12,7 @@ using Object = UnityEngine.Object;
 public class ControllerMock : MonoBehaviour
 //public class ControllerMock  b
 {
-    private GameWorldItem _gameWorldItem;
+    private IGameWorld _gameWorldItem;
     public GameObject CellObjectReference;
     public GameObject MovableObjectReference;
     public GameObject StructureObjectReference;
@@ -48,7 +47,7 @@ public class ControllerMock : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(1))
         {
-            foreach (MovableItem movableItem in _gameWorldItem.GetSelectedMovableItemList())
+            foreach (IMovable movableItem in _gameWorldItem.GetSelectedMovableItemList())
             {
                 movableItem.IssueMoveCommand(mapCoordinate);
             }
@@ -64,15 +63,15 @@ public class ControllerMock : MonoBehaviour
             print("begin placing");
             print(_gameWorldItem.GetItemsToBePlaced().Count);
             foreach (Item itemToPlace in _gameWorldItem.GetItemsToBePlaced()) {
-                switch (itemToPlace.Type) {
+                switch (itemToPlace.ItemType) {
                     case ItemType.Cell:
                         AddCellToMap(itemToPlace as CellItem);
                         break;
                     case ItemType.Movable:
-                        AddMovableToMap(itemToPlace as MovableItem);
+                        AddMovableToMap(itemToPlace as IMovable);
                         break;
                     case ItemType.Structure:
-                        AddStructureToMap(itemToPlace as StructureItem);
+                        AddStructureToMap(itemToPlace as IStructure);
                         break;
                     default:
                         throw new Exception("Unexpected item type!");
@@ -88,24 +87,24 @@ public class ControllerMock : MonoBehaviour
         GameObject newGameObject = Object.Instantiate(CellObjectReference, GetWorldVectorFromMapCoodinates(cellItem.Coordinate), Quaternion.identity);
     }
 
-    void AddMovableToMap(MovableItem movableItem) {
-        GameObject newGameObject = Object.Instantiate(MovableObjectReference,   GetWorldVectorFromMapCoodinates(movableItem.CurrentCoordiate) + Vector3.back * 2, Quaternion.identity);
+    void AddMovableToMap(IMovable movableItem) {
+        GameObject newGameObject = Object.Instantiate(MovableObjectReference,   GetWorldVectorFromMapCoodinates(movableItem.CurrentCoordinate) + Vector3.back * 2, Quaternion.identity);
         _movableDictionary.Add(movableItem.Guid, newGameObject);
     }
 
-    void AddStructureToMap(StructureItem structureItem) {
-        GameObject newGameObject = Object.Instantiate(StructureObjectReference, GetWorldVectorFromMapCoodinates(structureItem.StructureBoundary.topLeft) + Vector3.back, Quaternion.identity);
+    void AddStructureToMap(IStructure structureItem) {
+        GameObject newGameObject = Object.Instantiate(StructureObjectReference, GetWorldVectorFromMapCoodinates(structureItem.Boundary.topLeft) + Vector3.back, Quaternion.identity);
         print("create building");
     }
 
     void CheckNextMovements()
     {
-        foreach (MovableItem movableItem in _gameWorldItem.GetMovableItemsInMotion())
+        foreach (IMovable movableItem in _gameWorldItem.GetMovablesInMotion())
         {
             GameObject movableGameObject = _movableDictionary[movableItem.Guid];
             if (!movableGameObject.GetComponent<MovableBehaviour>().isMoving)
             {
-                Vector3 movableStartVector = GetWorldVectorFromMapCoodinates(movableItem.CurrentCoordiate);
+                Vector3 movableStartVector = GetWorldVectorFromMapCoodinates(movableItem.CurrentCoordinate);
                 Vector3 movableTargetVector = GetWorldVectorFromMapCoodinates(movableItem.NextCoordinate);
                 
                 movableGameObject.GetComponent<MovableBehaviour>().startPosition = movableStartVector;

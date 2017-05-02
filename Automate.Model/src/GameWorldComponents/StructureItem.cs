@@ -1,28 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using Automate.Model.Components;
-using Automate.Model.GameWorldComponents;
-using Automate.Model.MapModelComponents;
-
-namespace Automate.Model.GameWorldInterface
-{
-    public class StructureItem : Item
-    {
-        private readonly GameWorld _gameWorld;
-        public override Coordinate Coordinate => StructureBoundary.topLeft;
-        //public ComponentStackGroup ComponentStackGroup => _gameWorld.GetStructure(Guid).ComponentStackGroup;
-
-        public Boundary StructureBoundary => _gameWorld.GetStructure(Guid).Boundary;
-        public Structure Structure => _gameWorld.GetStructure(Guid);
-
-        internal StructureItem(GameWorld gameWorld, Guid structureGuid) {
-            Guid = structureGuid;
-            Type = ItemType.Structure;
-            _gameWorld = gameWorld;
-        }
-
-
-        //public Structure Structure => _gameWorld.GetStructure(Guid);
+﻿//using System;
+//using Automate.Model.MapModelComponents;
+//
+//namespace Automate.Model.GameWorldComponents
+//{
+//    [Obsolete]
+//    public class StructureItem : Item
+//    {
+//        private readonly GameWorld _gameWorld;
+//        public override Coordinate Coordinate => StructureBoundary.topLeft;
+//        //public ComponentStackGroup ComponentStackGroup => _gameWorld.GetStructure(Guid).ComponentStackGroup;
+//
+//        public Boundary StructureBoundary => _gameWorld.GetStructure(Guid).Boundary;
+//        public Structure Structure => _gameWorld.GetStructure(Guid);
+//
+//        internal StructureItem(GameWorld gameWorld, Guid structureGuid) {
+//            Guid = structureGuid;
+//            Type = ItemType.Structure;
+//            _gameWorld = gameWorld;
+//        }
+//
+//        public override ItemType Type => ItemType.Structure;
+//
+//
+//        //public Structure Structure => _gameWorld.GetStructure(Guid);
 
 //        public Dictionary<string, ComponentStack> GetInternalComponentStacks() {
 //            return _gameWorld.GetStructure(Guid).GetInternalComponentStacks();
@@ -49,5 +49,5 @@ namespace Automate.Model.GameWorldInterface
         //        public override int GetHashCode() {
         //            return Guid.GetHashCode();
         //        }
-    }
-}
+//    }
+//}

@@ -5,7 +5,7 @@ using Automate.Controller.Actions;
 using Automate.Controller.Handlers;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
-using Automate.Model.GameWorldInterface;
+using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
