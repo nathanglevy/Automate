@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Automate.Model.MapModelComponents;
 
 namespace Automate.Model.GameWorldComponents {
@@ -29,7 +30,7 @@ namespace Automate.Model.GameWorldComponents {
         /// <returns>List of all GameWorld interface items</returns>
         public static List<IGameWorld> GetGameWorldItemsInUniverse()
         {
-            throw new NotImplementedException();
+            return _gameWorldDictionary.Values.ToList();
         }
 
         /// <summary>

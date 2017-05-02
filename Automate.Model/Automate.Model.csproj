@@ -74,6 +74,7 @@
     <Compile Include="src\GameWorldComponents\IPlacable.cs" />
     <Compile Include="src\Jobs\JobType.cs" />
     <Compile Include="src\Jobs\StructureJob.cs" />
+    <Compile Include="src\Movables\PathRequirementHandler.cs" />
     <Compile Include="src\Requirements\BaseRequirement.cs" />
     <Compile Include="src\Requirements\ComponentPickupRequirement.cs" />
     <Compile Include="src\Requirements\ComponentDeliveryRequirement.cs" />

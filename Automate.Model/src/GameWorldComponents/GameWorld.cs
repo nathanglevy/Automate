@@ -84,7 +84,13 @@ namespace Automate.Model.GameWorldComponents
             Movable movable = new Movable(coordinate,movableType);
             _movables.Add(movable.GetId(), movable);
             _itemsToBePlaced.Add(movable);
+            movable.PathRequired += OnPathRequiredIssueMoveCommand;
             return movable;
+        }
+
+        internal bool OnPathRequiredIssueMoveCommand(object sender, PathRequirementArgs e)
+        {
+            return IssueMoveCommand(e.MovableGuid, e.TargetCoordinate);
         }
 
         public bool CanStructureBePlaced(Coordinate coordinate, Coordinate dimensions)

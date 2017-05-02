@@ -124,18 +124,18 @@ namespace Automate.Model.Tasks.Tests
         public void TestComplexTask_ExpectSuccess()
         {
             Task newTask = _taskDelegator.CreateNewTask();
-            newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0, 0, 0), 10);
-            newTask.AddAction(TaskActionType.DeliveryTask, new Coordinate(1, 1, 1), 5);
-            newTask.AddAction(TaskActionType.DeliveryTask, new Coordinate(1, 2, 1), 5);
+            newTask.AddAction(new Coordinate(0, 0, 0), 10);
+            newTask.AddAction(new Coordinate(1, 1, 1), 5);
+            newTask.AddAction(new Coordinate(1, 2, 1), 5);
             Guid assignee = Guid.NewGuid();
             _taskDelegator.AssignTask(assignee, newTask);
             Assert.IsTrue(_taskDelegator.HasDelegatedTasks(assignee));
             Assert.AreEqual(_taskDelegator.GetNextDelegatedTaskForGuid(assignee).GetCurrentAction().TaskActionType,
-                TaskActionType.PickupTask);
+                TaskActionType.GenericTask);
             Assert.AreEqual(_taskDelegator.GetNextDelegatedTaskForGuid(assignee).GetCurrentAction().Amount, 10);
             _taskDelegator.GetNextDelegatedTaskForGuid(assignee).CommitActionAndMoveTaskToNextAction();
             Assert.AreEqual(_taskDelegator.GetNextDelegatedTaskForGuid(assignee).GetCurrentAction().TaskActionType,
-                TaskActionType.DeliveryTask);
+                TaskActionType.GenericTask);
             Assert.AreEqual(_taskDelegator.GetNextDelegatedTaskForGuid(assignee).GetCurrentAction().Amount, 5);
             _taskDelegator.GetNextDelegatedTaskForGuid(assignee).CommitActionAndMoveTaskToNextAction();
             Assert.AreEqual(_taskDelegator.GetNextDelegatedTaskForGuid(assignee).GetCurrentAction().Amount, 5);

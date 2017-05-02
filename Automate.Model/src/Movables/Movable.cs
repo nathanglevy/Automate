@@ -30,12 +30,15 @@ namespace Automate.Model.Movables {
         public Coordinate NextCoordinate => GetNextCoordinate();
         public Movement NextMovement => GetNextMovement();
         public double NextMovementDuration => GetNextMovement().GetMoveCost() / Speed;
+
+        public event PathRequirementHandler PathRequired;
+
         public object GetAccessLock() {
             return AccessLock;
         }
 
         public bool IssueMoveCommand(Coordinate targetCoordinate) {
-            throw new NotImplementedException();
+            return PathRequired != null && PathRequired.Invoke(this, new PathRequirementArgs(Guid, targetCoordinate));
         }
 
 
