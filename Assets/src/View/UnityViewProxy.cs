@@ -272,7 +272,7 @@ namespace src.View
                 PickupAndDeliverTask.AddTransportAction(TaskActionType.DeliveryTask, new Coordinate(9, 0, 0), cmpntGrp000,
                     Component.IronOre, 5);
 
-                var movableListInCoordinate = gameWorld.GetMovableListInBoundary(new Boundary(new Coordinate(0, 0, 0), new Coordinate(GameXSize, GameYSize, 0)));
+                var movableListInCoordinate = gameWorld.GetMovableListInBoundary(new Boundary(new Coordinate(0, 0, 0), new Coordinate(GameXSize, GameYSize, 0))).Where(p => !p.IsInMotion());
                 
 
                 var movementPathWithLowestCostToCoordinate = gameWorld.GetMovementPathWithLowestCostToCoordinate(

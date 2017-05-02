@@ -112,6 +112,15 @@ namespace Automate.Controller.Modules
 
             // forward the update to the Timer Sched
             ForwardUpdateToTimerSched(args);
+
+            // seek for all Requirments and Generate Tassk
+            //var gameWorld = GameUniverse.GetGameWorldItemById(Model);
+            //var structureItem = gameWorld.CreateStructure(new Coordinate(3, 3, 0), new Coordinate(1, 1, 1), StructureType.Basic);
+            //var currentJobJobRequirements = structureItem.Structure.CurrentJob.JobRequirements;
+            //foreach (var currentJobJobRequirement in currentJobJobRequirements.GetIncompleteRequirements())
+            //{
+            //    currentJobJobRequirement.RequirementType
+            //}
         }
 
         private void PushFromModelToView(GameWorldItem gameWorldItem,
