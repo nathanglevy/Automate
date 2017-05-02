@@ -1,4 +1,5 @@
 using System;
+using Automate.Controller.Abstracts;
 using Automate.Controller.Handlers.GoAndPickUp;
 using Automate.Controller.Interfaces;
 using Automate.Model.Components;
@@ -8,11 +9,12 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
 {
     public class DeliverAction : PickUpAction
     {
-        public Coordinate DeliveryPickup { get; }
+        public Coordinate DeliveryCoordinate { get; }
 
-        public DeliverAction(ComponentType componentType, Coordinate DeliverDest, Coordinate DeliveryPickup, int amount, Guid deliverAuthorizedId) : base(componentType, DeliverDest,amount,deliverAuthorizedId)
+        public DeliverAction(ComponentType componentType, Coordinate DeliverDest, Coordinate deliveryCoordinate, int amount, Guid deliverAuthorizedId) : base(componentType, DeliverDest,amount,deliverAuthorizedId)
         {
-            this.DeliveryPickup = DeliveryPickup;
+            Type = ActionType.Deliver;
+            this.DeliveryCoordinate = deliveryCoordinate;
         }
 
         public event ControllerNotification OnComplete;

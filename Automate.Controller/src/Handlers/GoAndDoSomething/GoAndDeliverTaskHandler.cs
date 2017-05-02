@@ -1,6 +1,5 @@
 using System;
 using Automate.Controller.Abstracts;
-using Automate.Controller.Exceptions;
 using Automate.Controller.Handlers.GoAndPickUp;
 using Automate.Controller.Interfaces;
 using Automate.Model.Components;
@@ -47,8 +46,6 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
 
         protected override Coordinate GetComponentCoordinate(GoAndDoSomethingAction goAndDoSomethingAction, IMovable movableItem)
         {
-            // it should be at movable Current Coordinate
-            // TODO: add check that movable Current has Component
             return goAndDoSomethingAction.TargetDestCoordinate;
         }
 
@@ -70,6 +67,13 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
                 throw new NullReferenceException("Args is null, cannot determine if Handler should be activated");
 
             return args is GoAndDeliverAction;
+        }
+    }
+
+    public class ComponentStackAssignError : Exception
+    {
+        public ComponentStackAssignError(string toString) : base(toString)
+        {
         }
     }
 }

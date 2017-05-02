@@ -10,6 +10,8 @@ using Automate.Controller.Handlers.MoveHandler;
 using Automate.Controller.Handlers.PlaceAnObject;
 using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Handlers.SelectionNotification;
+using Automate.Controller.Handlers.TaskActionHandler;
+using Automate.Controller.Handlers.TaskHandler;
 using Automate.Controller.Interfaces;
 using Automate.Model;
 using Automate.Model.GameWorldComponents;
@@ -66,15 +68,22 @@ namespace Automate.Controller.Modules
 
             // register handlers
             _handlers.Add(new GoAndPickUpTaskHandler());
-            _handlers.Add(new GoAndDeliverTaskHandler());
+            _handlers.Add(new GoAndDeliverTaskHandler())
+                ;
             _handlers.Add(new ViewSelectionHandler());
             _handlers.Add(new RightClickNotificationHandler());
             _handlers.Add(new PlaceAnObjectRequestHandler());
+
             _handlers.Add(new MoveActionHandler());
             _handlers.Add(new StartMoveActionHandler());
+
             _handlers.Add(new PickUpActionHandler());
             _handlers.Add(new DeliverActionHandler());
-            
+
+            _handlers.Add(new TaskHandler());
+            _handlers.Add(new TaskActionHandler());
+
+
 
         }
 
@@ -192,14 +201,15 @@ namespace Automate.Controller.Modules
             {
 
                 // invoke Pre Handle
-                OnPreHandle?.Invoke(new ControllerNotificationArgs(args));
+                var handlerUtils = new HandlerUtils(Model, HandlerActivation, AcknowledgeActivation);
+                OnPreHandle?.Invoke(new ControllerNotificationArgs(args, handlerUtils));
 
                 // Handle and Get Result
-                var handlerUtils = new HandlerUtils(Model, HandlerActivation, AcknowledgeActivation);
+                
                 var handlerResult = handler.Handle(args,handlerUtils);
 
                 // invoke Pre Handle
-                OnPostHandle?.Invoke(new ControllerNotificationArgs(args));
+                OnPostHandle?.Invoke(new ControllerNotificationArgs(args, handlerUtils));
 
                 // Push to Sched
                 if (handlerResult.IsInternal)
@@ -221,7 +231,7 @@ namespace Automate.Controller.Modules
                 
 
                 // invoke on Finish
-                OnFinishHandle?.Invoke(new ControllerNotificationArgs(args) {Utils = handlerUtils });
+                OnFinishHandle?.Invoke(new ControllerNotificationArgs(args, handlerUtils) {Utils = handlerUtils });
 
                 // resume any waiting threads
                 syncEvent.Set();

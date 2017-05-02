@@ -74,13 +74,15 @@ namespace AutomateTests.test.Controller
             var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(5, 5, 1));
             var movableItem = gameWorldItem.CreateMovable(new Coordinate(3, 2, 0), MovableType.NormalHuman);
 
-            var newTask = gameWorldItem.TaskDelegator.CreateNewTask();
-            gameWorldItem.TaskDelegator.AssignTask(movableItem.Guid,newTask);
-            newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0,0,0),100 );
-            var currentAction = newTask.GetCurrentAction();
-
             gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0)).AddComponentStack(Component.GetComponent(ComponentType.IronOre), 100);
             var componentsAtCoordinate = gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0)).GetComponentStack(ComponentType.IronOre);
+
+            var newTask = gameWorldItem.TaskDelegator.CreateNewTask();
+            gameWorldItem.TaskDelegator.AssignTask(movableItem.Guid,newTask);
+            newTask.AddTransportAction(TaskActionType.PickupTask, new Coordinate(0,0,0), gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0)), Component.IronOre, 100 );
+            var currentAction = newTask.GetCurrentAction();
+
+            
 
             componentsAtCoordinate.AssignOutgoingAmount(movableItem.Guid,70);
             

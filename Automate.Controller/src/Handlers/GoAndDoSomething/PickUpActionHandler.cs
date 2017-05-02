@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Automate.Controller.Abstracts;
+using Automate.Controller.Handlers.GoAndDoSomething;
 using Automate.Controller.Interfaces;
 using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
@@ -27,15 +28,13 @@ namespace Automate.Controller.Handlers.GoAndPickUp
             // Get the Movable Object - Target
             var movableItem = gameWorldItem.GetMovable(pickUpAction.MovableId);
 
-            // TODO: HOW TO CHECK IF IT HAS COMPONENT STACK
-
             var componentStack = movableItem.ComponentStackGroup.AddComponentStack(pickUpAction.ComponentType, 0);
             componentStack.AssignIncomingAmount(movableItem.Guid,pickUpAction.Amount);
             // Transfer Amount from Source to Target
             sourceComponentStackGroup.TransferToStackGroup(pickUpAction.MovableId,movableItem.ComponentStackGroup,pickUpAction.ComponentType,pickUpAction.Amount);
 
             // Pick Up Operation Ended, Fire On Complete
-            pickUpAction.FireOnComplete(new ControllerNotificationArgs(pickUpAction));
+            pickUpAction.FireOnComplete(new ControllerNotificationArgs(pickUpAction, utils));
 
             return new HandlerResult(new List<MasterAction>() { pickUpAction });
         }
@@ -44,7 +43,7 @@ namespace Automate.Controller.Handlers.GoAndPickUp
         {
             if (args == null)
                 throw new NullReferenceException("Args is null, cannot determine if Handler should be activated");
-            return args is PickUpAction;
+            return args is PickUpAction && ! (args is DeliverAction);
         }
     }
 }

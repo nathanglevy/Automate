@@ -76,7 +76,6 @@
     <Compile Include="src\Abstracts\ModelMasterAction.cs" />
     <Compile Include="src\Abstracts\ObserverArgs.cs" />
     <Compile Include="src\Delegates\HandlerResultListner.cs" />
-    <Compile Include="src\Exceptions\ComponentStackAssignError.cs" />
     <Compile Include="src\Handlers\AcknowledgeNotification\AcknowledgeNotification.cs" />
     <Compile Include="src\Handlers\AcknowledgeNotification\AcknowledgeNotificationHandler.cs" />
     <Compile Include="src\Handlers\GoAndDoSomething\DeliverAction.cs" />
@@ -106,11 +105,11 @@
     <Compile Include="src\Handlers\SelectionNotification\ViewSelectionNotification.cs" />
     <Compile Include="src\Handlers\TaskActionHandler\TaskActionContainer.cs" />
     <Compile Include="src\Handlers\TaskActionHandler\TaskActionHandler.cs" />
+    <Compile Include="src\Handlers\TaskHandler\TaskContainer.cs" />
+    <Compile Include="src\Handlers\TaskHandler\TaskHandler.cs" />
     <Compile Include="src\Interfaces\ControllerNotification.cs" />
     <Compile Include="src\Interfaces\ControllerNotificationArgs.cs" />
     <Compile Include="src\Interfaces\HandlerResult.cs" />
-    <Compile Include="src\Interfaces\IAcknowledgeResult.cs" />
-    <Compile Include="src\Interfaces\IAcknowledgeResult1.cs" />
     <Compile Include="src\Interfaces\IGameController.cs" />
     <Compile Include="src\Interfaces\IGameView.cs" />
     <Compile Include="src\Interfaces\IHandler.cs" />
@@ -142,7 +141,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="src\Handlers\TaskHandler\" />
+    <Folder Include="src\Exceptions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

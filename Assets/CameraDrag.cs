@@ -12,7 +12,7 @@ public class CameraDrag : MonoBehaviour {
 
         if (!Input.GetMouseButton(2))
             return;
-
+         
         Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - dragOrigin);
         //Vector3 pos = Input.mousePosition - dragOrigin;
         Vector3 move = new Vector3(pos.x * dragSpeed, pos.y * dragSpeed, 0);

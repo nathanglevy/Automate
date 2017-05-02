@@ -113,7 +113,7 @@ namespace Automate.Model.Tasks
             return Guid.GetHashCode();
         }
 
-        public void AddAction(TaskActionType taskLocation, Coordinate coordinate, int amount)
+        public TaskAction AddAction(TaskActionType taskLocation, Coordinate coordinate, int amount)
         {
             throw new NotImplementedException("This method should no longer be used -- use AddAction generic, AddTransportAction, or AddWorkAction accordingly");
         }

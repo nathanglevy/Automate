@@ -30,7 +30,7 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
             movableItem.ComponentStackGroup.TransferToStack(deliverAction.MovableId, componentStack, deliverAction.Amount);
 
             // Pick Up Operation Ended, Fire On Complete
-            deliverAction.FireOnComplete(new ControllerNotificationArgs(deliverAction));
+            deliverAction.FireOnComplete(new ControllerNotificationArgs(deliverAction, utils));
 
             return new HandlerResult(new List<MasterAction>() {deliverAction});
         }

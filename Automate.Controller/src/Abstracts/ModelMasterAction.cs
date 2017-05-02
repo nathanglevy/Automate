@@ -3,7 +3,7 @@ using Automate.Model.Components;
 
 namespace Automate.Controller.Abstracts
 {
-    public class ModelMasterAction : MasterAction
+    public abstract class ModelMasterAction : MasterAction
     {
         public ModelMasterAction(ActionType type, string targetId) : base(type, targetId)
         {
