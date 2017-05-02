@@ -540,7 +540,7 @@ namespace AutomateTests.test.Controller
             //var moveAction0Result = gameController.Handle(moveAction0);
 
 
-            Assert.AreEqual(new Coordinate(2, 2, 0), gameWorld.GetMovableItem(movableItem.Guid).CurrentCoordiate);
+            Assert.AreEqual(new Coordinate(2, 2, 0), gameWorld.GetMovable(movableItem.Guid).CurrentCoordinate);
             Assert.IsTrue(_taskCompleteFired);
             Assert.AreEqual(10, ironat330.CurrentAmount);
             Assert.AreEqual(30, ironat000.CurrentAmount);

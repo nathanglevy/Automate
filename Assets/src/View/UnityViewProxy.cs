@@ -275,10 +275,10 @@ namespace src.View
                 
 
                 var movementPathWithLowestCostToCoordinate = gameWorld.GetMovementPathWithLowestCostToCoordinate(
-                    movableListInCoordinate.Select(p => p.CurrentCoordiate).ToList(), _GoldCoordinate);
-                var targetMovable = movableListInCoordinate.First(p => p.CurrentCoordiate.Equals(movementPathWithLowestCostToCoordinate.GetStartCoordinate()));
+                    movableListInCoordinate.Select(p => p.CurrentCoordinate).ToList(), _GoldCoordinate);
+                var targetMovable = movableListInCoordinate.First(p => p.CurrentCoordinate.Equals(movementPathWithLowestCostToCoordinate.GetStartCoordinate()));
                 gameWorld.TaskDelegator.AssignTask(targetMovable.Guid, PickupAndDeliverTask);
-                gameWorld.SelectMovableItems(new List<MovableItem>() { targetMovable });
+                gameWorld.SelectMovableItems(new List<IMovable>() { targetMovable });
 
                 
                 GameViewBase.Controller.Handle(new TaskContainer(PickupAndDeliverTask) { OnCompleteDelegate = TaskFinished });

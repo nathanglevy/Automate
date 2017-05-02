@@ -5,7 +5,7 @@ using Automate.Controller.Handlers.GoAndPickUp;
 using Automate.Controller.Handlers.TaskActionHandler;
 using Automate.Controller.Interfaces;
 using Automate.Model.Components;
-using Automate.Model.GameWorldInterface;
+using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

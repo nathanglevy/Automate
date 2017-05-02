@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Handlers.TaskActionHandler;
 using Automate.Controller.Interfaces;
-using Automate.Model.GameWorldInterface;
+using Automate.Model.GameWorldComponents;
 
 namespace Automate.Controller.Handlers.TaskHandler
 {

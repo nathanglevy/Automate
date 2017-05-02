@@ -8,7 +8,7 @@ using Automate.Controller.Handlers.TaskHandler;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 using Automate.Model.Components;
-using Automate.Model.GameWorldInterface;
+using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using Automate.Model.Tasks;

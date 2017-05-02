@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Handlers.GoAndPickUp;
 using Automate.Controller.Interfaces;
-using Automate.Model.GameWorldInterface;
+using Automate.Model.GameWorldComponents;
 using Automate.Model.Tasks;
 
 namespace Automate.Controller.Handlers.TaskActionHandler
