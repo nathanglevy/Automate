@@ -228,5 +228,10 @@ namespace AutomateTests.test.Mocks
         }
 
         public IRequirementAgent RequirementAgent { get; }
+        public List<ICell> GetCells { get; }
+        public ICell GetCellAtCoordinate(Coordinate coordinate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
