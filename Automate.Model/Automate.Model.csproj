@@ -105,9 +105,11 @@
     <Compile Include="src\PathFinding\PathFinderAStar.cs" />
     <Compile Include="src\PathFinding\PathOperationException.cs" />
     <Compile Include="src\Requirements\IRequirement.cs" />
+    <Compile Include="src\Requirements\RequirementAgent.cs" />
     <Compile Include="src\Requirements\RequirementContainer.cs" />
     <Compile Include="src\Requirements\RequirementException.cs" />
-    <Compile Include="src\Requirements\RequirementHelper.cs" />
+    <Compile Include="src\Requirements\IRequirementAgent.cs" />
+    <Compile Include="src\StructureComponents\StructureCost.cs" />
     <Compile Include="src\Tasks\TaskActionEventHandler.cs" />
     <Compile Include="src\Requirements\WorkRequirement.cs" />
     <Compile Include="src\Tasks\ITaskAction.cs" />

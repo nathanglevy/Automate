@@ -3,9 +3,9 @@
     public enum StructureType
     {
         Basic,
-        Machine,
-        InputPort,
-        OutputPort,
+        SmallFire,
+        MediumFire,
+        LargeFire,
         NonBlocking,
         Construction,
         Storage

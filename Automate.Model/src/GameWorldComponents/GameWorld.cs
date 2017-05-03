@@ -6,6 +6,7 @@ using Automate.Model.Components;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using Automate.Model.PathFinding;
+using Automate.Model.Requirements;
 using JetBrains.Annotations;
 using Automate.Model.Tasks;
 
@@ -24,6 +25,7 @@ namespace Automate.Model.GameWorldComponents
         private MapInfo _map;
         public Guid Guid { get; private set; }
         public TaskDelegator TaskDelegator { get; } = new TaskDelegator();
+        public IRequirementAgent RequirementAgent { get; }
 
         internal GameWorld(Coordinate mapDimensions)
         {
@@ -43,6 +45,7 @@ namespace Automate.Model.GameWorldComponents
                 _itemsToBePlaced.Add(new CellItem(this, coordinate));
             }
             Guid = Guid.NewGuid();
+            RequirementAgent = new RequirementAgent(this);
         }
 
         public IMovable GetMovable(Guid movableGuid)

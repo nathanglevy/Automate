@@ -14,5 +14,6 @@ namespace Automate.Model.GameWorldComponents {
         bool HasCompletedJob { get; }
         bool IsStructureComplete { get; }
         StructureType StructureType { get; }
+        bool HasJobInProgress { get; }
     }
 }
