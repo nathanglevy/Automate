@@ -14,6 +14,7 @@ namespace Automate.Model.GameWorldComponents
         TaskDelegator TaskDelegator { get; }
         Guid Guid { get; }
         IRequirementAgent RequirementAgent { get; }
+        List<ICell> GetCells { get; }
 
         /// <summary>Create a new movable character on the map</summary>
         /// <param name="spawnCoordinate">Starting position of spawned character</param>
@@ -150,5 +151,6 @@ namespace Automate.Model.GameWorldComponents
         IStructure GetStructure(Guid structureGuid);
         IMovable GetMovable(Guid movableGuid);
         List<IMovable> GetSelectedMovableItemList();
+        ICell GetCellAtCoordinate(Coordinate coordinate);
     }
 }

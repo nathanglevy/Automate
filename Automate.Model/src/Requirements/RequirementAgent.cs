@@ -24,17 +24,26 @@ namespace Automate.Model.Requirements
             return _gameWorld.GetStructuresList().Where(item => item.HasCompletedJob).ToList();
         }
 
+        public List<ICell> GetCellsWithActiveJobs()
+        {
+            return _gameWorld.GetCells.Where(item => item.HasActiveJob).ToList();
+        }
+
+        public List<ICell> GetCellsWithCompletedJobs() {
+            return _gameWorld.GetCells.Where(item => item.HasCompletedJob).ToList();
+        }
+
         public void SetConstructionJob(IStructure structure)
         {
             if (structure.HasJobInProgress)
                 throw new RequirementException("Structure already has a job in progress, cannot define a new job requirement!");
-            StructureJob structureJob = new StructureJob(JobType.Construction);
+            RequirementJob requirementJob = new RequirementJob(JobType.Construction);
             foreach (KeyValuePair<Component, int> costPair in StructureCost.GetStructureCost(structure.StructureType))
             {
-                structureJob.AddRequirement(new ComponentDeliveryRequirement(costPair.Key,costPair.Value));
-                structureJob.AddRequirement(new WorkRequirement(costPair.Key,costPair.Value));
+                requirementJob.AddRequirement(new ComponentDeliveryRequirement(costPair.Key,costPair.Value));
+                requirementJob.AddRequirement(new WorkRequirement(costPair.Key,costPair.Value));
             }
-            structure.CurrentJob = structureJob;
+            structure.CurrentJob = requirementJob;
         }
     }
 }

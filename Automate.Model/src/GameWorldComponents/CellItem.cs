@@ -3,10 +3,15 @@ using Automate.Model.MapModelComponents;
 
 namespace Automate.Model.GameWorldComponents
 {
-    public class CellItem : Item
+    public class CellItem : Item, ICell
     {
         private IGameWorld _gameWorld;
         public override ItemType ItemType { get; } = ItemType.Cell;
+        public bool HasActiveJob => !CurrentJob.JobType.Equals(JobType.Idle);
+        public bool HasCompletedJob => HasActiveJob && CurrentJob.PointsOfWorkRemaining <= 0;
+        public bool HasJobInProgress => HasActiveJob && CurrentJob.PointsOfWorkRemaining > 0;
+        public RequirementJob CurrentJob { get; set; } = new RequirementJob(JobType.Idle);
+
         public CellItem(IGameWorld gameWorld, Coordinate cellInfoCoordinate)
         {
             _gameWorld = gameWorld;

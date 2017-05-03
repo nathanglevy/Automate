@@ -3,7 +3,7 @@ using Automate.Model.Requirements;
 
 namespace Automate.Model.GameWorldComponents
 {
-    public class StructureJob
+    public class RequirementJob
     {
         public JobType JobType { get; }
         public int TotalPointsOfWorkRequired => JobRequirements.GetAllRequirements().Sum(item => item.TotalRequirement);
@@ -17,7 +17,7 @@ namespace Automate.Model.GameWorldComponents
             JobRequirements.AddRequirement(requirement);
         }
 
-        public StructureJob(JobType jobType)
+        public RequirementJob(JobType jobType)
         {
             JobType = jobType;
         }

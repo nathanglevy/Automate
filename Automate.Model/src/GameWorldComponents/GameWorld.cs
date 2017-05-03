@@ -20,12 +20,21 @@ namespace Automate.Model.GameWorldComponents
         private readonly Dictionary<Coordinate, ComponentStackGroup> _componentStacks = new Dictionary<Coordinate, ComponentStackGroup>();
         private readonly Dictionary<Guid, Structure> _structures = new Dictionary<Guid, Structure>();
         private readonly Dictionary<Coordinate, Guid> _coordinateToStructureMap = new Dictionary<Coordinate, Guid>();
+        private readonly Dictionary<Coordinate, CellItem> _cellItems = new Dictionary<Coordinate, CellItem>();
         private readonly HashSet<Guid> _selectedItems = new HashSet<Guid>();
         private readonly HashSet<Item> _itemsToBePlaced = new HashSet<Item>();
         private MapInfo _map;
         public Guid Guid { get; private set; }
         public TaskDelegator TaskDelegator { get; } = new TaskDelegator();
         public IRequirementAgent RequirementAgent { get; }
+        public List<ICell> GetCells => _cellItems.Select(item => item.Value as ICell).ToList();
+
+        public ICell GetCellAtCoordinate(Coordinate coordinate)
+        {
+            if (!GetWorldBoundary().IsCoordinateInBoundary(coordinate))
+                throw new ArgumentOutOfRangeException(nameof(coordinate), "given coordinate is not in range of this world");
+            return _cellItems[coordinate];
+        }
 
         internal GameWorld(Coordinate mapDimensions)
         {
@@ -42,7 +51,9 @@ namespace Automate.Model.GameWorldComponents
             _map.FillMapWithCells(new CellInfo(true, 1));
             foreach (Coordinate coordinate in _map.GetBoundary().GetListOfCoordinatesInBoundary())
             {
-                _itemsToBePlaced.Add(new CellItem(this, coordinate));
+                CellItem cellItem = new CellItem(this, coordinate);
+                _itemsToBePlaced.Add(cellItem);
+                _cellItems.Add(coordinate, cellItem);
             }
             Guid = Guid.NewGuid();
             RequirementAgent = new RequirementAgent(this);

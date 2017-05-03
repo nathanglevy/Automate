@@ -227,6 +227,6 @@ namespace AutomateTests.test.Mocks
             throw new NotImplementedException();
         }
 
-        public RequirementAgent RequirementAgent { get; }
+        public IRequirementAgent RequirementAgent { get; }
     }
 }

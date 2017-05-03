@@ -7,5 +7,7 @@ namespace Automate.Model.Requirements
         List<IStructure> GetStructuresWithActiveJobs();
         List<IStructure> GetStructuresWithCompletedJobs();
         void SetConstructionJob(IStructure structure);
+        List<ICell> GetCellsWithActiveJobs();
+        List<ICell> GetCellsWithCompletedJobs();
     }
 }

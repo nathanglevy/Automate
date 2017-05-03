@@ -72,8 +72,10 @@
     <Compile Include="src\GameWorldComponents\IGameWorld.cs" />
     <Compile Include="src\GameWorldComponents\IMovable.cs" />
     <Compile Include="src\GameWorldComponents\IPlacable.cs" />
+    <Compile Include="src\Jobs\IJobContainer.cs" />
     <Compile Include="src\Jobs\JobType.cs" />
-    <Compile Include="src\Jobs\StructureJob.cs" />
+    <Compile Include="src\Jobs\RequirementJob.cs" />
+    <Compile Include="src\GameWorldComponents\ICell.cs" />
     <Compile Include="src\Movables\PathRequirementHandler.cs" />
     <Compile Include="src\Requirements\BaseRequirement.cs" />
     <Compile Include="src\Requirements\ComponentPickupRequirement.cs" />
