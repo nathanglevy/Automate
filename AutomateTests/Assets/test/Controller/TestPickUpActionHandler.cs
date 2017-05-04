@@ -9,11 +9,11 @@ using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using Automate.Model.Tasks;
-using AutomateTests.test.Mocks;
+using AutomateTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Component = Automate.Model.Components.Component;
 
-namespace AutomateTests.test.Controller
+namespace AutomateTests.Controller
 {
     [TestClass]
     public class TestPickUpActionHandler

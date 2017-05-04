@@ -9,7 +9,7 @@ namespace Automate.Model.Requirements
 
         public override bool CanAttachToAction(ITaskAction taskAction)
         {
-            return (taskAction.TaskActionType == TaskActionType.PickupTask);
+            return (taskAction.TaskActionType == TaskActionType.PickupTask) && (taskAction.Amount <= Amount);
         }
     }
 }

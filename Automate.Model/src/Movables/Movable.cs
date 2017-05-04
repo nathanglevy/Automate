@@ -5,6 +5,7 @@ using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 using Automate.Model.PathFinding;
+using Automate.Model.StructureComponents;
 using Automate.Model.Tasks;
 
 [assembly: InternalsVisibleTo("AutomateTests")]
@@ -30,6 +31,7 @@ namespace Automate.Model.Movables {
         public Coordinate NextCoordinate => GetNextCoordinate();
         public Movement NextMovement => GetNextMovement();
         public double NextMovementDuration => GetNextMovement().GetMoveCost() / Speed;
+        public StructureAttribute StructureAttribute { get; } = new StructureAttribute();
 
         public event PathRequirementHandler PathRequired;
 

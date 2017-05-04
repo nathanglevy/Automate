@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using Automate.Model.CellComponents;
 using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
+using Automate.Model.Jobs;
 using Automate.Model.StructureComponents;
 
 namespace Automate.Model.Requirements
@@ -15,7 +17,7 @@ namespace Automate.Model.Requirements
             _gameWorld = gameWorld;
         }
 
-        public List<IStructure> GetStructuresWithActiveJobs()
+        public List<IStructure> GetStructuresWithJobInProgress()
         {
             return _gameWorld.GetStructuresList().Where(item => item.HasJobInProgress).ToList();
         }
@@ -24,9 +26,9 @@ namespace Automate.Model.Requirements
             return _gameWorld.GetStructuresList().Where(item => item.HasCompletedJob).ToList();
         }
 
-        public List<ICell> GetCellsWithActiveJobs()
+        public List<ICell> GetCellsWithJobInProgress()
         {
-            return _gameWorld.GetCells.Where(item => item.HasActiveJob).ToList();
+            return _gameWorld.GetCells.Where(item => item.HasJobInProgress).ToList();
         }
 
         public List<ICell> GetCellsWithCompletedJobs() {

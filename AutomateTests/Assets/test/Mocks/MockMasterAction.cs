@@ -1,7 +1,7 @@
 ﻿using System;
 using Automate.Controller.Abstracts;
 
-namespace AutomateTests.test.Mocks
+namespace AutomateTests.Mocks
 {
     public class MockMasterAction : MasterAction
     {

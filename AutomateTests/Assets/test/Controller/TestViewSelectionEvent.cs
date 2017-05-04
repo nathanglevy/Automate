@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using Automate.Controller.Abstracts;
-using Automate.Controller.Actions;
-using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Handlers.SelectionNotification;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
@@ -11,10 +8,9 @@ using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using AutomateTests.Mocks;
-using AutomateTests.test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.test.Controller
+namespace AutomateTests.Controller
 {
     [TestClass]
     public class TestViewSelectionEvent

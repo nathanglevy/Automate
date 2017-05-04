@@ -1,5 +1,6 @@
 ﻿using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
+using Automate.Model.StructureComponents;
 
 namespace Automate.Controller.Handlers.PlaceAnObject
 {

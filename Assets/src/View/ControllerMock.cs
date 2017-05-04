@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Automate.Model.CellComponents;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
+using Automate.Model.StructureComponents;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

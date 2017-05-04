@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Automate.Model.GameWorldComponents;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Automate.Model.MapModelComponents;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.test.Model.GameWorldInterface {
+namespace AutomateTests.Model.GameWorldInterface {
     [TestClass()]
     public class TestGameUniverse {
         [TestMethod()]

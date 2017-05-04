@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Automate.Model.CellComponents;
 using Automate.Model.Components;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using Automate.Model.PathFinding;
 using Automate.Model.Requirements;
+using Automate.Model.StructureComponents;
 using Automate.Model.Tasks;
 using JetBrains.Annotations;
 

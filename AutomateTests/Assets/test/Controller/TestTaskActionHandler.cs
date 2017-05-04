@@ -10,7 +10,7 @@ using Automate.Model.MapModelComponents;
 using Automate.Model.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.test.Controller
+namespace AutomateTests.Controller
 {
     [TestClass]
     public class TestTaskActionHandler

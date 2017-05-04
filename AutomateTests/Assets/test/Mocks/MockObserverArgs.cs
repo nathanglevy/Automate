@@ -1,6 +1,6 @@
 ﻿using Automate.Controller.Abstracts;
 
-namespace AutomateTests.test.Mocks
+namespace AutomateTests.Mocks
 {
     public class MockObserverArgs : ObserverArgs
     {

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Automate.Model.Requirements;
 
-namespace Automate.Model.GameWorldComponents
+namespace Automate.Model.Jobs
 {
     public class RequirementJob
     {

@@ -1,4 +1,4 @@
-﻿namespace Automate.Model.GameWorldComponents
+﻿namespace Automate.Model.Jobs
 {
     public interface IJobContainer
     {
@@ -6,5 +6,6 @@
         bool HasCompletedJob { get; }
         bool HasJobInProgress { get; }
         RequirementJob CurrentJob { get; set; }
+        void ClearCurrentJob();
     }
 }

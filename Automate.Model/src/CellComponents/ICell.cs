@@ -1,7 +1,9 @@
 ﻿using System;
+using Automate.Model.GameWorldComponents;
+using Automate.Model.Jobs;
 using Automate.Model.MapModelComponents;
 
-namespace Automate.Model.GameWorldComponents
+namespace Automate.Model.CellComponents
 {
     public interface ICell : IJobContainer {
         ItemType ItemType { get; }

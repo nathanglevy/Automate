@@ -1,11 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Automate.Model.Components;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
+using Automate.Model.Components;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Automate.Model.Components.Tests {
+namespace AutomateTests.Components {
     [TestClass()]
     public class TestComponentStackGroup
     {

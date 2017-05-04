@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 using Automate.Model.MapModelComponents;
 
-namespace AutomateTests.test.Mocks
+namespace AutomateTests.Mocks
 {
     public class MockGameView : IGameView
     {

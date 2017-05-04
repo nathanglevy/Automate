@@ -1,10 +1,9 @@
 ﻿using System;
 using Automate.Model.Components;
 using Automate.Model.MapModelComponents;
-using Automate.Model.Movables;
 using Automate.Model.PathFinding;
 
-namespace Automate.Model.GameWorldComponents {
+namespace Automate.Model.Movables {
     public interface IMovable : IPlacable {
         ComponentStackGroup ComponentStackGroup { get; }
         Guid Guid { get; }

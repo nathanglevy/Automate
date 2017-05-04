@@ -1,8 +1,10 @@
 ﻿using System;
 using Automate.Model.Components;
+using Automate.Model.GameWorldComponents;
+using Automate.Model.Jobs;
 using Automate.Model.MapModelComponents;
 
-namespace Automate.Model.GameWorldComponents {
+namespace Automate.Model.StructureComponents {
     public interface IStructure : IJobContainer {
         Boundary Boundary { get; }
         ComponentStackGroup ComponentStackGroup { get; }
