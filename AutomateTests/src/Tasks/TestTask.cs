@@ -76,19 +76,19 @@ namespace Automate.Model.Tasks.Tests {
         [TestMethod()]
         public void TestMoveTaskToNextAction_ExpectCorrectValue() {
             Task newTask = new Task();
-            newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0, 0, 0), 10);
-            newTask.AddAction(TaskActionType.DeliveryTask, new Coordinate(1, 0, 1), 20);
+            newTask.AddTransportAction(TaskActionType.PickupTask, new Coordinate(0, 0, 0), ComponentStackGroup, Component.IronOre, 10);
+            newTask.AddTransportAction(TaskActionType.DeliveryTask, new Coordinate(2, 2, 0), ComponentStackGroup, Component.IronOre, 5);
             newTask.CommitActionAndMoveTaskToNextAction();
-            Assert.AreEqual(newTask.GetCurrentAction().Amount, 20);
+            Assert.AreEqual(newTask.GetCurrentAction().Amount, 5);
             Assert.AreEqual(newTask.GetCurrentAction().TaskActionType, TaskActionType.DeliveryTask);
-            Assert.AreEqual(newTask.GetCurrentAction().TaskLocation, new Coordinate(1, 0, 1));
+            Assert.AreEqual(newTask.GetCurrentAction().TaskLocation, new Coordinate(2, 2, 0));
         }
 
         [TestMethod()]
         [ExpectedException(typeof(TaskActionException))]
         public void TestMoveTaskToNextAction_NoActionsLeft_ExpectTaskActionException() {
             Task newTask = new Task();
-            newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0, 0, 0), 10);
+            newTask.AddAction(new Coordinate(0, 0, 0), 10);
             newTask.CommitActionAndMoveTaskToNextAction();
             newTask.CommitActionAndMoveTaskToNextAction();
         }
@@ -97,7 +97,7 @@ namespace Automate.Model.Tasks.Tests {
         public void TestIsTaskComplete_ExpectSuccess() {
             Task newTask = new Task();
             Assert.IsTrue(newTask.IsTaskComplete());
-            newTask.AddAction(TaskActionType.PickupTask, new Coordinate(0, 0, 0), 10);
+            newTask.AddAction(new Coordinate(0, 0, 0), 10);
             Assert.IsFalse(newTask.IsTaskComplete());
             newTask.CommitActionAndMoveTaskToNextAction();
             Assert.IsTrue(newTask.IsTaskComplete());

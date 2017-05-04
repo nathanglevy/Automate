@@ -65,7 +65,8 @@ namespace Automate.Model.Tasks
 
         public void RemoveCompletedTasks(Guid assignee)
         {
-            IEnumerable<Guid> tasksToRemove = GetDelegatedTasksForGuid(assignee).Where(task => task.IsTaskComplete()).Select(task => task.Guid);
+            
+            List<Guid> tasksToRemove = GetDelegatedTasksForGuid(assignee).Where(task => task.IsTaskComplete()).Select(task => task.Guid).ToList();
             foreach (Guid taskToRemove in tasksToRemove)
             {
                 _delegatedTasks.Remove(taskToRemove);

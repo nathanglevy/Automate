@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Interfaces;
-using Automate.Model.GameWorldInterface;
+using Automate.Model.GameWorldComponents;
 
 namespace Automate.Controller.Handlers.GoAndDoSomething
 {
@@ -18,7 +18,7 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
 
             // Get Game World and Movable
             var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
-            var movableItem = gameWorldItem.GetMovableItem(deliverAction.MovableId);
+            var movableItem = gameWorldItem.GetMovable(deliverAction.MovableId);
 
             // Get Target Stack Group at Target Coordinate
             var componentStackGroup = gameWorldItem.GetComponentStackGroupAtCoordinate(deliverAction.TargetDest);

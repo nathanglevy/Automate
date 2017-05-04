@@ -68,6 +68,13 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Components\Component.cs" />
+    <Compile Include="src\GameWorldComponents\IStructure.cs" />
+    <Compile Include="src\GameWorldComponents\IGameWorld.cs" />
+    <Compile Include="src\GameWorldComponents\IMovable.cs" />
+    <Compile Include="src\GameWorldComponents\IPlacable.cs" />
+    <Compile Include="src\Jobs\JobType.cs" />
+    <Compile Include="src\Jobs\StructureJob.cs" />
+    <Compile Include="src\Movables\PathRequirementHandler.cs" />
     <Compile Include="src\Requirements\BaseRequirement.cs" />
     <Compile Include="src\Requirements\ComponentPickupRequirement.cs" />
     <Compile Include="src\Requirements\ComponentDeliveryRequirement.cs" />
@@ -75,18 +82,17 @@
     <Compile Include="src\Components\ComponentStack.cs" />
     <Compile Include="src\Components\ComponentStackGroup.cs" />
     <Compile Include="src\Components\IronOreComponent.cs" />
-    <Compile Include="src\GameWorldInterface\CellItem.cs" />
-    <Compile Include="src\GameWorldInterface\GameUniverse.cs" />
+    <Compile Include="src\GameWorldComponents\CellItem.cs" />
+    <Compile Include="src\GameWorldComponents\GameUniverse.cs" />
     <Compile Include="src\GameWorldComponents\GameWorld.cs" />
-    <Compile Include="src\GameWorldInterface\GameWorldItem.cs" />
-    <Compile Include="src\GameWorldInterface\Item.cs" />
+    <Compile Include="src\GameWorldComponents\GameWorldItem.cs" />
+    <Compile Include="src\GameWorldComponents\Item.cs" />
     <Compile Include="src\Movables\Movable.cs" />
-    <Compile Include="src\GameWorldInterface\MovableItem.cs" />
+    <Compile Include="src\GameWorldComponents\MovableItem.cs" />
     <Compile Include="src\Movables\MovableType.cs" />
     <Compile Include="src\GameWorldComponents\Structure.cs" />
-    <Compile Include="src\GameWorldInterface\StructureItem.cs" />
+    <Compile Include="src\GameWorldComponents\StructureItem.cs" />
     <Compile Include="src\GameWorldComponents\StructureType.cs" />
-    <Compile Include="src\IModelAbstractionLayer.cs" />
     <Compile Include="src\MapModelComponents\Boundary.cs" />
     <Compile Include="src\MapModelComponents\CellInfo.cs" />
     <Compile Include="src\MapModelComponents\Coordinate.cs" />
@@ -101,6 +107,7 @@
     <Compile Include="src\Requirements\IRequirement.cs" />
     <Compile Include="src\Requirements\RequirementContainer.cs" />
     <Compile Include="src\Requirements\RequirementException.cs" />
+    <Compile Include="src\Requirements\RequirementHelper.cs" />
     <Compile Include="src\Tasks\TaskActionEventHandler.cs" />
     <Compile Include="src\Requirements\WorkRequirement.cs" />
     <Compile Include="src\Tasks\ITaskAction.cs" />

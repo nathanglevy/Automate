@@ -29,7 +29,7 @@ namespace Automate.Model.Requirements
             return IsSatisfied;
         }
 
-        public void AttachAction(TaskAction taskAction)
+        public void AttachAction(ITaskAction taskAction)
         {
             if (!CanAttachToAction(taskAction))
                 throw new TaskActionException("Cannot attatch task action to this type of requirement");
@@ -37,7 +37,7 @@ namespace Automate.Model.Requirements
             taskAction.Completed += OnTaskCompleted;
         }
 
-        public void DettachAction(TaskAction taskAction)
+        public void DettachAction(ITaskAction taskAction)
         {
             if (!_taskActions.Contains(taskAction))
                 throw new TaskActionException("Cannot detatch task because it is not attached");
@@ -50,6 +50,6 @@ namespace Automate.Model.Requirements
             DettachAction(sender as TaskAction);
         }
 
-        public abstract bool CanAttachToAction(TaskAction taskAction);
+        public abstract bool CanAttachToAction(ITaskAction taskAction);
     }
 }

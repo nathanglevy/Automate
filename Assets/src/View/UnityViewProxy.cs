@@ -13,7 +13,6 @@ using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
-using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using Automate.Model.Tasks;
@@ -276,10 +275,10 @@ namespace src.View
                 
 
                 var movementPathWithLowestCostToCoordinate = gameWorld.GetMovementPathWithLowestCostToCoordinate(
-                    movableListInCoordinate.Select(p => p.CurrentCoordiate).ToList(), _GoldCoordinate);
-                var targetMovable = movableListInCoordinate.First(p => p.CurrentCoordiate.Equals(movementPathWithLowestCostToCoordinate.GetStartCoordinate()));
+                    movableListInCoordinate.Select(p => p.CurrentCoordinate).ToList(), _GoldCoordinate);
+                var targetMovable = movableListInCoordinate.First(p => p.CurrentCoordinate.Equals(movementPathWithLowestCostToCoordinate.GetStartCoordinate()));
                 gameWorld.TaskDelegator.AssignTask(targetMovable.Guid, PickupAndDeliverTask);
-                gameWorld.SelectMovableItems(new List<MovableItem>() { targetMovable });
+                gameWorld.SelectMovableItems(new List<IMovable>() { targetMovable });
 
                 
                 GameViewBase.Controller.Handle(new TaskContainer(PickupAndDeliverTask) { OnCompleteDelegate = TaskFinished });

@@ -1,6 +1,5 @@
 ﻿using System;
 using Automate.Model.GameWorldComponents;
-using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using Automate.Model.PathFinding;
@@ -10,7 +9,7 @@ namespace AutomateTests.Model.GameWorldInterface {
     [TestClass()]
     public class TestMovableItem
     {
-        private GameWorldItem _gameWorldItem;
+        private IGameWorld _gameWorldItem;
         [TestInitialize]
         public void TestInitialize() {
             _gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(10, 10, 2));
@@ -18,25 +17,25 @@ namespace AutomateTests.Model.GameWorldInterface {
 
         [TestMethod()]
         public void TestMovableNew_ExpectNotNull() {
-            MovableItem movable = _gameWorldItem.CreateMovable(new Coordinate(0,0,0), MovableType.NormalHuman);
+            IMovable movable = _gameWorldItem.CreateMovable(new Coordinate(0,0,0), MovableType.NormalHuman);
             Assert.IsNotNull(movable);
         }
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentNullException))]
         public void TestMovableNew_WithNull_ExpectArgumentNullException() {
-            MovableItem movable = _gameWorldItem.CreateMovable(null, MovableType.NormalHuman);
+            IMovable movable = _gameWorldItem.CreateMovable(null, MovableType.NormalHuman);
         }
 
         [TestMethod()]
         public void TestIsInMotion_ExpectNotInMotion() {
-            MovableItem movable = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
+            IMovable movable = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
             Assert.IsFalse(movable.IsInMotion());
         }
 
         [TestMethod()]
         public void TestIsInMotion_ExpectInMotionToggle() {
-            MovableItem movable = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
+            IMovable movable = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
             Assert.IsFalse(movable.IsInMotion());
             movable.IssueMoveCommand(new Coordinate(2,2,0));
             Assert.IsTrue(movable.IsInMotion());
@@ -47,7 +46,7 @@ namespace AutomateTests.Model.GameWorldInterface {
 
         [TestMethod()]
         public void TestGetNextMovement() {
-            MovableItem movable = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
+            IMovable movable = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
             movable.IssueMoveCommand(new Coordinate(3, 3, 0));
             Assert.AreEqual(movable.NextMovement, new Movement(1, 1, 0, 1));
             movable.MoveToNext();
@@ -62,7 +61,7 @@ namespace AutomateTests.Model.GameWorldInterface {
 
         [TestMethod()]
         public void TestGetNextCoordinate_ExpectCorrectValues() {
-            MovableItem movable = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
+            IMovable movable = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
             movable.IssueMoveCommand(new Coordinate(3,3,0));
             Assert.AreEqual(movable.NextCoordinate, new Coordinate(1, 1, 0));
             movable.MoveToNext();
@@ -76,13 +75,13 @@ namespace AutomateTests.Model.GameWorldInterface {
 
         [TestMethod()]
         public void TestMoveToNext_NoPathSet_ExpectSuccess() {
-            MovableItem movable = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
+            IMovable movable = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
             movable.MoveToNext();
         }
 
         [TestMethod()]
         public void TestIssuePath_NoExistingPath_ExpectSuccessAndFalseReturn() {
-            MovableItem movable = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
+            IMovable movable = _gameWorldItem.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
             bool success = movable.IssueMoveCommand(new Coordinate(0, 0, 1));
             movable.MoveToNext();
             Assert.IsFalse(success);

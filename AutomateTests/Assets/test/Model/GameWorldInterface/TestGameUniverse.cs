@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Automate.Model.GameWorldComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 
 namespace AutomateTests.test.Model.GameWorldInterface {
@@ -35,7 +35,7 @@ namespace AutomateTests.test.Model.GameWorldInterface {
 
         [TestMethod()]
         public void TestGetGameWorldItemsInUniverse_ExpectCorrectValues() {
-            HashSet<GameWorldItem> gameWorldIdList = new HashSet<GameWorldItem>
+            HashSet<IGameWorld> gameWorldIdList = new HashSet<IGameWorld>
             {
                 GameUniverse.CreateGameWorld(new Coordinate(10, 10, 2)),
                 GameUniverse.CreateGameWorld(new Coordinate(10, 10, 2)),
@@ -53,8 +53,8 @@ namespace AutomateTests.test.Model.GameWorldInterface {
 
         [TestMethod()]
         public void TestGetGameWorldItemById_ExpectCorrectValue() {
-            GameWorldItem gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(10, 10, 2));
-            GameWorldItem gameWorldItem2 = GameUniverse.GetGameWorldItemById(gameWorldItem.Guid);
+            IGameWorld gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(10, 10, 2));
+            IGameWorld gameWorldItem2 = GameUniverse.GetGameWorldItemById(gameWorldItem.Guid);
             Assert.AreEqual(gameWorldItem,gameWorldItem2);
         }
     }

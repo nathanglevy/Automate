@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Automate.Model.Tasks;
 
 namespace Automate.Model.Components
 {

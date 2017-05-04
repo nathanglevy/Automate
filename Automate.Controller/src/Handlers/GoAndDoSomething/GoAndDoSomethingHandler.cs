@@ -5,7 +5,7 @@ using Automate.Controller.Handlers.GoAndPickUp;
 using Automate.Controller.Handlers.MoveHandler;
 using Automate.Controller.Interfaces;
 using Automate.Model.Components;
-using Automate.Model.GameWorldInterface;
+using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 
 namespace Automate.Controller.Handlers.GoAndDoSomething
@@ -26,7 +26,8 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
             // Get the World Item
             var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
 
-            var movableItem = gameWorldItem.GetMovableItem(goAndDoSomethingAction.MovableGuid);
+            // TODO: Check With Naph, if Searching a non existing movable, what to expect
+            var movableItem = gameWorldItem.GetMovable(goAndDoSomethingAction.MovableGuid);
 
             // Get the target component Stack
             var componentCoordinate = GetComponentCoordinate(goAndDoSomethingAction, movableItem);
@@ -71,7 +72,7 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
         /// <param name="goAndDoSomethingAction"></param>
         /// <param name="movableItem"></param>
         /// <returns>Coordinate of Target</returns>
-        protected abstract Coordinate GetGoDestination(GoAndDoSomethingAction goAndDoSomethingAction, MovableItem movableItem);
+        protected abstract Coordinate GetGoDestination(GoAndDoSomethingAction goAndDoSomethingAction, IMovable movableItem);
 
         /// <summary>
         /// Method which called after movable gets to it's target, at this method we need to implement the "DO"
@@ -85,7 +86,7 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
         /// <param name="goAndDoSomethingAction"></param>
         /// <param name="movableItem"></param>
         /// <returns></returns>
-        protected abstract Coordinate GetComponentCoordinate(GoAndDoSomethingAction goAndDoSomethingAction, MovableItem movableItem);
+        protected abstract Coordinate GetComponentCoordinate(GoAndDoSomethingAction goAndDoSomethingAction, IMovable movableItem);
 
         /// <summary>
         /// method let the derived class Assign incming/outcoming and any on the target compoenent stack
@@ -93,7 +94,7 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
         /// <param name="targetComponentStack"></param>
         /// <param name="goAndDeliverAction"></param>
         /// <param name="movable"></param>
-        protected abstract void AssignComponentStack(ComponentStack targetComponentStack, GoAndDoSomethingAction goAndDeliverAction, MovableItem movable);
+        protected abstract void AssignComponentStack(ComponentStack targetComponentStack, GoAndDoSomethingAction goAndDeliverAction, IMovable movable);
 
 
         /// <summary>

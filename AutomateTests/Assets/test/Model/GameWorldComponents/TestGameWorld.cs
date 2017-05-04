@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
-using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using Automate.Model.PathFinding;
@@ -113,8 +112,8 @@ namespace AutomateTests.Model.GameWorldComponents {
         [TestMethod()]
         public void TestGetMovablesInBoundary() {
             GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
-            MovableItem movable = gameWorld.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
-            Assert.IsTrue(gameWorld.GetMovableListInBoundary(gameWorld.GetWorldBoundary()).SequenceEqual(new List<MovableItem>() { movable }));
+            IMovable movable = gameWorld.CreateMovable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
+            Assert.IsTrue(gameWorld.GetMovableListInBoundary(gameWorld.GetWorldBoundary()).SequenceEqual(new List<IMovable>() { movable }));
         }
 
         [TestMethod()]
@@ -243,10 +242,10 @@ namespace AutomateTests.Model.GameWorldComponents {
         [TestMethod()]
         public void TestGetGetMovableItemsInMotion_ExpectSuccess() {
             GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
-            MovableItem movable1 = gameWorld.CreateMovable(new Coordinate(1, 1, 1), MovableType.NormalHuman);
-            MovableItem movable2 = gameWorld.CreateMovable(new Coordinate(1, 1, 1), MovableType.NormalHuman);
+            IMovable movable1 = gameWorld.CreateMovable(new Coordinate(1, 1, 1), MovableType.NormalHuman);
+            IMovable movable2 = gameWorld.CreateMovable(new Coordinate(1, 1, 1), MovableType.NormalHuman);
             movable1.IssueMoveCommand(new Coordinate(2, 2, 1));
-            Assert.AreEqual(movable1.Guid, gameWorld.GetMovableItemsInMotion().First().Guid);
+            Assert.AreEqual(movable1.Guid, gameWorld.GetMovablesInMotion().First().Guid);
         }
 
         [TestMethod()]

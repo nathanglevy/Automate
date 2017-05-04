@@ -119,7 +119,7 @@ namespace AutomateTests.Model.GameWorldComponents {
         {
             Movable movable = new Movable(new Coordinate(0, 0, 0), MovableType.NormalHuman);
             movable.StartTransitionToNext();
-            Assert.IsFalse(movable.IsTransitioning());
+            Assert.IsFalse(movable.IsTransitioning);
 
         }
 

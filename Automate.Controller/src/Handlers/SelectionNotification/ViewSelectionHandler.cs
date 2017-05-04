@@ -2,7 +2,7 @@
 using Automate.Controller.Abstracts;
 using Automate.Controller.Actions;
 using Automate.Controller.Interfaces;
-using Automate.Model.GameWorldInterface;
+using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 
 namespace Automate.Controller.Handlers.SelectionNotification
@@ -14,7 +14,7 @@ namespace Automate.Controller.Handlers.SelectionNotification
             ViewSelectionNotification notification = args as ViewSelectionNotification;
 
             var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
-            List<MovableItem> selectedMovables = gameWorldItem.GetMovableListInBoundary(new Model.MapModelComponents.Boundary(notification.UpperLeft, notification.BottomRight));
+            List<IMovable> selectedMovables = gameWorldItem.GetMovableListInBoundary(new Model.MapModelComponents.Boundary(notification.UpperLeft, notification.BottomRight));
             gameWorldItem.SelectMovableItems(selectedMovables);
 
             var selectedMovableItemList = gameWorldItem.GetSelectedMovableItemList();
@@ -22,7 +22,7 @@ namespace Automate.Controller.Handlers.SelectionNotification
             List<MasterAction> actions = new List<MasterAction>();
             foreach (var movableItem in selectedMovables) 
             {
-                var selectPlayer = new SelectMovableAction(movableItem.CurrentCoordiate, movableItem.Guid.ToString());
+                var selectPlayer = new SelectMovableAction(movableItem.CurrentCoordinate, movableItem.Guid.ToString());
                 actions.Add(selectPlayer);
             }
             return new HandlerResult(actions);

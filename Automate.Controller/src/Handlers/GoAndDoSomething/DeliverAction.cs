@@ -17,8 +17,6 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
             this.DeliveryCoordinate = deliveryCoordinate;
         }
 
-        public Guid TargetId { get; }
-
         public event ControllerNotification OnComplete;
     }
 }

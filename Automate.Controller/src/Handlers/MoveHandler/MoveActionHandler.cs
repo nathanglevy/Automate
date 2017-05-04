@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Actions;
 using Automate.Controller.Interfaces;
-using Automate.Model.GameWorldInterface;
+using Automate.Model.GameWorldComponents;
 
 namespace Automate.Controller.Handlers.MoveHandler
 {
@@ -30,7 +30,7 @@ namespace Automate.Controller.Handlers.MoveHandler
 
                 // get the movableItem from model
                 var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
-                var movableItem = gameWorldItem.GetMovableItem(moveAction.TargetId);
+                var movableItem = gameWorldItem.GetMovable(moveAction.TargetId);
 
                 // capture InMotion State before moving to Next
                 var wasInMotion = movableItem.IsInMotion();
@@ -62,7 +62,7 @@ namespace Automate.Controller.Handlers.MoveHandler
                 if (wasInMotion && !movableItem.IsInMotion()) 
                 {
                     //  it's the Last Action
-                    var moveToNext = new MoveAction(movableItem.CurrentCoordiate, movableItem.EffectiveCoordinate,
+                    var moveToNext = new MoveAction(movableItem.CurrentCoordinate, movableItem.EffectiveCoordinate,
                         movableItem.Guid.ToString())
                     {
                         NeedAcknowledge = true,
@@ -78,7 +78,7 @@ namespace Automate.Controller.Handlers.MoveHandler
                 }
 
                 // If Target == Current -- Movable reached TARGET
-                if (movableItem.CurrentCoordiate == moveAction.To)
+                if (movableItem.CurrentCoordinate == moveAction.To)
                 {
                     Console.Out.WriteLine(String.Format("Player {0} reached the Target - Good Job :-)",
                         movableItem.Guid.ToString()));

@@ -8,7 +8,6 @@ using Automate.Controller.Handlers.SelectionNotification;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 using Automate.Model.GameWorldComponents;
-using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using AutomateTests.Mocks;
@@ -69,7 +68,7 @@ namespace AutomateTests.test.Controller
             var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
             var movableItem = gameWorldItem.CreateMovable(new Coordinate(3, 3, 0), MovableType.NormalHuman);
             var movableItem2 = gameWorldItem.CreateMovable(new Coordinate(7, 3, 0), MovableType.NormalHuman);
-            gameWorldItem.SelectMovableItems(new List<MovableItem>() { movableItem , movableItem2});
+            gameWorldItem.SelectMovableItems(new List<IMovable>() { movableItem , movableItem2});
             return gameWorldItem.Guid;
         }
 

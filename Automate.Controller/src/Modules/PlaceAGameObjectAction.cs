@@ -1,6 +1,6 @@
 using System;
 using Automate.Controller.Abstracts;
-using Automate.Model.GameWorldInterface;
+using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 
 namespace Automate.Controller.Modules

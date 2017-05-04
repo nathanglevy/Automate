@@ -3,7 +3,7 @@ using Automate.Controller.Abstracts;
 using Automate.Controller.Handlers.GoAndDoSomething;
 using Automate.Controller.Interfaces;
 using Automate.Model.Components;
-using Automate.Model.GameWorldInterface;
+using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 
 namespace Automate.Controller.Handlers.GoAndPickUp
@@ -29,8 +29,8 @@ namespace Automate.Controller.Handlers.GoAndPickUp
             var goAndPickUpAction = GetGoAndDoActionByMasterId(modelAction);
 
             var gameWorld = GameUniverse.GetGameWorldItemById(args.Utils.GameWorldId);
-            var movableItem = gameWorld.GetMovableItem(goAndPickUpAction.MovableGuid);
- 
+            var movableItem = gameWorld.GetMovable(goAndPickUpAction.MovableGuid);
+
             var pickUpAction = new PickUpAction(ComponentType.IronOre, GetComponentCoordinate(goAndPickUpAction, movableItem), goAndPickUpAction.Amount, goAndPickUpAction.MovableGuid)
             {
                 OnCompleteDelegate = AcknowledgeGoAndDoIsOver,
@@ -40,17 +40,17 @@ namespace Automate.Controller.Handlers.GoAndPickUp
             args.Utils.InvokeHandler(pickUpAction);
         }
 
-        protected override void AssignComponentStack(ComponentStack targetComponentStack, GoAndDoSomethingAction goAndDeliverAction, MovableItem movable)
+        protected override void AssignComponentStack(ComponentStack targetComponentStack, GoAndDoSomethingAction goAndDeliverAction, IMovable movable)
         {
             targetComponentStack.AssignOutgoingAmount(goAndDeliverAction.MovableGuid, goAndDeliverAction.Amount);
         }
 
-        protected override Coordinate GetGoDestination(GoAndDoSomethingAction goAndDoSomethingAction, MovableItem movableItem)
+        protected override Coordinate GetGoDestination(GoAndDoSomethingAction goAndDoSomethingAction, IMovable movableItem)
         {
             return goAndDoSomethingAction.TargetDestCoordinate;
         }
 
-        protected override Coordinate GetComponentCoordinate(GoAndDoSomethingAction goAndDoSomethingAction, MovableItem movableItem)
+        protected override Coordinate GetComponentCoordinate(GoAndDoSomethingAction goAndDoSomethingAction, IMovable movableItem)
         {
             return goAndDoSomethingAction.TargetDestCoordinate;
         }

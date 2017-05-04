@@ -1,23 +1,19 @@
 ﻿using System;
-using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 
-namespace Automate.Model.GameWorldInterface
+namespace Automate.Model.GameWorldComponents
 {
     public class CellItem : Item
     {
-        private GameWorld _gameWorld;
-
-        public CellItem(GameWorld gameWorld, Coordinate cellInfoCoordinate)
+        private IGameWorld _gameWorld;
+        public override ItemType ItemType { get; } = ItemType.Cell;
+        public CellItem(IGameWorld gameWorld, Coordinate cellInfoCoordinate)
         {
             _gameWorld = gameWorld;
-            Type = ItemType.Cell;
             Coordinate = cellInfoCoordinate;
-            Guid = Guid.NewGuid();
         }
 
         public override Coordinate Coordinate { get; }
-
 
         public override bool Equals(Object obj) {
             // Check for null values and compare run-time types.

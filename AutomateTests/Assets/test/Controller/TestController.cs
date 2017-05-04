@@ -11,7 +11,6 @@ using Automate.Controller.Modules;
 using Automate.Model;
 using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
-using Automate.Model.GameWorldInterface;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using Automate.Model.Tasks;
@@ -541,7 +540,7 @@ namespace AutomateTests.test.Controller
             //var moveAction0Result = gameController.Handle(moveAction0);
 
 
-            Assert.AreEqual(new Coordinate(2, 2, 0), gameWorld.GetMovableItem(movableItem.Guid).CurrentCoordiate);
+            Assert.AreEqual(new Coordinate(2, 2, 0), gameWorld.GetMovable(movableItem.Guid).CurrentCoordinate);
             Assert.IsTrue(_taskCompleteFired);
             Assert.AreEqual(10, ironat330.CurrentAmount);
             Assert.AreEqual(30, ironat000.CurrentAmount);

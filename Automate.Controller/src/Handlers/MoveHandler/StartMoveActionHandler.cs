@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Actions;
 using Automate.Controller.Interfaces;
-using Automate.Model.GameWorldInterface;
+using Automate.Model.GameWorldComponents;
 
 namespace Automate.Controller.Handlers.MoveHandler
 {
@@ -23,7 +23,7 @@ namespace Automate.Controller.Handlers.MoveHandler
             var gameWorld = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
 
             // Get the Movable
-            var movableItem = gameWorld.GetMovableItem(startMoveAction.TargetId);
+            var movableItem = gameWorld.GetMovable(startMoveAction.TargetId);
 
 
             var MovableAlreadyInMotion = movableItem.IsInMotion();
@@ -35,7 +35,7 @@ namespace Automate.Controller.Handlers.MoveHandler
                 return new HandlerResult(new List<MasterAction>());
 
             // create First Move and Send To View
-            var firstMoveAction = new MoveAction(movableItem.NextCoordinate, movableItem.CurrentCoordiate,
+            var firstMoveAction = new MoveAction(movableItem.NextCoordinate, movableItem.CurrentCoordinate,
                 movableItem.Guid)
             {
                 Duration = new TimeSpan(0, 0, 0, 0, (int)(movableItem.NextMovementDuration * 1000 / _multplier)),

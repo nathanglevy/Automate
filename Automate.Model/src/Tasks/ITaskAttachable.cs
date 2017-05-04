@@ -5,9 +5,9 @@ namespace Automate.Model.Tasks
 {
     public interface ITaskAttachable
     {
-        void AttachAction(TaskAction taskAction);
-        void DettachAction(TaskAction taskAction);
-        bool CanAttachToAction(TaskAction taskAction);
+        void AttachAction(ITaskAction taskAction);
+        void DettachAction(ITaskAction taskAction);
+        bool CanAttachToAction(ITaskAction taskAction);
         void OnTaskCompleted(object sender, TaskActionEventArgs e);
     }
 }

@@ -5,7 +5,7 @@ using Automate.Controller.Handlers;
 using Automate.Controller.Handlers.GoAndDoSomething;
 using Automate.Controller.Interfaces;
 using Automate.Model.Components;
-using Automate.Model.GameWorldInterface;
+using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using Automate.Model.Tasks;

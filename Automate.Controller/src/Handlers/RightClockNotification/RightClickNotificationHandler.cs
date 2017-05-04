@@ -7,7 +7,6 @@ using Automate.Controller.Handlers.MoveHandler;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 using Automate.Model.GameWorldComponents;
-using Automate.Model.GameWorldInterface;
 using UnityEngine;
 
 namespace Automate.Controller.Handlers.RightClockNotification
@@ -31,7 +30,7 @@ namespace Automate.Controller.Handlers.RightClockNotification
 
                 // Get All Selcted Objects
                 var gameWorldItem = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
-                List<MovableItem> selectedMovables = gameWorldItem.GetSelectedMovableItemList();
+                List<IMovable> selectedMovables = gameWorldItem.GetSelectedMovableItemList();
 
                 // iterate over selectable movables and create move actions
                 var masterActions = new List<MasterAction>();

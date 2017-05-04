@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Automate.Model.MapModelComponents;
+using Automate.Model.Tasks;
 
 namespace Automate.Model.Components
 {
-    public class ComponentStack
+    public class ComponentStack : ITaskAttachable
     {
         public Guid Guid { get; }
         public Component ComponentType { get; }
@@ -18,10 +19,15 @@ namespace Automate.Model.Components
         public int RemainingAmountForIncoming => MaxAmountInStack - CurrentAmount - IncomingAllocatedAmount;
         public int OutgoingAllocatedAmount => _outgoingAllocations.Values.Sum();
         public int IncomingAllocatedAmount => _incomingAllocations.Values.Sum();
+        public int RemainingAmountForTaskOutgoing => CurrentAmount - OutgoingTaskAllocatedAmount;
+        public int RemainingAmountForTaskIncoming => MaxAmountInStack - CurrentAmount - IncomingTaskAllocatedAmount;
+        public int OutgoingTaskAllocatedAmount => _taskActions.Where(item => item.TaskActionType == TaskActionType.PickupTask).Sum(item => item.Amount);
+        public int IncomingTaskAllocatedAmount => _taskActions.Where(item => item.TaskActionType == TaskActionType.DeliveryTask).Sum(item => item.Amount);
         public int StackMax { get; set; } = 2000;
         public int MaxAmountInStack => (int) (StackMax / ComponentType.Size);
         private Dictionary<Guid,int> _outgoingAllocations = new Dictionary<Guid, int>();
         private Dictionary<Guid,int> _incomingAllocations = new Dictionary<Guid, int>();
+        private List<ITaskAction> _taskActions = new List<ITaskAction>();
 
         public ComponentStack(Component componentType, int currentAmount)
         {
@@ -138,6 +144,35 @@ namespace Automate.Model.Components
         {
             if (amount < 0)
                 throw new ArgumentException("Method does not accept a negative currentAmount");
+        }
+
+        public void AttachAction(ITaskAction taskAction)
+        {
+            if (!CanAttachToAction(taskAction))
+                throw new TaskActionException("Cannot attach this type of task action to component stack");
+            if (_taskActions.Contains(taskAction))
+                throw new TaskActionException("This task action is already attached");
+            _taskActions.Add(taskAction);
+            taskAction.Completed += OnTaskCompleted;
+        }
+
+        public void DettachAction(ITaskAction taskAction)
+        {
+            if (!_taskActions.Contains(taskAction))
+                throw new TaskActionException("This task action is not attached");
+            _taskActions.Remove(taskAction);
+            taskAction.Completed -= OnTaskCompleted;
+        }
+
+        public bool CanAttachToAction(ITaskAction taskAction)
+        {
+            return taskAction.TaskActionType == TaskActionType.DeliveryTask ||
+                   taskAction.TaskActionType == TaskActionType.PickupTask;
+        }
+
+        public void OnTaskCompleted(object sender, TaskActionEventArgs e)
+        {
+            DettachAction(sender as ITaskAction);
         }
     }
 }

@@ -122,7 +122,7 @@ namespace Automate.Model.Components.Tests {
         public void TestAssignIncomingAmount_AssignOverMax_ExpectArgumentOutOfRangeException() {
             ComponentStack componentStack = new ComponentStack(new IronOreComponent(), 30);
             Guid targetGuid = Guid.NewGuid();
-            componentStack.AssignIncomingAmount(targetGuid, 101);
+            componentStack.AssignIncomingAmount(targetGuid, 201);
             Assert.AreEqual(componentStack.IncomingAllocatedAmount, 10);
         }
 
