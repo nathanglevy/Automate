@@ -9,13 +9,9 @@ namespace Automate.Model.StructureComponents {
         Boundary Boundary { get; }
         ComponentStackGroup ComponentStackGroup { get; }
         Coordinate Coordinate { get; }
-        RequirementJob CurrentJob { get; set; }
         Coordinate Dimensions { get; }
         Guid Guid { get; }
-        bool HasActiveJob { get; }
-        bool HasCompletedJob { get; }
         bool IsStructureComplete { get; }
         StructureType StructureType { get; }
-        bool HasJobInProgress { get; }
     }
 }

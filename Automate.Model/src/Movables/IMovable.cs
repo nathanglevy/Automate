@@ -15,7 +15,7 @@ namespace Automate.Model.Movables {
         Coordinate NextCoordinate { get; }
         Movement NextMovement { get; }
         double NextMovementDuration { get; }
-        double Speed { get; set; }
+        float Speed { get; set; }
 
         void DeliverToComponentStackGroup(ComponentStackGroup deliverToComponentStackGroup, Component component, int amount);
         bool Equals(object obj);

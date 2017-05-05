@@ -19,7 +19,6 @@ namespace Automate.Model.Movables {
         private bool _isPendingNewPath;
         private MovementPath _pendingNewPath;
         private MovementPath _movementPath;
-        private double _speed;
         private readonly Object AccessLock = new Object();
         private List<Task> _taskList = new List<Task>();
         public ComponentStackGroup ComponentStackGroup { get; } = new ComponentStackGroup();
@@ -30,8 +29,8 @@ namespace Automate.Model.Movables {
         public Coordinate EffectiveCoordinate => GetEffectiveCoordinate();
         public Coordinate NextCoordinate => GetNextCoordinate();
         public Movement NextMovement => GetNextMovement();
-        public double NextMovementDuration => GetNextMovement().GetMoveCost() / Speed;
-        public StructureAttribute StructureAttribute { get; } = new StructureAttribute();
+        public double NextMovementDuration => GetNextMovement().GetMoveCost() / MovableCapabilities.MovementSpeed;
+        public MovableCapabilities MovableCapabilities { get; } = new MovableCapabilities();
 
         public event PathRequirementHandler PathRequired;
 
@@ -53,12 +52,12 @@ namespace Automate.Model.Movables {
             Speed = 1;
         }
 
-        public double Speed {
-            get { return _speed; }
+        public float Speed {
+            get { return MovableCapabilities.MovementSpeed; }
             set {
                 if (value <= 0)
                     throw new ArgumentException("cannot set speed below 0");
-                _speed = value;
+                MovableCapabilities.MovementSpeed = value;
             }
         }
 
