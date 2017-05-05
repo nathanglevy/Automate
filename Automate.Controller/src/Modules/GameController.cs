@@ -14,8 +14,11 @@ using Automate.Controller.Handlers.TaskActionHandler;
 using Automate.Controller.Handlers.TaskHandler;
 using Automate.Controller.Interfaces;
 using Automate.Model;
+using Automate.Model.CellComponents;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
+using Automate.Model.Movables;
+using Automate.Model.StructureComponents;
 
 namespace Automate.Controller.Modules
 {

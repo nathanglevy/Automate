@@ -4,7 +4,7 @@
     {
         PickupTask,
         DeliveryTask,
-        BuildTask,
+        //BuildTask,
         WorkTask,
         GenericTask
     }

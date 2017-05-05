@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Automate.Model.CellComponents;
 using Automate.Model.Components;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using Automate.Model.PathFinding;
 using Automate.Model.Requirements;
+using Automate.Model.StructureComponents;
 using JetBrains.Annotations;
 using Automate.Model.Tasks;
 

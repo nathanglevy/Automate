@@ -47,8 +47,6 @@ namespace Automate.Controller.Handlers.TaskActionHandler
 
                     };
                     return new HandlerResult(new List<MasterAction>() { goAndDeliverAction }) { IsInternal = true };
-                case TaskActionType.BuildTask:
-                    break;
                 case TaskActionType.WorkTask:
                     break;
                 default:

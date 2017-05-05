@@ -249,6 +249,25 @@ namespace AutomateTests.Model.GameWorldComponents {
         }
 
         [TestMethod()]
+        public void TestGetSelectedMovableItemList_ExpectSuccess() {
+            GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
+            IMovable movable1 = gameWorld.CreateMovable(new Coordinate(1, 1, 1), MovableType.NormalHuman);
+            IMovable movable2 = gameWorld.CreateMovable(new Coordinate(1, 1, 1), MovableType.NormalHuman);
+            gameWorld.SelectMovableItems(new List<IMovable>() { movable1, movable2});
+            Assert.AreEqual(movable1.Guid, gameWorld.GetSelectedMovableItemList().First().Guid);
+        }
+
+        [TestMethod()]
+        public void TestGetMovableList_ExpectSuccess() {
+            GameWorld gameWorld = new GameWorld(new Coordinate(3, 3, 3));
+            IMovable movable1 = gameWorld.CreateMovable(new Coordinate(1, 1, 1), MovableType.NormalHuman);
+            IMovable movable2 = gameWorld.CreateMovable(new Coordinate(1, 1, 1), MovableType.NormalHuman);
+            Assert.AreEqual(2, gameWorld.GetMovableList().Count);
+            Assert.AreEqual(movable1.Guid, gameWorld.GetMovableList()[0].Guid);
+            Assert.AreEqual(movable2.Guid, gameWorld.GetMovableList()[1].Guid);
+        }
+
+        [TestMethod()]
         public void IMPLEMENT_PATH_AND_RECALC_TESTS() {
             throw new NotImplementedException();
         }

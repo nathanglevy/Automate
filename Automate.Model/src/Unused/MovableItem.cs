@@ -178,3 +178,7 @@
 //        public override ItemType Type => ItemType.Movable;
 //    }
 //}
+
+namespace Automate.Model.Unused
+{
+}

@@ -36,18 +36,22 @@
 //            _gameWorld.GetStructure(Guid).RemoveStack(componentType);
 //        }
 
-        //        public override bool Equals(Object obj) {
-        //            // Check for null values and compare run-time types.
-        //            if (obj == null || GetType() != obj.GetType())
-        //                return false;
-        //
-        //
-        //            StructureItem movableItem = (StructureItem)obj;
-        //            return (Guid == movableItem.Guid);
-        //        }
-        //
-        //        public override int GetHashCode() {
-        //            return Guid.GetHashCode();
-        //        }
+//        public override bool Equals(Object obj) {
+//            // Check for null values and compare run-time types.
+//            if (obj == null || GetType() != obj.GetType())
+//                return false;
+//
+//
+//            StructureItem movableItem = (StructureItem)obj;
+//            return (Guid == movableItem.Guid);
+//        }
+//
+//        public override int GetHashCode() {
+//            return Guid.GetHashCode();
+//        }
 //    }
 //}
+
+namespace Automate.Model.Unused
+{
+}

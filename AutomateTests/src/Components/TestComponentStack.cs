@@ -1,11 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
 using Automate.Model.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Automate.Model.MapModelComponents;
+using Automate.Model.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Automate.Model.Components.Tests {
+namespace AutomateTests.Components {
     [TestClass()]
     public class TestComponentStack {
 
@@ -115,6 +114,22 @@ namespace Automate.Model.Components.Tests {
             Guid targetGuid = Guid.NewGuid();
             componentStack.AssignIncomingAmount(targetGuid, 10);
             Assert.AreEqual(componentStack.IncomingAllocatedAmount, 10);
+        }
+
+        [TestMethod()]
+        public void TestTotalIncomingSpace_ExpectCorrectValue() {
+            ComponentStack componentStack = new ComponentStack(Component.IronIngot, 30);
+            Guid targetGuid = Guid.NewGuid();
+            componentStack.AssignIncomingAmount(targetGuid, 10);
+            Assert.AreEqual(componentStack.TotalIncomingSpace, 10 * Component.IronIngot.Size);
+        }
+
+        [TestMethod()]
+        public void TestTotalIncomingWeight_ExpectCorrectValue() {
+            ComponentStack componentStack = new ComponentStack(new IronOreComponent(), 30);
+            Guid targetGuid = Guid.NewGuid();
+            componentStack.AssignIncomingAmount(targetGuid, 10);
+            Assert.AreEqual(componentStack.TotalIncomingWeight, 10 * Component.IronIngot.Weight);
         }
 
         [TestMethod()]
@@ -230,6 +245,43 @@ namespace Automate.Model.Components.Tests {
             Assert.AreEqual(componentStack.RemainingAmountForOutgoing, 0);
             Assert.AreEqual(componentStack.GetOutgoingAllocatedAmountForGuid(targetGuid), 5);
             Assert.AreEqual(componentStack.GetOutgoingAllocatedAmountForGuid(targetGuid2), 10);
+        }
+
+        [TestMethod()]
+        //[ExpectedException(typeof(ArgumentException))]
+        public void TestAttachAction() {
+            ComponentStack componentStack = new ComponentStack(Component.IronIngot, 10);
+            Guid targetGuid = Guid.NewGuid();
+            DeliverTaskAction deliverTaskAction = new DeliverTaskAction(targetGuid, new ComponentStackGroup(), new Coordinate(0,0,0), Component.IronIngot, 10  );
+            componentStack.AttachAction(deliverTaskAction);
+            Assert.AreEqual(10, componentStack.IncomingTaskAllocatedAmount);
+            Assert.AreEqual(0, componentStack.RemainingAmountForTaskOutgoing);
+            Assert.AreEqual(0, componentStack.OutgoingTaskAllocatedAmount);
+            PickupTaskAction pickupTaskAction = new PickupTaskAction(targetGuid, new ComponentStackGroup(), new Coordinate(0, 0, 0), Component.IronIngot, 10);
+            componentStack.AttachAction(pickupTaskAction);
+            Assert.AreEqual(10, componentStack.OutgoingTaskAllocatedAmount);
+        }
+
+        [TestMethod()]
+        //[ExpectedException(typeof(ArgumentException))]
+        public void TestOnComplete() {
+            ComponentStack componentStack = new ComponentStack(Component.IronIngot, 10);
+            Guid targetGuid = Guid.NewGuid();
+            DeliverTaskAction deliverTaskAction = new DeliverTaskAction(targetGuid, new ComponentStackGroup(), new Coordinate(0, 0, 0), Component.IronIngot, 10);
+            componentStack.AttachAction(deliverTaskAction);
+            Assert.AreEqual(10, componentStack.IncomingTaskAllocatedAmount);
+            deliverTaskAction.OnCompleted();
+            Assert.AreEqual(0, componentStack.IncomingTaskAllocatedAmount);
+        }
+
+        [TestMethod()]
+        public void TestDettachAction() {
+            ComponentStack componentStack = new ComponentStack(Component.IronIngot, 10);
+            Guid targetGuid = Guid.NewGuid();
+            DeliverTaskAction deliverTaskAction = new DeliverTaskAction(targetGuid, new ComponentStackGroup(), new Coordinate(0, 0, 0), Component.IronIngot, 10);
+            componentStack.AttachAction(deliverTaskAction);
+            componentStack.DettachAction(deliverTaskAction);
+            Assert.AreEqual(0, componentStack.IncomingTaskAllocatedAmount);
         }
     }
 }

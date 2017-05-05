@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Handlers;
 using Automate.Controller.Interfaces;
-using AutomateTests.Mocks;
 
-namespace AutomateTests.test.Mocks
+namespace AutomateTests.Mocks
 {
 
     public class MockHandler : Handler<IObserverArgs>

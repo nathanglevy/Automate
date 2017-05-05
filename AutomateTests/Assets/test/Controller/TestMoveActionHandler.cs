@@ -8,9 +8,10 @@ using Automate.Controller.Modules;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
+using Automate.Model.StructureComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.test.Controller
+namespace AutomateTests.Controller
 {
     [TestClass]
     public class TestMoveActionHandler

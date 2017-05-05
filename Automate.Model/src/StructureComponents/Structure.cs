@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Automate.Model.Components;
+using Automate.Model.GameWorldComponents;
+using Automate.Model.Jobs;
 using Automate.Model.MapModelComponents;
-using Automate.Model.Requirements;
-using JetBrains.Annotations;
 
-namespace Automate.Model.GameWorldComponents
+namespace Automate.Model.StructureComponents
 {
     public class Structure : Item, IStructure {
         //TODO: Need to implement this...
@@ -21,6 +19,11 @@ namespace Automate.Model.GameWorldComponents
         public bool HasJobInProgress => HasActiveJob && CurrentJob.PointsOfWorkRemaining > 0;
         public RequirementJob CurrentJob { get; set; } = new RequirementJob(JobType.Idle);
         public bool IsStructureComplete { get; set; }
+        public HashSet<StructureAttribute> StructureAttributes { get; } = new HashSet<StructureAttribute>();
+
+        public void ClearCurrentJob() {
+            CurrentJob = new RequirementJob(JobType.Idle);
+        }
 
         internal Structure(Coordinate coordinate, Coordinate dimensions, StructureType structureType) {
             this.Coordinate = coordinate;

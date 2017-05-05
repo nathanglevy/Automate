@@ -1,10 +1,9 @@
 ﻿using System;
 using Automate.Model.Components;
 using Automate.Model.MapModelComponents;
-using Automate.Model.Movables;
 using Automate.Model.PathFinding;
 
-namespace Automate.Model.GameWorldComponents {
+namespace Automate.Model.Movables {
     public interface IMovable : IPlacable {
         ComponentStackGroup ComponentStackGroup { get; }
         Guid Guid { get; }
@@ -16,7 +15,7 @@ namespace Automate.Model.GameWorldComponents {
         Coordinate NextCoordinate { get; }
         Movement NextMovement { get; }
         double NextMovementDuration { get; }
-        double Speed { get; set; }
+        float Speed { get; set; }
 
         void DeliverToComponentStackGroup(ComponentStackGroup deliverToComponentStackGroup, Component component, int amount);
         bool Equals(object obj);

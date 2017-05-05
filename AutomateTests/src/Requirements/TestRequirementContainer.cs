@@ -1,12 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Automate.Model.Requirements;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using Automate.Model.Components;
+using Automate.Model.Requirements;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Automate.Model.Requirements.Tests {
+namespace AutomateTests.Requirements {
     [TestClass()]
     public class TestRequirementContainer {
         public RequirementContainer requirementContainer;

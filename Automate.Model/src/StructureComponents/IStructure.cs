@@ -1,19 +1,17 @@
 ﻿using System;
 using Automate.Model.Components;
+using Automate.Model.GameWorldComponents;
+using Automate.Model.Jobs;
 using Automate.Model.MapModelComponents;
 
-namespace Automate.Model.GameWorldComponents {
+namespace Automate.Model.StructureComponents {
     public interface IStructure : IJobContainer {
         Boundary Boundary { get; }
         ComponentStackGroup ComponentStackGroup { get; }
         Coordinate Coordinate { get; }
-        RequirementJob CurrentJob { get; set; }
         Coordinate Dimensions { get; }
         Guid Guid { get; }
-        bool HasActiveJob { get; }
-        bool HasCompletedJob { get; }
         bool IsStructureComplete { get; }
         StructureType StructureType { get; }
-        bool HasJobInProgress { get; }
     }
 }

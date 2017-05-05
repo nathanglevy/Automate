@@ -7,6 +7,7 @@ using Automate.Controller.Handlers.MoveHandler;
 using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 using Automate.Model.GameWorldComponents;
+using Automate.Model.Movables;
 using UnityEngine;
 
 namespace Automate.Controller.Handlers.RightClockNotification

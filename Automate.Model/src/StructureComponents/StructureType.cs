@@ -1,4 +1,4 @@
-﻿namespace Automate.Model.GameWorldComponents
+﻿namespace Automate.Model.StructureComponents
 {
     public enum StructureType
     {

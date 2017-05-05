@@ -1,12 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Automate.Model.Tasks;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
 using Automate.Model.MapModelComponents;
+using Automate.Model.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Automate.Model.Tasks.Tests
+namespace AutomateTests.Tasks
 {
     [TestClass()]
     public class TestTaskDelegator

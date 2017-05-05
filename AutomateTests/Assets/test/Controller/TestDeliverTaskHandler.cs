@@ -16,7 +16,7 @@ using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.test.Controller
+namespace AutomateTests.Controller
 {
     [TestClass]
     public class TestDeliverTaskHandler

@@ -1,7 +1,9 @@
 ﻿using System;
+using Automate.Model.GameWorldComponents;
+using Automate.Model.Jobs;
 using Automate.Model.MapModelComponents;
 
-namespace Automate.Model.GameWorldComponents
+namespace Automate.Model.CellComponents
 {
     public class CellItem : Item, ICell
     {
@@ -16,6 +18,11 @@ namespace Automate.Model.GameWorldComponents
         {
             _gameWorld = gameWorld;
             Coordinate = cellInfoCoordinate;
+        }
+
+        public void ClearCurrentJob()
+        {
+            CurrentJob = new RequirementJob(JobType.Idle);
         }
 
         public override Coordinate Coordinate { get; }

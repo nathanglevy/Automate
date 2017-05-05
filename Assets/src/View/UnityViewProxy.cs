@@ -15,6 +15,7 @@ using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
+using Automate.Model.StructureComponents;
 using Automate.Model.Tasks;
 using UnityEditor;
 using UnityEngine;
