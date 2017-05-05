@@ -6,6 +6,7 @@ using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using Automate.Model.PathFinding;
+using Automate.Model.Requirements;
 using Automate.Model.Tasks;
 
 namespace AutomateTests.test.Mocks
@@ -222,6 +223,13 @@ namespace AutomateTests.test.Mocks
         }
 
         public IMovable GetMovable(Guid movableGuid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IRequirementAgent RequirementAgent { get; }
+        public List<ICell> GetCells { get; }
+        public ICell GetCellAtCoordinate(Coordinate coordinate)
         {
             throw new NotImplementedException();
         }

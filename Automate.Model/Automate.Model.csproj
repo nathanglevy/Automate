@@ -72,8 +72,10 @@
     <Compile Include="src\GameWorldComponents\IGameWorld.cs" />
     <Compile Include="src\GameWorldComponents\IMovable.cs" />
     <Compile Include="src\GameWorldComponents\IPlacable.cs" />
+    <Compile Include="src\Jobs\IJobContainer.cs" />
     <Compile Include="src\Jobs\JobType.cs" />
-    <Compile Include="src\Jobs\StructureJob.cs" />
+    <Compile Include="src\Jobs\RequirementJob.cs" />
+    <Compile Include="src\GameWorldComponents\ICell.cs" />
     <Compile Include="src\Movables\PathRequirementHandler.cs" />
     <Compile Include="src\Requirements\BaseRequirement.cs" />
     <Compile Include="src\Requirements\ComponentPickupRequirement.cs" />
@@ -105,9 +107,11 @@
     <Compile Include="src\PathFinding\PathFinderAStar.cs" />
     <Compile Include="src\PathFinding\PathOperationException.cs" />
     <Compile Include="src\Requirements\IRequirement.cs" />
+    <Compile Include="src\Requirements\RequirementAgent.cs" />
     <Compile Include="src\Requirements\RequirementContainer.cs" />
     <Compile Include="src\Requirements\RequirementException.cs" />
-    <Compile Include="src\Requirements\RequirementHelper.cs" />
+    <Compile Include="src\Requirements\IRequirementAgent.cs" />
+    <Compile Include="src\StructureComponents\StructureCost.cs" />
     <Compile Include="src\Tasks\TaskActionEventHandler.cs" />
     <Compile Include="src\Requirements\WorkRequirement.cs" />
     <Compile Include="src\Tasks\ITaskAction.cs" />

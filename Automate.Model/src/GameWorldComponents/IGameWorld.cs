@@ -4,6 +4,7 @@ using Automate.Model.Components;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
 using Automate.Model.PathFinding;
+using Automate.Model.Requirements;
 using Automate.Model.Tasks;
 using JetBrains.Annotations;
 
@@ -12,6 +13,8 @@ namespace Automate.Model.GameWorldComponents
     public interface IGameWorld {
         TaskDelegator TaskDelegator { get; }
         Guid Guid { get; }
+        IRequirementAgent RequirementAgent { get; }
+        List<ICell> GetCells { get; }
 
         /// <summary>Create a new movable character on the map</summary>
         /// <param name="spawnCoordinate">Starting position of spawned character</param>
@@ -148,5 +151,6 @@ namespace Automate.Model.GameWorldComponents
         IStructure GetStructure(Guid structureGuid);
         IMovable GetMovable(Guid movableGuid);
         List<IMovable> GetSelectedMovableItemList();
+        ICell GetCellAtCoordinate(Coordinate coordinate);
     }
 }
