@@ -9,7 +9,7 @@ namespace Automate.Controller.Handlers.TaskHandler
     {
         public Task TargetTask { get; }
 
-        public TaskContainer(Task targetTask) : base(ActionType.DEFAULT)
+        public TaskContainer(Task targetTask) : base(ActionType.Internal)
         {
             TargetTask = targetTask;
         }

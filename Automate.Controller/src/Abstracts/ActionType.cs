@@ -9,6 +9,7 @@
         PlaceGameObject,
         PickUp,
         Deliver,
-        DEFAULT
+        DEFAULT,
+        Internal,
     }
 }

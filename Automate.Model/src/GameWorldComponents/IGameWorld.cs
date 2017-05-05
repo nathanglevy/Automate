@@ -10,7 +10,7 @@ using JetBrains.Annotations;
 
 namespace Automate.Model.GameWorldComponents
 {
-    public interface IGameWorld {
+    public interface  IGameWorld {
         TaskDelegator TaskDelegator { get; }
         Guid Guid { get; }
         IRequirementAgent RequirementAgent { get; }
