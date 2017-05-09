@@ -21,6 +21,10 @@ namespace Automate.Model.Requirements
             return _requirements.Where(item => !item.IsSatisfied).ToList();
         }
 
+        public List<ITransportRequirement> GetIncompleteTransportRequirements() {
+            return _requirements.Where(item => !item.IsSatisfied && (item.RequirementType == RequirementType.ComponentPickup || item.RequirementType == RequirementType.ComponentDelivery)).Select(item => item as ITransportRequirement).ToList();
+        }
+
         public List<IRequirement> GetCompleteRequirements() {
             return _requirements.Where(item => item.IsSatisfied).ToList();
         }
