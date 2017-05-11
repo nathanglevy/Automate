@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Automate.Model.MapModelComponents;
 using Automate.Model.PathFinding;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -88,6 +89,31 @@ namespace AutomateTests.Model.PathFinding {
             mapInfo.FillMapWithCells(new CellInfo(true, 1));
             mapInfo.SetCell(new Coordinate(0, 0, 0), new CellInfo(false, 1));
             MovementPath result = PathFinderAStar.FindShortestPath(mapInfo, new Coordinate(0, 0, 0), new Coordinate(3, 3, 0));
+        }
+
+        [TestMethod()]
+        public void TestFindShortestPath_ToABoundary_ExpectSuccess() {
+            MapInfo mapInfo = new MapInfo(10, 10, 2);
+            mapInfo.FillMapWithCells(new CellInfo(true, 1));
+            mapInfo.SetCell(new Coordinate(2, 2, 0), new CellInfo(false, 1));
+            mapInfo.SetCell(new Coordinate(2, 3, 0), new CellInfo(false, 1));
+            mapInfo.SetCell(new Coordinate(3, 2, 0), new CellInfo(false, 1));
+            mapInfo.SetCell(new Coordinate(3, 3, 0), new CellInfo(false, 1));
+            MovementPath result = PathFinderAStar.FindShortestPath(mapInfo, new List<Coordinate>()
+            { new Coordinate(0,0,0)} , new Boundary(new Coordinate(2,2,0), new Coordinate(3,3,0) ), false );
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(NoPathFoundException))]
+        public void TestFindShortestPath_ToABoundaryWithTargetAccess_ExpectException() {
+            MapInfo mapInfo = new MapInfo(10, 10, 2);
+            mapInfo.FillMapWithCells(new CellInfo(true, 1));
+            mapInfo.SetCell(new Coordinate(2, 2, 0), new CellInfo(false, 1));
+            mapInfo.SetCell(new Coordinate(2, 3, 0), new CellInfo(false, 1));
+            mapInfo.SetCell(new Coordinate(3, 2, 0), new CellInfo(false, 1));
+            mapInfo.SetCell(new Coordinate(3, 3, 0), new CellInfo(false, 1));
+            MovementPath result = PathFinderAStar.FindShortestPath(mapInfo, new List<Coordinate>()
+            { new Coordinate(0,0,0)}, new Boundary(new Coordinate(2, 2, 0), new Coordinate(3, 3, 0)), true);
         }
 
         [TestMethod()]

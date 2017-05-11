@@ -27,21 +27,24 @@ namespace AutomateTests.Tasks
         public void TestIsPendingTasksForDelegation()
         {
             Assert.IsFalse(_taskDelegator.IsPendingTasksForDelegation());
-            _taskDelegator.CreateNewTask();
+            Task newTask = new Task();
+            _taskDelegator.AddAndCommitNewTask(newTask);
             Assert.IsTrue(_taskDelegator.IsPendingTasksForDelegation());
         }
 
         [TestMethod()]
         public void TestAssignTask_ExpectSuccess()
         {
-            Task newTask = _taskDelegator.CreateNewTask();
+            Task newTask = new Task();
+            _taskDelegator.AddAndCommitNewTask(newTask);
             _taskDelegator.AssignTask(Guid.NewGuid(), newTask);
         }
 
         [TestMethod()]
         public void TestAssignTask_ExpectAssignment()
         {
-            Task newTask = _taskDelegator.CreateNewTask();
+            Task newTask = new Task();
+            _taskDelegator.AddAndCommitNewTask(newTask);
             Assert.IsTrue(_taskDelegator.IsPendingTasksForDelegation());
             _taskDelegator.AssignTask(Guid.NewGuid(), newTask);
             Assert.IsFalse(_taskDelegator.IsPendingTasksForDelegation());
@@ -51,7 +54,8 @@ namespace AutomateTests.Tasks
         [ExpectedException(typeof(TaskAssignmentException))]
         public void TestAssignTask_AssignTwice_ExpectTaskAssignmentException()
         {
-            Task newTask = _taskDelegator.CreateNewTask();
+            Task newTask = new Task();
+            _taskDelegator.AddAndCommitNewTask(newTask);
             _taskDelegator.AssignTask(Guid.NewGuid(), newTask);
             _taskDelegator.AssignTask(Guid.NewGuid(), newTask);
         }
@@ -65,7 +69,8 @@ namespace AutomateTests.Tasks
         [TestMethod()]
         public void TestGetDelegatedTasksForGuid_ExpectCorrectValues()
         {
-            Task newTask = _taskDelegator.CreateNewTask();
+            Task newTask = new Task();
+            _taskDelegator.AddAndCommitNewTask(newTask);
             Guid assignee = Guid.NewGuid();
             _taskDelegator.AssignTask(assignee, newTask);
             Assert.AreEqual(newTask, _taskDelegator.GetDelegatedTasksForGuid(assignee).FirstOrDefault());
@@ -74,7 +79,8 @@ namespace AutomateTests.Tasks
         [TestMethod()]
         public void TestGetNextPendingTask_ExpectSuccess()
         {
-            Task newTask = _taskDelegator.CreateNewTask();
+            Task newTask = new Task();
+            _taskDelegator.AddAndCommitNewTask(newTask);
             _taskDelegator.GetNextPendingTask();
         }
 
@@ -88,14 +94,16 @@ namespace AutomateTests.Tasks
         [TestMethod()]
         public void TestGetNextPendingTask_ExpectCorrectValue()
         {
-            Task newTask = _taskDelegator.CreateNewTask();
+            Task newTask = new Task();
+            _taskDelegator.AddAndCommitNewTask(newTask);
             Assert.AreEqual(_taskDelegator.GetNextPendingTask(), newTask);
         }
 
         [TestMethod()]
         public void TestGetNextDelegatedTaskForGuid_ExpectCorrectValue()
         {
-            Task newTask = _taskDelegator.CreateNewTask();
+            Task newTask = new Task();
+            _taskDelegator.AddAndCommitNewTask(newTask);
             Guid assignee = Guid.NewGuid();
             _taskDelegator.AssignTask(assignee, newTask);
             Assert.AreEqual(_taskDelegator.GetNextDelegatedTaskForGuid(assignee), newTask);
@@ -112,16 +120,26 @@ namespace AutomateTests.Tasks
         [TestMethod()]
         public void TestHasDelegatedTasks_ExpectCorrectValue()
         {
-            Task newTask = _taskDelegator.CreateNewTask();
+            Task newTask = new Task();
+            _taskDelegator.AddAndCommitNewTask(newTask);
             Guid assignee = Guid.NewGuid();
             _taskDelegator.AssignTask(assignee, newTask);
             Assert.IsTrue(_taskDelegator.HasDelegatedTasks(assignee));
         }
 
         [TestMethod()]
+        public void TestHasDelegatedTasks_NoTasks_ExpectCorrectValue() {
+            Task newTask = new Task();
+            _taskDelegator.AddAndCommitNewTask(newTask);
+            Guid assignee = Guid.NewGuid();
+            Assert.IsFalse(_taskDelegator.HasDelegatedTasks(assignee));
+        }
+
+        [TestMethod()]
         public void TestComplexTask_ExpectSuccess()
         {
-            Task newTask = _taskDelegator.CreateNewTask();
+            Task newTask = new Task();
+            _taskDelegator.AddAndCommitNewTask(newTask);
             newTask.AddAction(new Coordinate(0, 0, 0), 10);
             newTask.AddAction(new Coordinate(1, 1, 1), 5);
             newTask.AddAction(new Coordinate(1, 2, 1), 5);
@@ -144,7 +162,8 @@ namespace AutomateTests.Tasks
         [TestMethod()]
         public void TestRemoveCompletedTasks_ExpectSuccess()
         {
-            Task newTask = _taskDelegator.CreateNewTask();
+            Task newTask = new Task();
+            _taskDelegator.AddAndCommitNewTask(newTask);
             Guid assignee = Guid.NewGuid();
             _taskDelegator.AssignTask(assignee, newTask);
             Assert.IsTrue(_taskDelegator.HasDelegatedTasks(assignee));

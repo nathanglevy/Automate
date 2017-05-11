@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Automate.Model.Components;
 using Automate.Model.MapModelComponents;
@@ -13,9 +14,10 @@ namespace Automate.Model.Tasks
         public bool IsAssigned { get; private set; }
         private List<ITaskAction> _taskActionList = new List<ITaskAction>();
         private int _taskActionNumber = 0;
+        public bool IsCommited { get; internal set; }
         //private IEnumerable<TaskAction> _taskActionList = new List<TaskAction>();
 
-        internal Task()
+        public Task()
         {
             
         }
@@ -33,6 +35,11 @@ namespace Automate.Model.Tasks
                 IsAssigned = true;
                 _assignedToGuid = value;
             }
+        }
+
+        public List<ITaskAction> GetTaskActions()
+        {
+            return new List<ITaskAction>(_taskActionList);
         }
 
         public bool IsPositionChangeRequiredForCurrentAction(Coordinate currentPosition)
@@ -111,11 +118,6 @@ namespace Automate.Model.Tasks
 
         public override int GetHashCode() {
             return Guid.GetHashCode();
-        }
-
-        public TaskAction AddAction(TaskActionType taskLocation, Coordinate coordinate, int amount)
-        {
-            throw new NotImplementedException("This method should no longer be used -- use AddAction generic, AddTransportAction, or AddWorkAction accordingly");
         }
     }
 }
