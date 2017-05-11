@@ -15,6 +15,7 @@ namespace Automate.Model.Tasks
         private List<ITaskAction> _taskActionList = new List<ITaskAction>();
         private int _taskActionNumber = 0;
         public bool IsCommited { get; internal set; }
+        public TaskPriority TaskPriority { get; set; } = TaskPriority.Medium;
         //private IEnumerable<TaskAction> _taskActionList = new List<TaskAction>();
 
         public Task()
