@@ -7,7 +7,6 @@ using Automate.Controller.Interfaces;
 using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
-using Automate.Model.Movables;
 
 namespace Automate.Controller.Handlers.GoAndDoSomething
 {
