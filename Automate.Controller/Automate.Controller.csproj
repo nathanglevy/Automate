@@ -98,6 +98,11 @@
     <Compile Include="src\Handlers\PlaceAnObject\PlaceAnObjectRequest.cs" />
     <Compile Include="src\Handlers\PlaceAnObject\PlaceAnObjectRequestHandler.cs" />
     <Compile Include="src\Handlers\PlaceAnObject\PlaceAStrcutureRequest.cs" />
+    <Compile Include="src\Handlers\RequirementsHandler\CarriedMovableDirectRoute.cs" />
+    <Compile Include="src\Handlers\RequirementsHandler\DeliveryCost.cs" />
+    <Compile Include="src\Handlers\RequirementsHandler\ITransportScenarioProvider.cs" />
+    <Compile Include="src\Handlers\RequirementsHandler\RequirementsHandler.cs" />
+    <Compile Include="src\Handlers\RequirementsHandler\RequirementsPackage.cs" />
     <Compile Include="src\Handlers\RightClockNotification\RightClickNotification.cs" />
     <Compile Include="src\Handlers\RightClockNotification\RightClickNotificationHandler.cs" />
     <Compile Include="src\Actions\SelectMovableAction.cs" />

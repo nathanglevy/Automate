@@ -123,6 +123,44 @@ namespace Automate.Controller.Modules
             //{
             //    currentJobJobRequirement.RequirementType
             //}
+            HandleRequirements(args);
+
+
+        }
+
+        private void HandleRequirements(ViewUpdateArgs args)
+        {
+
+            // Foreach Sorted Requirment
+                // Foreach Idle Movable
+                    // IfCanMovableDo(Requirment)
+
+                    // Calc Movable Job Cost (return Min)(Dest,PickUPs,Stoargs,movables)
+                        // Calculate Movable with component directly to Dest Cost
+                        // Movable to Movable Transfer directly to Dest
+
+                        // movable with component to Storage to Dest
+                        // Movable with Component to Pickup to Dest
+
+                        // Movable without anything to pickup to Dest
+                        // Movable without anything to Storate to Dest
+
+                    // Add As Candidate
+
+            // At this point we have several candidates for the job
+             // Pick the Cheapest movable and Execute the Requriment
+           
+
+
+
+
+
+
+
+
+
+
+            throw new NotImplementedException();
         }
 
         private void PushFromModelToView(IGameWorld gameWorldItem,
