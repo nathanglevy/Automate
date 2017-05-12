@@ -40,7 +40,7 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             foreach (var structureJobReq in structuresJobs)
             {
                 //TODO: check if HasInProgress is better
-                while (structureJobReq.HasActiveJob && GetNumberOfWorkers(structureJobReq) <
+                while (structureJobReq.HasJobInProgress && GetNumberOfWorkers(structureJobReq) <
                        GetMaxNumberOfWorkers(structureJobReq))
                 {
                     foreach (var requirement in structureJobReq.CurrentJob.JobRequirements.GetIncompleteRequirements())
@@ -135,7 +135,7 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             foreach (var movable in gameWorld.GetMovableList().Where(m => !m.IsInMotion()))
             {
                 // Check if we already assigned this Movable to other Req/Task at this Phase
-                if (HasMovableAlreadyAssigned(movable.Guid, gameWorld))
+                if (gameWorld.TaskDelegator.HasDelegatedTasks(movable.Guid)) 
                     continue;
 
                 // check if movable Can Do the Job according to it's Skils
@@ -170,19 +170,6 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             requirement.AttachAction(transportAction);
 
             return new TaskContainer(newTask);
-        }
-
-        private bool HasMovableAlreadyAssigned(Guid movableGuid, IGameWorld gameWorld)
-        {
-            try
-            {
-                if (gameWorld.TaskDelegator.HasDelegatedTasks(movableGuid));
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
         }
 
         private int GetMin(List<int> nubmers)

@@ -123,7 +123,7 @@ namespace Automate.Controller.Modules
             //{
             //    currentJobJobRequirement.RequirementType
             //}
-            HandleRequirements(args);
+    //        HandleRequirements(args);
 
 
         }
