@@ -11,6 +11,8 @@ namespace Automate.Model.Requirements
         public int RequirementRemainingToSatisfy { get; private set; }
         public int TotalRequirement { get; }
         public Component ConsumedComponentType { get; }
+        //TODO:
+        public int RequirementRemainingToDelegate { get; }
 
         private List<ITaskAction> _attachedTasks = new List<ITaskAction>();
 
@@ -48,5 +50,7 @@ namespace Automate.Model.Requirements
         {
             throw new System.NotImplementedException();
         }
+
+
     }
 }

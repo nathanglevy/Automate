@@ -255,7 +255,7 @@ namespace AutomateTests.Components {
             DeliverTaskAction deliverTaskAction = new DeliverTaskAction(targetGuid, new ComponentStackGroup(), new Coordinate(0,0,0), Component.IronIngot, 10  );
             componentStack.AttachAction(deliverTaskAction);
             Assert.AreEqual(10, componentStack.IncomingTaskAllocatedAmount);
-            Assert.AreEqual(0, componentStack.RemainingAmountForTaskOutgoing);
+            Assert.AreEqual(10, componentStack.RemainingAmountForTaskOutgoing);
             Assert.AreEqual(0, componentStack.OutgoingTaskAllocatedAmount);
             PickupTaskAction pickupTaskAction = new PickupTaskAction(targetGuid, new ComponentStackGroup(), new Coordinate(0, 0, 0), Component.IronIngot, 10);
             componentStack.AttachAction(pickupTaskAction);

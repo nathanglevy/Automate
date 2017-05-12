@@ -8,6 +8,7 @@ namespace Automate.Model.Requirements
         bool IsSatisfied { get; }
         RequirementType RequirementType { get; }
         int RequirementRemainingToSatisfy { get; }
+        int RequirementRemainingToDelegate { get; }
         int TotalRequirement { get; }
         bool SatisfyRequirement(int amount);
     }

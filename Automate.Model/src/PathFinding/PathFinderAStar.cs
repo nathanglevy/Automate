@@ -61,7 +61,7 @@ namespace Automate.Model.PathFinding
             List<Coordinate> pathingMovements = GetPathingMovements();
 
             //start from target and work backwards
-            IEnumerable<Coordinate> targetCoordinates = target.GetListOfCoordinatesInBoundary().Where(item => mapInfo.GetCell(item).IsPassable());
+            IEnumerable<Coordinate> targetCoordinates = target.GetListOfCoordinatesInBoundary().Where(item => mapInfo.GetCell(item).IsPassable() || !targetAccessible);
             foreach (var targetCoordinate in targetCoordinates)
             {
                 toVisitList.Add(0, targetCoordinate);

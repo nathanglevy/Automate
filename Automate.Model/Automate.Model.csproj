@@ -69,6 +69,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Components\Component.cs" />
     <Compile Include="src\Movables\MovableCapabilities.cs" />
+    <Compile Include="src\Requirements\ITransportRequirement.cs" />
     <Compile Include="src\StructureComponents\IStructure.cs" />
     <Compile Include="src\GameWorldComponents\IGameWorld.cs" />
     <Compile Include="src\Movables\IMovable.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="src\GameWorldComponents\Item.cs" />
     <Compile Include="src\Movables\Movable.cs" />
     <Compile Include="src\StructureComponents\StructureAttribute.cs" />
+    <Compile Include="src\Tasks\TaskPriority.cs" />
     <Compile Include="src\Tasks\WorkTaskAction.cs" />
     <Compile Include="src\Unused\MovableItem.cs" />
     <Compile Include="src\Movables\MovableType.cs" />

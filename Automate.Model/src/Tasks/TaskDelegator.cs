@@ -27,7 +27,7 @@ namespace Automate.Model.Tasks
 
         public IEnumerable<Task> GetDelegatedTasksForGuid(Guid delegatedGuid)
         {
-            return _delegatedTasks.Where(pair => pair.Value.AssignedToGuid.Equals(delegatedGuid))
+            return _delegatedTasks.Where(pair => pair.Value.IsAssigned && pair.Value.AssignedToGuid.Equals(delegatedGuid))
                   .Select(pair => pair.Value);
         }
 
@@ -50,6 +50,7 @@ namespace Automate.Model.Tasks
 //            _pendingDelegationTasks.Add(newTask);
 //        }
 
+        [Obsolete]
         public Task CreateNewTask()
         {
             Task newTask = new Task();
@@ -58,9 +59,16 @@ namespace Automate.Model.Tasks
             return newTask;
         }
 
+        public void AddAndCommitNewTask(Task newTask)
+        {
+            newTask.IsCommited = true;
+            _pendingDelegationTasks.Add(newTask);
+            _delegatedTasks[newTask.Guid] = newTask;
+        }
+
         public bool HasDelegatedTasks(Guid assignee)
         {
-            return GetDelegatedTasksForGuid(assignee).Any();
+            return _delegatedTasks.Any(pair => pair.Value.IsAssigned && pair.Value.AssignedToGuid.Equals(assignee));
         }
 
         public void RemoveCompletedTasks(Guid assignee)
