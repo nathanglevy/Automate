@@ -113,6 +113,16 @@ namespace Automate.Model.PathFinding
             //build the return path
             while(!target.GetListOfCoordinatesInBoundary().Contains(resultPath.GetEndCoordinate()))
             {
+                var lastCoordinate = resultPath.GetEndCoordinate();
+                var nextCoordinate = lastCoordinate + movementList[lastCoordinate].GetMoveDirection();
+                bool isNextPassable = mapInfo.GetCell(nextCoordinate).IsPassable();
+                if (!isNextPassable && target.GetListOfCoordinatesInBoundary().Contains(nextCoordinate))
+                    return resultPath;
+
+                //this should not happen
+                if (!isNextPassable)
+                    throw new PathFindingException("Illegal state - this should never happen -- error when trying" +
+                                                   "to calculate the path.");
                 resultPath.AddMovement(movementList[resultPath.GetEndCoordinate()]);
             }
             return resultPath;

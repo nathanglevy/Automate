@@ -11,15 +11,16 @@ namespace Automate.Model.Tasks
 
         public void AssignTask(Guid assignTaskTo, Task taskToAssign)
         {
-            if (taskToAssign.IsAssigned)
-                throw new TaskAssignmentException("Task is already assigned, cannot assign again!");
-            if (!_pendingDelegationTasks.Contains(taskToAssign))
-                throw new TaskAssignmentException("Task is not in pending delegation task pool! Add task first and make sure it is not delegated");
-            _pendingDelegationTasks.Remove(taskToAssign);
+            //if (taskToAssign.IsAssigned)
+            //    throw new TaskAssignmentException("Task is already assigned, cannot assign again!");
+            //if (!_pendingDelegationTasks.Contains(taskToAssign))
+            //    throw new TaskAssignmentException("Task is not in pending delegation task pool! Add task first and make sure it is not delegated");
+            //_pendingDelegationTasks.Remove(taskToAssign);
             taskToAssign.AssignedToGuid = assignTaskTo;
             _delegatedTasks[taskToAssign.Guid] = taskToAssign;
         }
 
+        [Obsolete]
         public bool IsPendingTasksForDelegation()
         {
             return _pendingDelegationTasks.Count > 0;
@@ -31,6 +32,7 @@ namespace Automate.Model.Tasks
                   .Select(pair => pair.Value);
         }
 
+        [Obsolete]
         public Task GetNextPendingTask()
         {
             if (!IsPendingTasksForDelegation())
@@ -62,7 +64,7 @@ namespace Automate.Model.Tasks
         public void AddAndCommitNewTask(Task newTask)
         {
             newTask.IsCommited = true;
-            _pendingDelegationTasks.Add(newTask);
+            //_pendingDelegationTasks.Add(newTask);
             _delegatedTasks[newTask.Guid] = newTask;
         }
 
