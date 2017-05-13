@@ -28,8 +28,8 @@ namespace Automate.Controller.Handlers.GoAndPickUp
             // Get the Movable Object - Target
             var movableItem = gameWorldItem.GetMovable(pickUpAction.MovableId);
 
-            var componentStack = movableItem.ComponentStackGroup.AddComponentStack(pickUpAction.ComponentType, 0);
-            componentStack.AssignIncomingAmount(movableItem.Guid,pickUpAction.Amount);
+           // var componentStack = movableItem.ComponentStackGroup.AddComponentStack(pickUpAction.ComponentType, 0);
+           // componentStack.AssignIncomingAmount(movableItem.Guid,pickUpAction.Amount);
             // Transfer Amount from Source to Target
             sourceComponentStackGroup.TransferToStackGroup(pickUpAction.MovableId,movableItem.ComponentStackGroup,pickUpAction.ComponentType,pickUpAction.Amount);
 

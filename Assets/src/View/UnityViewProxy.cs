@@ -13,8 +13,10 @@ using Automate.Controller.Interfaces;
 using Automate.Controller.Modules;
 using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
+using Automate.Model.Jobs;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
+using Automate.Model.Requirements;
 using Automate.Model.StructureComponents;
 using Automate.Model.Tasks;
 using UnityEditor;
@@ -233,7 +235,7 @@ namespace src.View
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
                 _logger.Log(LogType.Log, INPUT, "Key: 3 preseed, we will clear selected items");
-                var gameWorldItemById = GameUniverse.GetGameWorldItemById(GameViewBase.Controller.Model);
+                var gameWorldItemById = GameUniverse.GetGameWorldItemById(GameViewBase.Controller.GameWorldGuid);
                 gameWorldItemById.ClearSelectedItems();
             }
 
@@ -247,7 +249,7 @@ namespace src.View
             {
 
 
-                var gameWorld = GameUniverse.GetGameWorldItemById(GameViewBase.Controller.Model);
+                var gameWorld = GameUniverse.GetGameWorldItemById(GameViewBase.Controller.GameWorldGuid);
 
                 // create Pickup Component Stack
                 var cmpntGrp330 = gameWorld.GetComponentStackGroupAtCoordinate(_GoldCoordinate);
@@ -286,6 +288,18 @@ namespace src.View
 
             }
 
+            if (Input.GetKeyDown(KeyCode.Alpha6))
+            {
+                var gameWorld = GameUniverse.GetGameWorldItemById(GameViewBase.Controller.GameWorldGuid);
+
+                var structure = gameWorld.CreateStructure(mapCoordinate, new Coordinate(1, 1, 1), StructureType.SmallFire);
+                structure.ComponentStackGroup.MaxSize = 1000;
+                structure.ComponentStackGroup.AddComponentStack(ComponentType.IronOre, 100);
+                structure.CurrentJob = new RequirementJob(JobType.ItemTransport);
+                structure.CurrentJob.JobRequirements.AddRequirement(
+                    new ComponentPickupRequirement(Component.IronOre, 92));
+
+            }
 
             if (Input.GetMouseButtonDown(0))
             {

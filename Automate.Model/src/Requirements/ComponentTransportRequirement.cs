@@ -10,6 +10,7 @@ namespace Automate.Model.Requirements
     public abstract class ComponentTransportRequirement : BaseRequirement, ITransportRequirement {
         public Component Component { get; }
         public abstract RequirementType RequirementType { get; }
+        
 
         internal ComponentTransportRequirement(Component component, int amount)
         {

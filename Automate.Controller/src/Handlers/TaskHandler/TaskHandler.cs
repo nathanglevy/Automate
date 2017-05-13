@@ -48,9 +48,13 @@ namespace Automate.Controller.Handlers.TaskHandler
 
             if (targetTask.IsTaskComplete())
             {
+
                 var taskContainer = _tasks[targetTask.Guid];
-                taskContainer.OnCompleteDelegate.Invoke(
+                taskContainer.OnCompleteDelegate?.Invoke(
                     new ControllerNotificationArgs(taskContainer, utils: args.Utils));
+
+                // Add Testing for this line
+                gameWorldItem.TaskDelegator.RemoveCompletedTasks(targetTask.AssignedToGuid);
             }
             else
             {

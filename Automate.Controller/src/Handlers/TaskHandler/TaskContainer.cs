@@ -12,6 +12,7 @@ namespace Automate.Controller.Handlers.TaskHandler
         public TaskContainer(Task targetTask) : base(ActionType.Internal)
         {
             TargetTask = targetTask;
+            MasterTaskId = targetTask.Guid;
         }
 
 

@@ -12,7 +12,7 @@ namespace Automate.Controller.Interfaces
         /// <summary>
         /// ID for the GameWorld under the controller focus
         /// </summary>
-        Guid Model { get; }
+        Guid GameWorldGuid { get; }
 
         /// <summary>
         /// refrence to the GameViewBase Object associated with the controller
@@ -25,7 +25,7 @@ namespace Automate.Controller.Interfaces
         IScheduler<MasterAction> OutputSched { get;}
 
         /// <summary>
-        /// Handle Method used to Handle an action and convert it to other form/update Model/...
+        /// Handle Method used to Handle an action and convert it to other form/update GameWorld/...
         /// </summary>
         /// <param name="args">the action to be handled</param>
         /// <returns>list of thread info (Thread and Sync) event </returns>

@@ -48,6 +48,7 @@ namespace Automate.Controller.Handlers.MoveHandler
                         NeedAcknowledge = true,
                         Duration = new TimeSpan(0, 0, 0, 0, (int)(movableItem.NextMovementDuration * 1000 / _multplier)),
                         OnCompleteDelegate = moveAction.OnCompleteDelegate,
+                        MasterTaskId = moveAction.MasterTaskId,
 
                     };
 
@@ -68,6 +69,7 @@ namespace Automate.Controller.Handlers.MoveHandler
                         NeedAcknowledge = true,
                         Duration = new TimeSpan(0, 0, 0, 0),
                         OnCompleteDelegate = moveAction.OnCompleteDelegate,
+                        MasterTaskId = moveAction.MasterTaskId,
                     };
 
                     var masterActions = new List<MasterAction>();

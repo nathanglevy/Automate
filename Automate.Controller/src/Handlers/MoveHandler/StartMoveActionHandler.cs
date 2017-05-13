@@ -4,6 +4,7 @@ using Automate.Controller.Abstracts;
 using Automate.Controller.Actions;
 using Automate.Controller.Interfaces;
 using Automate.Model.GameWorldComponents;
+using Automate.Model.MapModelComponents;
 
 namespace Automate.Controller.Handlers.MoveHandler
 {
@@ -28,7 +29,11 @@ namespace Automate.Controller.Handlers.MoveHandler
 
             var MovableAlreadyInMotion = movableItem.IsInMotion();
             // Default, Wasn't in motion and no in motion - let's create the first move
-            movableItem.IssueMoveCommand(startMoveAction.To);
+            // TODO: REMOVE THE ADDITION OF 1,0,0, IT"S JUST A WA FOR NOW
+            var canMoveToTarget = movableItem.IssueMoveCommand(startMoveAction.To + new Coordinate(1,0,0));
+            if (!canMoveToTarget)
+                throw new Exception(String.Format("Cannot Move Movable: {0} to Target Destination at Coordinate: {1}",
+                    movableItem.Guid, startMoveAction.To));
 
             // In Case Movable In Transition - nothing to do, the Next Move will get the correct Next Coordinate
             if (MovableAlreadyInMotion && movableItem.IsTransitioning)
@@ -40,7 +45,8 @@ namespace Automate.Controller.Handlers.MoveHandler
             {
                 Duration = new TimeSpan(0, 0, 0, 0, (int)(movableItem.NextMovementDuration * 1000 / _multplier)),
                 NeedAcknowledge = true,
-                OnCompleteDelegate = startMoveAction.OnCompleteDelegate
+                OnCompleteDelegate = startMoveAction.OnCompleteDelegate,
+                MasterTaskId = startMoveAction.MasterTaskId,
             };
 
             // Set Transition Start

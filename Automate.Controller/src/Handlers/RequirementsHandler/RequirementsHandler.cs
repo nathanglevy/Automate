@@ -22,59 +22,87 @@ namespace Automate.Controller.Handlers.RequirementsHandler
 
         public override IHandlerResult<MasterAction> Handle(IObserverArgs args, IHandlerUtils utils)
         {
-            if (!CanHandle(args))
-                throw new ArgumentException(
-                    "only Args from the type RequirementsPackage can be passed to Handle Method");
-
-            // Cast and Get Requirement
-            var reqWrapper = args as RequirementsPackage;
-            var req = reqWrapper.Requirement;
-
-            // Get GameWorld
-            var gameWorld = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
-            var agent = gameWorld.RequirementAgent;
-            var structuresJobs = gameWorld.GetStructuresList().Where(p => p.HasActiveJob);
-            var structuresWithJobInProgress = gameWorld.RequirementAgent.GetStructuresWithJobInProgress();
-
-            // iterate over all structure active jobs
-            var tasks = new List<MasterAction>();
-            foreach (var structure in structuresWithJobInProgress)
+            try
             {
-                while (structure.HasJobInProgress && GetNumberOfWorkers(structure) <
-                       GetMaxNumberOfWorkers(structure))
-                {
-                    foreach (var requirement in structure.CurrentJob.JobRequirements.GetIncompleteTransportRequirements())
-                    {
-                        switch (requirement.RequirementType)
-                        {
-                            case RequirementType.ComponentPickup:
-                                var executePickupJob = ExecutePickupJob(structure, requirement, gameWorld);
-                                tasks.Add(executePickupJob);
-                                break;
-                            case RequirementType.ComponentDelivery:
-                                var executeDeliveryJob = ExecuteDeliveryJob(structure, requirement, gameWorld);
-                                tasks.Add(executeDeliveryJob);
-                                break;
 
-                            default:
-                                throw new ArgumentOutOfRangeException(String.Format((string) "Requirement Type:{0} not Supported", (object) requirement.RequirementType));
+
+                if (!CanHandle(args))
+                    throw new ArgumentException(
+                        "only Args from the type RequirementsPackage can be passed to Handle Method");
+
+                // Cast and Get Requirement
+                var reqWrapper = args as RequirementsPackage;
+                var req = reqWrapper.Requirement;
+
+                // Get GameWorld
+                var gameWorld = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
+                var structuresWithJobInProgress = gameWorld.RequirementAgent.GetStructuresWithJobInProgress();
+
+                // iterate over all structure active jobs
+                var tasks = new List<MasterAction>();
+                foreach (var structure in structuresWithJobInProgress)
+                {
+                    // Create a HashSet which will hold Requirments which blocked to any reason
+                    var blockedReq = new HashSet<Guid>();
+
+                    // Loop till getting
+                    while (structure.HasJobInProgress && GetNumberOfWorkers(structure) <
+                           GetMaxNumberOfWorkers(structure))
+                    {
+                        var nonBlockedInCompleteReqs = structure.CurrentJob.JobRequirements
+                            .GetIncompleteTransportRequirements()
+                            .Where(p => !blockedReq.Contains(p.Guid));
+                        if (!nonBlockedInCompleteReqs.Any())
+                            break; // Break the While Loop, we cannot continue all Requriments are blocked
+
+                        foreach (var requirement in nonBlockedInCompleteReqs)
+                        {
+
+                            MasterAction action = null;
+                            switch (requirement.RequirementType)
+                            {
+
+                                case RequirementType.ComponentPickup:
+                                    action = ExecutePickupJob(structure, requirement, gameWorld);
+                                    break;
+                                case RequirementType.ComponentDelivery:
+                                    action = ExecuteDeliveryJob(structure, requirement, gameWorld);
+                                    break;
+
+                                default:
+                                    throw new ArgumentOutOfRangeException(String.Format(
+                                        (string) "Requirement Type:{0} not Supported",
+                                        (object) requirement.RequirementType));
+                            }
+
+                            // Check if we got anything from the handler, if not, assign requirments as blocked
+                            if (action == null)
+                                blockedReq.Add(requirement.Guid);
+                            else
+                            {
+                                tasks.Add(action);
+                                IncWorkersListForItem(structure);
+                                if (requirement.RequirementRemainingToDelegate == 0)
+                                    blockedReq.Add(requirement.Guid);
+                            }
                         }
-                        IncWorkersListForItem(structure);
                     }
                 }
+
+
+                // Reset the Dict to Start from Clean At Next Time
+                numberOfWorkersPerGuid.Clear();
+
+                return new HandlerResult(tasks) {IsInternal = true};
             }
-
-
-            // Reset the Dict to Start from Clean At Next Time
-            numberOfWorkersPerGuid.Clear();
-
-            return new HandlerResult(tasks) {IsInternal = true};
+            catch (Exception e)
+            {
+                throw new Exception("a problem was occurred when trying to handle the requirment: "+ e.ToString());
+            }
         }
 
         private MasterAction ExecuteDeliveryJob(IStructure structure, ITransportRequirement requirement, IGameWorld gameWorld)
         {
-            // Create a Task 
-            var newTask = gameWorld.TaskDelegator.CreateNewTask();
 
             // Iterate over all techinques to Get Delivery 
             // 1. find idle movable with component
@@ -99,11 +127,19 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             // Now we have all scenarios and associated cost, let's pick the minumum and execute
             var minCost = costs.Min();
 
+            if (minCost.Key == float.PositiveInfinity)
+                return null;
+
             // Allocate InComing to Target Component
             Guid executingMovable = minCost.Value.ScenarioTask.TargetTask.AssignedToGuid;
             structure.ComponentStackGroup.GetComponentStack(requirement.Component).AssignIncomingAmount(executingMovable,minCost.Value.Amount );
             gameWorld.GetMovable(executingMovable).ComponentStackGroup.GetComponentStack(requirement.Component).AssignOutgoingAmount(executingMovable,minCost.Value.Amount);
 
+
+            // Add/Assign/Commit new Task to TaskDelegator
+            gameWorld.TaskDelegator.AddAndCommitNewTask(minCost.Value.ScenarioTask.TargetTask);
+
+            // return to start handling
 
             // return the TaskContainer associated with Minumum Cost
             return minCost.Value.ScenarioTask;
@@ -136,12 +172,13 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             IGameWorld gameWorld)
         {
       
-
             // Create a Dict to hold cost per Movable seeking for best/cheapest cost to do the job
-            var costPerMovableDict = new SortedDictionary<float, IMovable>();
+            var costPerMovableDict = new SortedDictionary<float, List<IMovable>>();
+            var targetComponent = requirement.Component;
 
             // iterate over all idle movables
-            foreach (var movable in gameWorld.GetMovableList().Where(m => !m.IsInMotion()))
+            foreach (var movable in gameWorld.GetMovableList().Where(m => !m.IsInMotion() &&
+            m.ComponentStackGroup.GetComponentStack(targetComponent).RemainingAmountForIncoming > 0))
             {
                 // Check if we already assigned this Movable to other Req/Task at this Phase
                 if (gameWorld.TaskDelegator.HasDelegatedTasks(movable.Guid)) 
@@ -155,27 +192,47 @@ namespace Automate.Controller.Handlers.RequirementsHandler
                 var cost = CalculateJobCost(structure, movable, gameWorld);
 
                 // push it to the dict
-                costPerMovableDict.Add(cost, movable);
+                if (!costPerMovableDict.ContainsKey(cost))
+                {
+                    costPerMovableDict.Add(cost,new List<IMovable>());
+                }
+                costPerMovableDict[cost].Add(movable);
             }
+
+            if (costPerMovableDict.Count == 0)
+                return null;    // No Movable Found
+
             // now we will pick the cheaper and execute the Task
             var matchMovableKey = costPerMovableDict.Min(p => p.Key);
-            var matchMovable = costPerMovableDict[matchMovableKey];
-
 
             // Get Component Type and Find the Max Amount of Component can be delivered
-            var targetComponent = requirement.Component;
+
+
+            var matchMovable = costPerMovableDict[matchMovableKey].Aggregate(
+                (bestMatch,current)=> 
+                bestMatch.ComponentStackGroup.GetComponentStack(targetComponent).RemainingAmountForIncoming > current.ComponentStackGroup.GetComponentStack(targetComponent).RemainingAmountForIncoming ? bestMatch : current);
+
+
             var amount = GetMin(new List<int>()
             {
                 matchMovable.ComponentStackGroup.GetComponentStack(targetComponent).RemainingAmountForIncoming, // Whatever the movable can "carry"
                 requirement.TotalRequirement, 
-                requirement.RequirementRemainingToSatisfy
+                requirement.RequirementRemainingToDelegate,
+                requirement.RequirementRemainingToSatisfy,
             });
 
+            if (amount == 0)
+                return null;
+
             // Create a Task 
-            var newTask = gameWorld.TaskDelegator.CreateNewTask();
+            var newTask = new Task();
+            
+            // Add/Assign/Commit new Task to TaskDelegator
+            gameWorld.TaskDelegator.AddAndCommitNewTask(newTask);
 
             // Assign Task To Best Match Movable
-            gameWorld.TaskDelegator.AssignTask(matchMovable.Guid, newTask);
+            //gameWorld.TaskDelegator.AssignTask(matchMovable.Guid, newTask);
+            newTask.AssignedToGuid = matchMovable.Guid;
 
             // Update Outgoing Amount At Pickup 
             var stackGroup = structure.ComponentStackGroup;
@@ -192,7 +249,8 @@ namespace Automate.Controller.Handlers.RequirementsHandler
 
             // Attach action to the requirment
             requirement.AttachAction(transportAction);
-
+            
+            // return to start handling
             return new TaskContainer(newTask);
         }
 

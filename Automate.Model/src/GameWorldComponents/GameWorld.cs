@@ -278,6 +278,18 @@ namespace Automate.Model.GameWorldComponents
 
         public ComponentStackGroup GetComponentStackGroupAtCoordinate(Coordinate location)
         {
+            // ADDED BY AHAMDAN
+            try
+            {
+                var structureAtCoordinate = GetStructureAtCoordinate(location);
+                return structureAtCoordinate.ComponentStackGroup;
+            }
+            catch (Exception e)
+            {
+                // No Structure there, let's check cell
+            }
+            
+
             if (!_componentStacks.ContainsKey(location))
                 _componentStacks.Add(location, new ComponentStackGroup());
             return _componentStacks[location];

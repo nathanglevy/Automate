@@ -1,13 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2015
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automate", "Automate.csproj", "{9D6E405C-85EC-3E21-EDD7-62A43AC5A861}"
-	ProjectSection(ProjectDependencies) = postProject
-		{237A8506-7EFD-4D28-B543-29E119CAD8DE} = {237A8506-7EFD-4D28-B543-29E119CAD8DE}
-		{46B6EDC5-1879-4E95-8271-1A7B526F50F1} = {46B6EDC5-1879-4E95-8271-1A7B526F50F1}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automate.Editor", "Automate.Editor.csproj", "{2CA1C0CA-090C-B34A-CC35-C835FC1C9F87}"
 EndProject

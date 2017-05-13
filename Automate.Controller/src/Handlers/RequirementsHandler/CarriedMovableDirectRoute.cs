@@ -42,7 +42,7 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             // Get the Min Path & Cost between all of them
             var idleWithComponentStartPositions = idleMovablesHasComponent.Select(p => p.Coordinate).ToList();
 
-            // Call Model To Get the Min Path/Cost
+            // Call GameWorldGuid To Get the Min Path/Cost
             var lowestCost =
                 gameWorld.GetMovementPathWithLowestCostToBoundary((List<Coordinate>) idleWithComponentStartPositions, boundery,false);
 

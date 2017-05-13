@@ -9,5 +9,6 @@ namespace Automate.Model.Tasks
         void DettachAction(ITaskAction taskAction);
         bool CanAttachToAction(ITaskAction taskAction);
         void OnTaskCompleted(object sender, TaskActionEventArgs e);
+        Guid Guid { get; }
     }
 }

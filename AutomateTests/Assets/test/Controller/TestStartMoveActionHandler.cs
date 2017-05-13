@@ -62,6 +62,25 @@ namespace AutomateTests.Controller
         }
 
         [TestMethod]
+        public void TestStartMoveOfIdleMovableTowardsAStructure_ExpectFirstMoveActionInSched()
+        {
+            Handler<IObserverArgs> moveHandler = new StartMoveActionHandler();
+            var gameWorld = GameUniverse.CreateGameWorld(new Coordinate(10, 10, 1));
+            var movable = gameWorld.CreateMovable(new Coordinate(1, 1, 0), MovableType.FastHuman);
+            gameWorld.CreateStructure(new Coordinate(4, 4, 0), new Coordinate(1, 1, 1), StructureType.SmallFire);
+
+            IHandlerUtils utils = new HandlerUtils(gameWorld.Guid, null, null);
+
+            var handlerResult0 = moveHandler.Handle(new StartMoveAction(new Coordinate(4, 4, 0), movable.Guid), utils);
+            Assert.AreEqual(1, handlerResult0.GetItems().Count);
+            Assert.IsNotNull(handlerResult0.GetItems()[0] as MoveAction);
+            var moveAction0 = handlerResult0.GetItems()[0] as MoveAction;
+            Assert.AreEqual(new Coordinate(1, 1, 0), moveAction0.CurrentCoordiate);
+            Assert.AreEqual(new Coordinate(2, 2, 0), moveAction0.To);
+        }
+
+
+        [TestMethod]
         public void TestStartMoveOfInTransitionMovable_ExpectFirstMoveActionInSched()
         {
             Handler<IObserverArgs> startMoveHandler = new StartMoveActionHandler();
@@ -174,7 +193,7 @@ namespace AutomateTests.Controller
             var gameWorld = GameUniverse.CreateGameWorld(new Coordinate(4, 2, 1));
             var movable = gameWorld.CreateMovable(new Coordinate(0, 0, 0), MovableType.FastHuman);
 
-            // Call the Model To Calculate a Path
+            // Call the GameWorldGuid To Calculate a Path
             var sucess = movable.IssueMoveCommand(new Coordinate(3, 0, 0));
             Assert.IsTrue(sucess);
 
@@ -206,7 +225,7 @@ namespace AutomateTests.Controller
             var gameWorld = GameUniverse.CreateGameWorld(new Coordinate(4, 2, 1));
             var movable = gameWorld.CreateMovable(new Coordinate(0, 0, 0), MovableType.FastHuman);
 
-            // Call the Model To Calculate a Path
+            // Call the GameWorldGuid To Calculate a Path
             var sucess = movable.IssueMoveCommand(new Coordinate(2, 0, 0));
             movable.StartTransitionToNext();
             Assert.IsTrue(sucess);
