@@ -32,12 +32,13 @@ namespace AutomateTests.Assets.test.Controller.TestDeliveryProviders
             var structure = gameWorld.CreateStructure(new Coordinate(3, 4, 0), new Coordinate(2, 2, 1),
                 StructureType.LargeFire);
             structure.CurrentJob = new RequirementJob(JobType.ItemTransport);
-            var addRequirement = structure.CurrentJob.JobRequirements.AddRequirement(
+            structure.CurrentJob.JobRequirements.AddRequirement(
                 new ComponentDeliveryRequirement(Component.IronOre, 100));
+            var addRequirement = structure.CurrentJob.JobRequirements.GetIncompleteTransportRequirements()[0];
 
             var directRouteScenario = new CarriedMovableDirectRoute();
             var calcScenarioCost = directRouteScenario.CalcScenarioCost(structure.CurrentJob, addRequirement,
-                structure.Coordinate - new Coordinate(1, 0, 0), gameWorld);
+                structure.Boundary, gameWorld);
             Assert.AreEqual(float.PositiveInfinity, calcScenarioCost.Cost);
             Assert.IsNull(calcScenarioCost.ScenarioTask);
         }
@@ -53,12 +54,14 @@ namespace AutomateTests.Assets.test.Controller.TestDeliveryProviders
             var structure = gameWorld.CreateStructure(new Coordinate(3, 4, 0), new Coordinate(2, 2, 1),
                 StructureType.LargeFire);
             structure.CurrentJob = new RequirementJob(JobType.ItemTransport);
-            var addRequirement = structure.CurrentJob.JobRequirements.AddRequirement(
+            structure.CurrentJob.JobRequirements.AddRequirement(
                 new ComponentDeliveryRequirement(Component.IronOre, 100));
 
             var directRouteScenario = new CarriedMovableDirectRoute();
+            var addRequirement = structure.CurrentJob.JobRequirements.GetIncompleteTransportRequirements()[0];
+
             var calcScenarioCost = directRouteScenario.CalcScenarioCost(structure.CurrentJob, addRequirement,
-                structure.Coordinate - new Coordinate(1, 0, 0), gameWorld);
+                structure.Boundary, gameWorld);
             Assert.AreNotEqual(float.MaxValue, calcScenarioCost.Cost);
             Assert.IsNotNull(calcScenarioCost.ScenarioTask);
             Assert.AreEqual(movable.Guid,calcScenarioCost.ScenarioTask.TargetTask.AssignedToGuid);

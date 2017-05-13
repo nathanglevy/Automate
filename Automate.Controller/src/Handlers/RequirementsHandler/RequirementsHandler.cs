@@ -34,39 +34,44 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             var gameWorld = GameUniverse.GetGameWorldItemById(utils.GameWorldId);
             var agent = gameWorld.RequirementAgent;
             var structuresJobs = gameWorld.GetStructuresList().Where(p => p.HasActiveJob);
+            var structuresWithJobInProgress = gameWorld.RequirementAgent.GetStructuresWithJobInProgress();
 
             // iterate over all structure active jobs
             var tasks = new List<MasterAction>();
-            foreach (var structureJobReq in structuresJobs)
+            foreach (var structure in structuresWithJobInProgress)
             {
-                //TODO: check if HasInProgress is better
-                while (structureJobReq.HasJobInProgress && GetNumberOfWorkers(structureJobReq) <
-                       GetMaxNumberOfWorkers(structureJobReq))
+                while (structure.HasJobInProgress && GetNumberOfWorkers(structure) <
+                       GetMaxNumberOfWorkers(structure))
                 {
-                    foreach (var requirement in structureJobReq.CurrentJob.JobRequirements.GetIncompleteRequirements())
+                    foreach (var requirement in structure.CurrentJob.JobRequirements.GetIncompleteTransportRequirements())
                     {
                         switch (requirement.RequirementType)
                         {
                             case RequirementType.ComponentPickup:
-                                var executePickupJob = ExecutePickupJob(structureJobReq, requirement, gameWorld);
+                                var executePickupJob = ExecutePickupJob(structure, requirement, gameWorld);
                                 tasks.Add(executePickupJob);
                                 break;
                             case RequirementType.ComponentDelivery:
-                                var executeDeliveryJob = ExecuteDeliveryJob(structureJobReq, requirement, gameWorld);
+                                var executeDeliveryJob = ExecuteDeliveryJob(structure, requirement, gameWorld);
                                 tasks.Add(executeDeliveryJob);
                                 break;
 
                             default:
                                 throw new ArgumentOutOfRangeException(String.Format((string) "Requirement Type:{0} not Supported", (object) requirement.RequirementType));
                         }
+                        IncWorkersListForItem(structure);
                     }
                 }
             }
 
+
+            // Reset the Dict to Start from Clean At Next Time
+            numberOfWorkersPerGuid.Clear();
+
             return new HandlerResult(tasks) {IsInternal = true};
         }
 
-        private MasterAction ExecuteDeliveryJob(IStructure structureJobReq, IRequirement requirement, IGameWorld gameWorld)
+        private MasterAction ExecuteDeliveryJob(IStructure structure, ITransportRequirement requirement, IGameWorld gameWorld)
         {
             // Create a Task 
             var newTask = gameWorld.TaskDelegator.CreateNewTask();
@@ -86,13 +91,19 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             SortedList<float,DeliveryCost> costs = new SortedList<float,DeliveryCost>();
             foreach (var deliveryProvider in scenarios)
             {
-                var scenarioCost = deliveryProvider.CalcScenarioCost(structureJobReq.CurrentJob, requirement, structureJobReq.Coordinate,
+                var scenarioCost = deliveryProvider.CalcScenarioCost(structure.CurrentJob, requirement, structure.Boundary,
                     gameWorld);
                 costs.Add(scenarioCost.Cost,scenarioCost);
             }
 
             // Now we have all scenarios and associated cost, let's pick the minumum and execute
             var minCost = costs.Min();
+
+            // Allocate InComing to Target Component
+            Guid executingMovable = minCost.Value.ScenarioTask.TargetTask.AssignedToGuid;
+            structure.ComponentStackGroup.GetComponentStack(requirement.Component).AssignIncomingAmount(executingMovable,minCost.Value.Amount );
+            gameWorld.GetMovable(executingMovable).ComponentStackGroup.GetComponentStack(requirement.Component).AssignOutgoingAmount(executingMovable,minCost.Value.Amount);
+
 
             // return the TaskContainer associated with Minumum Cost
             return minCost.Value.ScenarioTask;
@@ -121,12 +132,10 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             return numberOfWorkersPerGuid[structureJobReq.Guid];
         }
 
-        private MasterAction ExecutePickupJob(IStructure structureJobReq, IRequirement requirement,
+        private MasterAction ExecutePickupJob(IStructure structure, ITransportRequirement requirement,
             IGameWorld gameWorld)
         {
-            // Create a Task 
-            var newTask = gameWorld.TaskDelegator.CreateNewTask();
-            
+      
 
             // Create a Dict to hold cost per Movable seeking for best/cheapest cost to do the job
             var costPerMovableDict = new SortedDictionary<float, IMovable>();
@@ -139,11 +148,11 @@ namespace Automate.Controller.Handlers.RequirementsHandler
                     continue;
 
                 // check if movable Can Do the Job according to it's Skils
-                if (!CanMovableDoTheJob(movable, structureJobReq.CurrentJob))
+                if (!CanMovableDoTheJob(movable, structure.CurrentJob))
                     continue;
 
                 // Calculate the Cost doing the requirment using this movable
-                var cost = CalculateJobCost(structureJobReq, movable, gameWorld);
+                var cost = CalculateJobCost(structure, movable, gameWorld);
 
                 // push it to the dict
                 costPerMovableDict.Add(cost, movable);
@@ -152,21 +161,36 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             var matchMovableKey = costPerMovableDict.Min(p => p.Key);
             var matchMovable = costPerMovableDict[matchMovableKey];
 
-            // Add Worker to GUID
-            IncWorkersListForItem(structureJobReq);
-            gameWorld.TaskDelegator.AssignTask(matchMovable.Guid, newTask);
 
-
-            var targetComponent = Component.IronOre;
+            // Get Component Type and Find the Max Amount of Component can be delivered
+            var targetComponent = requirement.Component;
             var amount = GetMin(new List<int>()
             {
-                matchMovable.ComponentStackGroup.GetComponentStack(targetComponent).StackMax,
-                requirement.TotalRequirement,
+                matchMovable.ComponentStackGroup.GetComponentStack(targetComponent).RemainingAmountForIncoming, // Whatever the movable can "carry"
+                requirement.TotalRequirement, 
                 requirement.RequirementRemainingToSatisfy
             });
 
-            var transportAction = newTask.AddTransportAction(TaskActionType.PickupTask, structureJobReq.Coordinate,
-                gameWorld.GetComponentStackGroupAtCoordinate(structureJobReq.Coordinate), targetComponent, amount);
+            // Create a Task 
+            var newTask = gameWorld.TaskDelegator.CreateNewTask();
+
+            // Assign Task To Best Match Movable
+            gameWorld.TaskDelegator.AssignTask(matchMovable.Guid, newTask);
+
+            // Update Outgoing Amount At Pickup 
+            var stackGroup = structure.ComponentStackGroup;
+            var targetStack = stackGroup.GetComponentStack(targetComponent);
+            targetStack.AssignOutgoingAmount(matchMovable.Guid,amount);
+
+            // Update Incoming Amount At Movable
+            var movableTargetStack = matchMovable.ComponentStackGroup.GetComponentStack(targetComponent);
+            movableTargetStack.AssignIncomingAmount(matchMovable.Guid, amount);
+
+            // Create the Transport Pickup Action in Task
+            var transportAction = newTask.AddTransportAction(TaskActionType.PickupTask, structure.Coordinate,stackGroup
+                , targetComponent, amount);
+
+            // Attach action to the requirment
             requirement.AttachAction(transportAction);
 
             return new TaskContainer(newTask);
@@ -186,9 +210,9 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             // ?
 
             // for now i will return number of Steps to Target as COST
-            var pathToDest = gameWorld.GetMovementPathWithLowestCostToCoordinate(
+            var pathToDest = gameWorld.GetMovementPathWithLowestCostToBoundary(
                 new List<Coordinate>() {movable.CurrentCoordinate},
-                new Coordinate(structure.Coordinate.x - 1, structure.Coordinate.y, 0));
+                structure.Boundary,false);
 
 
             return pathToDest.TotalCost;

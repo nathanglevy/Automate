@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Automate.Controller.Handlers.TaskHandler;
@@ -12,34 +13,42 @@ namespace Automate.Controller.Handlers.RequirementsHandler
 {
     public class CarriedMovableDirectRoute : ITransportScenarioProvider
     {
-        public DeliveryCost CalcScenarioCost(RequirementJob requirmentJob, IRequirement requirement,
+        public DeliveryCost CalcScenarioCost(RequirementJob requirmentJob, ITransportRequirement requirement,
             Coordinate Destination, IGameWorld gameWorld)
+        {
+            throw  new NotImplementedException();
+        }
+
+        public DeliveryCost CalcScenarioCost(RequirementJob requirmentJob, ITransportRequirement requirement,
+            Boundary boundery, IGameWorld gameWorld)
         {
             var allIdleMovables = gameWorld.GetMovableList().Where(m => !m.IsInMotion());
 
-            //TODO: Add While till all points delegated or got to maximum
-            // TODO: CHANGE IT WHEN CompoenntType will be added to requirment
-            var componentType = Component.IronOre;
+            var componentType = requirement.Component;
 
             // GetAllMovables Has Such Component
             var idleMovablesHasComponent = allIdleMovables
-                .Where(m => m.ComponentStackGroup.IsContainingComponentStack(componentType) &&
-                            m.ComponentStackGroup.GetComponentStack(componentType).CurrentAmount > 0)
+                .Where(m => m.ComponentStackGroup.IsContainingComponentStack(componentType) && // has the needed component 
+                            m.ComponentStackGroup.GetComponentStack(componentType).CurrentAmount > 0 && // has some amount of needed component
+                            !gameWorld.TaskDelegator.HasDelegatedTasks(m.Guid)) // has no tasks which already delegated
                 .ToList();
+
+            
 
             // In case of no match, returns the higest cost ever
             if (idleMovablesHasComponent.Count == 0)
-                return new DeliveryCost(float.PositiveInfinity,null);
+                return new DeliveryCost(float.PositiveInfinity,null,0);
 
             // Get the Min Path & Cost between all of them
             var idleWithComponentStartPositions = idleMovablesHasComponent.Select(p => p.Coordinate).ToList();
 
             // Call Model To Get the Min Path/Cost
             var lowestCost =
-                gameWorld.GetMovementPathWithLowestCostToCoordinate((List<Coordinate>) idleWithComponentStartPositions, Destination);
+                gameWorld.GetMovementPathWithLowestCostToBoundary((List<Coordinate>) idleWithComponentStartPositions, boundery,false);
 
             // Get the movable located at this position
             var bestMovable = idleMovablesHasComponent.First(m => m.Coordinate.Equals(lowestCost.GetStartCoordinate()));
+            
 
             // Create New Task
             var deliverTask = gameWorld.TaskDelegator.CreateNewTask();
@@ -48,15 +57,20 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             gameWorld.TaskDelegator.AssignTask(bestMovable.Guid, deliverTask);
 
             // Create Delivery Task
-            var deliverAction = deliverTask.AddTransportAction(TaskActionType.DeliveryTask, Destination,
-                gameWorld.GetComponentStackGroupAtCoordinate(Destination + new Coordinate(1,0,0)),componentType,
-                bestMovable.ComponentStackGroup.GetComponentStack(componentType).CurrentAmount);
+            var deliveryAmount = bestMovable.ComponentStackGroup.GetComponentStack(componentType).CurrentAmount;
+            if (requirement.RequirementRemainingToDelegate < deliveryAmount)
+            {
+                deliveryAmount = requirement.RequirementRemainingToDelegate;
+            }
+            var deliverAction = deliverTask.AddTransportAction(TaskActionType.DeliveryTask, lowestCost.GetEndCoordinate(),
+                gameWorld.GetComponentStackGroupAtCoordinate(boundery.topLeft),componentType,deliveryAmount
+               );
 
             // Attach action to Req
             requirement.AttachAction(deliverAction);
 
             // return the Cost & the Task
-            return new DeliveryCost(lowestCost.TotalCost, new TaskContainer(deliverTask));
+            return new DeliveryCost(lowestCost.TotalCost, new TaskContainer(deliverTask),deliveryAmount);
         }
     }
 }

@@ -15,7 +15,7 @@ using Automate.Model.Tasks;
 using AutomateTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AutomateTests.Controller
+namespace AutomateTests.test.Controller
 {
     [TestClass]
     public class TestController
@@ -227,8 +227,8 @@ namespace AutomateTests.Controller
 
             // check that only a single thread is executed
             Assert.AreEqual(1, threads.Count);
-            Assert.AreEqual("AutomateTests.test.Mocks.MockHandler_HandleWorkerThread", threads[0].Thread.Name);
-            Assert.AreNotEqual("AutomateTests.test.Mocks.MockHandler_HandleWorkerThread", Thread.CurrentThread.Name);
+            Assert.AreEqual("AutomateTests.Mocks.MockHandler_HandleWorkerThread", threads[0].Thread.Name);
+            Assert.AreNotEqual("AutomateTests.Mocks.MockHandler_HandleWorkerThread", Thread.CurrentThread.Name);
 
             gameController.OutputSched.OnPullStart(new ViewUpdateArgs());
             Assert.AreEqual(2, gameController.OutputSched.ItemsCount);

@@ -60,35 +60,30 @@ namespace AutomateTests.test.Controller
 
         [TestMethod]
         public void
-            TestHandlePickUpRequirmentWhenTwoIdleMovablesAndNoDeliveryNeeded_expectTaskWithAssigneToClosetAndDelivertoStorage()
+            TestHandlePickUpRequirementWhenTwoIdleMovablesAndNoDeliveryNeeded_expectTaskWithAssigneToClosetAndDelivertoStorage()
         {
             // Create the World
-            var gameWorld = GameUniverse.CreateGameWorld(new Coordinate(10, 10, 1));
+            var gameWorld = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
 
             // Create two Movables
-            var movabe430 = gameWorld.CreateMovable(new Coordinate(6, 3, 0), MovableType.SimpleRobot);
-            var ironOreStack = movabe430.ComponentStackGroup.AddComponentStack(ComponentType.IronOre, 0);
-            movabe430.ComponentStackGroup.MaxSize = 50;
-            ironOreStack.StackMax = 50;
+            var closeMovabe = gameWorld.CreateMovable(new Coordinate(6, 3, 0), MovableType.SimpleRobot);
+            var woodMovableStack = closeMovabe.ComponentStackGroup.AddComponentStack(Component.Wood, 0);
+            closeMovabe.ComponentStackGroup.MaxSize = 500;
+            closeMovabe.ComponentStackGroup.GetComponentStack(Component.Wood).StackMax = 500;
+            woodMovableStack.StackMax = 500;
 
-            var movabe880 = gameWorld.CreateMovable(new Coordinate(8, 8, 0), MovableType.SimpleRobot);
-            var ironOreStack2 = movabe880.ComponentStackGroup.AddComponentStack(ComponentType.IronOre, 0);
-            movabe430.ComponentStackGroup.MaxSize = 170;
-            ironOreStack2.StackMax = 170;
-
-            // Create a Storage
-            var storage = gameWorld.CreateStructure(new Coordinate(0, 0, 0), new Coordinate(1, 1, 1),
-                StructureType.Storage);
-            storage.ComponentStackGroup.AddComponentStack(ComponentType.IronOre, 0);
+            var farMovable = gameWorld.CreateMovable(new Coordinate(18, 8, 0), MovableType.SimpleRobot);
+            var ironOreStack2 = farMovable.ComponentStackGroup.AddComponentStack(Component.Wood, 0);
+            farMovable.ComponentStackGroup.MaxSize = 1200;
+            ironOreStack2.StackMax = 1200;
 
             // Create a PickUp Requirement
             var ironFactory = gameWorld.CreateStructure(new Coordinate(4, 4, 0), new Coordinate(2, 2, 1),
                 StructureType.Basic);
-            ironFactory.CurrentJob.JobRequirements.AddRequirement(
-                new ComponentPickupRequirement(Component.IronOre, 200));
+
             ironFactory.CurrentJob = new RequirementJob(JobType.ItemTransport);
-            ironFactory.CurrentJob.AddRequirement(new ComponentPickupRequirement(Component.IronOre, 200));
-            ironFactory.ComponentStackGroup.AddComponentStack(ComponentType.IronOre, 200);
+            ironFactory.CurrentJob.AddRequirement(new ComponentPickupRequirement(Component.Wood, 200));
+            ironFactory.ComponentStackGroup.AddComponentStack(Component.Wood, 200);
 
             // create the Requirement package
             var requirementWrapper = new RequirementsPackage(gameWorld.RequirementAgent);
@@ -97,16 +92,19 @@ namespace AutomateTests.test.Controller
             var handler = new RequirementsHandler();
             var handlerResult = handler.Handle(requirementWrapper, new HandlerUtils(gameWorld.Guid, null, null));
 
-            // Test Check
 
             // check that we have a single TASK
             var actionIndex = 0;
             Assert.AreEqual(2, handlerResult.GetItems().Count);
+            Assert.AreEqual(170,
+                ironFactory.ComponentStackGroup.GetComponentStack(Component.Wood).OutgoingAllocatedAmount);
+
             Assert.AreEqual(ActionType.Internal, handlerResult.GetItems()[actionIndex].Type);
             Assert.IsTrue(handlerResult.GetItems()[actionIndex] is TaskContainer);
             var taskContainer = handlerResult.GetItems()[actionIndex] as TaskContainer;
             Assert.IsTrue(taskContainer.TargetTask.IsAssigned);
-            Assert.AreEqual(movabe430.Guid, taskContainer.TargetTask.AssignedToGuid);
+            Assert.AreEqual(closeMovabe.Guid, taskContainer.TargetTask.AssignedToGuid);
+            Assert.AreEqual(50,closeMovabe.ComponentStackGroup.GetComponentStack(Component.Wood).IncomingAllocatedAmount);
 
             // we expect 2 Sub actions
             // a. pickup Task from Dest
@@ -122,31 +120,32 @@ namespace AutomateTests.test.Controller
             Assert.IsTrue(handlerResult.GetItems()[actionIndex] is TaskContainer);
             var taskContainer2 = handlerResult.GetItems()[actionIndex] as TaskContainer;
             Assert.IsTrue(taskContainer2.TargetTask.IsAssigned);
-            Assert.AreEqual(movabe880.Guid, taskContainer2.TargetTask.AssignedToGuid);
+            Assert.AreEqual(farMovable.Guid, taskContainer2.TargetTask.AssignedToGuid);
+            Assert.AreEqual(120, farMovable.ComponentStackGroup.GetComponentStack(Component.Wood).IncomingAllocatedAmount);
 
             // we expect 2 Sub actions
             // a. pickup Task from Dest
             // b. Deliver Task to Storage
             Assert.AreEqual(TaskActionType.PickupTask, taskContainer2.TargetTask.GetCurrentAction().TaskActionType);
             Assert.AreEqual(new Coordinate(4, 4, 0), taskContainer2.TargetTask.GetCurrentAction().TaskLocation);
-            Assert.AreEqual(150, taskContainer2.TargetTask.GetCurrentAction().Amount);
+            Assert.AreEqual(120, taskContainer2.TargetTask.GetCurrentAction().Amount);
         }
 
 
         [TestMethod]
-        public void TestDeliverRequirmentWhenOnlyIdleMovableWithRequiredComponent_ExpectDeliveryTaskAssignedToMovable()
+        public void TestDeliverRequirmentWhenIdleMovableWithRequiredComponent_ExpectDeliveryTaskAssignedToMovable()
         {
             // Create the World
             var gameWorld = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
 
             // Create two Movables
-            var movabe850 = gameWorld.CreateMovable(new Coordinate(8, 5, 0), MovableType.SimpleRobot);
+            var movabe850 = gameWorld.CreateMovable(new Coordinate(18, 5, 0), MovableType.SimpleRobot);
             var ironOreStack = movabe850.ComponentStackGroup.AddComponentStack(ComponentType.IronOre, 50);
             movabe850.ComponentStackGroup.MaxSize = 50;
             ironOreStack.StackMax = 50;
 
-            var movabe100 = gameWorld.CreateMovable(new Coordinate(1, 0, 0), MovableType.SimpleRobot);
-            var ironOreStack2 = movabe100.ComponentStackGroup.AddComponentStack(ComponentType.IronOre, 170);
+            var movabe400 = gameWorld.CreateMovable(new Coordinate(4, 0, 0), MovableType.SimpleRobot);
+            var ironOreStack2 = movabe400.ComponentStackGroup.AddComponentStack(ComponentType.IronOre, 170);
             movabe850.ComponentStackGroup.MaxSize = 170;
             ironOreStack2.StackMax = 170;
 
@@ -157,11 +156,10 @@ namespace AutomateTests.test.Controller
             // Create a PickUp Requirement
             var ironFactory = gameWorld.CreateStructure(new Coordinate(4, 4, 0), new Coordinate(2, 2, 1),
                 StructureType.Basic);
-            ironFactory.CurrentJob.JobRequirements.AddRequirement(
-                new ComponentPickupRequirement(Component.IronOre, 200));
+
             ironFactory.CurrentJob = new RequirementJob(JobType.ItemTransport);
             ironFactory.CurrentJob.AddRequirement(new ComponentDeliveryRequirement(Component.IronOre, 200));
-            ironFactory.ComponentStackGroup.AddComponentStack(ComponentType.IronOre, 200);
+            ironFactory.ComponentStackGroup.AddComponentStack(ComponentType.IronOre, 0);
 
             // create the Requirement package
             var requirementWrapper = new RequirementsPackage(gameWorld.RequirementAgent);
@@ -172,37 +170,52 @@ namespace AutomateTests.test.Controller
 
             // Test Check
 
-            // check that we have a single TASK
             var actionIndex = 0;
             Assert.AreEqual(2, handlerResult.GetItems().Count);
+            Assert.AreEqual(200, ironFactory.ComponentStackGroup.GetComponentStack(ComponentType.IronOre).IncomingAllocatedAmount);
+
+
             Assert.AreEqual(ActionType.Internal, handlerResult.GetItems()[actionIndex].Type);
             Assert.IsTrue(handlerResult.GetItems()[actionIndex] is TaskContainer);
             var taskContainer = handlerResult.GetItems()[actionIndex] as TaskContainer;
             Assert.IsTrue(taskContainer.TargetTask.IsAssigned);
-            Assert.AreEqual(movabe850.Guid, taskContainer.TargetTask.AssignedToGuid);
+            Assert.AreEqual(movabe400.Guid, taskContainer.TargetTask.AssignedToGuid);
+            Assert.AreEqual(170, movabe400.ComponentStackGroup.GetComponentStack(ComponentType.IronOre).OutgoingAllocatedAmount);
 
             // we expect 2 Sub actions
             // a. pickup Task from Dest
             // b. Deliver Task to Storage
             Assert.AreEqual(TaskActionType.DeliveryTask, taskContainer.TargetTask.GetCurrentAction().TaskActionType);
-            Assert.AreEqual(new Coordinate(4, 4, 0), taskContainer.TargetTask.GetCurrentAction().TaskLocation);
-            Assert.AreEqual(50, taskContainer.TargetTask.GetCurrentAction().Amount);
+            Assert.AreEqual(new Coordinate(5, 4, 0), taskContainer.TargetTask.GetCurrentAction().TaskLocation);
+            Assert.AreEqual(170, taskContainer.TargetTask.GetCurrentAction().Amount);
 
-            // check that we have a single TASK
+
             actionIndex = 1;
             Assert.AreEqual(ActionType.Internal, handlerResult.GetItems()[actionIndex].Type);
             Assert.IsTrue(handlerResult.GetItems()[actionIndex] is TaskContainer);
-            var taskContainer2 = handlerResult.GetItems()[actionIndex] as TaskContainer;
-            Assert.IsTrue(taskContainer2.TargetTask.IsAssigned);
-            Assert.AreEqual(movabe100.Guid, taskContainer2.TargetTask.AssignedToGuid);
+            taskContainer = handlerResult.GetItems()[actionIndex] as TaskContainer;
+            Assert.IsTrue(taskContainer.TargetTask.IsAssigned);
+            Assert.AreEqual(movabe850.Guid, taskContainer.TargetTask.AssignedToGuid);
+            Assert.AreEqual(30,movabe850.ComponentStackGroup.GetComponentStack(ComponentType.IronOre).OutgoingAllocatedAmount);
 
             // we expect 2 Sub actions
             // a. pickup Task from Dest
             // b. Deliver Task to Storage
-            Assert.AreEqual(TaskActionType.DeliveryTask, taskContainer2.TargetTask.GetCurrentAction().TaskActionType);
-            Assert.AreEqual(new Coordinate(4, 4, 0), taskContainer2.TargetTask.GetCurrentAction().TaskLocation);
-            Assert.AreEqual(150, taskContainer2.TargetTask.GetCurrentAction().Amount);
+            Assert.AreEqual(TaskActionType.DeliveryTask, taskContainer.TargetTask.GetCurrentAction().TaskActionType);
+            Assert.AreEqual(new Coordinate(5, 5, 0), taskContainer.TargetTask.GetCurrentAction().TaskLocation);
+            Assert.AreEqual(30, taskContainer.TargetTask.GetCurrentAction().Amount);
+
+
+
         }
+
+
+        [TestMethod]
+        public void NOT_IMP_TestHandleIdleMovablesWithCarriedComponents_expectDeliverytoClosetStorage()
+        {
+            throw new NotImplementedException();
+        }
+
 
 
         //        [TestMethod]
