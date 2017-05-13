@@ -101,6 +101,16 @@ namespace AutomateTests.Model.PathFinding {
             mapInfo.SetCell(new Coordinate(3, 3, 0), new CellInfo(false, 1));
             MovementPath result = PathFinderAStar.FindShortestPath(mapInfo, new List<Coordinate>()
             { new Coordinate(0,0,0)} , new Boundary(new Coordinate(2,2,0), new Coordinate(3,3,0) ), false );
+            Assert.AreEqual(new Coordinate(1,1,0), result.GetEndCoordinate() );
+        }
+
+        [TestMethod()]
+        public void TestFindShortestPath_ToABoundaryNotBlocked_ExpectSuccess() {
+            MapInfo mapInfo = new MapInfo(10, 10, 2);
+            mapInfo.FillMapWithCells(new CellInfo(true, 1));
+            MovementPath result = PathFinderAStar.FindShortestPath(mapInfo, new List<Coordinate>()
+            { new Coordinate(0,0,0)}, new Boundary(new Coordinate(2, 2, 0), new Coordinate(3, 3, 0)), false);
+            Assert.AreEqual(new Coordinate(2, 2, 0), result.GetEndCoordinate());
         }
 
         [TestMethod()]

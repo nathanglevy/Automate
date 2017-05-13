@@ -18,21 +18,6 @@ namespace AutomateTests.Tasks
         }
 
         [TestMethod()]
-        public void TestCreateNewTask_ExpectSuccess()
-        {
-            _taskDelegator.CreateNewTask();
-        }
-
-        [TestMethod()]
-        public void TestIsPendingTasksForDelegation()
-        {
-            Assert.IsFalse(_taskDelegator.IsPendingTasksForDelegation());
-            Task newTask = new Task();
-            _taskDelegator.AddAndCommitNewTask(newTask);
-            Assert.IsTrue(_taskDelegator.IsPendingTasksForDelegation());
-        }
-
-        [TestMethod()]
         public void TestAssignTask_ExpectSuccess()
         {
             Task newTask = new Task();

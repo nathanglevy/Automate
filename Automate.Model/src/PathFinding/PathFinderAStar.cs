@@ -32,19 +32,27 @@ namespace Automate.Model.PathFinding
             return FindShortestPath(mapInfo, source, new Boundary(target, target), true);
         }
 
-        public static MovementPath FindShortestPath(MapInfo mapInfo, List<Coordinate> source, Boundary target, bool targetAccessible)
+        public static MovementPath FindShortestPath(MapInfo mapInfo, List<Coordinate> source, Boundary target,
+            bool targetAccessible)
+        {
+            return FindShortestPath(mapInfo, source, target, targetAccessible, 1).First();
+        }
+
+        public static List<MovementPath> FindShortestPath(MapInfo mapInfo, List<Coordinate> source, Boundary target, bool targetAccessible, int getSourceCount)
         {
             if (mapInfo == null || source == null || target == null)
                 throw new ArgumentNullException();
             if (!(mapInfo.IsCoordinateIsWithinBounds(target.topLeft) && mapInfo.IsCoordinateIsWithinBounds(target.bottomRight)))
                 throw new ArgumentOutOfRangeException();
+            if (source.Count < getSourceCount)
+                throw new ArgumentOutOfRangeException(nameof(getSourceCount), "Cannot search for more sources than sources given in list");
             foreach (Coordinate sourceCoordinate in source)
             {
                 if (!(mapInfo.IsCoordinateIsWithinBounds(sourceCoordinate)))
                     throw new ArgumentOutOfRangeException();
                 if (target.IsCoordinateInBoundary(sourceCoordinate))
                 {
-                    return new MovementPath(sourceCoordinate);
+                    return new List<MovementPath>() {new MovementPath(sourceCoordinate)};
                 }
             }
 
@@ -69,7 +77,7 @@ namespace Automate.Model.PathFinding
             
 
             //while the to visit list is not empty
-            while ((toVisitList.Count > 0) && !visitedSet.Intersect(source).Any())
+            while ((toVisitList.Count > 0) && (visitedSet.Intersect(source).Count() < getSourceCount))
             {
                 Coordinate currentCoordinate = toVisitList.Values[0];
                 double currentWeight = toVisitList.Keys[0];
@@ -108,14 +116,32 @@ namespace Automate.Model.PathFinding
             if (!visitedSet.Intersect(source).Any())
                 throw new NoPathFoundException();
 
-            MovementPath resultPath = new MovementPath(visitedSet.Intersect(source).First());
+            List<MovementPath> resultPathList = new List<MovementPath>();
 
-            //build the return path
-            while(!target.GetListOfCoordinatesInBoundary().Contains(resultPath.GetEndCoordinate()))
+            foreach (Coordinate coordinate in visitedSet.Intersect(source))
             {
-                resultPath.AddMovement(movementList[resultPath.GetEndCoordinate()]);
+                MovementPath resultPath = new MovementPath(visitedSet.Intersect(source).First());
+
+                //build the return path
+                while (!target.GetListOfCoordinatesInBoundary().Contains(resultPath.GetEndCoordinate())) {
+                    var lastCoordinate = resultPath.GetEndCoordinate();
+                    var nextCoordinate = lastCoordinate + movementList[lastCoordinate].GetMoveDirection();
+                    bool isNextPassable = mapInfo.GetCell(nextCoordinate).IsPassable();
+                    if (!isNextPassable && target.GetListOfCoordinatesInBoundary().Contains(nextCoordinate))
+                        break;
+
+                    //this should not happen
+                    if (!isNextPassable)
+                        throw new PathFindingException("Illegal state - this should never happen -- error when trying" +
+                                                       "to calculate the path.");
+                    resultPath.AddMovement(movementList[resultPath.GetEndCoordinate()]);
+                }
+                resultPathList.Add(resultPath);
+                if (resultPathList.Count >= getSourceCount)
+                    break;
             }
-            return resultPath;
+            
+            return resultPathList;
         }
 
 

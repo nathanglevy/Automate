@@ -69,6 +69,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Components\Component.cs" />
     <Compile Include="src\Movables\MovableCapabilities.cs" />
+    <Compile Include="src\PathFinding\PathFindingException.cs" />
     <Compile Include="src\Requirements\ITransportRequirement.cs" />
     <Compile Include="src\StructureComponents\IStructure.cs" />
     <Compile Include="src\GameWorldComponents\IGameWorld.cs" />
