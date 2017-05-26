@@ -216,7 +216,7 @@ namespace AutomateTests.test.Controller
             // a. pickup Task from Dest
             // b. Deliver Task to Storage
             Assert.AreEqual(TaskActionType.DeliveryTask, taskContainer.TargetTask.GetCurrentAction().TaskActionType);
-            Assert.AreEqual(new Coordinate(5, 4, 0), taskContainer.TargetTask.GetCurrentAction().TaskLocation);
+            Assert.AreEqual(new Coordinate(5, 3, 0), taskContainer.TargetTask.GetCurrentAction().TaskLocation);
             Assert.AreEqual(170, taskContainer.TargetTask.GetCurrentAction().Amount);
 
 
@@ -232,7 +232,7 @@ namespace AutomateTests.test.Controller
             // a. pickup Task from Dest
             // b. Deliver Task to Storage
             Assert.AreEqual(TaskActionType.DeliveryTask, taskContainer.TargetTask.GetCurrentAction().TaskActionType);
-            Assert.AreEqual(new Coordinate(5, 5, 0), taskContainer.TargetTask.GetCurrentAction().TaskLocation);
+            Assert.AreEqual(new Coordinate(6, 5, 0), taskContainer.TargetTask.GetCurrentAction().TaskLocation);
             Assert.AreEqual(30, taskContainer.TargetTask.GetCurrentAction().Amount);
 
 

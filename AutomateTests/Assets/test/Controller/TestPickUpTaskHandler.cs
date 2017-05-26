@@ -13,6 +13,7 @@ using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
+using Automate.Model.StructureComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AutomateTests.Controller
@@ -81,9 +82,13 @@ namespace AutomateTests.Controller
         {
             _gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
             var movableItem = _gameWorldItem.CreateMovable(new Coordinate(3, 1, 0), MovableType.NormalHuman);
-            ComponentStack componentsAtCoordinate = _gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0))
-                .AddComponentStack(Component.GetComponent(ComponentType.IronOre), 0);
-            componentsAtCoordinate.AddAmount(100);
+            var movableStack = movableItem.ComponentStackGroup.AddComponentStack(ComponentType.IronOre, 0);
+
+            var structure = _gameWorldItem.CreateStructure(new Coordinate(0, 0, 0), new Coordinate(1, 1, 1), StructureType.Basic);
+            var componentsAtCoordinate = structure.ComponentStackGroup.AddComponentStack(ComponentType.IronOre, 100);
+//            ComponentStack componentsAtCoordinate = _gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0))
+//                .AddComponentStack(Component.GetComponent(ComponentType.IronOre), 0);
+//            componentsAtCoordinate.AddAmount(100);
           //  componentsAtCoordinate.AssignOutgoingAmount(movableItem.Guid,99);
         
 

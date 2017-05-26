@@ -24,8 +24,6 @@ namespace Automate.Controller.Handlers.RequirementsHandler
         {
             try
             {
-
-
                 if (!CanHandle(args))
                     throw new ArgumentException(
                         "only Args from the type RequirementsPackage can be passed to Handle Method");
@@ -94,6 +92,10 @@ namespace Automate.Controller.Handlers.RequirementsHandler
                 numberOfWorkersPerGuid.Clear();
 
                 return new HandlerResult(tasks) {IsInternal = true};
+            }
+            catch (ArgumentException ae)
+            {
+                throw ae;
             }
             catch (Exception e)
             {

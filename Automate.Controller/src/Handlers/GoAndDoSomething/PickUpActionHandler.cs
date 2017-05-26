@@ -24,7 +24,12 @@ namespace Automate.Controller.Handlers.GoAndPickUp
 
             // Get the Component Stack Group in the Pickup Location - Source
             var sourceComponentStackGroup = gameWorldItem.GetComponentStackGroupAtCoordinate(pickUpAction.TargetDest);
-
+//            if (gameWorldItem.IsStructureAtCoordinate(pickUpAction.TargetDest))
+//            {
+//                var structure = gameWorldItem.GetStructureAtCoordinate(pickUpAction.TargetDest);
+//                sourceComponentStackGroup = structure.ComponentStackGroup;
+//            }
+            
             // Get the Movable Object - Target
             var movableItem = gameWorldItem.GetMovable(pickUpAction.MovableId);
 

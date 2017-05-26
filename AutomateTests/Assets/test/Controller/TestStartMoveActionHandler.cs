@@ -110,7 +110,7 @@ namespace AutomateTests.Controller
             Assert.IsNotNull(handlerResult2.GetItems()[0] as MoveAction);
             var moveAction1 = handlerResult2.GetItems()[0] as MoveAction;
             Assert.AreEqual(new Coordinate(2, 1, 0), moveAction1.CurrentCoordiate);
-            Assert.AreEqual(new Coordinate(2, 2, 0), moveAction1.To);
+            Assert.AreEqual(new Coordinate(3, 2, 0), moveAction1.To);
 
         }
 
