@@ -124,9 +124,6 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>Assets\Plugins\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>Assets\Plugins\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="NSubstitute">
       <HintPath>Assets\UnityTestTools\UnitTesting\Editor\NSubstitute\NSubstitute.dll</HintPath>
     </Reference>
@@ -181,7 +178,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Graphics\openpixels-master\openpixels-master\README.txt" />
-    <None Include="Assets\Plugins\nunit.framework.xml" />
     <None Include="Assets\StreamingAssets\build_info.txt" />
     <None Include="Assets\UnityTestTools\Examples\IntegrationTestsFrameworkExamples\AngryBotsTests\Shaders\BackgroundAndCharacters\AngryInclude.cginc" />
     <None Include="Assets\UnityTestTools\Examples\IntegrationTestsFrameworkExamples\AngryBotsTests\Shaders\BackgroundAndCharacters\CharacterSelfIlluminationReflective.shader" />
