@@ -299,6 +299,14 @@ namespace Automate.Model.GameWorldComponents
             }
         }
 
+        public List<MovementPath> GetMovementPathsToBoundary(List<Coordinate> startCoordinates, Boundary endBoundary, bool inclusive, int returnPathCount) {
+            return PathFinderAStar.FindShortestPath(_map, startCoordinates, endBoundary, inclusive, returnPathCount);
+        }
+
+        public List<MovementPath> GetMovementPathsToCoordinate(List<Coordinate> startCoordinates, Coordinate endCoordinate, bool inclusive, int returnPathCount) {
+            return PathFinderAStar.FindShortestPath(_map, startCoordinates, new Boundary(endCoordinate, endCoordinate), inclusive, returnPathCount);
+        }
+
         //public Task CreateTask
         public MovementPath GetMovementPathWithLowestCostToBoundary(List<Coordinate> startCoordinates, Boundary endBoundary, bool inclusive)
         {
