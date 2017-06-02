@@ -8,6 +8,7 @@ using Automate.Controller.Handlers.GoAndDoSomething;
 using Automate.Controller.Handlers.GoAndPickUp;
 using Automate.Controller.Handlers.MoveHandler;
 using Automate.Controller.Handlers.PlaceAnObject;
+using Automate.Controller.Handlers.RequirementsHandler;
 using Automate.Controller.Handlers.RightClockNotification;
 using Automate.Controller.Handlers.SelectionNotification;
 using Automate.Controller.Handlers.TaskActionHandler;
@@ -39,7 +40,7 @@ namespace Automate.Controller.Modules
 
         public GameController(IGameView view)
         {
-            Model = Guid.Empty;
+            GameWorldGuid = Guid.Empty;
             View = view;
             // register current Controller
             view.Controller = this;
@@ -70,6 +71,8 @@ namespace Automate.Controller.Modules
             OutputSched.OnPull += ForwardItemToTimerSched;
 
             // register handlers
+            _handlers.Add(new RequirementsHandler());
+
             _handlers.Add(new GoAndPickUpTaskHandler());
             _handlers.Add(new GoAndDeliverTaskHandler())
                 ;
@@ -110,27 +113,19 @@ namespace Automate.Controller.Modules
         private void OnViewUpdate(ViewUpdateArgs args)
         {
             // Push any pending items at model to view
-            PushFromModelToView(GameUniverse.GetGameWorldItemById(Model), OutputSched);
+            PushFromModelToView(GameUniverse.GetGameWorldItemById(GameWorldGuid), OutputSched);
 
             // forward the update to the Timer Sched
             ForwardUpdateToTimerSched(args);
 
-            // seek for all Requirments and Generate Tassk
-            //var gameWorld = GameUniverse.GetGameWorldItemById(Model);
-            //var structureItem = gameWorld.CreateStructure(new Coordinate(3, 3, 0), new Coordinate(1, 1, 1), StructureType.Basic);
-            //var currentJobJobRequirements = structureItem.Structure.CurrentJob.JobRequirements;
-            //foreach (var currentJobJobRequirement in currentJobJobRequirements.GetIncompleteRequirements())
-            //{
-            //    currentJobJobRequirement.RequirementType
-            //}
-    //        HandleRequirements(args);
+            // Handle All PickUp/Delivery/Build/... Requirments
+            HandleRequirements(args);
 
 
         }
 
         private void HandleRequirements(ViewUpdateArgs args)
         {
-
             // Foreach Sorted Requirment
                 // Foreach Idle Movable
                     // IfCanMovableDo(Requirment)
@@ -149,18 +144,13 @@ namespace Automate.Controller.Modules
 
             // At this point we have several candidates for the job
              // Pick the Cheapest movable and Execute the Requriment
-           
 
 
+            var gameWorld = GameUniverse.GetGameWorldItemById(GameWorldGuid);
+            var requirementsPackage = new RequirementsPackage(gameWorld.RequirementAgent);
 
-
-
-
-
-
-
-
-            throw new NotImplementedException();
+            // Call Handle Method
+            Handle(requirementsPackage);
         }
 
         private void PushFromModelToView(IGameWorld gameWorldItem,
@@ -211,7 +201,7 @@ namespace Automate.Controller.Modules
         }
 
 
-        public Guid Model { get; private set; }
+        public Guid GameWorldGuid { get; private set; }
         public IGameView View { get; private set; }
 
         public IList<ThreadInfo> Handle(IObserverArgs args)
@@ -251,7 +241,7 @@ namespace Automate.Controller.Modules
             {
 
                 // invoke Pre Handle
-                var handlerUtils = new HandlerUtils(Model, HandlerActivation, AcknowledgeActivation);
+                var handlerUtils = new HandlerUtils(GameWorldGuid, HandlerActivation, AcknowledgeActivation);
                 OnPreHandle?.Invoke(new ControllerNotificationArgs(args, handlerUtils));
 
                 // Handle and Get Result
@@ -322,7 +312,7 @@ namespace Automate.Controller.Modules
         //    {
         //        // Handle and Get Result
         //        IAcknowledgeResult<MasterAction> acknowledgeResult = handler.Acknowledge(action,
-        //            new HandlerUtils(Model, HandlerActivation, AcknowledgeActivation));
+        //            new HandlerUtils(GameWorldGuid, HandlerActivation, AcknowledgeActivation));
 
         //        // Push to Sched
         //        OutputSched.GetPushInvoker().Invoke(acknowledgeResult);
@@ -348,18 +338,18 @@ namespace Automate.Controller.Modules
      
         public bool HasFocusedGameWorld
         {
-            get { return !Model.Equals(Guid.Empty); }
+            get { return !GameWorldGuid.Equals(Guid.Empty); }
         }
 
         public void FocusGameWorld(Guid gameWorldId)
         {
-            Model = gameWorldId;
+            GameWorldGuid = gameWorldId;
         }
 
         public Guid UnfocusGameWorld()
         {
-            Guid focusedWorld = Model;
-            Model = Guid.Empty;
+            Guid focusedWorld = GameWorldGuid;
+            GameWorldGuid = Guid.Empty;
             return focusedWorld;
         }
 

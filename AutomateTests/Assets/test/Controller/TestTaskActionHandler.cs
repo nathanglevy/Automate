@@ -7,6 +7,7 @@ using Automate.Controller.Interfaces;
 using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
+using Automate.Model.StructureComponents;
 using Automate.Model.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -55,7 +56,30 @@ namespace AutomateTests.Controller
         }
 
         [TestMethod]
-        public void TestHandlePickUp_ExpectGoAndPickUpTaskGenerated()
+        public void TestHandlePickUpToStructure_ExpectGoAndPickUpTaskGenerated()
+        {
+            var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(10, 10, 1));
+            var newTask = gameWorldItem.TaskDelegator.CreateNewTask();
+            var structure = gameWorldItem.CreateStructure(new Coordinate(3, 3, 0), new Coordinate(1, 1, 1), StructureType.MediumFire);
+            structure.ComponentStackGroup.AddComponentStack(ComponentType.IronOre, 0);
+
+            var taskAction = newTask.AddTransportAction(TaskActionType.PickupTask, new Coordinate(3, 3, 0), structure.ComponentStackGroup, Component.IronOre, 30);
+            var newGuid = Guid.NewGuid();
+            gameWorldItem.TaskDelegator.AssignTask(newGuid, newTask);
+
+            var taskActionHandler = new TaskActionHandler();
+            var handlerResult = taskActionHandler.Handle(new TaskActionContainer(taskAction, newTask.Guid) { OnCompleteDelegate = OnCompleteCheck }, new HandlerUtils(gameWorldItem.Guid));
+
+            Assert.AreEqual(1, handlerResult.GetItems().Count);
+
+            Assert.IsTrue(condition: handlerResult.GetItems()[0] is GoAndPickUpAction);
+            var goAndPickUpAction = handlerResult.GetItems()[0] as GoAndPickUpAction;
+            Assert.AreEqual(newGuid, goAndPickUpAction.MovableGuid);
+            Assert.AreEqual(OnCompleteCheck, goAndPickUpAction.OnCompleteDelegate);
+        }
+
+        [TestMethod]
+        public void TestHandlePickUpToCell_ExpectGoAndPickUpTaskGenerated()
         {
             var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(10, 10, 1));
             var newTask = gameWorldItem.TaskDelegator.CreateNewTask();

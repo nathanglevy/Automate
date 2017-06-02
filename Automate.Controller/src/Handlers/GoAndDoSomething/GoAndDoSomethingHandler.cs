@@ -32,6 +32,7 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
 
             // Get the target component Stack
             var componentCoordinate = GetComponentCoordinate(goAndDoSomethingAction, movableItem);
+
             var componentStackGroup = gameWorldItem.GetComponentStackGroupAtCoordinate(componentCoordinate);
             var targetComponentStack = componentStackGroup.GetComponentStack(goAndDoSomethingAction.ComponentType);
 
@@ -42,6 +43,7 @@ namespace Automate.Controller.Handlers.GoAndDoSomething
             var moveAction = new StartMoveAction(GetGoDestination(goAndDoSomethingAction, movableItem), movableItem.Guid)
             {
                 OnCompleteDelegate = OnMovableAtTargetDest,
+                MasterTaskId = goAndDoSomethingAction.MasterTaskId,
             };
 
             // Save the Action according to MasterTaskId

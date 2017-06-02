@@ -166,13 +166,13 @@ namespace AutomateTests.Controller
             Assert.AreEqual(new Coordinate(1, 0, 0), moveAction2.To);
             Assert.AreEqual(new Coordinate(2, 0, 0), moveAction2.CurrentCoordiate);
 
-            var result3 = moveActionHandler.Handle(moveAction2, utils);
-            Assert.AreEqual(1, result3.GetItems().Count);
-            Assert.AreEqual(ActionType.Movement, result3.GetItems()[0].Type);
-            var moveAction3 = result3.GetItems()[0] as MoveAction;
-            Assert.IsNotNull(moveAction3);
-            Assert.AreEqual(new Coordinate(0, 0, 0), moveAction3.To);
-            Assert.AreEqual(new Coordinate(1, 0, 0), moveAction3.CurrentCoordiate);
+            //var result3 = moveActionHandler.Handle(moveAction2, utils);
+            //Assert.AreEqual(1, result3.GetItems().Count);
+            //Assert.AreEqual(ActionType.Movement, result3.GetItems()[0].Type);
+            //var moveAction3 = result3.GetItems()[0] as MoveAction;
+            //Assert.IsNotNull(moveAction3);
+            //Assert.AreEqual(new Coordinate(0, 0, 0), moveAction3.To);
+            //Assert.AreEqual(new Coordinate(1, 0, 0), moveAction3.CurrentCoordiate);
 
 
             var result4 = moveActionHandler.Handle(moveAction2, utils);
@@ -180,8 +180,8 @@ namespace AutomateTests.Controller
             Assert.AreEqual(ActionType.Movement, result4.GetItems()[0].Type);
             var moveAction4 = result4.GetItems()[0] as MoveAction;
             Assert.IsNotNull(moveAction4);
-            Assert.AreEqual(new Coordinate(0, 0, 0), moveAction4.To);
-            Assert.AreEqual(new Coordinate(0, 0, 0), moveAction4.CurrentCoordiate);
+            Assert.AreEqual(new Coordinate(1, 0, 0), moveAction4.To);
+            Assert.AreEqual(new Coordinate(1, 0, 0), moveAction4.CurrentCoordiate);
 
             _DeliverHandleSync = new AutoResetEvent(false);
             var resultNotRelvant = moveActionHandler.Handle(moveAction4, utils);

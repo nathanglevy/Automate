@@ -92,7 +92,7 @@ namespace AutomateTests.Controller
             var gameWorld = GameUniverse.CreateGameWorld(new Coordinate(4, 2, 1));
             var movable = gameWorld.CreateMovable(new Coordinate(0, 0, 0), MovableType.FastHuman);
 
-            // Call the Model To Calculate a Path
+            // Call the GameWorldGuid To Calculate a Path
             var sucess = movable.IssueMoveCommand(new Coordinate(3, 0, 0));
             Assert.IsTrue(sucess);
 
@@ -124,7 +124,7 @@ namespace AutomateTests.Controller
             var gameWorld = GameUniverse.CreateGameWorld(new Coordinate(4, 2, 1));
             var movable = gameWorld.CreateMovable(new Coordinate(0, 0, 0), MovableType.FastHuman);
 
-            // Call the Model To Calculate a Path
+            // Call the GameWorldGuid To Calculate a Path
             var sucess = movable.IssueMoveCommand(new Coordinate(2, 0, 0));
             movable.StartTransitionToNext();
             Assert.IsTrue(sucess);

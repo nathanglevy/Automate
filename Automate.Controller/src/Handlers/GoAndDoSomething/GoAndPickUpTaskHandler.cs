@@ -11,7 +11,10 @@ namespace Automate.Controller.Handlers.GoAndPickUp
 {
     public class GoAndPickUpTaskHandler : GoAndDoSomethingHandler
     {
-
+        public override IHandlerResult<MasterAction> Handle(IObserverArgs args, IHandlerUtils utils)
+        {
+            return base.Handle(args, utils);
+        }
 
         public override bool CanHandle(IObserverArgs args)
         {
@@ -32,18 +35,20 @@ namespace Automate.Controller.Handlers.GoAndPickUp
             var gameWorld = GameUniverse.GetGameWorldItemById(args.Utils.GameWorldId);
             var movableItem = gameWorld.GetMovable(goAndPickUpAction.MovableGuid);
 
-            var pickUpAction = new PickUpAction(ComponentType.IronOre, GetComponentCoordinate(goAndPickUpAction, movableItem), goAndPickUpAction.Amount, goAndPickUpAction.MovableGuid)
+            var pickUpAction = new PickUpAction(goAndPickUpAction.ComponentType, GetComponentCoordinate(goAndPickUpAction, movableItem), goAndPickUpAction.Amount, goAndPickUpAction.MovableGuid)
             {
                 OnCompleteDelegate = AcknowledgeGoAndDoIsOver,
                 Duration = new TimeSpan(0),
                 NeedAcknowledge = false,
+                MasterTaskId = modelAction.MasterTaskId,
             };
             args.Utils.InvokeHandler(pickUpAction);
         }
 
         protected override void AssignComponentStack(ComponentStack targetComponentStack, GoAndDoSomethingAction goAndDeliverAction, IMovable movable)
         {
-            targetComponentStack.AssignOutgoingAmount(goAndDeliverAction.MovableGuid, goAndDeliverAction.Amount);
+            // TODO: REVISIT THIS AGAIN - ASSIGN_OUT_GOING OCCURS AT REQUIRMENTS HANDLER
+           // targetComponentStack.AssignOutgoingAmount(goAndDeliverAction.MovableGuid, goAndDeliverAction.Amount);
         }
 
         protected override Coordinate GetGoDestination(GoAndDoSomethingAction goAndDoSomethingAction, IMovable movableItem)

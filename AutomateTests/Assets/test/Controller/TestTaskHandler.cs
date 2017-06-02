@@ -34,7 +34,7 @@ namespace AutomateTests.Controller
         public void TestCanHandleWithCorrectArgs_ExpectTrue()
         {
             var taskHandler = new TaskHandler();
-            Assert.IsTrue(taskHandler.CanHandle(new TaskContainer(null)));
+            Assert.IsTrue(taskHandler.CanHandle(new TaskContainer(new Task())));
         }
 
         [TestMethod]

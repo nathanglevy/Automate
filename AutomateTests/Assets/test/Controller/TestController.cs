@@ -33,7 +33,7 @@ namespace AutomateTests.test.Controller
             gameController.FocusGameWorld(model);
             Assert.IsNotNull(gameController);
             Assert.IsNotNull(gameController.View);
-            Assert.IsNotNull(gameController.Model);
+            Assert.IsNotNull(gameController.GameWorldGuid);
         }
 
         private Guid GetMockGameWorld()
@@ -427,7 +427,7 @@ namespace AutomateTests.test.Controller
             // mimic on Start Method to create the world
             gameWorldBase.PerformOnStart(new Coordinate(20, 20, 1));
 
-            var gameWorld = GameUniverse.GetGameWorldItemById(gameController.Model);
+            var gameWorld = GameUniverse.GetGameWorldItemById(gameController.GameWorldGuid);
 
             // create Pickup Component Stack
             var cmpntGrp330 = gameWorld.GetComponentStackGroupAtCoordinate(new Coordinate(3, 3, 0));
@@ -458,7 +458,7 @@ namespace AutomateTests.test.Controller
             gameWorld.TaskDelegator.AssignTask(movableItem.Guid, PickupAndDeliverTask);
 
             gameWorldBase.PerformOnUpdateStart();
-            // Handle all actions from Model
+            // Handle all actions from GameWorldGuid
             gameWorldBase.PerformOnUpdate();
 
             // Move from Push to Pull Q

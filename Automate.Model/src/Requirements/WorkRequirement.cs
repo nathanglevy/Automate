@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Automate.Model.Components;
 using Automate.Model.Tasks;
 
@@ -11,6 +12,8 @@ namespace Automate.Model.Requirements
         public int RequirementRemainingToSatisfy { get; private set; }
         public int TotalRequirement { get; }
         public Component ConsumedComponentType { get; }
+
+        public Guid Guid { get; } = Guid.NewGuid();
         //TODO:
         public int RequirementRemainingToDelegate { get; }
 
@@ -51,6 +54,6 @@ namespace Automate.Model.Requirements
             throw new System.NotImplementedException();
         }
 
-
+        
     }
 }

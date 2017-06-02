@@ -8,6 +8,7 @@ using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
 using Automate.Model.MapModelComponents;
 using Automate.Model.Movables;
+using Automate.Model.StructureComponents;
 using Automate.Model.Tasks;
 using AutomateTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -73,20 +74,25 @@ namespace AutomateTests.Controller
         {
             var gameWorldItem = GameUniverse.CreateGameWorld(new Coordinate(5, 5, 1));
             var movableItem = gameWorldItem.CreateMovable(new Coordinate(3, 2, 0), MovableType.NormalHuman);
+            var movableStack = movableItem.ComponentStackGroup.AddComponentStack(ComponentType.IronOre, 0);
 
-            gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0)).AddComponentStack(Component.GetComponent(ComponentType.IronOre), 100);
-            var componentsAtCoordinate = gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0)).GetComponentStack(ComponentType.IronOre);
+            var structure = gameWorldItem.CreateStructure(new Coordinate(0, 0, 0), new Coordinate(1, 1, 1), StructureType.Basic);
+            var componentsAtCoordinate = structure.ComponentStackGroup.AddComponentStack(Component.GetComponent(ComponentType.IronOre), 100);
+            //            gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0)).AddComponentStack(Component.GetComponent(ComponentType.IronOre), 100);
+            //            var componentsAtCoordinate = gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0)).GetComponentStack(ComponentType.IronOre);
 
             var newTask = gameWorldItem.TaskDelegator.CreateNewTask();
             gameWorldItem.TaskDelegator.AssignTask(movableItem.Guid,newTask);
-            newTask.AddTransportAction(TaskActionType.PickupTask, new Coordinate(0,0,0), gameWorldItem.GetComponentStackGroupAtCoordinate(new Coordinate(0, 0, 0)), Component.IronOre, 100 );
+            newTask.AddTransportAction(TaskActionType.PickupTask, new Coordinate(0,0,0), structure.ComponentStackGroup, Component.IronOre, 100 );
             var currentAction = newTask.GetCurrentAction();
 
             
 
+            // allocate 70 units for movable
             componentsAtCoordinate.AssignOutgoingAmount(movableItem.Guid,70);
-            
+            movableStack.AssignIncomingAmount(movableItem.Guid,70);
 
+            // create the pickup with same amount
             var pickUpAction = new PickUpAction(ComponentType.IronOre, new Coordinate(0,0,0),70, movableItem.Guid)
             {
                 MasterTaskId =  newTask.Guid,
@@ -94,10 +100,17 @@ namespace AutomateTests.Controller
                 OnCompleteDelegate = OnCompleteSniffer,
             };
 
+            // check before handle that stack has 100
             Assert.AreEqual(componentsAtCoordinate.CurrentAmount, 100);
+
+            // Execute the PickUp Action
             var pickUpActionHandler = new PickUpActionHandler();
             var handlerResult = pickUpActionHandler.Handle(pickUpAction, new HandlerUtils(gameWorldItem.Guid));
+
+            // Expect the 70 to be taken
             Assert.AreEqual(componentsAtCoordinate.CurrentAmount, 30);
+
+            // Expect the Action to Fire ImOver
             Assert.IsTrue(_onCompleteFired);
 
         }

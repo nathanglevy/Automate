@@ -103,6 +103,8 @@
     <Compile Include="src\Handlers\RequirementsHandler\ITransportScenarioProvider.cs" />
     <Compile Include="src\Handlers\RequirementsHandler\RequirementsHandler.cs" />
     <Compile Include="src\Handlers\RequirementsHandler\RequirementsPackage.cs" />
+    <Compile Include="src\Handlers\RequirementsHandler\StoragePickAndDeliver.cs" />
+    <Compile Include="src\Handlers\RequirementsHandler\TransportScenarioProvider.cs" />
     <Compile Include="src\Handlers\RightClockNotification\RightClickNotification.cs" />
     <Compile Include="src\Handlers\RightClockNotification\RightClickNotificationHandler.cs" />
     <Compile Include="src\Actions\SelectMovableAction.cs" />

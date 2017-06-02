@@ -134,7 +134,7 @@ namespace AutomateTests.Controller
 
             var gameController = new GameController(view);
 
-            // at First update, Actions from Model being copied to the "Staging" Area in the Schudler
+            // at First update, Actions from GameWorldGuid being copied to the "Staging" Area in the Schudler
             view.PerformOnStart(GameWorldSize());
             view.PerformCompleteUpdate();
 

@@ -5,7 +5,7 @@
 //using Automate.Controller.Handlers.AcknowledgeNotification;
 //using Automate.Controller.Interfaces;
 //using Automate.Controller.Modules;
-//using Automate.Model.MapModelComponents;
+//using Automate.GameWorld.MapModelComponents;
 //using AutomateTests.test.Mocks;
 //using Microsoft.VisualStudio.TestTools.UnitTesting;
 

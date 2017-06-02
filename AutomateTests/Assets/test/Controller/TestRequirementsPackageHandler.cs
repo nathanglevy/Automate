@@ -131,6 +131,36 @@ namespace AutomateTests.test.Controller
             Assert.AreEqual(120, taskContainer2.TargetTask.GetCurrentAction().Amount);
         }
 
+        [TestMethod]
+        public void
+            TestHandlePickUpRequirementWhenNoMovablesToDoTheJob_expectNothingToHappenAndNoTasksToBeAddedAndRequirmentStillActiveForNextRound()
+        {
+            // Create the World
+            var gameWorld = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
+
+            // Create a PickUp Requirement
+            var ironFactory = gameWorld.CreateStructure(new Coordinate(4, 4, 0), new Coordinate(2, 2, 1),
+                StructureType.Basic);
+
+            ironFactory.CurrentJob = new RequirementJob(JobType.ItemTransport);
+            ironFactory.CurrentJob.AddRequirement(new ComponentPickupRequirement(Component.Wood, 200));
+            ironFactory.ComponentStackGroup.AddComponentStack(Component.Wood, 200);
+
+            // create the Requirement package
+            var requirementWrapper = new RequirementsPackage(gameWorld.RequirementAgent);
+
+            // Create the Handler
+            var handler = new RequirementsHandler();
+            var handlerResult = handler.Handle(requirementWrapper, new HandlerUtils(gameWorld.Guid, null, null));
+
+
+            // check that we have a single TASK
+            Assert.AreEqual(0, handlerResult.GetItems().Count);
+            Assert.AreEqual(0, ironFactory.CurrentJob.PointsOfWorkDone);
+            Assert.AreEqual(200, ironFactory.CurrentJob.PointsOfWorkRemaining);
+        }
+
+
 
         [TestMethod]
         public void TestDeliverRequirmentWhenIdleMovableWithRequiredComponent_ExpectDeliveryTaskAssignedToMovable()
@@ -186,7 +216,7 @@ namespace AutomateTests.test.Controller
             // a. pickup Task from Dest
             // b. Deliver Task to Storage
             Assert.AreEqual(TaskActionType.DeliveryTask, taskContainer.TargetTask.GetCurrentAction().TaskActionType);
-            Assert.AreEqual(new Coordinate(5, 4, 0), taskContainer.TargetTask.GetCurrentAction().TaskLocation);
+            Assert.AreEqual(new Coordinate(5, 3, 0), taskContainer.TargetTask.GetCurrentAction().TaskLocation);
             Assert.AreEqual(170, taskContainer.TargetTask.GetCurrentAction().Amount);
 
 
@@ -202,13 +232,54 @@ namespace AutomateTests.test.Controller
             // a. pickup Task from Dest
             // b. Deliver Task to Storage
             Assert.AreEqual(TaskActionType.DeliveryTask, taskContainer.TargetTask.GetCurrentAction().TaskActionType);
-            Assert.AreEqual(new Coordinate(5, 5, 0), taskContainer.TargetTask.GetCurrentAction().TaskLocation);
+            Assert.AreEqual(new Coordinate(6, 5, 0), taskContainer.TargetTask.GetCurrentAction().TaskLocation);
             Assert.AreEqual(30, taskContainer.TargetTask.GetCurrentAction().Amount);
 
 
 
         }
 
+        [TestMethod]
+        public void TestDeliverRequirmentsWhenNoMovablesToDo_ExpectNothingValidRequirment()
+        {
+            // Create the World
+            var gameWorld = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
+
+            // Create a PickUp Requirement
+            var ironFactory = gameWorld.CreateStructure(new Coordinate(4, 4, 0), new Coordinate(2, 2, 1),
+                StructureType.Basic);
+
+            ironFactory.CurrentJob = new RequirementJob(JobType.ItemTransport);
+            ironFactory.CurrentJob.AddRequirement(new ComponentDeliveryRequirement(Component.IronOre, 200));
+            ironFactory.ComponentStackGroup.AddComponentStack(ComponentType.IronOre, 0);
+
+            // create the Requirement package
+            var requirementWrapper = new RequirementsPackage(gameWorld.RequirementAgent);
+
+            // Create the Handler
+            var handler = new RequirementsHandler();
+            var handlerResult = handler.Handle(requirementWrapper, new HandlerUtils(gameWorld.Guid, null, null));
+
+            // Test Check
+            Assert.AreEqual(0, handlerResult.GetItems().Count);
+            Assert.AreEqual(0, ironFactory.CurrentJob.PointsOfWorkDone);
+            Assert.AreEqual(200, ironFactory.CurrentJob.PointsOfWorkRemaining);
+        }
+
+        [TestMethod]
+        public void TestGetComponentStackOfCoordinateWhenBelongToStructure()
+        {
+            // Create the World
+            var gameWorld = GameUniverse.CreateGameWorld(new Coordinate(20, 20, 1));
+
+            // Create a PickUp Requirement
+            var ironFactory = gameWorld.CreateStructure(new Coordinate(4, 4, 0), new Coordinate(2, 2, 1),
+                StructureType.Basic);
+            ironFactory.ComponentStackGroup.AddComponentStack(ComponentType.Stone, 200);
+
+            var componentStackGroup = gameWorld.GetComponentStackGroupAtCoordinate(ironFactory.Coordinate);
+            Assert.IsTrue(componentStackGroup.IsContainingComponentStack(ComponentType.Stone));
+        }
 
         [TestMethod]
         public void NOT_IMP_TestHandleIdleMovablesWithCarriedComponents_expectDeliverytoClosetStorage()

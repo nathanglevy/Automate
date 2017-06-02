@@ -78,6 +78,8 @@
     <Compile Include="Assets\test\Controller\TestDeliverActionHandler.cs" />
     <Compile Include="Assets\test\Controller\TestDeliverTaskHandler.cs" />
     <Compile Include="Assets\test\Controller\TestDeliveryProviders\TestCarriedMovableDirectRoute.cs" />
+    <Compile Include="Assets\test\Controller\TestDeliveryProviders\TestPickUpFromNonStorageAndDeliver.cs" />
+    <Compile Include="Assets\test\Controller\TestDeliveryProviders\TestStoragePickupAndDeliver.cs" />
     <Compile Include="Assets\test\Controller\TestStartMoveActionHandler.cs" />
     <Compile Include="Assets\test\Controller\TestScheduler.cs" />
     <Compile Include="Assets\test\Controller\TestAcknowledgeNotification.cs" />

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Automate.Controller.Abstracts;
 using Automate.Controller.Interfaces;
+using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
 
 namespace Automate.Controller.Handlers.PlaceAnObject
@@ -23,8 +24,13 @@ namespace Automate.Controller.Handlers.PlaceAnObject
                 {
                     case ItemType.Movable:
                         var placeMovable = placeObjectArgs as PlaceAMovableRequest;
-                        gameWorld.CreateMovable(placeMovable.Coordinate, placeMovable.MovableType);
-                        break;
+                        var movable = gameWorld.CreateMovable(placeMovable.Coordinate, placeMovable.MovableType);
+
+                        // WA for now
+                        var addComponentStack = movable.ComponentStackGroup.AddComponentStack(ComponentType.IronOre, 0);
+                        addComponentStack.StackMax = 300;
+
+                            break;
                     case ItemType.Structure:
                         var placeStruct = placeObjectArgs as PlaceAStrcutureRequest;
                         gameWorld.CreateStructure(placeStruct.Coordinate, placeStruct.Dim,
