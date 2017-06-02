@@ -76,6 +76,9 @@
     <Reference Include="UnityEngine.TestRunner">
       <HintPath>Library\UnityAssemblies\UnityEngine.TestRunner.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>Library\UnityAssemblies\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor.TreeEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.TreeEditor.dll</HintPath>
     </Reference>
@@ -109,9 +112,6 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>Library\UnityAssemblies\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>Library\UnityAssemblies\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Assets\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -141,12 +141,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Editor\ExposeProperties.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Editor\IsoSnapping.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Editor\IsoSortingEditor.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Editor\IsoTransformEditor.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Editor\Reminder.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Editor\reminderHelper.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\Editor\AssertionComponentEditor.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\Editor\AssertionExplorerWindow.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\Editor\AssertionListRenderer.cs" />
@@ -186,7 +180,6 @@
     <Compile Include="Assets\UnityTestTools\IntegrationTestsFramework\TestRunner\Editor\TestComponentEditor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Graphics\UltimateIsometricToolkit\License.txt" />
     <None Include="Assets\Graphics\openpixels-master\openpixels-master\README.txt" />
     <None Include="Assets\Plugins\nunit.framework.xml" />
     <None Include="Assets\StreamingAssets\build_info.txt" />

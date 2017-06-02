@@ -61,6 +61,9 @@
     <Reference Include="UnityEngine.TestRunner">
       <HintPath>Library\UnityAssemblies\UnityEngine.TestRunner.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>Library\UnityAssemblies\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.Analytics">
       <HintPath>Library\UnityAssemblies\UnityEngine.Analytics.dll</HintPath>
     </Reference>
@@ -69,9 +72,6 @@
     </Reference>
     <Reference Include="UnityEngine.VR">
       <HintPath>Library\UnityAssemblies\UnityEngine.VR.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>Library\UnityAssemblies\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
@@ -94,21 +94,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\CameraDrag.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Core\HeuristicSorting.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Core\IsoSorting.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Core\IsoTransform.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Core\SortingStrategy.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Examples\GenericGridMap.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Examples\SmoothCamera2d.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\External\EasingFunctions.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\External\ExposePropertyAttribute.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\External\LinqExtensions.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\External\PinchZoom.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\IsoController\SimpleIsoObjectController.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\GizmosExtension.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\Isometric.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\MethodExtensionForMonoBehaviourTransform.cs" />
-    <Compile Include="Assets\Graphics\UltimateIsometricToolkit\Scripts\Utils\Singleton.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\AssertionComponent.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\AssertionException.cs" />
     <Compile Include="Assets\UnityTestTools\Assertions\Assertions.cs" />
@@ -163,7 +148,6 @@
     <Compile Include="Assets\src\View\ViewBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Graphics\UltimateIsometricToolkit\License.txt" />
     <None Include="Assets\Graphics\openpixels-master\openpixels-master\README.txt" />
     <None Include="Assets\Plugins\nunit.framework.xml" />
     <None Include="Assets\StreamingAssets\build_info.txt" />
