@@ -11,15 +11,15 @@ using Automate.Model.Tasks;
 
 namespace Automate.Controller.Handlers.RequirementsHandler
 {
-    public class CarriedMovableDirectRoute : ITransportScenarioProvider
+    public class CarriedMovableDirectRoute : TransportScenarioProvider, ITransportScenarioProvider
     {
-        public DeliveryCost CalcScenarioCost(RequirementJob requirmentJob, ITransportRequirement requirement,
+        public override DeliveryCost CalcScenarioCost(RequirementJob requirmentJob, ITransportRequirement requirement,
             Coordinate Destination, IGameWorld gameWorld)
         {
             throw  new NotImplementedException();
         }
 
-        public DeliveryCost CalcScenarioCost(RequirementJob requirmentJob, ITransportRequirement requirement,
+        public override DeliveryCost CalcScenarioCost(RequirementJob requirmentJob, ITransportRequirement requirement,
             Boundary boundery, IGameWorld gameWorld)
         {
             var allIdleMovables = gameWorld.GetMovableList().Where(m => !m.IsInMotion());

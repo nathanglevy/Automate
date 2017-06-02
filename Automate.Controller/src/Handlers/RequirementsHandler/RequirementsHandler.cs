@@ -116,7 +116,7 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             {
                 new CarriedMovableDirectRoute(),
 
-            };
+            }; 
 
             SortedList<float,DeliveryCost> costs = new SortedList<float,DeliveryCost>();
             foreach (var deliveryProvider in scenarios)
