@@ -154,5 +154,7 @@ namespace Automate.Model.GameWorldComponents
         IMovable GetMovable(Guid movableGuid);
         List<IMovable> GetSelectedMovableItemList();
         ICell GetCellAtCoordinate(Coordinate coordinate);
+        List<MovementPath> GetMovementPathsToBoundary(List<Coordinate> startCoordinates, Boundary endBoundary, bool inclusive, int returnPathCount);
+        List<MovementPath> GetMovementPathsToCoordinate(List<Coordinate> startCoordinates, Coordinate endCoordinate, bool inclusive, int returnPathCount);
     }
 }
