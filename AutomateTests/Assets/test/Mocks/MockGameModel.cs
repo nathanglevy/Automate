@@ -234,5 +234,15 @@ namespace AutomateTests.Mocks
         {
             throw new NotImplementedException();
         }
+
+        public List<MovementPath> GetMovementPathsToBoundary(List<Coordinate> startCoordinates, Boundary endBoundary, bool inclusive, int returnPathCount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<MovementPath> GetMovementPathsToCoordinate(List<Coordinate> startCoordinates, Coordinate endCoordinate, bool inclusive, int returnPathCount)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
