@@ -55,8 +55,8 @@ namespace AutomateTests.test.Controller.TestDeliveryProviders
             var storagePickAndDeliver = new StoragePickAndDeliver();
             var calcScenarioCost = storagePickAndDeliver.CalcScenarioCost(fire.CurrentJob, transportReq, fire.Boundary, gameWorld);
 
-            Assert.AreEqual(movable.Guid,calcScenarioCost.ScenarioTask.TargetTask.AssignedToGuid);
-            var taskActions = calcScenarioCost.ScenarioTask.TargetTask.GetTaskActions();
+            Assert.AreEqual(movable.Guid,calcScenarioCost.Task.TargetTask.AssignedToGuid);
+            var taskActions = calcScenarioCost.Task.TargetTask.GetTaskActions();
             Assert.AreEqual(2,taskActions.Count);
             Assert.AreEqual(TaskActionType.PickupTask,taskActions[0].TaskActionType);
             Assert.AreEqual(TaskActionType.DeliveryTask,taskActions[1].TaskActionType);

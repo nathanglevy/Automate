@@ -130,8 +130,8 @@ namespace Automate.Controller.Modules
                 // Foreach Idle Movable
                     // IfCanMovableDo(Requirment)
 
-                    // Calc Movable Job Cost (return Min)(Dest,PickUPs,Stoargs,movables)
-                        // Calculate Movable with component directly to Dest Cost
+                    // Calc Movable Job ScenarioCost (return Min)(Dest,PickUPs,Stoargs,movables)
+                        // Calculate Movable with component directly to Dest ScenarioCost
                         // Movable to Movable Transfer directly to Dest
 
                         // movable with component to Storage to Dest

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Automate.Controller.Handlers.TaskHandler;
 using Automate.Model.GameWorldComponents;
@@ -9,16 +10,14 @@ using Automate.Model.Tasks;
 
 namespace Automate.Controller.Handlers.RequirementsHandler
 {
-    public class StoragePickAndDeliver : ITransportScenarioProvider
+    public class StoragePickAndDeliver : TransportScenarioProvider, ITransportScenarioProvider
     {
-        public DeliveryCost CalcScenarioCost(RequirementJob requirmentJob, ITransportRequirement requirement, Coordinate Destination,
-            IGameWorld gameWorld)
+        public override  ScenarioTask CalcScenarioCost(RequirementJob requirmentJob, ITransportRequirement requirement, Coordinate Destination, IGameWorld gameWorld)
         {
             throw new System.NotImplementedException();
         }
 
-        public DeliveryCost CalcScenarioCost(RequirementJob structureCurrentJob, ITransportRequirement requirement,
-            Boundary boundary, IGameWorld gameWorld)
+        public override ScenarioTask CalcScenarioCost(RequirementJob structureCurrentJob, ITransportRequirement requirement, Boundary boundary, IGameWorld gameWorld)
         {
             var componentType = requirement.Component;
             var movables = gameWorld.GetMovableList().Where(m => !m.IsInMotion() && m.ComponentStackGroup.IsContainingComponentStack(componentType));
@@ -26,14 +25,14 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             // In case of no movable exists -- nothing we can do
             if (!movables.Any())
             {
-                return new DeliveryCost(float.PositiveInfinity, null, 0);
+                return new NoScenarioAvailable();
             }
 
             // LOCATE STORAGE HAS COMPONENT
             var storageWithComponent = gameWorld.GetStructuresList().Where(s => s.StructureType.Equals(StructureType.Storage) && s.ComponentStackGroup.IsContainingComponentStack(componentType));
             if (!storageWithComponent.Any())
             {
-                return new DeliveryCost(float.PositiveInfinity, null, 0);
+                return new NoScenarioAvailable();
             }
 
             // Find the closest storage to delivery location
@@ -51,19 +50,19 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             var selectedMovable = movables.First(m => m.Coordinate.Equals(movableToStorageShortestPath.GetStartCoordinate()));
 
             
-            // the Cost will be the SUM of TWO PATHS FOR NOW (ASSUMING PICKUP has no cost)
+            // the ScenarioCost will be the SUM of TWO PATHS FOR NOW (ASSUMING PICKUP has no cost)
             // 
             float totalCost = storageToDestShortestPath.TotalCost + movableToStorageShortestPath.TotalCost;
 
             // NOW will create 2 tasks to pickup and deliver
 
-            // Create New Task
+            // Create New ScenarioTask
             var pickupAndDeliverTask = gameWorld.TaskDelegator.CreateNewTask();
 
             // Assign Movable
             gameWorld.TaskDelegator.AssignTask(selectedMovable.Guid, pickupAndDeliverTask);
 
-            // Create Delivery Task
+            // Create Delivery ScenarioTask
             // get the max amount the movable can pickup
             var pickupAmount = selectedMovable.ComponentStackGroup.GetComponentStack(componentType).RemainingAmountForIncoming;
 
@@ -85,9 +84,36 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             // Attach action to Req
             requirement.AttachAction(deliverAction);
 
-            // return the Cost & the Task
-            return new DeliveryCost(totalCost, new TaskContainer(pickupAndDeliverTask), pickupAmount);
+            // return the ScenarioCost & the ScenarioTask
+            return new ScenarioTask(
+                new ScenarioCost(totalCost),
+                new TaskContainer(pickupAndDeliverTask),
+                delegate()
+                {
+                    // set outgoing to the storage
+                    pickupStorage.ComponentStackGroup.GetComponentStack(componentType)
+                        .AssignOutgoingAmount(selectedMovable.Guid, pickupAmount);
 
+                    // set incoming and outgoing to the movable
+                    selectedMovable.ComponentStackGroup.GetComponentStack(componentType)
+                        .AssignIncomingAmount(selectedMovable.Guid, pickupAmount);
+                    selectedMovable.ComponentStackGroup.GetComponentStack(componentType)
+                        .AssignOutgoingAmount(selectedMovable.Guid, pickupAmount);
+
+                    // set outgoing to the target delivery structure
+                    var targetStructure = gameWorld.GetStructureAtCoordinate(boundary.topLeft);
+                    targetStructure.ComponentStackGroup.GetComponentStack(componentType)
+                        .AssignIncomingAmount(selectedMovable.Guid, pickupAmount);
+                });
+
+        }
+
+    }
+
+    public class NoScenarioAvailable : ScenarioTask
+    {
+        public NoScenarioAvailable() : base(new ScenarioCost(float.PositiveInfinity), null, null)
+        {
         }
     }
 }

@@ -115,36 +115,39 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             List<ITransportScenarioProvider> scenarios = new List<ITransportScenarioProvider>()
             {
                 new CarriedMovableDirectRoute(),
+                new StoragePickAndDeliver(),
 
             }; 
 
-            SortedList<float,DeliveryCost> costs = new SortedList<float,DeliveryCost>();
+            ScenarioTask minTask = null;
+            float minCost = float.PositiveInfinity;
             foreach (var deliveryProvider in scenarios)
             {
-                var scenarioCost = deliveryProvider.CalcScenarioCost(structure.CurrentJob, requirement, structure.Boundary,
+                var scenarioTask = deliveryProvider.CalcScenarioCost(structure.CurrentJob, requirement, structure.Boundary,
                     gameWorld);
-                costs.Add(scenarioCost.Cost,scenarioCost);
+                if (scenarioTask.ScenarioCost.Cost < minCost)
+                {
+                    minCost = scenarioTask.ScenarioCost.Cost;
+                    minTask = scenarioTask;
+                }
             }
 
-            // Now we have all scenarios and associated cost, let's pick the minumum and execute
-            var minCost = costs.Min();
 
-            if (minCost.Key == float.PositiveInfinity)
-                return null;
+            // Check that we really have a real scenario can be executed
+            if (minCost == float.PositiveInfinity)
+                return null; // TODO: return "empty" object
 
-            // Allocate InComing to Target Component
-            Guid executingMovable = minCost.Value.ScenarioTask.TargetTask.AssignedToGuid;
-            structure.ComponentStackGroup.GetComponentStack(requirement.Component).AssignIncomingAmount(executingMovable,minCost.Value.Amount );
-            gameWorld.GetMovable(executingMovable).ComponentStackGroup.GetComponentStack(requirement.Component).AssignOutgoingAmount(executingMovable,minCost.Value.Amount);
+            // Execute and LeftOvers needed to make the Task attacable
+            minTask.Execute();
 
 
-            // Add/Assign/Commit new Task to TaskDelegator
-            gameWorld.TaskDelegator.AddAndCommitNewTask(minCost.Value.ScenarioTask.TargetTask);
+            // Add/Assign/Commit new ScenarioTask to TaskDelegator
+            gameWorld.TaskDelegator.AddAndCommitNewTask(minTask.Task.TargetTask);
 
             // return to start handling
 
-            // return the TaskContainer associated with Minumum Cost
-            return minCost.Value.ScenarioTask;
+            // return the TaskContainer associated with Minumum ScenarioCost
+            return minTask.Task;
         }
 
         private void IncWorkersListForItem(IStructure structureJobReq)
@@ -182,7 +185,7 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             foreach (var movable in gameWorld.GetMovableList().Where(m => !m.IsInMotion() &&
             m.ComponentStackGroup.GetComponentStack(targetComponent).RemainingAmountForIncoming > 0))
             {
-                // Check if we already assigned this Movable to other Req/Task at this Phase
+                // Check if we already assigned this Movable to other Req/ScenarioTask at this Phase
                 if (gameWorld.TaskDelegator.HasDelegatedTasks(movable.Guid)) 
                     continue;
 
@@ -190,7 +193,7 @@ namespace Automate.Controller.Handlers.RequirementsHandler
                 if (!CanMovableDoTheJob(movable, structure.CurrentJob))
                     continue;
 
-                // Calculate the Cost doing the requirment using this movable
+                // Calculate the ScenarioCost doing the requirment using this movable
                 var cost = CalculateJobCost(structure, movable, gameWorld);
 
                 // push it to the dict
@@ -204,7 +207,7 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             if (costPerMovableDict.Count == 0)
                 return null;    // No Movable Found
 
-            // now we will pick the cheaper and execute the Task
+            // now we will pick the cheaper and execute the ScenarioTask
             var matchMovableKey = costPerMovableDict.Min(p => p.Key);
 
             // Get Component Type and Find the Max Amount of Component can be delivered
@@ -226,13 +229,13 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             if (amount == 0)
                 return null;
 
-            // Create a Task 
+            // Create a ScenarioTask 
             var newTask = new Task();
             
-            // Add/Assign/Commit new Task to TaskDelegator
+            // Add/Assign/Commit new ScenarioTask to TaskDelegator
             gameWorld.TaskDelegator.AddAndCommitNewTask(newTask);
 
-            // Assign Task To Best Match Movable
+            // Assign ScenarioTask To Best Match Movable
             //gameWorld.TaskDelegator.AssignTask(matchMovable.Guid, newTask);
             newTask.AssignedToGuid = matchMovable.Guid;
 
@@ -245,7 +248,7 @@ namespace Automate.Controller.Handlers.RequirementsHandler
             var movableTargetStack = matchMovable.ComponentStackGroup.GetComponentStack(targetComponent);
             movableTargetStack.AssignIncomingAmount(matchMovable.Guid, amount);
 
-            // Create the Transport Pickup Action in Task
+            // Create the Transport Pickup Action in ScenarioTask
             var transportAction = newTask.AddTransportAction(TaskActionType.PickupTask, structure.Coordinate,stackGroup
                 , targetComponent, amount);
 
@@ -263,7 +266,7 @@ namespace Automate.Controller.Handlers.RequirementsHandler
 
         private float CalculateJobCost(IStructure structure, IMovable movable, IGameWorld gameWorld)
         {
-            // TODO: Consult Naph on this, Cost should be a number which contains/reflects:
+            // TODO: Consult Naph on this, ScenarioCost should be a number which contains/reflects:
             // 1. path to the Dest
             // 2. Speed of Movable
             // 3. CarryCapability
@@ -306,7 +309,7 @@ namespace Automate.Controller.Handlers.RequirementsHandler
 
         //private TaskContainer CreatePickUpTask(RequirementsPackage req, IGameWorld gameWorld)
         //{
-        //    // create new Task
+        //    // create new ScenarioTask
         //    var pickupTask = gameWorld.TaskDelegator.CreateNewTask();
 
         //    // Get/Add Component Stack Group at Dest
@@ -316,7 +319,7 @@ namespace Automate.Controller.Handlers.RequirementsHandler
         //    var pickUpTaskAction = pickupTask.AddTransportAction(TaskActionType.PickupTask, req.HostingItem.Coordinate, cmpntGrp,
         //        req.Requirement.Component, req.Requirement.Amount);
 
-        //    // Link the Req to the Task
+        //    // Link the Req to the ScenarioTask
         //    req.Requirement.AttachAction(pickUpTaskAction);
 
         //    if (IsIdleMovablesExist(gameWorld))

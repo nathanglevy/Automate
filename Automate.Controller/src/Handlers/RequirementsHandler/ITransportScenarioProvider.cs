@@ -7,9 +7,8 @@ namespace Automate.Controller.Handlers.RequirementsHandler
 {
     public interface ITransportScenarioProvider
     {
-        DeliveryCost CalcScenarioCost(RequirementJob requirmentJob, ITransportRequirement requirement, Coordinate Destination,
-            IGameWorld gameWorld);
+        ScenarioTask CalcScenarioCost(RequirementJob requirmentJob, ITransportRequirement requirement, Coordinate Destination, IGameWorld gameWorld);
 
-        DeliveryCost CalcScenarioCost(RequirementJob structureCurrentJob, ITransportRequirement requirement, Boundary structureBoundary, IGameWorld gameWorld);
+        ScenarioTask CalcScenarioCost(RequirementJob structureCurrentJob, ITransportRequirement requirement, Boundary structureBoundary, IGameWorld gameWorld);
     }
 }

@@ -39,8 +39,8 @@ namespace AutomateTests.Assets.test.Controller.TestDeliveryProviders
             var directRouteScenario = new CarriedMovableDirectRoute();
             var calcScenarioCost = directRouteScenario.CalcScenarioCost(structure.CurrentJob, addRequirement,
                 structure.Boundary, gameWorld);
-            Assert.AreEqual(float.PositiveInfinity, calcScenarioCost.Cost);
-            Assert.IsNull(calcScenarioCost.ScenarioTask);
+            Assert.AreEqual(float.PositiveInfinity, calcScenarioCost.ScenarioCost);
+            Assert.IsNull(calcScenarioCost.Task);
         }
 
         [TestMethod]
@@ -62,11 +62,11 @@ namespace AutomateTests.Assets.test.Controller.TestDeliveryProviders
 
             var calcScenarioCost = directRouteScenario.CalcScenarioCost(structure.CurrentJob, addRequirement,
                 structure.Boundary, gameWorld);
-            Assert.AreNotEqual(float.MaxValue, calcScenarioCost.Cost);
-            Assert.IsNotNull(calcScenarioCost.ScenarioTask);
-            Assert.AreEqual(movable.Guid,calcScenarioCost.ScenarioTask.TargetTask.AssignedToGuid);
-            Assert.AreEqual(80, calcScenarioCost.ScenarioTask.TargetTask.GetCurrentAction().Amount);
-            Assert.AreEqual(TaskActionType.DeliveryTask, calcScenarioCost.ScenarioTask.TargetTask.GetCurrentAction().TaskActionType);
+            Assert.AreNotEqual(float.MaxValue, calcScenarioCost.ScenarioCost);
+            Assert.IsNotNull(calcScenarioCost.Task);
+            Assert.AreEqual(movable.Guid,calcScenarioCost.Task.TargetTask.AssignedToGuid);
+            Assert.AreEqual(80, calcScenarioCost.Task.TargetTask.GetCurrentAction().Amount);
+            Assert.AreEqual(TaskActionType.DeliveryTask, calcScenarioCost.Task.TargetTask.GetCurrentAction().TaskActionType);
 
         }
 

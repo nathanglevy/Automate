@@ -265,7 +265,7 @@ namespace src.View
 
 
 
-                // Create the Task and Actions
+                // Create the ScenarioTask and Actions
                 var PickupAndDeliverTask = gameWorld.TaskDelegator.CreateNewTask();
                 PickupAndDeliverTask.AddTransportAction(TaskActionType.PickupTask, _GoldCoordinate, cmpntGrp330,
                     Component.IronOre, 40);
@@ -298,6 +298,24 @@ namespace src.View
                 structure.CurrentJob = new RequirementJob(JobType.ItemTransport);
                 structure.CurrentJob.JobRequirements.AddRequirement(
                     new ComponentPickupRequirement(Component.IronOre, 92));
+
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha7))
+            {
+                var gameWorld = GameUniverse.GetGameWorldItemById(GameViewBase.Controller.GameWorldGuid);
+
+                 
+                var structure = gameWorld.CreateStructure(new Coordinate(15, 5, 0), new Coordinate(1, 1, 1), StructureType.SmallFire);
+                structure.ComponentStackGroup.MaxSize = 1000;
+                structure.ComponentStackGroup.AddComponentStack(ComponentType.Wood, 0);
+                structure.CurrentJob = new RequirementJob(JobType.ItemTransport);
+                structure.CurrentJob.JobRequirements.AddRequirement(
+                    new ComponentDeliveryRequirement(Component.Wood, 92));
+
+                var storage = gameWorld.CreateStructure(new Coordinate(5, 18, 0), new Coordinate(1, 1, 1), StructureType.Storage);
+                storage.ComponentStackGroup.MaxSize = 6000;
+                storage.ComponentStackGroup.AddComponentStack(ComponentType.Wood, 350);
 
             }
 
