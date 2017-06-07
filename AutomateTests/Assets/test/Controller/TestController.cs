@@ -444,7 +444,7 @@ namespace AutomateTests.test.Controller
 
 
 
-            // Create the Task and Actions
+            // Create the ScenarioTask and Actions
             var PickupAndDeliverTask = gameWorld.TaskDelegator.CreateNewTask();
             PickupAndDeliverTask.AddTransportAction(TaskActionType.PickupTask, new Coordinate(3, 3, 0), cmpntGrp330,
                 Component.IronOre, 40);
@@ -472,7 +472,7 @@ namespace AutomateTests.test.Controller
             }
 
 
-            // handle the Task
+            // handle the ScenarioTask
             var taskContainer = new TaskContainer(PickupAndDeliverTask) {OnCompleteDelegate = TaskonCompleteFired};
             var threadInfos = gameController.Handle(taskContainer);
 

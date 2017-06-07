@@ -20,10 +20,10 @@ namespace Automate.Controller.Handlers.TaskHandler
             // Safe Cast
             var taskContainer = args as TaskContainer;
 
-            // Safe the Task for future usage
+            // Safe the ScenarioTask for future usage
             _tasks.Add(taskContainer.TargetTask.Guid,taskContainer);
 
-            // Get Original Task
+            // Get Original ScenarioTask
             var task = taskContainer.TargetTask;
 
             // Get Current Action
