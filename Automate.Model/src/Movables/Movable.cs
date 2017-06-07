@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Automate.Model.Components;
 using Automate.Model.GameWorldComponents;
+using Automate.Model.Jobs;
 using Automate.Model.MapModelComponents;
 using Automate.Model.PathFinding;
+using Automate.Model.RuleComponents;
 using Automate.Model.StructureComponents;
 using Automate.Model.Tasks;
 
@@ -21,6 +23,7 @@ namespace Automate.Model.Movables {
         private MovementPath _movementPath;
         private readonly Object AccessLock = new Object();
         private List<Task> _taskList = new List<Task>();
+        private Dictionary<JobType,IConditionGroup> _jobConditionDictionary = new Dictionary<JobType, IConditionGroup>();
         public ComponentStackGroup ComponentStackGroup { get; } = new ComponentStackGroup();
         public override ItemType ItemType => ItemType.Movable;
         public bool PathToTargetHasBeenBroken { get; internal set; }
@@ -79,6 +82,19 @@ namespace Automate.Model.Movables {
             lock (AccessLock)
                 if (IsInMotion())
                     _isTransitioning = true;
+        }
+
+        public IConditionGroup GetConditionsForJob(JobType jobType)
+        {
+            if (_jobConditionDictionary.ContainsKey(jobType))
+                return _jobConditionDictionary[jobType];
+            throw new ArgumentException("There is no condition group set for that jobtype");
+        }
+
+        public void SetConditionsForJob(JobType jobType, IConditionGroup conditionGroup) {
+            if (_jobConditionDictionary.ContainsKey(jobType))
+                _jobConditionDictionary.Remove(jobType);
+            _jobConditionDictionary.Add(jobType,conditionGroup);
         }
 
         public Movement GetNextMovement()

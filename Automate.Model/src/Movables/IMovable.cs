@@ -1,7 +1,9 @@
 ﻿using System;
 using Automate.Model.Components;
+using Automate.Model.Jobs;
 using Automate.Model.MapModelComponents;
 using Automate.Model.PathFinding;
+using Automate.Model.RuleComponents;
 
 namespace Automate.Model.Movables {
     public interface IMovable : IPlacable {
@@ -27,6 +29,8 @@ namespace Automate.Model.Movables {
         Movement MoveToNext();
         void PickupFromComponentStackGroup(ComponentStackGroup pickupFromComponentStackGroup, Component component, int amount);
         void StartTransitionToNext();
+        IConditionGroup GetConditionsForJob(JobType jobType);
+        void SetConditionsForJob(JobType jobType, IConditionGroup conditionGroup);
     }
 
     public partial interface IPlacable
