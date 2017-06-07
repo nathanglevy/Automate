@@ -71,10 +71,13 @@
     <Compile Include="src\Movables\MovableCapabilities.cs" />
     <Compile Include="src\PathFinding\PathFindingException.cs" />
     <Compile Include="src\Requirements\ITransportRequirement.cs" />
-    <Compile Include="src\RuleComponents\IRule.cs" />
-    <Compile Include="src\RuleComponents\IRuleCondition.cs" />
-    <Compile Include="src\RuleComponents\IRuleOutcome.cs" />
-    <Compile Include="src\RuleComponents\IRuleSet.cs" />
+    <Compile Include="src\RuleComponents\AndConditionGroup.cs" />
+    <Compile Include="src\RuleComponents\ConditionGroup.cs" />
+    <Compile Include="src\RuleComponents\ICondition.cs" />
+    <Compile Include="src\RuleComponents\IConditionItem.cs" />
+    <Compile Include="src\RuleComponents\IConditionGroup.cs" />
+    <Compile Include="src\RuleComponents\OrConditionGroup.cs" />
+    <Compile Include="src\RuleComponents\SingleCondition.cs" />
     <Compile Include="src\StructureComponents\IStructure.cs" />
     <Compile Include="src\GameWorldComponents\IGameWorld.cs" />
     <Compile Include="src\Movables\IMovable.cs" />
